@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crown & Call — Character Sheet</title>
+<style>
+  :root {
+    --bg: #20252b;
+    --card: #30363d;
+    --ink: #f0f0f0;
+    --mute: #9da5ad;
+    --line: #171a1d;
+    --gold: #d8a400;
+    --btn: #4a525b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 14px 28px;
+  }
+  h1 { margin: 0; font-size: 26px; text-align: center; }
+  .sub { margin: 4px 0 16px; text-align: center; color: var(--mute); font-size: 13px; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.15fr .95fr;
+    gap: 14px;
+  }
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  }
+  h2 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #c9d0d6;
+  }
+  label { font-size: 12px; color: var(--mute); display: block; margin-bottom: 3px; }
+  input[type=text], input[type=number], select {
+    width: 100%;
+    border: 0;
+    border-radius: 8px;
+    background: var(--line);
+    color: var(--ink);
+    padding: 8px 9px;
+    font-size: 15px;
+  }
+  input[type=number] { font-variant-numeric: tabular-nums; }
+  .who { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .caps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .cap {
+    display: grid;
+    grid-template-columns: 1fr 64px 52px;
+    gap: 6px;
+    align-items: end;
+  }
+  .eff {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+    padding-bottom: 6px;
+  }
+  .eff.hurt { color: #e2b34a; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .chk {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #d5dbe0;
+  }
+  .mods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .mod {
+    background: var(--line);
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .mod b { display: block; font-size: 22px; }
+  .mod span { color: var(--mute); font-size: 12px; }
+  .weapon { margin-bottom: 10px; }
+  .weapon .row3 { margin-top: 6px; }
+  .header, .wrow {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 6px;
+    align-items: center;
+  }
+  .header {
+    color: #aeb5bc;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .wrow { margin: 5px 0; }
+  button {
+    width: 100%;
+    min-height: 44px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--btn);
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:active { transform: scale(.97); }
+  .bit-cell {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .bit-cell.high { background: var(--gold); color: #17120a; }
+  .bit-cell.low { background: var(--line); color: #777f87; }
+  .reset { max-width: 140px; min-height: 36px; font-size: 14px; margin: 8px auto 0; display: block; }
+  .hint { margin: 8px 0 0; color: var(--mute); font-size: 11px; line-height: 1.4; text-align: center; }
+  .sum { margin-top: 10px; background: var(--line); border-radius: 10px; padding: 10px; font-size: 13px; line-height: 1.45; }
+  .warn { color: #e2b34a; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Crown & Call</h1>
+  <p class="sub">Play sheet · mods update as you type · no save, no cookies</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Character</h2>
+      <div class="who">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Name">
+        </div>
+        <div>
+          <label for="who">Who they are</label>
+          <input id="who" type="text" placeholder="warrior-priest, hedge caller…">
+        </div>
+      </div>
+
+      <h2>Capabilities</h2>
+      <div class="caps" id="caps"></div>
+      <div class="sum" id="capSum"></div>
+
+      <div class="row2">
+        <div>
+          <label for="baseSpeed">Base Speed</label>
+          <input id="baseSpeed" type="number" value="30">
+        </div>
+        <div>
+          <label for="armor">Armor (severity, not AC)</label>
+          <select id="armor">
+            <option value="1">None (+1 severity)</option>
+            <option value="0" selected>Leather (0)</option>
+            <option value="-1">Chain (−1)</option>
+            <option value="-2">Plate (−2)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label for="agg">Aggression (−10 to +10)</label>
+          <input id="agg" type="number" value="0" min="-10" max="10">
+        </div>
+        <div>
+          <label for="grip">Default grip</label>
+          <select id="grip">
+            <option value="1">1H</option>
+            <option value="2" selected>2H</option>
+          </select>
+        </div>
+      </div>
+      <label class="chk"><input id="adjacent" type="checkbox"> Adjacent to an enemy (required for non-zero Aggression)</label>
+      <label class="chk"><input id="guidance" type="checkbox"> Guidance banked (max 1)</label>
+    </div>
+
+    <div class="card">
+      <h2>Wounds (W8)</h2>
+      <div class="header"><div>Heal</div><div>Rung</div><div>Hurt</div></div>
+      <div id="bits"></div>
+      <button class="reset" id="reset" type="button">RESET</button>
+      <p class="hint">Binary ladder. Worst rung is the C5 penalty. MAGIC / ACADEMICS / FAITH ignore it. Speed uses full ATHLETICS.</p>
+      <div class="sum" id="woundSum"></div>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:14px">
+    <div class="card">
+      <h2>Weapons (enter your own stats)</h2>
+      <div class="weapon" id="w1"></div>
+      <div class="weapon" id="w2"></div>
+      <div class="weapon" id="sh"></div>
+    </div>
+    <div class="card">
+      <h2>Live modifiers</h2>
+      <div class="mods" id="mods"></div>
+      <div class="sum" id="notes"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CAPS = [
+  ["weapons", "WEAPONS", true],
+  ["ranged", "RANGED", true],
+  ["athletics", "ATHLETICS", true],
+  ["thievery", "THIEVERY", true],
+  ["sense", "SENSE", true],
+  ["magic", "MAGIC", false],
+  ["academics", "ACADEMICS", false],
+  ["faith", "FAITH", false]
+];
+
+const BITS = [
+  { v: 32, name: "MORT", lvl: 6 },
+  { v: 16, name: "GRAV", lvl: 5 },
+  { v: 8,  name: "SEVR", lvl: 4 },
+  { v: 4,  name: "DEEP", lvl: 3 },
+  { v: 2,  name: "LITE", lvl: 2 },
+  { v: 1,  name: "FLSH", lvl: 1 }
+];
+
+let total = 0;
+
+function n(id) {
+  const el = document.getElementById(id);
+  const v = parseInt(el.value, 10);
+  return Number.isFinite(v) ? v : 0;
+}
+function cap(id) {
+  const v = n(id);
+  return Math.max(0, Math.min(20, v));
+}
+
+function woundLevel() {
+  for (const b of BITS) {
+    if (total & b.v) return b.lvl;
+  }
+  return 0;
+}
+function worstName() {
+  for (const b of BITS) {
+    if (total & b.v) return b.name;
+  }
+  return "none";
+}
+
+function speed() {
+  const raw = n("baseSpeed") + cap("athletics");
+  return Math.ceil(raw / 5) * 5;
+}
+
+function meleeAgg() {
+  if (!document.getElementById("adjacent").checked) return 0;
+  let a = n("agg");
+  if (a > 10) a = 10;
+  if (a < -10) a = -10;
+  return a;
+}
+
+function wield(prefix) {
+  const grip = document.getElementById("grip").value === "2" ? "2h" : "1h";
+  return n(prefix + grip);
+}
+
+function buildCaps() {
+  const box = document.getElementById("caps");
+  box.innerHTML = "";
+  CAPS.forEach(([id, label]) => {
+    const wrap = document.createElement("div");
+    wrap.className = "cap";
+    wrap.innerHTML =
+      `<div><label for="${id}">${label}</label><input id="${id}" type="number" min="0" max="20" value="0"></div>` +
+      `<div class="eff" id="eff-${id}">0</div>` +
+      `<div></div>`;
+    box.appendChild(wrap);
+    wrap.querySelector("input").addEventListener("input", render);
+  });
+}
+
+function weaponBlock(mountId, prefix, title, defaults) {
+  const el = document.getElementById(mountId);
+  el.innerHTML =
+    `<label>${title}</label>` +
+    `<input id="${prefix}name" type="text" value="${defaults.name}">` +
+    `<div class="row3">` +
+    `<div><label>1H</label><input id="${prefix}1h" type="number" value="${defaults.h1}"></div>` +
+    `<div><label>2H</label><input id="${prefix}2h" type="number" value="${defaults.h2}"></div>` +
+    `<div><label>Ceiling</label><input id="${prefix}ceil" type="text" value="${defaults.ceil}"></div>` +
+    `</div>` +
+    `<div class="row2" style="margin-top:6px">` +
+    `<div><label>Used with</label>` +
+    `<select id="${prefix}stat">` +
+    `<option value="weapons"${defaults.stat==="weapons"?" selected":""}>WEAPONS</option>` +
+    `<option value="ranged"${defaults.stat==="ranged"?" selected":""}>RANGED</option>` +
+    `</select></div>` +
+    `<div><label>Kind</label>` +
+    `<select id="${prefix}kind">` +
+    `<option value="melee"${defaults.kind==="melee"?" selected":""}>Melee</option>` +
+    `<option value="ranged"${defaults.kind==="ranged"?" selected":""}>Ranged</option>` +
+    `</select></div>` +
+    `</div>`;
+  el.querySelectorAll("input,select").forEach(i => i.addEventListener("input", render));
+}
+
+function buildBits() {
+  const box = document.getElementById("bits");
+  box.innerHTML = "";
+  BITS.forEach((b, index) => {
+    const row = document.createElement("div");
+    row.className = "wrow";
+    const minus = document.createElement("button");
+    minus.type = "button";
+    minus.textContent = "−";
+    minus.addEventListener("click", () => changeTotal(-b.v));
+    const cell = document.createElement("div");
+    cell.className = "bit-cell low";
+    cell.id = "bit-" + index;
+    cell.textContent = b.name;
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.textContent = "+";
+    plus.addEventListener("click", () => changeTotal(b.v));
+    row.append(minus, cell, plus);
+    box.appendChild(row);
+  });
+}
+
+function changeTotal(amount) {
+  total += amount;
+  if (total < 0) total = 0;
+  if (total > 63) total = 63;
+  render();
+}
+
+function signed(v) {
+  return (v >= 0 ? "+" : "") + v;
+}
+
+function render() {
+  const wl = woundLevel();
+  const agg = meleeAgg();
+  const spent = CAPS.reduce((s, [id]) => s + cap(id), 0);
+
+  CAPS.forEach(([id, label, penalized]) => {
+    const raw = cap(id);
+    const eff = penalized ? raw - wl : raw;
+    const node = document.getElementById("eff-" + id);
+    node.textContent = eff;
+    node.className = "eff" + (penalized && wl ? " hurt" : "");
+  });
+
+  document.getElementById("capSum").innerHTML =
+    `Points on the sheet: <b>${spent}</b> · start is 15 across five CAPs (C3). ` +
+    `Shown number at right is the roll bonus after C5.`;
+
+  BITS.forEach((b, i) => {
+    const cell = document.getElementById("bit-" + i);
+    const on = (total & b.v) !== 0;
+    cell.className = "bit-cell " + (on ? "high" : "low");
+  });
+
+  const wpen = wl ? `−${wl} ${worstName()}` : "0";
+  document.getElementById("woundSum").innerHTML =
+    `Value ${total} FLSH units · worst rung <b>${worstName()}</b> · C5 penalty <b>${wpen}</b>` +
+    (total >= 32 ? ` <span class="warn">· MORT: down and dying (W6)</span>` : "");
+
+  const weap = cap("weapons") - wl;
+  const rang = cap("ranged") - wl;
+  const ath = cap("athletics") - wl;
+  const mag = cap("magic");
+  const faith = cap("faith");
+
+  function line(prefix) {
+    const kind = document.getElementById(prefix + "kind").value;
+    const stat = document.getElementById(prefix + "stat").value;
+    const w = wield(prefix);
+    const capv = stat === "ranged" ? rang : weap;
+    const useAgg = kind === "melee";
+    const off = capv + w + (useAgg ? agg : 0);
+    const def = capv + w - (useAgg ? agg : 0);
+    return { off, def, kind, name: document.getElementById(prefix + "name").value || prefix };
+  }
+  const a = line("a");
+  const b = line("b");
+  const s = line("s");
+  const dodgeOff = ath + (0) ;
+  const dodgeDef = ath - agg;
+  const spd = speed();
+  const squares = spd / 5;
+  const diag = Math.floor(squares / 2);
+
+  let ceil = "DEEP";
+  if (mag >= 16) ceil = "MORT";
+  else if (mag >= 11) ceil = "GRAV";
+  else if (mag >= 6) ceil = "SEVR";
+
+  const mods = document.getElementById("mods");
+  mods.innerHTML = `
+    <div class="mod"><span>${a.name} melee/ranged offense</span><b>${signed(a.off)}</b></div>
+    <div class="mod"><span>${a.name} defense (if used to parry)</span><b>${signed(a.def)}</b></div>
+    <div class="mod"><span>${b.name} offense</span><b>${signed(b.off)}</b></div>
+    <div class="mod"><span>${s.name} defense</span><b>${signed(s.def)}</b></div>
+    <div class="mod"><span>Dodge (ATHLETICS, melee)</span><b>${signed(dodgeDef)}</b></div>
+    <div class="mod"><span>Call (MAGIC vs MAGIC)</span><b>${signed(mag)}</b></div>
+    <div class="mod"><span>Speed / squares</span><b>${spd} ft · ${squares} sq</b></div>
+    <div class="mod"><span>Call ceiling (M6)</span><b>${ceil}</b></div>
+  `;
+
+  const adj = document.getElementById("adjacent").checked;
+  const notes = [];
+  notes.push(`Add d20 (or the table's dice mode). MoV 1–4 FLSH, 5–8 LITE, 9–12 DEEP, 13–16 SEVR, 17–20 GRAV, 21+ MORT — then apply the weapon/Call ceiling and armor.`);
+  notes.push(`Aggression in the boxes: ${adj ? signed(agg) : "0 (not adjacent)"}. Ranged rolls ignore it.`);
+  notes.push(`Diagonal this Turn: at most ${diag} of ${squares} squares (T3).`);
+  notes.push(`Meditation minutes today: ${faith * 15} (O6).`);
+  if (document.getElementById("guidance").checked) notes.push(`Guidance ready: you may add FAITH (${faith}) to a combat roll after seeing the dice (F3).`);
+  if (!adj && n("agg") !== 0) notes.push(`Aggression typed ${n("agg")} but you are not adjacent, so live melee mods use 0.`);
+  document.getElementById("notes").innerHTML = notes.join("<br>");
+}
+
+buildCaps();
+weaponBlock("w1", "a", "Weapon A", { name: "Arming Sword", h1: 0, h2: 2, ceil: "DEEP", stat: "weapons", kind: "melee" });
+weaponBlock("w2", "b", "Weapon B / launcher or thrown", { name: "—", h1: 0, h2: 0, ceil: "—", stat: "ranged", kind: "ranged" });
+weaponBlock("sh", "s", "Shield or off-hand", { name: "Shield (Light)", h1: 2, h2: 4, ceil: "LITE", stat: "weapons", kind: "melee" });
+buildBits();
+["baseSpeed","armor","agg","grip","adjacent","guidance"].forEach(id => {
+  document.getElementById(id).addEventListener("input", render);
+  document.getElementById(id).addEventListener("change", render);
+});
+document.getElementById("reset").addEventListener("click", () => { total = 0; render(); });
+render();
+</script>
+</body>
+</html>
