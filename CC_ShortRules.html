@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+Crown & Call short rules
+Version: 202609190857
+Source: CC_ShortRules.txt Ver. 202609190728
+Copyright (c) 2026 Thomas Paige. All rights reserved.
+Playtest use only. Not licensed for redistribution.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crown & Call — Short Rules</title>
+<style>
+  :root {
+    --bg: #20252b;
+    --card: #30363d;
+    --ink: #f0f0f0;
+    --mute: #9da5ad;
+    --line: #171a1d;
+    --gold: #d8a400;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 14px 28px;
+  }
+  h1 { margin: 0; font-size: 26px; text-align: center; }
+  .sub { margin: 4px 0 16px; text-align: center; color: var(--mute); font-size: 13px; line-height: 1.4; }
+  .foot { margin: 18px 0 4px; text-align: center; color: var(--mute); font-size: 12px; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  }
+  .card.wide { grid-column: 1 / -1; }
+  h2 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #c9d0d6;
+  }
+  p { margin: 0 0 10px; font-size: 14px; line-height: 1.45; }
+  p:last-child { margin-bottom: 0; }
+  ul, ol { margin: 0 0 10px; padding-left: 18px; font-size: 14px; line-height: 1.45; }
+  li { margin: 0 0 4px; }
+  .caps {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 6px;
+    margin: 0 0 10px;
+  }
+  .pill {
+    background: var(--line);
+    border-radius: 8px;
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .kv {
+    display: grid;
+    grid-template-columns: 7.5em 1fr;
+    gap: 6px 10px;
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 0 10px;
+  }
+  .kv b { color: var(--gold); font-weight: bold; }
+  .mono {
+    font-family: Consolas, "Courier New", monospace;
+    background: var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 0 0 10px;
+  }
+  .drop { margin: 0; padding: 0; list-style: none; }
+  .drop li { margin: 0 0 8px; padding-left: 0; }
+  .drop b { color: var(--gold); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Crown & Call</h1>
+  <p class="sub">Short rules for tables that already know D&amp;D.<br>
+  Canon is CC_Ruleset.txt. Quote an ID when you need the long form.</p>
+
+  <div class="grid">
+    <div class="card wide">
+      <h2>What this is not</h2>
+      <p>No classes, no levels, no AC, no hit points, no opportunity attacks, no spell slots. You roll d20 + a Capability. If someone resists, they roll too. Wounds are named rungs, not a pool. Magic is a listed Call, not a prayer. Prayer is Faith and the GM (F5).</p>
+    </div>
+
+    <div class="card">
+      <h2>Who you are (C)</h2>
+      <p>Eight Capabilities, 0–20. 0 is an ordinary person, not a hole (C2). Start with 15 points on exactly five CAPs, min 1 max 5. The other three stay 0 (C3).</p>
+      <div class="caps">
+        <div class="pill">WEAPONS</div>
+        <div class="pill">RANGED</div>
+        <div class="pill">ATHLETICS</div>
+        <div class="pill">THIEVERY</div>
+        <div class="pill">SENSE</div>
+        <div class="pill">MAGIC</div>
+        <div class="pill">ACADEMICS</div>
+        <div class="pill">FAITH</div>
+      </div>
+      <p>Speed = 30 + ATHLETICS, round up to 5 ft (T3). Wounds do not cut Speed (C5).</p>
+    </div>
+
+    <div class="card">
+      <h2>How you roll (R, O3)</h2>
+      <p>Uncertain? d20 + CAP + mods (R1). Fiction already clear? No roll (G1).</p>
+      <p><b>Opposed (R2):</b> both roll. High wins. Difference is MoV. No GM Target Number. No AC. Defense is always a roll (R4): weapon, shield, or ATHLETICS dodge.</p>
+      <p><b>Unopposed (R3, R5),</b> 1d20 column:</p>
+      <div class="mono">Routine 10 &nbsp; Moderate 15 &nbsp; Hard 20<br>Extreme 25 &nbsp; Legendary 30</div>
+      <p>"1d20" means the dice mode in play (O3). Lethal 1d20, Risky 3d6, Stable 4d6 drop lowest.</p>
+    </div>
+
+    <div class="card">
+      <h2>Your turn (T)</h2>
+      <p>A Round is about 7 seconds (T1). GM rolls d20: 11–20 PCs first, 1–10 NPCs first. Each side picks its order (T5).</p>
+      <div class="kv">
+        <b>MOVE</b><span>Up to Speed. Split around ACT. Grid: Speed/5 squares; at most half (round down) diagonal (T3).</span>
+        <b>PREP</b><span>One second: draw, drop, set Aggression, declare Protect.</span>
+        <b>ACT</b><span>The thing. Two-weapon = two attack rolls if fiction allows (W10). Forgo ACT for a second Move (T4).</span>
+      </div>
+      <p>HOLD: skip your Turn, re-enter later where you choose (T6).</p>
+      <p>No opportunity attack. Leaving a threatened square is free unless you are Engaged (W1b).</p>
+    </div>
+
+    <div class="card">
+      <h2>This sheet’s kit</h2>
+      <div class="mono">Arming Sword &nbsp; 1H +0 &nbsp; 2H +2 &nbsp; DEEP<br>Shield (Light) &nbsp; 1H +2 &nbsp; 2H +4 &nbsp; LITE<br>Call Flame (MAGIC 1) &nbsp; MOTION×2, WORDS, SIGHT</div>
+      <p>Offense = CAP + Wield + Aggression − Wound Level<br>
+      Defense = CAP + Wield − Aggression − Wound Level</p>
+      <p>Ranged never uses Aggression (W1).</p>
+    </div>
+
+    <div class="card wide">
+      <h2>Combat (W)</h2>
+      <p>Aggression −10 to +10. Melee only. Set it only while adjacent to an enemy. Arrive this Turn? Set it in PREP before you strike. +5 offense is −5 defense (W1).</p>
+      <p>Ranged needs 10 ft or more (W1a). Thrown −1 per 10 ft (W11).</p>
+      <p><b>Engaged (W1b):</b> adjacent to an enemy willing to oppose you. Leaving that square is your whole ACT. Opposed withdraw vs each who contests (WEAPONS or ATHLETICS). Win all: walk a legal path. Fail any: stay. No free hit. −10 first is optional.</p>
+      <p><b>Protect (T7):</b> PREP “I protect [name].” Leftover Speed only for this. Melee only. You must reach a square adjacent to both ally and attacker. You become the target. Once per Turn. You stay there. That square Engages you (W1b). You do not stroll off.</p>
+      <div class="mono">MoV → wound, then ceiling, then armor (W3–W5)<br>
+      1–4 FLSH &nbsp; 5–8 LITE &nbsp; 9–12 DEEP<br>
+      13–16 SEVR &nbsp; 17–20 GRAV &nbsp; 21+ MORT<br>
+      Armor: none +1 &nbsp; leather 0 &nbsp; chain −1 &nbsp; plate −2. No AC.<br>
+      Ladder (W8): 2 FLSH=LITE · 2 LITE=DEEP · 2 DEEP=SEVR · 2 SEVR=GRAV · 2 GRAV=MORT<br>
+      C5 penalty is the worst rung: FLSH−1 … MORT−6. Hits WEAPONS, RANGED, ATHLETICS, THIEVERY, SENSE. MAGIC, ACADEMICS, FAITH are clean.</div>
+      <p>Scale 1: MORT drops you dying. Next wound kills. GM secretly rolls seconds to bleed out. Two hands + whole ACT at the body stems it; they stay Mortal, not healed (W6). Scale 2+ needs that many MORT (W9). Extra standing MORT adds +1 to the C5 penalty.</p>
+    </div>
+
+    <div class="card">
+      <h2>Calling (M)</h2>
+      <p>Listed Calls only. Flame needs MAGIC 1+, two free hands, spoken words, sight of the target (M10). Leather or less to Gather (M11). You do not invent a Call mid-fight (M1).</p>
+      <p>Damaging Call: MAGIC vs MAGIC (M7). A sword is not defended with MAGIC. MAGIC 0 still rolls d20+0.</p>
+      <p>Range 5 ft × MAGIC. Area = MAGIC contiguous 5-ft squares, all in range (M9). Area is one roll vs the strongest named defender. Win: split the wound down the M3 steps. Lose: nobody in the paint is hit.</p>
+      <p><b>Gather (M4):</b> up to 3 still Rounds (no MOVE, PREP, ACT, talk). Release is the whole Turn, up to 4 Calls. A wound dumps the store. Attacked while Gathering: keep the store and defend on a die of 1, or abandon and defend normally.</p>
+      <p><b>Convert-heal (M8):</b> announce first. Single-target only. Roll vs an enemy still in the fight, not a friend. Virtual wound heals the named ally one rung lower. FLSH converts to nothing. Area cannot convert.</p>
+    </div>
+
+    <div class="card">
+      <h2>Faith (F, G7)</h2>
+      <p>Natural 20 on a combat roll: add FAITH now, or try to bank Guidance (d20+FAITH &gt; 20, max 1 banked) (F1–F2). Spend Guidance later to add FAITH to a combat roll, even after you see the dice (F3). Not on jumps or locks.</p>
+      <p>Prayer never copies a Call. It can change a circumstance the GM already thought was possible (F5). Petition for the dead is two raw d20s; higher restores. FAITH does not auto-add. God is never obligated (F6).</p>
+      <h2 style="margin-top:16px">After the fight (O)</h2>
+      <p>No potions. No Full Rest. Clock, not a gift (O1).</p>
+      <div class="mono">Active &nbsp; 1 FLSH / hour<br>Resting &nbsp; 1 FLSH / 30 min (lying still)<br>Meditating &nbsp; 1 FLSH / 15 min, FAITH × 15 min/day (O6)</div>
+      <p>No stacking. Tend (SENSE or ACADEMICS 1+, one hour): patient uses Resting on the road. Bearing (O5): MAGIC 5+, one minute, both hands; move wound value onto the Caller.</p>
+      <p>Conditions (O4): Entangled no MOVE; Prone stand = MOVE, −2 physical, +2 melee vs you; Blind −4 if you need sight; Deaf / Mute block speech; Afflicted −2 ATHLETICS, THIEVERY, SENSE; Impeded half Speed.</p>
+    </div>
+
+    <div class="card wide">
+      <h2>D&amp;D reflexes to drop</h2>
+      <ul class="drop">
+        <li><b>Armor Class</b> → they roll defense.</li>
+        <li><b>HP</b> → named rungs that pair up (W8).</li>
+        <li><b>Opportunity attack</b> → does not exist. Engaged + withdraw instead (W1b).</li>
+        <li><b>Spell slot / prepare list</b> → MAGIC score + listed Call + tags. Gather is the nova, and it is fragile (M4).</li>
+        <li><b>Cleric heal</b> → M8 spends a blow at a real enemy, or O5 moves the wound, or the clock. Prayer is F5.</li>
+        <li><b>Surprise round</b> → no. Fiction, facing, Aggression (O2).</li>
+        <li><b>“I ready an attack”</b> → HOLD (T6), or Protect (T7).</li>
+        <li><b>Sneak attack / class feature</b> → you don’t have one. Spend CAP and describe it (G6).</li>
+      </ul>
+      <p>If stuck: skip the roll when the story already answered (G1). Play the intent, not a wording hole (G8). Then quote the ID.</p>
+    </div>
+  </div>
+
+  <p class="foot">Ver. 202609190857 · source Short Rules 202609190728 · © 2026 Thomas Paige · playtest, not for redistribution</p>
+</div>
+</body>
+</html>
