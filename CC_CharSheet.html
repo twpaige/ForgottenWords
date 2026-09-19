@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+Crown & Call character sheet
+Version: 202609190836
+Copyright (c) 2026 Thomas Paige. All rights reserved.
+Playtest use only. Not licensed for redistribution.
+-->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -28,6 +34,7 @@
   }
   h1 { margin: 0; font-size: 26px; text-align: center; }
   .sub { margin: 4px 0 16px; text-align: center; color: var(--mute); font-size: 13px; }
+  .foot { margin: 18px 0 4px; text-align: center; color: var(--mute); font-size: 12px; }
   .grid {
     display: grid;
     grid-template-columns: 1.15fr .95fr;
@@ -145,12 +152,41 @@
   .hint { margin: 8px 0 0; color: var(--mute); font-size: 11px; line-height: 1.4; text-align: center; }
   .sum { margin-top: 10px; background: var(--line); border-radius: 10px; padding: 10px; font-size: 13px; line-height: 1.45; }
   .warn { color: #e2b34a; }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: 0 0 16px;
+  }
+  .toolbar button, .toolbar label.filebtn {
+    width: auto;
+    min-height: 36px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+  .toolbar label.filebtn {
+    display: inline-flex;
+    align-items: center;
+    background: var(--btn);
+    border-radius: 9px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .toolbar input[type=file] { display: none; }
+  .toast { text-align: center; color: var(--mute); font-size: 12px; min-height: 16px; margin: -8px 0 12px; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Crown & Call</h1>
-  <p class="sub">Play sheet · mods update as you type · no save, no cookies</p>
+  <p class="sub">Play sheet · Save writes this browser only · JSON file for work PCs</p>
+  <div class="toolbar">
+    <button type="button" id="saveLocal">Save in browser</button>
+    <button type="button" id="downloadJson">Download JSON</button>
+    <label class="filebtn">Load JSON<input type="file" id="loadJson" accept="application/json,.json"></label>
+  </div>
+  <p class="toast" id="toast"></p>
 
   <div class="grid">
     <div class="card">
@@ -217,6 +253,7 @@
       <div class="sum" id="notes"></div>
     </div>
   </div>
+  <p class="foot">Ver. 202609190836 · © 2026 Thomas Paige · playtest, not for redistribution</p>
 </div>
 
 <script>
@@ -445,17 +482,134 @@ function render() {
   document.getElementById("notes").innerHTML = notes.join("<br>");
 }
 
+const STORE = "cc-charsheet-v1";
+
+function toast(msg) {
+  document.getElementById("toast").textContent = msg;
+}
+
+function weaponState(prefix) {
+  return {
+    name: document.getElementById(prefix + "name").value,
+    h1: n(prefix + "1h"),
+    h2: n(prefix + "2h"),
+    ceil: document.getElementById(prefix + "ceil").value,
+    stat: document.getElementById(prefix + "stat").value,
+    kind: document.getElementById(prefix + "kind").value
+  };
+}
+
+function gatherState() {
+  const caps = {};
+  CAPS.forEach(([id]) => { caps[id] = cap(id); });
+  return {
+    name: document.getElementById("name").value,
+    who: document.getElementById("who").value,
+    caps,
+    baseSpeed: n("baseSpeed"),
+    armor: document.getElementById("armor").value,
+    agg: n("agg"),
+    adjacent: document.getElementById("adjacent").checked,
+    guidance: document.getElementById("guidance").checked,
+    wounds: total,
+    a: weaponState("a"),
+    b: weaponState("b"),
+    c: weaponState("c")
+  };
+}
+
+function applyWeapon(prefix, data) {
+  if (!data) return;
+  document.getElementById(prefix + "name").value = data.name || "";
+  document.getElementById(prefix + "1h").value = data.h1 ?? 0;
+  document.getElementById(prefix + "2h").value = data.h2 ?? 0;
+  document.getElementById(prefix + "ceil").value = data.ceil || "";
+  if (data.stat) document.getElementById(prefix + "stat").value = data.stat;
+  if (data.kind) document.getElementById(prefix + "kind").value = data.kind;
+}
+
+function applyState(data) {
+  if (!data || typeof data !== "object") return false;
+  document.getElementById("name").value = data.name || "";
+  document.getElementById("who").value = data.who || "";
+  CAPS.forEach(([id]) => {
+    if (data.caps && data.caps[id] != null) document.getElementById(id).value = data.caps[id];
+  });
+  if (data.baseSpeed != null) document.getElementById("baseSpeed").value = data.baseSpeed;
+  if (data.armor != null) document.getElementById("armor").value = data.armor;
+  if (data.agg != null) document.getElementById("agg").value = data.agg;
+  document.getElementById("adjacent").checked = !!data.adjacent;
+  document.getElementById("guidance").checked = !!data.guidance;
+  total = Math.max(0, Math.min(63, parseInt(data.wounds, 10) || 0));
+  applyWeapon("a", data.a);
+  applyWeapon("b", data.b);
+  applyWeapon("c", data.c);
+  render();
+  return true;
+}
+
+function saveLocal() {
+  try {
+    localStorage.setItem(STORE, JSON.stringify(gatherState()));
+    toast("Saved in this browser. Not sent anywhere.");
+  } catch (err) {
+    toast("Browser would not save. Use Download JSON.");
+  }
+}
+
+function loadLocal() {
+  try {
+    const raw = localStorage.getItem(STORE);
+    if (!raw) return false;
+    return applyState(JSON.parse(raw));
+  } catch (err) {
+    return false;
+  }
+}
+
+function downloadJson() {
+  const blob = new Blob([JSON.stringify(gatherState(), null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  const name = (document.getElementById("name").value || "character").replace(/[^\w\-]+/g, "_");
+  a.href = URL.createObjectURL(blob);
+  a.download = "CC_" + name + ".json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast("JSON downloaded. Keep it with the sheet.");
+}
+
+function loadJsonFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      if (applyState(JSON.parse(reader.result))) toast("Loaded " + file.name);
+      else toast("That file was not a character sheet.");
+    } catch (err) {
+      toast("Could not read that file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
 buildCaps();
 weaponBlock("w1", "a", "Weapon A", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
 weaponBlock("w2", "b", "Weapon B", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
 weaponBlock("w3", "c", "Weapon C", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
 buildBits();
-["baseSpeed","armor","agg","adjacent","guidance"].forEach(id => {
+["baseSpeed","armor","agg","adjacent","guidance","name","who"].forEach(id => {
   document.getElementById(id).addEventListener("input", render);
   document.getElementById(id).addEventListener("change", render);
 });
 document.getElementById("reset").addEventListener("click", () => { total = 0; render(); });
-render();
+document.getElementById("saveLocal").addEventListener("click", saveLocal);
+document.getElementById("downloadJson").addEventListener("click", downloadJson);
+document.getElementById("loadJson").addEventListener("change", ev => {
+  const file = ev.target.files && ev.target.files[0];
+  if (file) loadJsonFile(file);
+  ev.target.value = "";
+});
+if (loadLocal()) toast("Loaded last Save in browser.");
+else render();
 </script>
 </body>
 </html>
