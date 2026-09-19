@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<!--
+Crown & Call GM multi-sheet
+Version: 202609191552
+Copyright (c) 2026 Thomas Paige. All rights reserved.
+Playtest use only. Not licensed for redistribution.
+Same JSON as CC_CharSheet.html. No cookies. No localStorage.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crown & Call — GM Board</title>
+<style>
+  :root {
+    --bg: #1a1e24;
+    --card: #2b3138;
+    --ink: #f0f0f0;
+    --mute: #8b949e;
+    --line: #171a1d;
+    --gold: #d8a400;
+    --btn: #4a525b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+  }
+  .top {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    background: #12151a;
+    border-bottom: 1px solid #3a424b;
+  }
+  .top h1 { margin: 0; font-size: 15px; font-weight: normal; }
+  .top select, .top button, .top label.filebtn {
+    border: 0;
+    border-radius: 6px;
+    background: var(--btn);
+    color: #fff;
+    min-height: 28px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .top select { background: var(--line); }
+  .top input[type=file] { display: none; }
+  .top label.filebtn { display: inline-flex; align-items: center; }
+  .toast { width: 100%; text-align: center; color: var(--mute); font-size: 11px; min-height: 14px; }
+  .board {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+    padding: 6px;
+  }
+  @media (max-width: 1600px) {
+    .board { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (max-width: 980px) {
+    .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  .seat {
+    background: var(--card);
+    border-radius: 8px;
+    padding: 6px;
+    min-width: 0;
+  }
+  .seat input, .seat select {
+    width: 100%;
+    border: 0;
+    border-radius: 4px;
+    background: var(--line);
+    color: var(--ink);
+    padding: 2px 4px;
+    font-size: 11px;
+    min-height: 20px;
+  }
+  .seat input[type=number] { font-variant-numeric: tabular-nums; }
+  .name-row { display: grid; grid-template-columns: 1.2fr .8fr; gap: 3px; margin-bottom: 4px; }
+  .caps {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 2px;
+    margin-bottom: 4px;
+  }
+  .cap { min-width: 0; }
+  .cap label, .mini label {
+    display: block;
+    color: var(--mute);
+    font-size: 8px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+  .cap .line { display: grid; grid-template-columns: 1fr 18px; gap: 2px; align-items: center; }
+  .eff { text-align: right; font-weight: bold; font-size: 11px; }
+  .eff.hurt { color: #e2b34a; }
+  .mini-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3px;
+    margin-bottom: 3px;
+  }
+  .flags { display: flex; gap: 6px; flex-wrap: wrap; margin: 2px 0 4px; color: #c9d0d6; }
+  .flags label { display: flex; gap: 3px; align-items: center; font-size: 10px; }
+  .wep { display: grid; grid-template-columns: 1.3fr 26px 26px 36px 48px 44px; gap: 2px; margin-bottom: 2px; }
+  .plain {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  .plain::-webkit-outer-spin-button,
+  .plain::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .wounds {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 2px;
+    margin-top: 4px;
+  }
+  .wcell { min-width: 0; }
+  .wcell .bit {
+    text-align: center;
+    border-radius: 3px 3px 0 0;
+    font-size: 8px;
+    font-weight: bold;
+    min-height: 14px;
+    line-height: 14px;
+  }
+  .bit.high { background: var(--gold); color: #17120a; }
+  .bit.low { background: var(--line); color: #777f87; }
+  .wpm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+  }
+  .wpm button {
+    min-height: 14px;
+    font-size: 10px;
+    line-height: 1;
+    border-radius: 0 0 3px 3px;
+    padding: 0;
+  }
+  .seat button {
+    border: 0;
+    border-radius: 4px;
+    background: var(--btn);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    min-height: 18px;
+    font-size: 12px;
+  }
+  .live {
+    margin-top: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+  .mod {
+    background: var(--line);
+    border-radius: 4px;
+    padding: 3px 4px;
+  }
+  .mod span { display: block; color: var(--mute); font-size: 8px; text-transform: uppercase; }
+  .mod b { display: block; font-size: 12px; font-weight: bold; }
+  .seat-bar { display: flex; gap: 3px; margin-top: 4px; }
+  .seat-bar button, .seat-bar label.filebtn {
+    flex: 1;
+    min-height: 22px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--btn);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .seat-bar input[type=file] { display: none; }
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>C&amp;C GM board</h1>
+  <label>Encounter
+    <select id="encounter">
+      <option value="crossroads">Crossroads</option>
+    </select>
+  </label>
+  <button type="button" id="loadEncounter">Load encounter</button>
+  <button type="button" id="saveEncounter">Save encounter JSON</button>
+  <label class="filebtn">Load encounter JSON<input type="file" id="loadEncounterFile" accept="application/json,.json"></label>
+  <button type="button" id="clearAll">Clear all seats</button>
+  <div class="toast" id="toast"></div>
+</div>
+<div class="board" id="board"></div>
+
+<script>
+const CAPS = [
+  ["weapons", "WPN", true],
+  ["ranged", "RNG", true],
+  ["athletics", "ATH", true],
+  ["thievery", "THV", true],
+  ["sense", "SNS", true],
+  ["magic", "MAG", false],
+  ["academics", "ACD", false],
+  ["faith", "FTH", false]
+];
+
+const BITS = [
+  { v: 32, name: "MORT" },
+  { v: 16, name: "GRAV" },
+  { v: 8,  name: "SEVR" },
+  { v: 4,  name: "DEEP" },
+  { v: 2,  name: "LITE" },
+  { v: 1,  name: "FLSH" }
+];
+
+const PACKS = {
+  crossroads: {
+    type: "cc-encounter-v1",
+    name: "Crossroads",
+    seats: new Array(12).fill(null)
+  }
+};
+
+const seats = [];
+
+function toast(msg) {
+  document.getElementById("toast").textContent = msg;
+}
+
+function signed(v) {
+  return (v >= 0 ? "+" : "") + v;
+}
+
+function emptySheet() {
+  return {
+    name: "",
+    who: "",
+    caps: { weapons:0, ranged:0, athletics:0, thievery:0, sense:0, magic:0, academics:0, faith:0 },
+    baseSpeed: 30,
+    armor: "0",
+    agg: 0,
+    adjacent: false,
+    guidance: false,
+    wounds: 0,
+    a: { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" },
+    b: { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" },
+    c: { name: "", h1: 0, h2: 0, ceil: "", stat: "ranged", kind: "ranged" }
+  };
+}
+
+function num(el) {
+  const v = parseInt(el.value, 10);
+  return Number.isFinite(v) ? v : 0;
+}
+
+function clampCap(v) {
+  return Math.max(0, Math.min(20, v));
+}
+
+function download(filename, obj) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function readFile(file, cb) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try { cb(JSON.parse(reader.result)); }
+    catch (err) { toast("Could not read " + file.name); }
+  };
+  reader.readAsText(file);
+}
+
+function isSheet(data) {
+  return data && typeof data === "object" && !Array.isArray(data) && data.type !== "cc-encounter-v1";
+}
+
+function createSeat(index) {
+  const seat = { i: index, wounds: 0, root: null };
+  const root = document.createElement("div");
+  root.className = "seat";
+  seat.root = root;
+
+  const capHtml = CAPS.map(([id, lab]) =>
+    `<div class="cap"><label>${lab}</label><div class="line">` +
+    `<input data-cap="${id}" type="number" min="0" max="20" value="0">` +
+    `<span class="eff" data-eff="${id}">0</span></div></div>`
+  ).join("");
+
+  const bitHtml = BITS.map((b, bi) =>
+    `<div class="wcell">` +
+    `<div class="bit low" data-bit="${bi}">${b.name}</div>` +
+    `<div class="wpm">` +
+    `<button type="button" data-delta="-${b.v}">−</button>` +
+    `<button type="button" data-delta="${b.v}">+</button>` +
+    `</div></div>`
+  ).join("");
+
+  function wepRow(p, label) {
+    return `<div class="wep">` +
+      `<input data-w="${p}name" placeholder="${label}">` +
+      `<input class="plain" data-w="${p}1h" type="text" inputmode="numeric" value="0" title="1H">` +
+      `<input class="plain" data-w="${p}2h" type="text" inputmode="numeric" value="0" title="2H">` +
+      `<input data-w="${p}ceil" placeholder="ceil">` +
+      `<select data-w="${p}stat"><option value="weapons">WPN</option><option value="ranged">RNG</option></select>` +
+      `<select data-w="${p}kind"><option value="melee">Melee</option><option value="ranged">Rng</option></select>` +
+      `</div>`;
+  }
+
+  root.innerHTML =
+    `<div class="name-row">` +
+    `<input data-f="name" placeholder="Seat ${index + 1}">` +
+    `<input data-f="who" placeholder="who">` +
+    `</div>` +
+    `<div class="caps">${capHtml}</div>` +
+    `<div class="mini-row">` +
+    `<div class="mini"><label>Spd</label><input data-f="baseSpeed" type="number" value="30"></div>` +
+    `<div class="mini"><label>Armor</label>` +
+    `<select data-f="armor">` +
+    `<option value="1">None+1</option>` +
+    `<option value="0" selected>Lth 0</option>` +
+    `<option value="-1">Chn−1</option>` +
+    `<option value="-2">Plt−2</option>` +
+    `</select></div>` +
+    `<div class="mini"><label>Agg</label><input data-f="agg" type="number" value="0" min="-10" max="10"></div>` +
+    `</div>` +
+    `<div class="flags">` +
+    `<label><input data-f="adjacent" type="checkbox"> Adj</label>` +
+    `<label><input data-f="guidance" type="checkbox"> Guid</label>` +
+    `</div>` +
+    `${wepRow("a", "Wpn A")} ${wepRow("b", "Wpn B")} ${wepRow("c", "Wpn C")}` +
+    `<div class="wounds">${bitHtml}</div>` +
+    `<button type="button" data-reset style="width:100%;margin-top:2px;font-size:9px;min-height:16px">RESET WOUNDS</button>` +
+    `<div class="live" data-live></div>` +
+    `<div class="seat-bar">` +
+    `<button type="button" data-save>JSON ↓</button>` +
+    `<label class="filebtn">JSON ↑<input type="file" data-load accept="application/json,.json"></label>` +
+    `<button type="button" data-wipe>Clear</button>` +
+    `</div>`;
+
+  const q = (sel) => root.querySelector(sel);
+  const qa = (sel) => root.querySelectorAll(sel);
+
+  function capVal(id) {
+    return clampCap(num(q('[data-cap="' + id + '"]')));
+  }
+
+  function woundLevel() {
+    const map = {32:6,16:5,8:4,4:3,2:2,1:1};
+    for (const b of BITS) {
+      if (seat.wounds & b.v) return map[b.v];
+    }
+    return 0;
+  }
+
+  function worstName() {
+    for (const b of BITS) if (seat.wounds & b.v) return b.name;
+    return "—";
+  }
+
+  function meleeAgg() {
+    if (!q('[data-f="adjacent"]').checked) return 0;
+    let a = num(q('[data-f="agg"]'));
+    if (a > 10) a = 10;
+    if (a < -10) a = -10;
+    return a;
+  }
+
+  function wepState(p) {
+    return {
+      name: q('[data-w="' + p + 'name"]').value,
+      h1: num(q('[data-w="' + p + '1h"]')),
+      h2: num(q('[data-w="' + p + '2h"]')),
+      ceil: q('[data-w="' + p + 'ceil"]').value,
+      stat: q('[data-w="' + p + 'stat"]').value,
+      kind: q('[data-w="' + p + 'kind"]').value
+    };
+  }
+
+  function applyWep(p, data) {
+    if (!data) return;
+    q('[data-w="' + p + 'name"]').value = data.name || "";
+    q('[data-w="' + p + '1h"]').value = data.h1 ?? 0;
+    q('[data-w="' + p + '2h"]').value = data.h2 ?? 0;
+    q('[data-w="' + p + 'ceil"]').value = data.ceil || "";
+    if (data.stat) q('[data-w="' + p + 'stat"]').value = data.stat;
+    if (data.kind) q('[data-w="' + p + 'kind"]').value = data.kind;
+  }
+
+  seat.gather = function () {
+    const caps = {};
+    CAPS.forEach(([id]) => { caps[id] = capVal(id); });
+    return {
+      name: q('[data-f="name"]').value,
+      who: q('[data-f="who"]').value,
+      caps,
+      baseSpeed: num(q('[data-f="baseSpeed"]')),
+      armor: q('[data-f="armor"]').value,
+      agg: num(q('[data-f="agg"]')),
+      adjacent: q('[data-f="adjacent"]').checked,
+      guidance: q('[data-f="guidance"]').checked,
+      wounds: seat.wounds,
+      a: wepState("a"),
+      b: wepState("b"),
+      c: wepState("c")
+    };
+  };
+
+  seat.apply = function (data) {
+    const s = (data && isSheet(data)) ? data : emptySheet();
+    q('[data-f="name"]').value = s.name || "";
+    q('[data-f="who"]').value = s.who || "";
+    CAPS.forEach(([id]) => {
+      q('[data-cap="' + id + '"]').value = (s.caps && s.caps[id] != null) ? s.caps[id] : 0;
+    });
+    q('[data-f="baseSpeed"]').value = s.baseSpeed != null ? s.baseSpeed : 30;
+    q('[data-f="armor"]').value = s.armor != null ? String(s.armor) : "0";
+    q('[data-f="agg"]').value = s.agg != null ? s.agg : 0;
+    q('[data-f="adjacent"]').checked = !!s.adjacent;
+    q('[data-f="guidance"]').checked = !!s.guidance;
+    seat.wounds = Math.max(0, Math.min(63, parseInt(s.wounds, 10) || 0));
+    applyWep("a", s.a);
+    applyWep("b", s.b);
+    applyWep("c", s.c);
+    seat.render();
+    return true;
+  };
+
+  seat.render = function () {
+    const wl = woundLevel();
+    const agg = meleeAgg();
+    CAPS.forEach(([id, , pen]) => {
+      const raw = capVal(id);
+      const eff = pen ? raw - wl : raw;
+      const node = q('[data-eff="' + id + '"]');
+      node.textContent = eff;
+      node.className = "eff" + (pen && wl ? " hurt" : "");
+    });
+    BITS.forEach((b, bi) => {
+      const cell = q('[data-bit="' + bi + '"]');
+      cell.className = "bit " + ((seat.wounds & b.v) ? "high" : "low");
+    });
+    const weap = capVal("weapons") - wl;
+    const rang = capVal("ranged") - wl;
+    const ath = capVal("athletics") - wl;
+    const mag = capVal("magic");
+    const faith = capVal("faith");
+    function pair(p) {
+      const w = wepState(p);
+      const capv = w.stat === "ranged" ? rang : weap;
+      const extraOff = w.kind === "melee" ? agg : 0;
+      const extraDef = w.kind === "melee" ? -agg : 0;
+      const off1 = capv + w.h1 + extraOff;
+      const off2 = capv + w.h2 + extraOff;
+      const def1 = capv + w.h1 + extraDef;
+      const def2 = capv + w.h2 + extraDef;
+      const nm = (w.name || ("Wpn " + p.toUpperCase()));
+      return { nm, off: signed(off1) + " / " + signed(off2), def: signed(def1) + " / " + signed(def2) };
+    }
+    const A = pair("a");
+    const B = pair("b");
+    const C = pair("c");
+    const spd = Math.ceil((num(q('[data-f="baseSpeed"]')) + capVal("athletics")) / 5) * 5;
+    let ceil = "DEEP";
+    if (mag >= 16) ceil = "MORT";
+    else if (mag >= 11) ceil = "GRAV";
+    else if (mag >= 6) ceil = "SEVR";
+    const adj = q('[data-f="adjacent"]').checked;
+    q("[data-live]").innerHTML =
+      `<div class="mod"><span>${A.nm} off 1H/2H</span><b>${A.off}</b></div>` +
+      `<div class="mod"><span>${A.nm} def 1H/2H</span><b>${A.def}</b></div>` +
+      `<div class="mod"><span>${B.nm} off 1H/2H</span><b>${B.off}</b></div>` +
+      `<div class="mod"><span>${B.nm} def 1H/2H</span><b>${B.def}</b></div>` +
+      `<div class="mod"><span>${C.nm} off 1H/2H</span><b>${C.off}</b></div>` +
+      `<div class="mod"><span>${C.nm} def 1H/2H</span><b>${C.def}</b></div>` +
+      `<div class="mod"><span>Dodge (melee)</span><b>${signed(ath - agg)}</b></div>` +
+      `<div class="mod"><span>Call / ceiling</span><b>${signed(mag)} · ${ceil}</b></div>` +
+      `<div class="mod"><span>Speed</span><b>${spd} ft · ${spd / 5} sq</b></div>` +
+      `<div class="mod"><span>Wound / C5 / Guid</span><b>${worstName()} · ${wl ? ("−" + wl) : "0"} · ${q('[data-f="guidance"]').checked ? "FTH " + faith : "off"}</b></div>` +
+      `<div class="mod"><span>Aggression live</span><b>${adj ? signed(agg) : "0 not adj"}</b></div>` +
+      `<div class="mod"><span>Meditate</span><b>${faith * 15} min</b></div>`;
+  };
+
+  root.addEventListener("input", () => seat.render());
+  root.addEventListener("change", () => seat.render());
+  qa("[data-delta]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      seat.wounds += parseInt(btn.getAttribute("data-delta"), 10);
+      if (seat.wounds < 0) seat.wounds = 0;
+      if (seat.wounds > 63) seat.wounds = 63;
+      seat.render();
+    });
+  });
+  q("[data-reset]").addEventListener("click", () => { seat.wounds = 0; seat.render(); });
+  q("[data-save]").addEventListener("click", () => {
+    const s = seat.gather();
+    const name = (s.name || ("seat" + (index + 1))).replace(/[^\w\-]+/g, "_");
+    download("CC_" + name + ".json", s);
+    toast("Seat " + (index + 1) + " downloaded.");
+  });
+  q("[data-load]").addEventListener("change", ev => {
+    const file = ev.target.files && ev.target.files[0];
+    if (!file) return;
+    readFile(file, data => {
+      if (data && data.type === "cc-encounter-v1") {
+        toast("That is an encounter file. Use Load encounter JSON.");
+      } else if (seat.apply(data)) {
+        toast("Seat " + (index + 1) + " loaded " + file.name);
+      } else {
+        toast("Not a character sheet.");
+      }
+    });
+    ev.target.value = "";
+  });
+  q("[data-wipe]").addEventListener("click", () => {
+    seat.apply(emptySheet());
+    toast("Seat " + (index + 1) + " cleared.");
+  });
+
+  seat.apply(emptySheet());
+  return seat;
+}
+
+const board = document.getElementById("board");
+for (let i = 0; i < 12; i++) {
+  const s = createSeat(i);
+  seats.push(s);
+  board.appendChild(s.root);
+}
+
+function gatherEncounter(name) {
+  return {
+    type: "cc-encounter-v1",
+    name: name || "Encounter",
+    seats: seats.map(s => s.gather())
+  };
+}
+
+function applyEncounter(pack) {
+  if (!pack || pack.type !== "cc-encounter-v1" || !Array.isArray(pack.seats)) return false;
+  for (let i = 0; i < 12; i++) {
+    seats[i].apply(pack.seats[i] || emptySheet());
+  }
+  return true;
+}
+
+document.getElementById("loadEncounter").addEventListener("click", () => {
+  const key = document.getElementById("encounter").value;
+  const pack = PACKS[key];
+  if (!pack) return toast("No pack.");
+  applyEncounter(pack);
+  toast((pack.name || key) + " loaded (empty stub until you save NPCs).");
+});
+
+document.getElementById("saveEncounter").addEventListener("click", () => {
+  const key = document.getElementById("encounter").value;
+  const name = (PACKS[key] && PACKS[key].name) || key;
+  download("CC_encounter_" + name.replace(/[^\w\-]+/g, "_") + ".json", gatherEncounter(name));
+  toast("Encounter JSON downloaded.");
+});
+
+document.getElementById("loadEncounterFile").addEventListener("change", ev => {
+  const file = ev.target.files && ev.target.files[0];
+  if (!file) return;
+  readFile(file, data => {
+    if (applyEncounter(data)) toast("Loaded encounter " + file.name);
+    else toast("Not an encounter file (need type cc-encounter-v1).");
+  });
+  ev.target.value = "";
+});
+
+document.getElementById("clearAll").addEventListener("click", () => {
+  seats.forEach(s => s.apply(emptySheet()));
+  toast("All seats cleared.");
+});
+</script>
+</body>
+</html>
