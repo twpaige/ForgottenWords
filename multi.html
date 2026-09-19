@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C&C Multi Wound Tracker</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #20252b;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #f0f0f0;
+  }
+
+  .page {
+    padding: 12px 14px 20px;
+  }
+
+  .page-title {
+    margin: 0 0 4px;
+    text-align: center;
+    font-size: 22px;
+  }
+
+  .page-sub {
+    margin: 0 0 12px;
+    text-align: center;
+    color: #b9c0c7;
+    font-size: 13px;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
+    gap: 10px;
+  }
+
+  .machine {
+    padding: 10px;
+    border-radius: 12px;
+    background: #30363d;
+    box-shadow: 0 8px 22px rgba(0,0,0,.35);
+    min-width: 0;
+  }
+
+  .name-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .name-row input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    border-radius: 8px;
+    background: #171a1d;
+    color: #f0f0f0;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+
+  .name-row input::placeholder {
+    color: #7d858d;
+  }
+
+  .header, .row {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr 1fr;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .header {
+    margin-bottom: 4px;
+    color: #aeb5bc;
+    font-size: 9px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .row { margin: 3px 0; }
+
+  button {
+    width: 100%;
+    min-height: 28px;
+    border: 0;
+    border-radius: 7px;
+    background: #4a525b;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .08s, background .12s;
+  }
+
+  button:hover { background: #5b646e; }
+  button:active { transform: scale(.96); }
+
+  .bit-cell {
+    min-height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    font-weight: bold;
+    transition: background .15s, color .15s;
+  }
+
+  .bit-cell.high {
+    background: #d8a400;
+    color: #17120a;
+  }
+
+  .bit-cell.low {
+    background: #171a1d;
+    color: #777f87;
+  }
+
+  .bit {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 11px;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .reset {
+    width: 72px;
+    min-height: 26px;
+    font-size: 11px;
+    background: #555d66;
+  }
+
+  @media (max-width: 1400px) {
+    .board { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  @media (max-width: 980px) {
+    .board { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 720px) {
+    .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 class="page-title">Crown & Call Wound Tracker</h1>
+  <p class="page-sub">GM board — 12 independent trackers</p>
+  <div class="board" id="board"></div>
+</div>
+
+<script>
+  const TRACKER_COUNT = 12;
+  const bitValues = [128, 64, 32, 16, 8, 4, 2, 1];
+  const labels = ["MORT x4", "MORT x2", "MORT", "GRAV", "SEVR", "DEEP", "LITE", "FLSH"];
+
+  function createTracker(id) {
+    const machine = document.createElement("div");
+    machine.className = "machine";
+
+    const nameRow = document.createElement("div");
+    nameRow.className = "name-row";
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.placeholder = "Name " + (id + 1);
+    nameInput.maxLength = 32;
+    nameRow.appendChild(nameInput);
+
+    const header = document.createElement("div");
+    header.className = "header";
+    header.innerHTML = "<div>Sub</div><div>Wound</div><div>Add</div>";
+
+    const bits = document.createElement("div");
+    const bottom = document.createElement("div");
+    bottom.className = "bottom";
+    const reset = document.createElement("button");
+    reset.className = "reset";
+    reset.textContent = "RESET";
+    bottom.appendChild(reset);
+
+    machine.appendChild(nameRow);
+    machine.appendChild(header);
+    machine.appendChild(bits);
+    machine.appendChild(bottom);
+
+    const state = { total: 0, cells: [] };
+
+    bitValues.forEach((value, index) => {
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const subtract = document.createElement("button");
+      subtract.textContent = "−";
+      subtract.title = "Subtract " + labels[index];
+      subtract.addEventListener("click", () => change(state, -value));
+
+      const cell = document.createElement("div");
+      cell.className = "bit-cell low";
+      const bit = document.createElement("div");
+      bit.className = "bit";
+      bit.textContent = labels[index];
+      cell.appendChild(bit);
+
+      const add = document.createElement("button");
+      add.textContent = "+";
+      add.title = "Add " + labels[index];
+      add.addEventListener("click", () => change(state, value));
+
+      row.appendChild(subtract);
+      row.appendChild(cell);
+      row.appendChild(add);
+      bits.appendChild(row);
+      state.cells.push(cell);
+    });
+
+    reset.addEventListener("click", () => {
+      state.total = 0;
+      paint(state);
+    });
+
+    paint(state);
+    return machine;
+  }
+
+  function change(state, amount) {
+    state.total += amount;
+    if (state.total < 0) state.total = 0;
+    if (state.total > 255) state.total = 255;
+    paint(state);
+  }
+
+  function paint(state) {
+    bitValues.forEach((value, index) => {
+      const on = (state.total & value) !== 0;
+      state.cells[index].className = "bit-cell " + (on ? "high" : "low");
+    });
+  }
+
+  const board = document.getElementById("board");
+  for (let i = 0; i < TRACKER_COUNT; i++) {
+    board.appendChild(createTracker(i));
+  }
+</script>
+</body>
+</html>
