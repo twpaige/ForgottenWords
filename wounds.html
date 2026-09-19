@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6-Bit Adding Machine</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #20252b;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #f0f0f0;
+  }
+
+  .machine {
+    width: min(560px, 94vw);
+    padding: 28px;
+    border-radius: 18px;
+    background: #30363d;
+    box-shadow: 0 12px 35px rgba(0,0,0,.45);
+  }
+
+  h1 {
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 28px;
+  }
+
+  .subtitle {
+    margin: 0 0 22px;
+    text-align: center;
+    color: #b9c0c7;
+    font-size: 14px;
+  }
+
+  .display {
+    text-align: center;
+    margin-bottom: 22px;
+    padding: 16px;
+    border-radius: 12px;
+    background: #171a1d;
+  }
+
+  .decimal {
+    font-size: 42px;
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  .binary {
+    margin-top: 9px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 24px;
+    letter-spacing: 5px;
+    color: #d9dde1;
+  }
+
+  .header, .row {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .header {
+    margin-bottom: 7px;
+    color: #aeb5bc;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .row {
+    margin: 7px 0;
+  }
+
+  button {
+    width: 100%;
+    min-height: 54px;
+    border: 0;
+    border-radius: 10px;
+    background: #4a525b;
+    color: white;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .08s, background .12s;
+  }
+
+  button:hover { background: #5b646e; }
+  button:active { transform: scale(.96); }
+
+  .bit-cell {
+    min-height: 54px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: background .15s, color .15s;
+  }
+
+  .bit-cell.high {
+    background: #d8a400;
+    color: #17120a;
+  }
+
+  .bit-cell.low {
+    background: #171a1d;
+    color: #777f87;
+  }
+
+  .bit {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 25px;
+  }
+
+  .value {
+    font-size: 11px;
+    opacity: .8;
+    margin-top: 2px;
+  }
+
+  .bottom {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .reset {
+    width: 150px;
+    min-height: 42px;
+    font-size: 16px;
+    background: #555d66;
+  }
+
+  .hint {
+    margin-top: 18px;
+    text-align: center;
+    color: #9da5ad;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+
+<body>
+<div class="machine">
+  <h1>Crown & Call Wound Tracker</h1>
+  <p class="subtitle">Add or subtract any wound</p>
+
+  <div class="header">
+    <div>Subtract</div>
+    <div>Wound</div>
+    <div>Add</div>
+  </div>
+
+  <div id="bits"></div>
+
+  <div class="bottom">
+    <button class="reset" id="reset">RESET</button>
+  </div>
+
+  
+</div>
+
+<script>
+  let total = 0;
+
+  // Top to bottom: 32, 16, 8, 4, 2, 1
+  const bitValues = [128, 64, 32, 16, 8, 4, 2, 1];
+
+  const bitsContainer = document.getElementById("bits");
+  const resetButton = document.getElementById("reset");
+
+  function buildTable() {
+    bitsContainer.innerHTML = "";
+
+    bitValues.forEach((value, index) => {
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const subtractButton = document.createElement("button");
+      subtractButton.textContent = "−";
+      subtractButton.title = `Subtract ${value}`;
+      subtractButton.addEventListener("click", () => changeTotal(-value));
+
+      const bitCell = document.createElement("div");
+      bitCell.className = "bit-cell";
+      bitCell.id = `bit-${index}`;
+
+      const bit = document.createElement("div");
+      bit.className = "bit";
+
+      const valueLabel = document.createElement("div");
+      valueLabel.className = "value";
+      //valueLabel.textContent = value;
+
+      bitCell.appendChild(bit);
+      bitCell.appendChild(valueLabel);
+
+      const addButton = document.createElement("button");
+      addButton.textContent = "+";
+      addButton.title = `Add ${value}`;
+      addButton.addEventListener("click", () => changeTotal(value));
+
+      row.appendChild(subtractButton);
+      row.appendChild(bitCell);
+      row.appendChild(addButton);
+
+      bitsContainer.appendChild(row);
+    });
+  }
+
+  function changeTotal(amount) {
+    total += amount;
+
+    // Keep the machine within the six-bit range.
+    if (total < 0) total = 0;
+    if (total > 255) total = 255;
+
+    updateDisplay();
+  }
+
+  function updateDisplay() {
+    const binary = total.toString(2).padStart(7, "0");
+
+  //  decimalDisplay.textContent = total;
+  //  binaryDisplay.textContent = binary;
+
+    bitValues.forEach((value, index) => {
+      const cell = document.getElementById(`bit-${index}`);
+      const bit = cell.querySelector(".bit");
+
+      // Because bitValues are in descending order, each bit
+      // corresponds directly to the binary string's position.
+      const isHigh = (total & value) !== 0;
+
+      cell.className = `bit-cell ${isHigh ? "high" : "low"}`;
+      bit.textContent = ["MORT x4", "MORT x2", "MORT", "GRAV", "SEVR", "DEEP", "LITE", "FLSH"][index];
+    });
+  }
+
+  resetButton.addEventListener("click", () => {
+    total = 0;
+    updateDisplay();
+  });
+
+  buildTable();
+  updateDisplay();
+</script>
+</body>
+</html>
