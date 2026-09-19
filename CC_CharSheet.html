@@ -206,10 +206,10 @@
 
   <div class="grid" style="margin-top:14px">
     <div class="card">
-      <h2>Weapons (enter your own stats)</h2>
+      <h2>Weapons</h2>
       <div class="weapon" id="w1"></div>
       <div class="weapon" id="w2"></div>
-      <div class="weapon" id="sh"></div>
+      <div class="weapon" id="w3"></div>
     </div>
     <div class="card">
       <h2>Live modifiers</h2>
@@ -404,12 +404,12 @@ function render() {
     return {
       off: pair(off1, off2),
       def: pair(def1, def2),
-      name: document.getElementById(prefix + "name").value || prefix
+      name: (document.getElementById(prefix + "name").value || "").trim() || ("Weapon " + prefix.toUpperCase())
     };
   }
   const a = line("a");
   const b = line("b");
-  const s = line("s");
+  const c = line("c");
   const dodgeDef = ath - agg;
   const spd = speed();
   const squares = spd / 5;
@@ -425,7 +425,9 @@ function render() {
     <div class="mod"><span>${a.name} offense 1H / 2H</span><b>${a.off}</b></div>
     <div class="mod"><span>${a.name} defense 1H / 2H</span><b>${a.def}</b></div>
     <div class="mod"><span>${b.name} offense 1H / 2H</span><b>${b.off}</b></div>
-    <div class="mod"><span>${s.name} defense 1H / 2H</span><b>${s.def}</b></div>
+    <div class="mod"><span>${b.name} defense 1H / 2H</span><b>${b.def}</b></div>
+    <div class="mod"><span>${c.name} offense 1H / 2H</span><b>${c.off}</b></div>
+    <div class="mod"><span>${c.name} defense 1H / 2H</span><b>${c.def}</b></div>
     <div class="mod"><span>Dodge (ATHLETICS, melee)</span><b>${signed(dodgeDef)}</b></div>
     <div class="mod"><span>Call (MAGIC vs MAGIC)</span><b>${signed(mag)}</b></div>
     <div class="mod"><span>Speed / squares</span><b>${spd} ft · ${squares} sq</b></div>
@@ -444,9 +446,9 @@ function render() {
 }
 
 buildCaps();
-weaponBlock("w1", "a", "Weapon A", { name: "Arming Sword", h1: 0, h2: 2, ceil: "DEEP", stat: "weapons", kind: "melee" });
-weaponBlock("w2", "b", "Weapon B / launcher or thrown", { name: "—", h1: 0, h2: 0, ceil: "—", stat: "ranged", kind: "ranged" });
-weaponBlock("sh", "s", "Shield or off-hand", { name: "Shield (Light)", h1: 2, h2: 4, ceil: "LITE", stat: "weapons", kind: "melee" });
+weaponBlock("w1", "a", "Weapon A", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
+weaponBlock("w2", "b", "Weapon B", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
+weaponBlock("w3", "c", "Weapon C", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
 buildBits();
 ["baseSpeed","armor","agg","adjacent","guidance"].forEach(id => {
   document.getElementById(id).addEventListener("input", render);
