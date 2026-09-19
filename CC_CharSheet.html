@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 Crown & Call character sheet
-Version: 202609190836
+Version: 202609191618
 Copyright (c) 2026 Thomas Paige. All rights reserved.
 Playtest use only. Not licensed for redistribution.
 -->
@@ -12,10 +12,10 @@ Playtest use only. Not licensed for redistribution.
 <title>Crown & Call — Character Sheet</title>
 <style>
   :root {
-    --bg: #20252b;
-    --card: #30363d;
+    --bg: #1a1e24;
+    --card: #2b3138;
     --ink: #f0f0f0;
-    --mute: #9da5ad;
+    --mute: #8b949e;
     --line: #171a1d;
     --gold: #d8a400;
     --btn: #4a525b;
@@ -26,160 +26,213 @@ Playtest use only. Not licensed for redistribution.
     background: var(--bg);
     color: var(--ink);
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
   }
   .wrap {
-    max-width: 1100px;
+    max-width: 720px;
     margin: 0 auto;
-    padding: 16px 14px 28px;
+    padding: 6px 10px 16px;
   }
-  h1 { margin: 0; font-size: 26px; text-align: center; }
-  .sub { margin: 4px 0 16px; text-align: center; color: var(--mute); font-size: 13px; }
-  .foot { margin: 18px 0 4px; text-align: center; color: var(--mute); font-size: 12px; }
-  .grid {
-    display: grid;
-    grid-template-columns: 1.15fr .95fr;
-    gap: 14px;
+  h1 { margin: 0; font-size: 18px; text-align: center; font-weight: normal; }
+  .sub { margin: 2px 0 6px; text-align: center; color: var(--mute); font-size: 11px; }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+    margin: 0 0 4px;
   }
-  @media (max-width: 860px) {
-    .grid { grid-template-columns: 1fr; }
+  .toolbar button, .toolbar label.filebtn {
+    border: 0;
+    border-radius: 6px;
+    background: var(--btn);
+    color: #fff;
+    min-height: 24px;
+    padding: 0 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
   }
-  .card {
+  .toolbar label.filebtn { display: inline-flex; align-items: center; }
+  .toolbar input[type=file] { display: none; }
+  .toast { text-align: center; color: var(--mute); font-size: 11px; min-height: 12px; margin: 0 0 6px; }
+  .seat {
     background: var(--card);
-    border-radius: 14px;
-    padding: 14px;
+    border-radius: 10px;
+    padding: 8px 10px;
     box-shadow: 0 10px 28px rgba(0,0,0,.35);
   }
-  h2 {
-    margin: 0 0 10px;
-    font-size: 15px;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: #c9d0d6;
-  }
-  label { font-size: 12px; color: var(--mute); display: block; margin-bottom: 3px; }
-  input[type=text], input[type=number], select {
+  .seat input, .seat select {
     width: 100%;
     border: 0;
-    border-radius: 8px;
+    border-radius: 6px;
     background: var(--line);
     color: var(--ink);
-    padding: 8px 9px;
-    font-size: 15px;
+    padding: 4px 6px;
+    font-size: 13px;
+    min-height: 26px;
   }
-  input[type=number] { font-variant-numeric: tabular-nums; }
-  .who { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .seat input[type=checkbox] {
+    width: 12px;
+    height: 12px;
+    min-height: 12px;
+    padding: 0;
+  }
+  .seat input[type=number] { font-variant-numeric: tabular-nums; }
+  .name-row { display: grid; grid-template-columns: 1.2fr .8fr; gap: 6px; margin-bottom: 6px; }
   .caps {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .cap {
-    display: grid;
-    grid-template-columns: 1fr 64px 52px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 6px;
-    align-items: end;
-  }
-  .eff {
-    font-size: 18px;
-    font-weight: bold;
-    text-align: right;
-    padding-bottom: 6px;
-  }
-  .eff.hurt { color: #e2b34a; }
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .chk {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    margin-top: 10px;
-    font-size: 13px;
-    color: #d5dbe0;
-  }
-  .mods {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .mod {
-    background: var(--line);
-    border-radius: 10px;
-    padding: 10px;
-  }
-  .mod b { display: block; font-size: 22px; }
-  .mod span { color: var(--mute); font-size: 12px; }
-  .weapon { margin-bottom: 10px; }
-  .weapon .row3 { margin-top: 6px; }
-  .header, .wrow {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr 1fr;
-    gap: 6px;
-    align-items: center;
-  }
-  .header {
-    color: #aeb5bc;
-    font-size: 11px;
-    font-weight: bold;
-    text-align: center;
-    text-transform: uppercase;
     margin-bottom: 4px;
   }
-  .wrow { margin: 5px 0; }
+  .cap { min-width: 0; }
+  .cap label, .mini label, .wlab {
+    display: block;
+    color: var(--mute);
+    font-size: 10px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .cap .line { display: grid; grid-template-columns: 1fr 28px; gap: 4px; align-items: center; }
+  .eff { text-align: right; font-weight: bold; font-size: 16px; }
+  .eff.hurt { color: #e2b34a; }
+  .sum {
+    margin: 0 0 6px;
+    color: var(--mute);
+    font-size: 11px;
+    line-height: 1.3;
+  }
+  .mini-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .flags {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
+    align-items: center;
+    margin: 2px 0 4px;
+    color: #d5dbe0;
+    white-space: nowrap;
+    font-size: 11px;
+    line-height: 1;
+  }
+  .flags label {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    font-size: 11px;
+    margin: 0;
+  }
+  .flags input[type=checkbox] {
+    width: 12px;
+    height: 12px;
+    min-height: 12px;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--gold);
+    flex: 0 0 12px;
+  }
+  .wep {
+    display: grid;
+    grid-template-columns: minmax(90px, 1.4fr) 44px 44px 56px 92px 88px;
+    gap: 5px;
+    margin-bottom: 4px;
+    align-items: center;
+  }
+  .wep-head span {
+    color: var(--mute);
+    font-size: 9px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .plain {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  .plain::-webkit-outer-spin-button,
+  .plain::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .wounds {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 5px;
+    margin-top: 5px;
+  }
+  .wcell { min-width: 0; }
+  .wcell .bit {
+    text-align: center;
+    border-radius: 6px 6px 0 0;
+    font-size: 12px;
+    font-weight: bold;
+    min-height: 26px;
+    line-height: 26px;
+  }
+  .bit.high { background: var(--gold); color: #17120a; }
+  .bit.low { background: var(--line); color: #777f87; }
+  .wpm { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .wpm button {
+    min-height: 26px;
+    font-size: 16px;
+    line-height: 1;
+    border-radius: 0 0 6px 6px;
+    padding: 0;
+  }
   button {
-    width: 100%;
-    min-height: 44px;
     border: 0;
-    border-radius: 9px;
+    border-radius: 6px;
     background: var(--btn);
-    color: white;
-    font-size: 22px;
+    color: #fff;
     font-weight: bold;
     cursor: pointer;
   }
   button:active { transform: scale(.97); }
-  .bit-cell {
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9px;
-    font-weight: bold;
-    font-size: 14px;
+  .reset {
+    width: 100%;
+    margin-top: 4px;
+    min-height: 24px;
+    font-size: 11px;
   }
-  .bit-cell.high { background: var(--gold); color: #17120a; }
-  .bit-cell.low { background: var(--line); color: #777f87; }
-  .reset { max-width: 140px; min-height: 36px; font-size: 14px; margin: 8px auto 0; display: block; }
-  .hint { margin: 8px 0 0; color: var(--mute); font-size: 11px; line-height: 1.4; text-align: center; }
-  .sum { margin-top: 10px; background: var(--line); border-radius: 10px; padding: 10px; font-size: 13px; line-height: 1.45; }
+  .live {
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+  .mod {
+    background: var(--line);
+    border-radius: 5px;
+    padding: 3px 6px;
+  }
+  .mod span { display: block; color: var(--mute); font-size: 9px; text-transform: uppercase; line-height: 1.2; }
+  .mod b { display: block; font-size: 14px; font-weight: bold; margin-top: 0; line-height: 1.2; }
+  .notes {
+    margin-top: 5px;
+    background: var(--line);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 11px;
+    line-height: 1.35;
+    color: #d5dbe0;
+  }
   .warn { color: #e2b34a; }
-  .toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin: 0 0 16px;
+  .foot { margin: 8px 0 0; text-align: center; color: var(--mute); font-size: 11px; }
+  @media (max-width: 640px) {
+    .caps { grid-template-columns: 1fr 1fr; }
+    .wep { grid-template-columns: 1fr 1fr 1fr; }
+    .live { grid-template-columns: 1fr; }
   }
-  .toolbar button, .toolbar label.filebtn {
-    width: auto;
-    min-height: 36px;
-    padding: 0 14px;
-    font-size: 14px;
-  }
-  .toolbar label.filebtn {
-    display: inline-flex;
-    align-items: center;
-    background: var(--btn);
-    border-radius: 9px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .toolbar input[type=file] { display: none; }
-  .toast { text-align: center; color: var(--mute); font-size: 12px; min-height: 16px; margin: -8px 0 12px; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Crown & Call</h1>
+  <h1>Crown &amp; Call</h1>
   <p class="sub">Play sheet · Save writes this browser only · JSON file for work PCs</p>
   <div class="toolbar">
     <button type="button" id="saveLocal">Save in browser</button>
@@ -188,72 +241,84 @@ Playtest use only. Not licensed for redistribution.
   </div>
   <p class="toast" id="toast"></p>
 
-  <div class="grid">
-    <div class="card">
-      <h2>Character</h2>
-      <div class="who">
-        <div>
-          <label for="name">Name</label>
-          <input id="name" type="text" placeholder="Name">
-        </div>
-        <div>
-          <label for="who">Who they are</label>
-          <input id="who" type="text" placeholder="warrior-priest, hedge caller…">
-        </div>
-      </div>
-
-      <h2>Capabilities</h2>
-      <div class="caps" id="caps"></div>
-      <div class="sum" id="capSum"></div>
-
-      <div class="row2">
-        <div>
-          <label for="baseSpeed">Base Speed</label>
-          <input id="baseSpeed" type="number" value="30">
-        </div>
-        <div>
-          <label for="armor">Armor (severity, not AC)</label>
-          <select id="armor">
-            <option value="1">None (+1 severity)</option>
-            <option value="0" selected>Leather (0)</option>
-            <option value="-1">Chain (−1)</option>
-            <option value="-2">Plate (−2)</option>
-          </select>
-        </div>
-      </div>
-
+  <div class="seat">
+    <div class="name-row">
       <div>
-        <label for="agg">Aggression (−10 to +10)</label>
+        <label class="wlab" for="name">Name</label>
+        <input id="name" type="text" placeholder="Name">
+      </div>
+      <div>
+        <label class="wlab" for="who">Who they are</label>
+        <input id="who" type="text" placeholder="warrior-priest, hedge caller…">
+      </div>
+    </div>
+
+    <div class="caps" id="caps"></div>
+    <div class="sum" id="capSum"></div>
+
+    <div class="mini-row">
+      <div class="mini">
+        <label for="baseSpeed">Base Speed</label>
+        <input id="baseSpeed" type="number" value="30">
+      </div>
+      <div class="mini">
+        <label for="armor">Armor</label>
+        <select id="armor">
+          <option value="1">None (+1 severity)</option>
+          <option value="0" selected>Leather (0)</option>
+          <option value="-1">Chain (−1)</option>
+          <option value="-2">Plate (−2)</option>
+        </select>
+      </div>
+      <div class="mini">
+        <label for="agg">Aggression</label>
         <input id="agg" type="number" value="0" min="-10" max="10">
       </div>
-      <label class="chk"><input id="adjacent" type="checkbox"> Adjacent to an enemy (required for non-zero Aggression)</label>
-      <label class="chk"><input id="guidance" type="checkbox"> Guidance banked (max 1)</label>
+    </div>
+    <div class="flags">
+      <label><input id="adjacent" type="checkbox"> Adjacent</label>
+      <label><input id="guidance" type="checkbox"> Guidance</label>
     </div>
 
-    <div class="card">
-      <h2>Wounds (W8)</h2>
-      <div class="header"><div>Heal</div><div>Rung</div><div>Hurt</div></div>
-      <div id="bits"></div>
-      <button class="reset" id="reset" type="button">RESET</button>
-      <p class="hint">Binary ladder. Worst rung is the C5 penalty. MAGIC / ACADEMICS / FAITH ignore it. Speed uses full ATHLETICS.</p>
-      <div class="sum" id="woundSum"></div>
+    <div class="wlab">Weapons</div>
+    <div class="wep wep-head">
+      <span>Name</span><span>1H</span><span>2H</span><span>Ceil</span><span>Used with</span><span>Kind</span>
     </div>
-  </div>
+    <div id="weapons">
+      <div class="wep">
+        <input id="aname" type="text" placeholder="Weapon A">
+        <input class="plain" id="a1h" type="text" inputmode="numeric" value="0" title="1H">
+        <input class="plain" id="a2h" type="text" inputmode="numeric" value="0" title="2H">
+        <input id="aceil" type="text" placeholder="ceil">
+        <select id="astat"><option value="weapons" selected>WEAPONS</option><option value="ranged">RANGED</option></select>
+        <select id="akind"><option value="melee" selected>Melee</option><option value="ranged">Ranged</option></select>
+      </div>
+      <div class="wep">
+        <input id="bname" type="text" placeholder="Weapon B">
+        <input class="plain" id="b1h" type="text" inputmode="numeric" value="0" title="1H">
+        <input class="plain" id="b2h" type="text" inputmode="numeric" value="0" title="2H">
+        <input id="bceil" type="text" placeholder="ceil">
+        <select id="bstat"><option value="weapons" selected>WEAPONS</option><option value="ranged">RANGED</option></select>
+        <select id="bkind"><option value="melee" selected>Melee</option><option value="ranged">Ranged</option></select>
+      </div>
+      <div class="wep">
+        <input id="cname" type="text" placeholder="Weapon C">
+        <input class="plain" id="c1h" type="text" inputmode="numeric" value="0" title="1H">
+        <input class="plain" id="c2h" type="text" inputmode="numeric" value="0" title="2H">
+        <input id="cceil" type="text" placeholder="ceil">
+        <select id="cstat"><option value="ranged" selected>RANGED</option><option value="weapons">WEAPONS</option></select>
+        <select id="ckind"><option value="ranged" selected>Ranged</option><option value="melee">Melee</option></select>
+      </div>
+    </div>
 
-  <div class="grid" style="margin-top:14px">
-    <div class="card">
-      <h2>Weapons</h2>
-      <div class="weapon" id="w1"></div>
-      <div class="weapon" id="w2"></div>
-      <div class="weapon" id="w3"></div>
-    </div>
-    <div class="card">
-      <h2>Live modifiers</h2>
-      <div class="mods" id="mods"></div>
-      <div class="sum" id="notes"></div>
-    </div>
+    <div class="wounds" id="bits"></div>
+    <button class="reset" id="reset" type="button">RESET WOUNDS</button>
+    <div class="sum" id="woundSum"></div>
+
+    <div class="live" id="mods"></div>
+    <div class="notes" id="notes"></div>
   </div>
-  <p class="foot">Ver. 202609190836 · © 2026 Thomas Paige · playtest, not for redistribution</p>
+  <p class="foot">Ver. 202609191618 · © 2026 Thomas Paige · playtest, not for redistribution</p>
 </div>
 
 <script>
@@ -285,28 +350,19 @@ function n(id) {
   return Number.isFinite(v) ? v : 0;
 }
 function cap(id) {
-  const v = n(id);
-  return Math.max(0, Math.min(20, v));
+  return Math.max(0, Math.min(20, n(id)));
 }
-
 function woundLevel() {
-  for (const b of BITS) {
-    if (total & b.v) return b.lvl;
-  }
+  for (const b of BITS) if (total & b.v) return b.lvl;
   return 0;
 }
 function worstName() {
-  for (const b of BITS) {
-    if (total & b.v) return b.name;
-  }
+  for (const b of BITS) if (total & b.v) return b.name;
   return "none";
 }
-
 function speed() {
-  const raw = n("baseSpeed") + cap("athletics");
-  return Math.ceil(raw / 5) * 5;
+  return Math.ceil((n("baseSpeed") + cap("athletics")) / 5) * 5;
 }
-
 function meleeAgg() {
   if (!document.getElementById("adjacent").checked) return 0;
   let a = n("agg");
@@ -314,9 +370,11 @@ function meleeAgg() {
   if (a < -10) a = -10;
   return a;
 }
-
 function pair(a, b) {
   return signed(a) + " / " + signed(b);
+}
+function signed(v) {
+  return (v >= 0 ? "+" : "") + v;
 }
 
 function buildCaps() {
@@ -326,59 +384,44 @@ function buildCaps() {
     const wrap = document.createElement("div");
     wrap.className = "cap";
     wrap.innerHTML =
-      `<div><label for="${id}">${label}</label><input id="${id}" type="number" min="0" max="20" value="0"></div>` +
-      `<div class="eff" id="eff-${id}">0</div>` +
-      `<div></div>`;
+      `<label for="${id}">${label}</label>` +
+      `<div class="line"><input id="${id}" type="number" min="0" max="20" value="0">` +
+      `<span class="eff" id="eff-${id}">0</span></div>`;
     box.appendChild(wrap);
     wrap.querySelector("input").addEventListener("input", render);
   });
 }
 
-function weaponBlock(mountId, prefix, title, defaults) {
-  const el = document.getElementById(mountId);
-  el.innerHTML =
-    `<label>${title}</label>` +
-    `<input id="${prefix}name" type="text" value="${defaults.name}">` +
-    `<div class="row3">` +
-    `<div><label>1H</label><input id="${prefix}1h" type="number" value="${defaults.h1}"></div>` +
-    `<div><label>2H</label><input id="${prefix}2h" type="number" value="${defaults.h2}"></div>` +
-    `<div><label>Ceiling</label><input id="${prefix}ceil" type="text" value="${defaults.ceil}"></div>` +
-    `</div>` +
-    `<div class="row2" style="margin-top:6px">` +
-    `<div><label>Used with</label>` +
-    `<select id="${prefix}stat">` +
-    `<option value="weapons"${defaults.stat==="weapons"?" selected":""}>WEAPONS</option>` +
-    `<option value="ranged"${defaults.stat==="ranged"?" selected":""}>RANGED</option>` +
-    `</select></div>` +
-    `<div><label>Kind</label>` +
-    `<select id="${prefix}kind">` +
-    `<option value="melee"${defaults.kind==="melee"?" selected":""}>Melee</option>` +
-    `<option value="ranged"${defaults.kind==="ranged"?" selected":""}>Ranged</option>` +
-    `</select></div>` +
-    `</div>`;
-  el.querySelectorAll("input,select").forEach(i => i.addEventListener("input", render));
+function bindWeapons() {
+  document.querySelectorAll("#weapons input, #weapons select").forEach(i => {
+    i.addEventListener("input", render);
+    i.addEventListener("change", render);
+  });
 }
 
 function buildBits() {
   const box = document.getElementById("bits");
   box.innerHTML = "";
   BITS.forEach((b, index) => {
-    const row = document.createElement("div");
-    row.className = "wrow";
+    const cell = document.createElement("div");
+    cell.className = "wcell";
+    const bit = document.createElement("div");
+    bit.className = "bit low";
+    bit.id = "bit-" + index;
+    bit.textContent = b.name;
+    const pm = document.createElement("div");
+    pm.className = "wpm";
     const minus = document.createElement("button");
     minus.type = "button";
     minus.textContent = "−";
     minus.addEventListener("click", () => changeTotal(-b.v));
-    const cell = document.createElement("div");
-    cell.className = "bit-cell low";
-    cell.id = "bit-" + index;
-    cell.textContent = b.name;
     const plus = document.createElement("button");
     plus.type = "button";
     plus.textContent = "+";
     plus.addEventListener("click", () => changeTotal(b.v));
-    row.append(minus, cell, plus);
-    box.appendChild(row);
+    pm.append(minus, plus);
+    cell.append(bit, pm);
+    box.appendChild(cell);
   });
 }
 
@@ -389,16 +432,12 @@ function changeTotal(amount) {
   render();
 }
 
-function signed(v) {
-  return (v >= 0 ? "+" : "") + v;
-}
-
 function render() {
   const wl = woundLevel();
   const agg = meleeAgg();
   const spent = CAPS.reduce((s, [id]) => s + cap(id), 0);
 
-  CAPS.forEach(([id, label, penalized]) => {
+  CAPS.forEach(([id, , penalized]) => {
     const raw = cap(id);
     const eff = penalized ? raw - wl : raw;
     const node = document.getElementById("eff-" + id);
@@ -407,13 +446,11 @@ function render() {
   });
 
   document.getElementById("capSum").innerHTML =
-    `Points on the sheet: <b>${spent}</b> · start is 15 across five CAPs (C3). ` +
-    `Shown number at right is the roll bonus after C5.`;
+    `Points on the sheet: <b>${spent}</b> · start is 15 across five CAPs (C3). Number at right is the roll bonus after C5.`;
 
   BITS.forEach((b, i) => {
     const cell = document.getElementById("bit-" + i);
-    const on = (total & b.v) !== 0;
-    cell.className = "bit-cell " + (on ? "high" : "low");
+    cell.className = "bit " + ((total & b.v) ? "high" : "low");
   });
 
   const wpen = wl ? `−${wl} ${worstName()}` : "0";
@@ -431,16 +468,11 @@ function render() {
     const kind = document.getElementById(prefix + "kind").value;
     const stat = document.getElementById(prefix + "stat").value;
     const capv = stat === "ranged" ? rang : weap;
-    const useAgg = kind === "melee";
-    const extraOff = useAgg ? agg : 0;
-    const extraDef = useAgg ? -agg : 0;
-    const off1 = capv + n(prefix + "1h") + extraOff;
-    const off2 = capv + n(prefix + "2h") + extraOff;
-    const def1 = capv + n(prefix + "1h") + extraDef;
-    const def2 = capv + n(prefix + "2h") + extraDef;
+    const extraOff = kind === "melee" ? agg : 0;
+    const extraDef = kind === "melee" ? -agg : 0;
     return {
-      off: pair(off1, off2),
-      def: pair(def1, def2),
+      off: pair(capv + n(prefix + "1h") + extraOff, capv + n(prefix + "2h") + extraOff),
+      def: pair(capv + n(prefix + "1h") + extraDef, capv + n(prefix + "2h") + extraDef),
       name: (document.getElementById(prefix + "name").value || "").trim() || ("Weapon " + prefix.toUpperCase())
     };
   }
@@ -451,14 +483,12 @@ function render() {
   const spd = speed();
   const squares = spd / 5;
   const diag = Math.floor(squares / 2);
-
   let ceil = "DEEP";
   if (mag >= 16) ceil = "MORT";
   else if (mag >= 11) ceil = "GRAV";
   else if (mag >= 6) ceil = "SEVR";
 
-  const mods = document.getElementById("mods");
-  mods.innerHTML = `
+  document.getElementById("mods").innerHTML = `
     <div class="mod"><span>${a.name} offense 1H / 2H</span><b>${a.off}</b></div>
     <div class="mod"><span>${a.name} defense 1H / 2H</span><b>${a.def}</b></div>
     <div class="mod"><span>${b.name} offense 1H / 2H</span><b>${b.off}</b></div>
@@ -466,9 +496,11 @@ function render() {
     <div class="mod"><span>${c.name} offense 1H / 2H</span><b>${c.off}</b></div>
     <div class="mod"><span>${c.name} defense 1H / 2H</span><b>${c.def}</b></div>
     <div class="mod"><span>Dodge (ATHLETICS, melee)</span><b>${signed(dodgeDef)}</b></div>
-    <div class="mod"><span>Call (MAGIC vs MAGIC)</span><b>${signed(mag)}</b></div>
+    <div class="mod"><span>Call / ceiling (M6)</span><b>${signed(mag)} · ${ceil}</b></div>
     <div class="mod"><span>Speed / squares</span><b>${spd} ft · ${squares} sq</b></div>
-    <div class="mod"><span>Call ceiling (M6)</span><b>${ceil}</b></div>
+    <div class="mod"><span>Wound / C5 / Guidance</span><b>${worstName()} · ${wpen} · ${document.getElementById("guidance").checked ? "FAITH " + faith : "off"}</b></div>
+    <div class="mod"><span>Aggression live</span><b>${document.getElementById("adjacent").checked ? signed(agg) : "0 not adjacent"}</b></div>
+    <div class="mod"><span>Meditation (O6)</span><b>${faith * 15} min</b></div>
   `;
 
   const adj = document.getElementById("adjacent").checked;
@@ -529,7 +561,7 @@ function applyWeapon(prefix, data) {
 }
 
 function applyState(data) {
-  if (!data || typeof data !== "object") return false;
+  if (!data || typeof data !== "object" || data.type === "cc-encounter-v1") return false;
   document.getElementById("name").value = data.name || "";
   document.getElementById("who").value = data.who || "";
   CAPS.forEach(([id]) => {
@@ -592,9 +624,7 @@ function loadJsonFile(file) {
 }
 
 buildCaps();
-weaponBlock("w1", "a", "Weapon A", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
-weaponBlock("w2", "b", "Weapon B", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
-weaponBlock("w3", "c", "Weapon C", { name: "", h1: 0, h2: 0, ceil: "", stat: "weapons", kind: "melee" });
+bindWeapons();
 buildBits();
 ["baseSpeed","armor","agg","adjacent","guidance","name","who"].forEach(id => {
   document.getElementById(id).addEventListener("input", render);
