@@ -186,18 +186,9 @@
         </div>
       </div>
 
-      <div class="row2">
-        <div>
-          <label for="agg">Aggression (−10 to +10)</label>
-          <input id="agg" type="number" value="0" min="-10" max="10">
-        </div>
-        <div>
-          <label for="grip">Default grip</label>
-          <select id="grip">
-            <option value="1">1H</option>
-            <option value="2" selected>2H</option>
-          </select>
-        </div>
+      <div>
+        <label for="agg">Aggression (−10 to +10)</label>
+        <input id="agg" type="number" value="0" min="-10" max="10">
       </div>
       <label class="chk"><input id="adjacent" type="checkbox"> Adjacent to an enemy (required for non-zero Aggression)</label>
       <label class="chk"><input id="guidance" type="checkbox"> Guidance banked (max 1)</label>
@@ -287,9 +278,8 @@ function meleeAgg() {
   return a;
 }
 
-function wield(prefix) {
-  const grip = document.getElementById("grip").value === "2" ? "2h" : "1h";
-  return n(prefix + grip);
+function pair(a, b) {
+  return signed(a) + " / " + signed(b);
 }
 
 function buildCaps() {
@@ -403,17 +393,23 @@ function render() {
   function line(prefix) {
     const kind = document.getElementById(prefix + "kind").value;
     const stat = document.getElementById(prefix + "stat").value;
-    const w = wield(prefix);
     const capv = stat === "ranged" ? rang : weap;
     const useAgg = kind === "melee";
-    const off = capv + w + (useAgg ? agg : 0);
-    const def = capv + w - (useAgg ? agg : 0);
-    return { off, def, kind, name: document.getElementById(prefix + "name").value || prefix };
+    const extraOff = useAgg ? agg : 0;
+    const extraDef = useAgg ? -agg : 0;
+    const off1 = capv + n(prefix + "1h") + extraOff;
+    const off2 = capv + n(prefix + "2h") + extraOff;
+    const def1 = capv + n(prefix + "1h") + extraDef;
+    const def2 = capv + n(prefix + "2h") + extraDef;
+    return {
+      off: pair(off1, off2),
+      def: pair(def1, def2),
+      name: document.getElementById(prefix + "name").value || prefix
+    };
   }
   const a = line("a");
   const b = line("b");
   const s = line("s");
-  const dodgeOff = ath + (0) ;
   const dodgeDef = ath - agg;
   const spd = speed();
   const squares = spd / 5;
@@ -426,10 +422,10 @@ function render() {
 
   const mods = document.getElementById("mods");
   mods.innerHTML = `
-    <div class="mod"><span>${a.name} melee/ranged offense</span><b>${signed(a.off)}</b></div>
-    <div class="mod"><span>${a.name} defense (if used to parry)</span><b>${signed(a.def)}</b></div>
-    <div class="mod"><span>${b.name} offense</span><b>${signed(b.off)}</b></div>
-    <div class="mod"><span>${s.name} defense</span><b>${signed(s.def)}</b></div>
+    <div class="mod"><span>${a.name} offense 1H / 2H</span><b>${a.off}</b></div>
+    <div class="mod"><span>${a.name} defense 1H / 2H</span><b>${a.def}</b></div>
+    <div class="mod"><span>${b.name} offense 1H / 2H</span><b>${b.off}</b></div>
+    <div class="mod"><span>${s.name} defense 1H / 2H</span><b>${s.def}</b></div>
     <div class="mod"><span>Dodge (ATHLETICS, melee)</span><b>${signed(dodgeDef)}</b></div>
     <div class="mod"><span>Call (MAGIC vs MAGIC)</span><b>${signed(mag)}</b></div>
     <div class="mod"><span>Speed / squares</span><b>${spd} ft · ${squares} sq</b></div>
@@ -452,7 +448,7 @@ weaponBlock("w1", "a", "Weapon A", { name: "Arming Sword", h1: 0, h2: 2, ceil: "
 weaponBlock("w2", "b", "Weapon B / launcher or thrown", { name: "—", h1: 0, h2: 0, ceil: "—", stat: "ranged", kind: "ranged" });
 weaponBlock("sh", "s", "Shield or off-hand", { name: "Shield (Light)", h1: 2, h2: 4, ceil: "LITE", stat: "weapons", kind: "melee" });
 buildBits();
-["baseSpeed","armor","agg","grip","adjacent","guidance"].forEach(id => {
+["baseSpeed","armor","agg","adjacent","guidance"].forEach(id => {
   document.getElementById(id).addEventListener("input", render);
   document.getElementById(id).addEventListener("change", render);
 });
