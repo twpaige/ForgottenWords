@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 Crown & Call redesigned web ruleset
-Version: 202609200907
+Version: 202609202100
 Source: CC_Ruleset.txt Version 202609190716
 Copyright (c) 2026 Thomas Paige. All rights reserved.
 Playtest use only. Not licensed for redistribution.
@@ -10,22 +10,21 @@ Playtest use only. Not licensed for redistribution.
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Crown & Call — Ruleset</title>
 <style>
-:root{--ink:#26231f;--muted:#6c655c;--paper:#f3efe4;--paper2:#fffdf7;--gold:#9a6b16;--gold2:#c49a45;--red:#713a32;--line:#d7cbb7;--shadow:rgba(39,31,20,.16);--nav:#211f1c}
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px}body{margin:0;background:#d9d1c3;color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.65}
-.topbar{position:sticky;top:0;z-index:20;background:rgba(33,31,28,.97);border-bottom:2px solid var(--gold2);box-shadow:0 3px 12px rgba(0,0,0,.25)}
-.topbar-inner{max-width:1180px;margin:auto;display:flex;align-items:center;gap:12px;padding:9px 18px}.brand{color:#fff;font-weight:700;letter-spacing:.06em;white-space:nowrap}.topbar a{color:#f1dfb4;text-decoration:none;font-family:Arial,sans-serif;font-size:13px}.topbar a:hover{color:#fff}.spacer{flex:1}
-.hero{background:linear-gradient(135deg,#29251f,#4a3a26);color:#fff;padding:58px 20px 50px;text-align:center;border-bottom:5px solid var(--gold2)}.hero h1{font-size:clamp(38px,7vw,70px);margin:0;letter-spacing:.04em}.hero .kicker{font:700 13px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#e2c47f}.hero .tagline{max-width:720px;margin:14px auto 0;font-size:20px;color:#f3ead7;font-style:italic}
-.wrap{max-width:1120px;margin:0 auto;padding:28px 18px 70px}.intro,.card{background:var(--paper2);border:1px solid var(--line);box-shadow:0 8px 25px var(--shadow);border-radius:8px;margin:0 0 24px;padding:30px 34px}.intro{border-top:5px solid var(--gold)}
-h2{font-size:27px;margin:0 0 18px;color:#3c3023;border-bottom:1px solid var(--line);padding-bottom:10px;letter-spacing:.025em}h3{font-size:20px;margin:34px 0 10px;color:var(--red);padding-top:4px}p{margin:0 0 13px}.sub{text-align:center;color:var(--muted);font-size:14px}.foot{text-align:center;color:var(--muted);font-size:12px}
-.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:18px 0 8px}.toc a,.rule-index a{display:block;text-decoration:none;color:#4a3513;background:#f4ead4;border:1px solid #dfcda8;border-radius:5px;padding:8px 10px;font:700 12px Arial,sans-serif}.toc a:hover,.rule-index a:hover{background:#ead7ae}
-.rule-index{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px}.rule-index a span{display:block;font-weight:400;color:#716754;margin-top:2px}
-.mono{font-family:Consolas,"Courier New",monospace;background:#272522;color:#f3ead7;border-left:4px solid var(--gold2);border-radius:4px;padding:13px 15px;font-size:13px;line-height:1.55;margin:10px 0 16px;white-space:pre-wrap;overflow-x:auto}
-.example{background:#eef0e8;border-left:4px solid #687453;padding:13px 16px;margin:12px 0 20px;border-radius:0 5px 5px 0}.example strong{font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#4e5d3c}.flavor{font-style:italic;color:#51483d;background:#f5eee1;border:1px solid #e1d2b9;padding:14px 17px;border-radius:5px;margin:0 0 18px}
-.rule-tools{float:right;font:12px Arial,sans-serif}.rule-tools a{color:var(--gold);text-decoration:none;margin-left:10px}.legal{font-size:13px;color:#5f584f}.legal h2{font-size:20px}
-table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:14px}th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}th{background:#eee3ce}
-@media(max-width:650px){.topbar-inner{padding:8px 10px}.brand{font-size:13px}.hero{padding:38px 15px}.intro,.card{padding:22px 18px}.wrap{padding:18px 10px 50px}h2{font-size:23px}h3{font-size:18px}.rule-index{grid-template-columns:repeat(2,1fr)}}
-@media print{.topbar{display:none}body{background:white}.hero{color:#111;background:white;border-bottom:2px solid #111}.card,.intro{box-shadow:none;break-inside:auto}.example{break-inside:avoid}}
-</style></head><body><div class="topbar"><div class="topbar-inner"><span class="brand">CROWN &amp; CALL</span><a href="CC_Home.html">Home</a><a href="#index">Rule Index</a><a href="#s9quickreferencesummary">Quick Reference</a><span class="spacer"></span><a href="#top">Top ↑</a></div></div><header class="hero" id="top"><div class="kicker">Pre-Release Playtest Rules</div><h1>Crown &amp; Call</h1><p class="tagline">The world is broken. Darkness is real. The King is calling.</p></header><div class='wrap'>
+:root{--slate:#0c1016;--panel:#161b22;--panel2:#1c222b;--gold:#c9a44a;--gold-soft:#e4d2a0;--ink:#e8eaed;--muted:#9aa3ad;--amber:#e0a84a;--line:rgba(201,164,74,.28);--deep:#080b0f}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:72px}body{margin:0;background:radial-gradient(ellipse at 50% 0%,#1c2430 0%,var(--slate) 58%);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.65}
+a{color:var(--gold-soft)}a:hover{color:#fff}.topbar{position:sticky;top:0;z-index:20;background:rgba(12,16,22,.96);border-bottom:1px solid var(--line);box-shadow:0 4px 18px rgba(0,0,0,.45)}.topbar-inner{max-width:1180px;margin:auto;display:flex;align-items:center;gap:14px;padding:9px 18px}.brand{color:var(--gold-soft);font-weight:700;letter-spacing:.08em;white-space:nowrap}.topbar a{color:var(--gold-soft);text-decoration:none;font:13px Arial,sans-serif}.spacer{flex:1}
+.hero{max-width:1120px;margin:0 auto;padding:20px 18px 4px;text-align:center}.hero-logo{display:block;width:min(860px,95vw);height:auto;margin:0 auto -8px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.55))}.hero .kicker{font:700 12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}.hero .tagline{max-width:720px;margin:4px auto 16px;font-size:20px;color:var(--gold);font-style:italic}
+.wrap{max-width:1120px;margin:0 auto;padding:16px 18px 70px}.intro,.card{background:linear-gradient(180deg,rgba(22,27,34,.96),rgba(12,16,22,.96));border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.3);border-radius:14px;margin:0 0 24px;padding:30px 34px}.intro{border-top:3px solid var(--gold)}
+h2{font-size:27px;margin:0 0 18px;color:var(--gold-soft);border-bottom:1px solid var(--line);padding-bottom:10px;letter-spacing:.025em}h3{font-size:20px;margin:34px 0 10px;color:var(--gold);padding-top:4px}p{margin:0 0 13px}.sub{text-align:center;color:var(--muted);font-size:14px}.foot{text-align:center;color:#6e7780;font:12px Arial,sans-serif}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:18px 0 8px}.toc a,.rule-index a{display:block;text-decoration:none;color:var(--gold-soft);background:#10151c;border:1px solid var(--line);border-radius:7px;padding:9px 11px;font:700 12px Arial,sans-serif}.toc a:hover,.rule-index a:hover{background:#202833;border-color:var(--gold)}
+.rule-index{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px}.mono{font-family:Consolas,"Courier New",monospace;background:#080b0f;color:#e8eaed;border-left:4px solid var(--gold);border-radius:5px;padding:13px 15px;font-size:13px;line-height:1.55;margin:10px 0 16px;white-space:pre-wrap;overflow-x:auto}
+.example{background:#111820;border:1px solid rgba(224,168,74,.18);border-left:4px solid var(--amber);padding:13px 16px;margin:12px 0 20px;border-radius:0 7px 7px 0}.example strong{font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--amber)}.flavor{font-style:italic;color:#d8dadd;background:#10151c;border:1px solid var(--line);padding:14px 17px;border-radius:7px;margin:0 0 18px}.rule-tools{float:right;font:12px Arial,sans-serif}.rule-tools a{color:var(--gold);text-decoration:none;margin-left:10px}.legal{font-size:13px;color:#c0c5cb}.legal h2{font-size:20px}
+.nick-break{display:grid;grid-template-columns:145px 1fr;gap:22px;align-items:center;margin:8px 0 24px;padding:16px 24px;background:linear-gradient(90deg,rgba(22,27,34,.96),rgba(12,16,22,.78));border:1px solid var(--line);border-radius:14px}.nick-break img{width:135px;max-height:150px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(224,168,74,.22))}.nick-break p{margin:0;color:var(--muted);font-style:italic;font-size:16px}.nick-break strong{display:block;color:var(--gold-soft);font:700 12px Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.lantern-mark{display:inline-block;width:17px;height:17px;margin-right:8px;vertical-align:-3px;background:radial-gradient(circle at 50% 58%,var(--amber),#8a5a12 55%,transparent 56%),#2a2f36;border:1px solid var(--gold);border-radius:3px;box-shadow:0 0 10px rgba(224,168,74,.2)}
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:14px}th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}th{background:#10151c;color:var(--gold-soft)}
+@media(max-width:650px){.topbar-inner{padding:8px 10px;gap:9px}.brand{font-size:12px}.hero{padding-top:12px}.intro,.card{padding:22px 18px}.wrap{padding:12px 10px 50px}h2{font-size:23px}h3{font-size:18px}.rule-index{grid-template-columns:repeat(2,1fr)}.nick-break{grid-template-columns:90px 1fr;padding:12px}.nick-break img{width:85px}}
+@media print{.topbar,.nick-break{display:none}body{background:white;color:#111}.hero{display:none}.card,.intro{background:white;color:#111;box-shadow:none;border:1px solid #aaa}.card h2,.card h3,.intro h2{color:#111}.mono{background:#eee;color:#111}.example,.flavor{background:#f4f4f4;color:#111}}
+</style></head><body><div class="topbar"><div class="topbar-inner"><span class="brand">CROWN &amp; CALL</span><a href="CC_Home.html">Home</a><a href="#index">Rule Index</a><a href="#s9quickreferencesummary">Quick Reference</a><span class="spacer"></span><a href="#top">Top ↑</a></div></div><header class="hero" id="top"><a href="CC_Home.html"><img class="hero-logo" src="cc-logo3.png" alt="Crown &amp; Call"></a><div class="kicker">Pre-Release Playtest Rules</div><p class="tagline">The world is broken. Darkness is real. The King is calling.</p></header><div class='wrap'>
 <section class="intro"><p class="sub">Complete rules · source CC_Ruleset.txt Ver. 202609190716<br>Quote a rule ID at the table. This page is a reading copy, not a second canon.</p>
 <h2>Find Your Way</h2><p>Crown &amp; Call is built to be learned at the table. Read straight through once, then use the links below to jump directly to the rule you need.</p><nav class="toc"><a href="#s1designprinciples">1. DESIGN PRINCIPLES</a><a href="#s2capabilities">2. CAPABILITIES</a><a href="#s3resolution">3. RESOLUTION</a><a href="#s4combat">4. COMBAT</a><a href="#s5turnsmovementandinitiative">5. TURNS, MOVEMENT, AND INITIATIVE</a><a href="#s6magiccalling">6. MAGIC — CALLING</a><a href="#s7faithcriticalsandthedivine">7. FAITH, CRITICALS, AND THE DIVINE</a><a href="#s8otherrules">8. OTHER RULES</a><a href="#s9quickreferencesummary">9. QUICK REFERENCE SUMMARY</a><a href="#s10closingnotes">10. CLOSING NOTES</a></nav><p style="text-align:center;margin-top:14px"><a href="CC_Home.html">← Return to Crown &amp; Call Home</a></p></section>
 <section class="card" id="index"><h2>Rule Index</h2><p>Every rule ID below is a direct link. Use this as the table-side index when a question comes up.</p><div class="rule-index"><a href="#g1">G1. ROLEPLAY FIRST</a><a href="#g2">G2. BROAD CAPABILITIES</a><a href="#g3">G3. MEANINGFUL CONSEQUENCES</a><a href="#g4">G4. CREATIVE PERMISSION</a><a href="#g5">G5. NO AUTOMATIC POWER</a><a href="#g6">G6. CHARACTER CONCEPTS</a><a href="#g7">G7. MAGIC AND FAITH ARE NOT THE SAME</a><a href="#g8">G8. SPIRIT OF THE RULES</a><a href="#c1">C1. THE EIGHT CAPABILITIES</a><a href="#c2">C2. CAPABILITY SCALE</a><a href="#c3">C3. STARTING CAPABILITY POINTS</a><a href="#c4">C4. ADVANCEMENT</a><a href="#c5">C5. WOUND PENALTIES ON CAPABILITIES</a><a href="#r1">R1. THE D20</a><a href="#r2">R2. OPPOSED ROLLS</a><a href="#r3">R3. UNOPPOSED TASKS</a><a href="#r4">R4. DEFENSE CHOICES</a><a href="#r5">R5. DIFFICULTY GUIDELINES</a><a href="#w1">W1. AGGRESSION</a><a href="#w1a">W1a. RANGED REACH</a><a href="#w1b">W1b. ENGAGED</a><a href="#w2">W2. WIELDING MODIFIERS</a><a href="#w3">W3. MARGIN OF VICTORY AND WOUND SEVERITY</a><a href="#w4">W4. WEAPON WOUND CEILING</a><a href="#w5">W5. ARMOR</a><a href="#w6">W6. MORTAL WOUND</a><a href="#w7">W7. NO WOUNDS ABOVE MORT</a><a href="#w8">W8. WOUND TRACKING AND COMBINING</a><a href="#w9">W9. SCALE</a><a href="#w10">W10. MULTIPLE WEAPONS</a><a href="#w11">W11. RANGED WEAPONS AND THE DEFAULT LIST</a><a href="#t1">T1. ROUNDS</a><a href="#t2">T2. TURN STRUCTURE (MPA)</a><a href="#t3">T3. SPEED</a><a href="#t4">T4. DOUBLE MOVE</a><a href="#t5">T5. INITIATIVE</a><a href="#t6">T6. HOLD</a><a href="#t7">T7. PROTECT</a><a href="#t8">T8. COVER AND CONCEALMENT</a><a href="#m1">M1. MAGIC AS CALLING</a><a href="#m2">M2. MAGIC POWER</a><a href="#m3">M3. AREA EFFECTS</a><a href="#m4">M4. GATHERING</a><a href="#m5">M5. MAGIC PROGRESSION TITLES (OPTIONAL FLAVOR)</a><a href="#m6">M6. CALL WOUND CEILINGS</a><a href="#m7">M7. DEFENDING AGAINST CALLINGS</a><a href="#m8">M8. CONVERTED COMBAT HEALING</a><a href="#m9">M9. CALL RANGE, AREA, AND VISIBILITY</a><a href="#m10">M10. CALL REQUIREMENTS</a><a href="#m11">M11. GATHERING REQUIREMENTS</a><a href="#f1">F1. NATURAL 20 — CRITICAL SUCCESS</a><a href="#f2">F2. BANKING GUIDANCE</a><a href="#f3">F3. SPENDING GUIDANCE</a><a href="#f4">F4. NATURAL 1 — CRITICAL FAILURE</a><a href="#f5">F5. DIVINE WORKS</a><a href="#f6">F6. PETITION FOR THE DEAD</a><a href="#o1">O1. ACTIVE AND RESTING RECOVERY</a><a href="#o2">O2. NO SURPRISE MECHANIC</a><a href="#o3">O3. DICE MODES (GM TOOL)</a><a href="#o4">O4. CONDITIONS</a><a href="#o5">O5. BEARING THE BURDEN</a><a href="#o6">O6. MEDITATION</a></div></section><section class="card legal" id="front-matter">
@@ -66,7 +65,7 @@ Each rule has a letter and a number. The letter is the subject. The number is th
 <p>G is design and philosophy. O is leftover table procedure (recovery, ambush, dice modes, conditions, meditation).</p>
 </section>
 <section class="card" id="s1designprinciples">
-<h2>1. DESIGN PRINCIPLES</h2><p class="flavor">Before dice touch the table, these principles answer the most important question: what kind of game is Crown & Call trying to be? Fiction leads. Rules support it.</p>
+<h2><span class="lantern-mark"></span>1. DESIGN PRINCIPLES</h2><p class="flavor">Before dice touch the table, these principles answer the most important question: what kind of game is Crown & Call trying to be? Fiction leads. Rules support it.</p>
 <h3 id="g1">G1. ROLEPLAY FIRST</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
 <p>The rules serve the story, not the other way around. When a situation is clear from the fiction, the GM may simply declare the result without a roll. Rolls are used when the outcome is uncertain and interesting.</p>
 <div class="example"><strong>At the Table</strong><br>The party reaches an unlocked cottage door. Opening it needs no roll. Hearing a faint scrape behind that door when an assassin is hiding inside might call for SENSE.</div>
@@ -99,8 +98,8 @@ If the intent is clear, that intent wins even when a clever reading would get yo
 The GM decides when the table disagrees, then play continues. Talk it out after the scene.</p>
 <div class="example"><strong>At the Table</strong><br>If wording seems to permit carrying twenty readied polearms because no encumbrance formula forbids it, the GM applies the obvious intent and keeps play moving.</div>
 </section>
-<section class="card" id="s2capabilities">
-<h2>2. CAPABILITIES</h2><p class="flavor">A hero is not a class. A hero is a collection of strengths, weaknesses, convictions, training, and choices. Capabilities put numbers to those strengths without deciding the character for you.</p>
+<aside class="nick-break"><img src="cc-mascot3.png" alt="Nick, the Crown & Call squirrel mascot holding his lantern"><p><strong>Nick's Field Note</strong>A Capability tells you what a hero can do. It never tells you who that hero must become.</p></aside><section class="card" id="s2capabilities">
+<h2><span class="lantern-mark"></span>2. CAPABILITIES</h2><p class="flavor">A hero is not a class. A hero is a collection of strengths, weaknesses, convictions, training, and choices. Capabilities put numbers to those strengths without deciding the character for you.</p>
 <h3 id="c1">C1. THE EIGHT CAPABILITIES</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
 <p>Every character has eight Capabilities, each rated from 0 to 20:</p>
 <div class="mono">  WEAPONS   — Hand-wielded martial weapons (attacking and defending with them)
@@ -146,7 +145,7 @@ The GM decides when the table disagrees, then play continues. Talk it out after 
 <div class="example"><strong>At the Table</strong><br>A hero with WEAPONS 7 and a DEEP wound has Wound Level 3, so affected WEAPONS rolls use 4 before other modifiers. His MAGIC and FAITH remain unchanged.</div>
 </section>
 <section class="card" id="s3resolution">
-<h2>3. RESOLUTION</h2><p class="flavor">When the outcome matters and nobody knows what happens next, the dice enter the story. Most uncertainty comes down to one roll and a clear comparison.</p>
+<h2><span class="lantern-mark"></span>3. RESOLUTION</h2><p class="flavor">When the outcome matters and nobody knows what happens next, the dice enter the story. Most uncertainty comes down to one roll and a clear comparison.</p>
 <h3 id="r1">R1. THE D20</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
 <p>When the outcome of an action is uncertain, resolve it with a d20 roll. Add the appropriate Capability and any relevant modifiers.</p>
 <p>If another character or creature actively opposes the action, use an Opposed Roll (R2). Both sides roll, and the higher total wins. Opposed Rolls resolve themselves. The GM does not set a Target Number.</p>
@@ -181,8 +180,8 @@ Legendary      30    26      28        CAP 17-20 plus favorable conditions. Near
 <p>The GM may also rule partial success, success with cost, or interesting failure. A margin of 5 or more either way may mark an especially strong success or failure.</p>
 <div class="example"><strong>At the Table</strong><br>A routine climb might be TN 10 on 1d20; scaling the rain-slick outer wall of a fortress could be Hard at TN 20. The GM chooses the difficulty from the situation.</div>
 </section>
-<section class="card" id="s4combat">
-<h2>4. COMBAT</h2><p class="flavor">Steel is dangerous here. A single clean blow can change a fight, and every choice between attack and defense matters.</p>
+<aside class="nick-break"><img src="cc-mascot3.png" alt="Nick, the Crown & Call squirrel mascot holding his lantern"><p><strong>Nick Says: Mind the Steel</strong>Crown & Call combat is deliberately dangerous. Read the wound rules before you decide that one more swing is worth the risk.</p></aside><section class="card" id="s4combat">
+<h2><span class="lantern-mark"></span>4. COMBAT</h2><p class="flavor">Steel is dangerous here. A single clean blow can change a fight, and every choice between attack and defense matters.</p>
 <h3 id="w1">W1. AGGRESSION</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
 <p>A character may set Aggression anywhere from −10 to +10 (0 is neutral). Setting it is free.</p>
 <p>You may set a non-zero Aggression only while adjacent (within 5 feet) to an enemy in the fight. If you are not adjacent, Aggression is 0.</p>
@@ -357,7 +356,7 @@ Dart                   +1     +1     LITE      Ammo; blowgun</div>
 <div class="example"><strong>At the Table</strong><br>A knife thrown 30 feet uses RANGED and takes -3. A longbow shot uses the arrow's wound ceiling and modifier but the longbow's range rules.</div>
 </section>
 <section class="card" id="s5turnsmovementandinitiative">
-<h2>5. TURNS, MOVEMENT, AND INITIATIVE</h2><p class="flavor">A fight is not a queue of statues waiting their turn. Movement, preparation, protection, and action flow together inside a short, violent Round.</p>
+<h2><span class="lantern-mark"></span>5. TURNS, MOVEMENT, AND INITIATIVE</h2><p class="flavor">A fight is not a queue of statues waiting their turn. Movement, preparation, protection, and action flow together inside a short, violent Round.</p>
 <h3 id="t1">T1. ROUNDS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
 <p>A Round represents up to seven seconds of activity. Once every character and relevant NPC has completed a Turn, the Round ends and a new one begins.</p>
 <div class="example"><strong>At the Table</strong><br>If five heroes and three enemies are involved, the Round ends after all eight have completed their Turns. In the fiction, that activity overlaps within roughly seven seconds.</div>
@@ -406,8 +405,8 @@ Alpha playable species is human. Other species are not in this book.</p>
 <p>The GM may give a modifier when someone is behind cover or is concealed. Use a Capability that fits (often RANGED to hit, SENSE to spot). The number is for this moment. It is not a standing bonus.</p>
 <div class="example"><strong>At the Table</strong><br>An archer firing through a narrow arrow slit may face a situational modifier. The GM sets it for that shot rather than creating a permanent cover statistic.</div>
 </section>
-<section class="card" id="s6magiccalling">
-<h2>6. MAGIC — CALLING</h2><p class="flavor">Magic is part of creation: wondrous, dangerous, learnable, and bounded. A Caller shapes what already exists; he does not command the Creator.</p>
+<aside class="nick-break"><img src="cc-mascot3.png" alt="Nick, the Crown & Call squirrel mascot holding his lantern"><p><strong>By Lantern Light</strong>Calling is learned power within creation. Faith is something different. Keeping that distinction clear matters to the world and to the rules.</p></aside><section class="card" id="s6magiccalling">
+<h2><span class="lantern-mark"></span>6. MAGIC — CALLING</h2><p class="flavor">Magic is part of creation: wondrous, dangerous, learnable, and bounded. A Caller shapes what already exists; he does not command the Creator.</p>
 <h3 id="m1">M1. MAGIC AS CALLING</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
 <p>Magic is expressed through Callings. In the world, magic is a created force of nature, like gravity (see G7). Using a Call is learned skill, not a command issued to God.</p>
 <p>The alpha book uses a controlled list. The 20 Combat Callings in the appendix are that list. Each name shows (MAGIC N): you need MAGIC at least N to use it. That number is access only. It does not change MoV or the M6 ceiling.</p>
@@ -520,8 +519,8 @@ Area equals the Caller&#x27;s MAGIC in 5-foot squares (25 square feet each).</p>
 <p>Release uses each Call&#x27;s own tags. If a released Call lists WORDS and the Caller is Mute, that Call cannot be released until Mute is resolved. Other stored Callings with no WORDS tag may still be released.</p>
 <div class="example"><strong>At the Table</strong><br>While Gathering, the Caller must satisfy MOTION x2 and the Leather armor restriction. On release, each stored Call must satisfy its own listed requirements.</div>
 </section>
-<section class="card" id="s7faithcriticalsandthedivine">
-<h2>7. FAITH, CRITICALS, AND THE DIVINE</h2><p class="flavor">Faith matters, but it is never a lever attached to God. These rules give faith a place at the table without reducing divine action to a spell list.</p>
+<aside class="nick-break"><img src="cc-mascot3.png" alt="Nick, the Crown & Call squirrel mascot holding his lantern"><p><strong>Nick's Field Note</strong>Faith can matter enormously without turning God into a game mechanic the player controls.</p></aside><section class="card" id="s7faithcriticalsandthedivine">
+<h2><span class="lantern-mark"></span>7. FAITH, CRITICALS, AND THE DIVINE</h2><p class="flavor">Faith matters, but it is never a lever attached to God. These rules give faith a place at the table without reducing divine action to a spell list.</p>
 <h3 id="f1">F1. NATURAL 20 — CRITICAL SUCCESS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
 <p>A natural 20 on a combat roll creates a Critical Opportunity. A combat roll is an Opposed Roll made to attack or defend in a fight: WEAPONS, RANGED, a shield, ATHLETICS used to dodge, or a damaging Call. Jumps, locks, lectures, and other unopposed tasks are not combat rolls.</p>
 <p>The player chooses one:</p>
@@ -551,7 +550,7 @@ Area equals the Caller&#x27;s MAGIC in 5-foot squares (25 square feet each).</p>
 <div class="example"><strong>At the Table</strong><br>A companion dies. A survivor Petitions: player and GM each roll d20. Only if the petitioner's result is higher may restoration occur under this rule.</div>
 </section>
 <section class="card" id="s8otherrules">
-<h2>8. OTHER RULES</h2><p class="flavor">These procedures handle the hard edges of adventure: recovery, conditions, ambushes, meditation, and the consequences that remain after the swords are sheathed.</p>
+<h2><span class="lantern-mark"></span>8. OTHER RULES</h2><p class="flavor">These procedures handle the hard edges of adventure: recovery, conditions, ambushes, meditation, and the consequences that remain after the swords are sheathed.</p>
 <h3 id="o1">O1. ACTIVE AND RESTING RECOVERY</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
 <p>Characters recover wound value as time passes. Recovery is a clock, not a gift. Nothing in these rules restores a body to new in a moment. Converted Call healing (M8) spends a blow that could have wounded an enemy. Bearing (O5) moves wound value; it does not erase it. Tending only changes which clock the patient uses.</p>
 <div class="mono">  Active      1 FLSH every 1 hour
@@ -616,8 +615,8 @@ The ground or the situation hinders you. Speed is halved (round down to 5 ft). J
 <p>Meditation is Faith, not Magic. MAGIC does not grant minutes or the Meditating rate.</p>
 <div class="example"><strong>At the Table</strong><br>A hero with FAITH 4 may meditate up to 60 minutes that day. Fifteen uninterrupted minutes can recover 1 FLSH at the meditation rate.</div>
 </section>
-<section class="card" id="s9quickreferencesummary">
-<h2>9. QUICK REFERENCE SUMMARY</h2><p class="flavor">When play is moving quickly, start here. This section gathers the numbers and procedures most often needed at the table.</p>
+<aside class="nick-break"><img src="cc-mascot3.png" alt="Nick, the Crown & Call squirrel mascot holding his lantern"><p><strong>Keep This Close</strong>Once you know the game, this is where Nick would leave the lantern: the numbers and procedures most likely to stop play while somebody looks them up.</p></aside><section class="card" id="s9quickreferencesummary">
+<h2><span class="lantern-mark"></span>9. QUICK REFERENCE SUMMARY</h2><p class="flavor">When play is moving quickly, start here. This section gathers the numbers and procedures most often needed at the table.</p>
 <p>CAPABILITIES (0–20)</p>
 <div class="mono">  WEAPONS | RANGED | ATHLETICS | THIEVERY | SENSE | MAGIC | ACADEMICS | FAITH</div>
 <p>RESOLUTION</p>
@@ -662,12 +661,12 @@ The ground or the situation hinders you. Speed is halved (round down to 5 ft). J
 <div class="mono">  Entangled: no MOVE. Prone: stand costs MOVE, -2 physical, +2 melee vs you. Blind -4 if you need sight. Deaf / Mute block speech. Afflicted -2 ATHLETICS, THIEVERY, SENSE. Impeded: half Speed.</div>
 </section>
 <section class="card" id="s10closingnotes">
-<h2>10. CLOSING NOTES</h2><p class="flavor">The rules are still being forged. Play them hard, find where they bend, and remember that the goal is not machinery—it is adventure.</p>
+<h2><span class="lantern-mark"></span>10. CLOSING NOTES</h2><p class="flavor">The rules are still being forged. Play them hard, find where they bend, and remember that the goal is not machinery—it is adventure.</p>
 <p>Crown’s Calling is still a living design. Numerical values—exact MoV thresholds, starting CAP Points, Aggression range extremes, Scale MORT quotas, and critical details—should be tested at the table and adjusted as needed.</p>
 <p>The first goal is not a perfect rulebook. The first goal is a game that people actually want to sit down and play: one in which capable characters feel capable, dangerous enemies feel dangerous, wounds matter, clever ideas are worth attempting, magic feels wondrous, and Faith remains meaningful without becoming a mechanism for controlling God.</p>
 <p>The rules should get out of the way when the players start having fun.</p>
 <p>Take up your calling. The Crown awaits.</p>
 <p>— End of Player Manual —</p>
 </section>
-<p style="text-align:center;margin:28px 0"><a href="CC_Home.html">← Return to Crown &amp; Call Home</a> &nbsp; · &nbsp; <a href="#index">Rule Index</a> &nbsp; · &nbsp; <a href="#top">Back to Top ↑</a></p><p class="foot">Ver. 202609200907 · source ruleset 202609190716 · © 2026 Thomas Paige · playtest, not for redistribution</p>
+<p style="text-align:center;margin:28px 0"><a href="CC_Home.html">← Return to Crown &amp; Call Home</a> &nbsp; · &nbsp; <a href="#index">Rule Index</a> &nbsp; · &nbsp; <a href="#top">Back to Top ↑</a></p><p class="foot">Ver. 202609202100 · source ruleset 202609190716 · © 2026 Thomas Paige · playtest, not for redistribution</p>
 </div></body></html>
