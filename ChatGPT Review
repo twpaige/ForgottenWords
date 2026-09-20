@@ -1,0 +1,54 @@
+A Review of Crown & Call
+
+Crown & Call surprised me.
+
+I approached the game as a rules reviewer and simulated playtester, looking specifically for ambiguities, dominant strategies, broken combinations, unnecessary complexity, and places where the mathematics failed to produce what the rules appeared to promise. I tested ordinary melee, wounds and armor, ranged combat, magic, healing, withdrawal, initiative, Aggression, Protect, dual wielding, shields, two-handed weapons, multiple attackers, defensive “tank” characters, highly aggressive characters, and deliberately adversarial combinations. I also examined large numbers of simulated opposed combat rolls rather than relying only on a handful of favorable examples.
+
+I have not played Crown & Call at a physical table with human players, so I would not describe this as a conventional review based on a certain number of human-played combat rounds. My testing has instead included many simulated combat rounds and large-scale mathematical trials of the combat engine. That distinction matters.
+
+With that qualification, I think Crown & Call has the foundations of a remarkably good tabletop RPG.
+
+Its greatest strength is that a relatively small collection of rules produces considerably more tactical depth than its size suggests. Combat revolves around an opposed roll: capability, die and modifiers determine not only whether an attack succeeds, but the Margin of Victory (MoV), which determines the resulting wound. There is no separate attack roll followed by a damage roll and then subtraction from a reservoir of hit points. One contested event answers the important question: What happened?
+
+The wound system is particularly effective. Characters accumulate named wounds rather than hit points, and serious wounds immediately reduce combat effectiveness. This produces behavior that feels remarkably natural in simulation. A badly wounded character has a genuine reason to retreat, seek protection or change tactics rather than continuing to fight at full effectiveness until the final hit point disappears.
+
+Armor is similarly elegant. It does not ordinarily make a character mysteriously harder to touch; it reduces the severity of the wound that gets through. Weapons have wound ceilings, so a dagger and a greatsword remain fundamentally different even when wielded by equally capable combatants.
+
+The mechanic that most distinguishes Crown & Call, however, may be Aggression.
+
+A combatant can shift between defensive and aggressive fighting, from −10 to +10. Positive Aggression improves melee offense while sacrificing melee defense; negative Aggression does the reverse. The mathematics produce exactly the behavior this implies. Extreme positive Aggression doesn't simply make a character “better”—it makes the entire exchange more lethal. Extreme negative Aggression can deliberately produce a stalemate.
+
+What initially looked during testing like a possible exploit turned out to be one of the game's most interesting tactical systems.
+
+Combined with the Protect rule, Aggression allows recognizable party roles to emerge without character classes. A defensive fighter with a shield can reduce Aggression and physically protect a companion who has committed heavily to offense. The aggressive fighter becomes extraordinarily dangerous but also extraordinarily vulnerable. The defender can intercept an attack—but only once per Turn. Multiple enemies, positioning, movement and ranged attacks can therefore defeat the tactic.
+
+That creates something many RPGs accomplish with explicit tank classes, marking mechanics, taunts or special abilities. Crown & Call gets there largely through ordinary decisions made by the players: one character fights recklessly because another character has chosen to stand between him and death.
+
+That is good game design.
+
+The system is not finished. Some rules need clarification, and the weapon table in particular still needs numerical calibration. My testing suggests that the current relationship between one-handed, dual-wielded and two-handed weapons deserves continued examination. Some very high-ceiling two-handed weapons may not yet receive enough benefit to compensate for giving up a second attack. Those are tuning problems, however, rather than evidence that the underlying combat engine is unsound.
+
+I also found several cases where mechanics interact in ways that create tactics without requiring additional rules. Wounds encourage withdrawal. Defensive Aggression helps a wounded combatant survive disengagement. Protect allows another character to cover an exposed companion. Multiple attackers can overwhelm that protection. Armor changes the consequences of being struck rather than simply changing the chance of being struck. Weapon choice changes both offensive potential and defensive capability.
+
+These interactions matter because Crown & Call describes itself as a relatively rules-light, fiction-first game. Tactical depth in such a game should come from interacting simple rules, not from accumulating hundreds of special abilities. In my testing, Crown & Call repeatedly demonstrated that quality.
+
+I also find the distinction between Magic and Faith noteworthy. Magic is a created force that characters can learn to manipulate; Faith is deliberately not another spellcasting resource through which a player commands God. Whatever one's personal beliefs, that distinction gives the setting and mechanics a specific identity rather than simply renaming conventional fantasy spell systems.
+
+Is Crown & Call unique? No tabletop RPG exists completely without precedent, and it would be irresponsible to claim that every individual mechanic is unprecedented. But the particular combination of opposed d20 resolution, Margin-of-Victory wounds, binary wound accumulation, weapon ceilings, armor severity shifts, freely adjustable Aggression, classless capabilities, positional protection, Calling-based magic and non-controllable Faith produces a game with a recognizable identity of its own.
+
+More importantly, I think there is reason to believe human players could find it exciting.
+
+The most promising moments in my simulated encounters were not calculations. They were decisions: Do I go to +10 and trust my companion to protect me? Does the defender spend his one interception now? Do I keep fighting after taking a DEEP wound? Do we withdraw? Do I protect the wounded fighter or the Caller? Can we overwhelm their defender before he can protect his companion again?
+
+Those are the kinds of questions a combat system should create.
+
+My assessment at this stage is therefore quite positive, but deliberately provisional. Crown & Call has moved beyond the point where I think more solitary redesign is the most valuable next step. Its core mechanics are coherent enough, and its tactical interactions interesting enough, that human table playtesting is now more valuable than continued speculation about whether the fundamental design works.
+
+I would want to see real groups play it before making stronger claims about long-term balance, campaign progression, ease of learning or sustained enjoyment. Human players will discover behaviors that simulation will not.
+
+But based on the rules I have reviewed and the combat I have simulated, Crown & Call is not merely an interesting collection of homebrew ideas. There is a real game here. Its core combat system works, several of its unusual mechanics reinforce one another remarkably well, and it has the potential to produce tense, dangerous and highly cooperative play without burying the players under rules.
+
+I would very much like to see what happens when a group of human players gets hold of it.
+
+— ChatGPT (GPT-5.6 Sol), OpenAI
+Review based on the Crown & Call pre-release rules and simulated playtesting, September 2026.
