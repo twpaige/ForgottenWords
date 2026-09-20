@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<!--
+Crown & Call redesigned web ruleset
+Version: 202609200907
+Source: CC_Ruleset.txt Version 202609190716
+Copyright (c) 2026 Thomas Paige. All rights reserved.
+Playtest use only. Not licensed for redistribution.
+-->
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crown & Call — Ruleset</title>
+<style>
+:root{--ink:#26231f;--muted:#6c655c;--paper:#f3efe4;--paper2:#fffdf7;--gold:#9a6b16;--gold2:#c49a45;--red:#713a32;--line:#d7cbb7;--shadow:rgba(39,31,20,.16);--nav:#211f1c}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:76px}body{margin:0;background:#d9d1c3;color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.65}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(33,31,28,.97);border-bottom:2px solid var(--gold2);box-shadow:0 3px 12px rgba(0,0,0,.25)}
+.topbar-inner{max-width:1180px;margin:auto;display:flex;align-items:center;gap:12px;padding:9px 18px}.brand{color:#fff;font-weight:700;letter-spacing:.06em;white-space:nowrap}.topbar a{color:#f1dfb4;text-decoration:none;font-family:Arial,sans-serif;font-size:13px}.topbar a:hover{color:#fff}.spacer{flex:1}
+.hero{background:linear-gradient(135deg,#29251f,#4a3a26);color:#fff;padding:58px 20px 50px;text-align:center;border-bottom:5px solid var(--gold2)}.hero h1{font-size:clamp(38px,7vw,70px);margin:0;letter-spacing:.04em}.hero .kicker{font:700 13px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#e2c47f}.hero .tagline{max-width:720px;margin:14px auto 0;font-size:20px;color:#f3ead7;font-style:italic}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 18px 70px}.intro,.card{background:var(--paper2);border:1px solid var(--line);box-shadow:0 8px 25px var(--shadow);border-radius:8px;margin:0 0 24px;padding:30px 34px}.intro{border-top:5px solid var(--gold)}
+h2{font-size:27px;margin:0 0 18px;color:#3c3023;border-bottom:1px solid var(--line);padding-bottom:10px;letter-spacing:.025em}h3{font-size:20px;margin:34px 0 10px;color:var(--red);padding-top:4px}p{margin:0 0 13px}.sub{text-align:center;color:var(--muted);font-size:14px}.foot{text-align:center;color:var(--muted);font-size:12px}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:18px 0 8px}.toc a,.rule-index a{display:block;text-decoration:none;color:#4a3513;background:#f4ead4;border:1px solid #dfcda8;border-radius:5px;padding:8px 10px;font:700 12px Arial,sans-serif}.toc a:hover,.rule-index a:hover{background:#ead7ae}
+.rule-index{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px}.rule-index a span{display:block;font-weight:400;color:#716754;margin-top:2px}
+.mono{font-family:Consolas,"Courier New",monospace;background:#272522;color:#f3ead7;border-left:4px solid var(--gold2);border-radius:4px;padding:13px 15px;font-size:13px;line-height:1.55;margin:10px 0 16px;white-space:pre-wrap;overflow-x:auto}
+.example{background:#eef0e8;border-left:4px solid #687453;padding:13px 16px;margin:12px 0 20px;border-radius:0 5px 5px 0}.example strong{font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#4e5d3c}.flavor{font-style:italic;color:#51483d;background:#f5eee1;border:1px solid #e1d2b9;padding:14px 17px;border-radius:5px;margin:0 0 18px}
+.rule-tools{float:right;font:12px Arial,sans-serif}.rule-tools a{color:var(--gold);text-decoration:none;margin-left:10px}.legal{font-size:13px;color:#5f584f}.legal h2{font-size:20px}
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:14px}th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}th{background:#eee3ce}
+@media(max-width:650px){.topbar-inner{padding:8px 10px}.brand{font-size:13px}.hero{padding:38px 15px}.intro,.card{padding:22px 18px}.wrap{padding:18px 10px 50px}h2{font-size:23px}h3{font-size:18px}.rule-index{grid-template-columns:repeat(2,1fr)}}
+@media print{.topbar{display:none}body{background:white}.hero{color:#111;background:white;border-bottom:2px solid #111}.card,.intro{box-shadow:none;break-inside:auto}.example{break-inside:avoid}}
+</style></head><body><div class="topbar"><div class="topbar-inner"><span class="brand">CROWN &amp; CALL</span><a href="CC_Home.html">Home</a><a href="#index">Rule Index</a><a href="#s9quickreferencesummary">Quick Reference</a><span class="spacer"></span><a href="#top">Top ↑</a></div></div><header class="hero" id="top"><div class="kicker">Pre-Release Playtest Rules</div><h1>Crown &amp; Call</h1><p class="tagline">The world is broken. Darkness is real. The King is calling.</p></header><div class='wrap'>
+<section class="intro"><p class="sub">Complete rules · source CC_Ruleset.txt Ver. 202609190716<br>Quote a rule ID at the table. This page is a reading copy, not a second canon.</p>
+<h2>Find Your Way</h2><p>Crown &amp; Call is built to be learned at the table. Read straight through once, then use the links below to jump directly to the rule you need.</p><nav class="toc"><a href="#s1designprinciples">1. DESIGN PRINCIPLES</a><a href="#s2capabilities">2. CAPABILITIES</a><a href="#s3resolution">3. RESOLUTION</a><a href="#s4combat">4. COMBAT</a><a href="#s5turnsmovementandinitiative">5. TURNS, MOVEMENT, AND INITIATIVE</a><a href="#s6magiccalling">6. MAGIC — CALLING</a><a href="#s7faithcriticalsandthedivine">7. FAITH, CRITICALS, AND THE DIVINE</a><a href="#s8otherrules">8. OTHER RULES</a><a href="#s9quickreferencesummary">9. QUICK REFERENCE SUMMARY</a><a href="#s10closingnotes">10. CLOSING NOTES</a></nav><p style="text-align:center;margin-top:14px"><a href="CC_Home.html">← Return to Crown &amp; Call Home</a></p></section>
+<section class="card" id="index"><h2>Rule Index</h2><p>Every rule ID below is a direct link. Use this as the table-side index when a question comes up.</p><div class="rule-index"><a href="#g1">G1. ROLEPLAY FIRST</a><a href="#g2">G2. BROAD CAPABILITIES</a><a href="#g3">G3. MEANINGFUL CONSEQUENCES</a><a href="#g4">G4. CREATIVE PERMISSION</a><a href="#g5">G5. NO AUTOMATIC POWER</a><a href="#g6">G6. CHARACTER CONCEPTS</a><a href="#g7">G7. MAGIC AND FAITH ARE NOT THE SAME</a><a href="#g8">G8. SPIRIT OF THE RULES</a><a href="#c1">C1. THE EIGHT CAPABILITIES</a><a href="#c2">C2. CAPABILITY SCALE</a><a href="#c3">C3. STARTING CAPABILITY POINTS</a><a href="#c4">C4. ADVANCEMENT</a><a href="#c5">C5. WOUND PENALTIES ON CAPABILITIES</a><a href="#r1">R1. THE D20</a><a href="#r2">R2. OPPOSED ROLLS</a><a href="#r3">R3. UNOPPOSED TASKS</a><a href="#r4">R4. DEFENSE CHOICES</a><a href="#r5">R5. DIFFICULTY GUIDELINES</a><a href="#w1">W1. AGGRESSION</a><a href="#w1a">W1a. RANGED REACH</a><a href="#w1b">W1b. ENGAGED</a><a href="#w2">W2. WIELDING MODIFIERS</a><a href="#w3">W3. MARGIN OF VICTORY AND WOUND SEVERITY</a><a href="#w4">W4. WEAPON WOUND CEILING</a><a href="#w5">W5. ARMOR</a><a href="#w6">W6. MORTAL WOUND</a><a href="#w7">W7. NO WOUNDS ABOVE MORT</a><a href="#w8">W8. WOUND TRACKING AND COMBINING</a><a href="#w9">W9. SCALE</a><a href="#w10">W10. MULTIPLE WEAPONS</a><a href="#w11">W11. RANGED WEAPONS AND THE DEFAULT LIST</a><a href="#t1">T1. ROUNDS</a><a href="#t2">T2. TURN STRUCTURE (MPA)</a><a href="#t3">T3. SPEED</a><a href="#t4">T4. DOUBLE MOVE</a><a href="#t5">T5. INITIATIVE</a><a href="#t6">T6. HOLD</a><a href="#t7">T7. PROTECT</a><a href="#t8">T8. COVER AND CONCEALMENT</a><a href="#m1">M1. MAGIC AS CALLING</a><a href="#m2">M2. MAGIC POWER</a><a href="#m3">M3. AREA EFFECTS</a><a href="#m4">M4. GATHERING</a><a href="#m5">M5. MAGIC PROGRESSION TITLES (OPTIONAL FLAVOR)</a><a href="#m6">M6. CALL WOUND CEILINGS</a><a href="#m7">M7. DEFENDING AGAINST CALLINGS</a><a href="#m8">M8. CONVERTED COMBAT HEALING</a><a href="#m9">M9. CALL RANGE, AREA, AND VISIBILITY</a><a href="#m10">M10. CALL REQUIREMENTS</a><a href="#m11">M11. GATHERING REQUIREMENTS</a><a href="#f1">F1. NATURAL 20 — CRITICAL SUCCESS</a><a href="#f2">F2. BANKING GUIDANCE</a><a href="#f3">F3. SPENDING GUIDANCE</a><a href="#f4">F4. NATURAL 1 — CRITICAL FAILURE</a><a href="#f5">F5. DIVINE WORKS</a><a href="#f6">F6. PETITION FOR THE DEAD</a><a href="#o1">O1. ACTIVE AND RESTING RECOVERY</a><a href="#o2">O2. NO SURPRISE MECHANIC</a><a href="#o3">O3. DICE MODES (GM TOOL)</a><a href="#o4">O4. CONDITIONS</a><a href="#o5">O5. BEARING THE BURDEN</a><a href="#o6">O6. MEDITATION</a></div></section><section class="card legal" id="front-matter">
+<h2>Front matter</h2>
+<p>COPYRIGHT &amp; LICENSE NOTICE
+CROWN &amp; CALL™
+Pre-Release Playtest Version
+Copyright © 2026 Thomas Paige. All rights reserved.
+This document contains the unpublished and proprietary rules, mechanics, text, concepts, and other creative material comprising the Crown &amp; Call tabletop roleplaying game system.
+This is a pre-release playtest document. It is provided solely for the purpose of evaluating, testing, discussing, and improving Crown &amp; Call.
+No license is granted to copy, reproduce, distribute, publish, modify, adapt, translate, sell, sublicense, or create derivative works from this material, except as expressly authorized by the copyright holder.
+Playtesters may view, use, and discuss the rules for purposes of playtesting and may provide feedback to the creator. Playtesters may not redistribute the document or make its contents publicly available without permission.
+Crown &amp; Call and associated names, logos, artwork, settings, characters, and other creative works are the property of Thomas Paige unless otherwise noted.
+FUTURE OPEN LICENSE
+It is the creator&#x27;s present intention to release the Crown &amp; Call game system under the Open RPG Creative (ORC) License following completion of development and playtesting.
+This document is not currently released under the ORC License. No rights under the ORC License are granted by this document or by making it available to playtesters.
+The creator reserves the right to determine which Crown &amp; Call materials will be designated as Licensed Material and which will remain Reserved Material when the public release is made.
+Until an official public release and corresponding ORC License notice are published, all rights are reserved.
+Version: 202609190716
+Last Updated: 19 Sept 2026
+Last Updated by: Thomas Paige</p>
+<p>CROWN’S CALLING
+Player Manual — Complete Rules</p>
+<p>The world is broken. Darkness is real. The King is calling.</p>
+<p>Crown’s Calling is a classless, single-die tabletop roleplaying game of courage, faith, danger, and adventure. You will face enemies, discover mysteries, wield weapons and magic, and make choices that matter. There are no classes or rigid paths. Your character becomes what you choose to make of them.</p>
+<p>All you need to play is a single d20. The rules are simple by design. Roleplay comes first. The rules exist to help tell the story—not get in its way. When danger comes, combat is fast and brutal, and no character is guaranteed to survive.</p>
+<p>Gather your companions. Take up your calling. The Crown awaits.</p>
+<p>HOW TO READ RULE IDS
+Each rule has a letter and a number. The letter is the subject. The number is the rule inside that subject. Quote the ID at the table (for example, M7).</p>
+<div class="mono">  G  General / design             G1-G8
+  C  Capabilities                 C1-C5
+  R  Resolution (how you roll)    R1-R5
+  W  Wounds and combat            W1-W11
+  T  Turns, movement, initiative  T1-T8
+  M  Magic / Calling             M1-M11
+  F  Faith, criticals, divine     F1-F6
+  O  Other / recovery / GM tools  O1-O6</div>
+<p>G is design and philosophy. O is leftover table procedure (recovery, ambush, dice modes, conditions, meditation).</p>
+</section>
+<section class="card" id="s1designprinciples">
+<h2>1. DESIGN PRINCIPLES</h2><p class="flavor">Before dice touch the table, these principles answer the most important question: what kind of game is Crown & Call trying to be? Fiction leads. Rules support it.</p>
+<h3 id="g1">G1. ROLEPLAY FIRST</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>The rules serve the story, not the other way around. When a situation is clear from the fiction, the GM may simply declare the result without a roll. Rolls are used when the outcome is uncertain and interesting.</p>
+<div class="example"><strong>At the Table</strong><br>The party reaches an unlocked cottage door. Opening it needs no roll. Hearing a faint scrape behind that door when an assassin is hiding inside might call for SENSE.</div>
+<h3 id="g2">G2. BROAD CAPABILITIES</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Characters are defined by a small number of broad Capabilities rather than classes or long lists of narrow skills. Existing Capabilities should be used flexibly whenever they reasonably apply. There are no classes, professions, or prescribed character paths. A Capability describes what a character can do. It does not dictate who they must be.</p>
+<div class="example"><strong>At the Table</strong><br>A player wants to calm a frightened horse. There is no Animal Handling skill to hunt for; SENSE already covers understanding and handling animals.</div>
+<h3 id="g3">G3. MEANINGFUL CONSEQUENCES</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Combat is dangerous. Every successful attack can produce a wound that immediately changes how a character approaches the rest of the fight. There is no slow hit-point attrition.</p>
+<div class="example"><strong>At the Table</strong><br>A swordsman who takes a DEEP wound is immediately worse at several physical Capabilities. The wound changes the decisions he makes now, not twenty hit points later.</div>
+<h3 id="g4">G4. CREATIVE PERMISSION</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Players are encouraged to attempt interesting actions. The GM determines whether an action is possible and which Capability applies, but the default stance is to let players try.</p>
+<div class="example"><strong>At the Table</strong><br>A player wants to swing from a chandelier and kick a guard from a balcony. If the fiction permits it, the GM chooses the appropriate Capability and lets the attempt happen.</div>
+<h3 id="g5">G5. NO AUTOMATIC POWER</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Magic is wondrous and limited by the Caller&#x27;s skill. Faith is relationship with God, not a resource that can be spent to compel divine power.</p>
+<div class="example"><strong>At the Table</strong><br>A Caller may use a learned Call according to its rules. A faithful character may pray for help, but cannot spend FAITH points to order God to produce a chosen miracle.</div>
+<h3 id="g6">G6. CHARACTER CONCEPTS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A priest, mage, warrior, scholar, thief, knight, healer, craftsman, or any other concept is a description, not a mechanical category. There is no required set of Capabilities or rules for any archetype.</p>
+<p>A player who wants a priest might invest heavily in FAITH and describe Works as prayer or dependence on God. Another might build a warrior-priest with strong WEAPONS and FAITH. A priest might also be a scholar with high ACADEMICS, a Caller with high MAGIC, or all of these.</p>
+<p>A character with high MAGIC might be a traditional mage, an alchemist, an artificer, a hedge wizard, or something else. A character with high WEAPONS and ACADEMICS might be a scholarly swordsman. The rules do not distinguish these concepts unless the player and GM want them to.</p>
+<p>The question is not &quot;What class is my character?&quot; It is &quot;Who is my character, and what are they capable of doing?&quot; Build the character you want to play. The rules provide the tools. You provide the character.</p>
+<div class="example"><strong>At the Table</strong><br>Two characters may both be called 'knights.' One invests in WEAPONS and ATHLETICS; another in WEAPONS, FAITH, and ACADEMICS. The title describes them; it does not build them.</div>
+<h3 id="g7">G7. MAGIC AND FAITH ARE NOT THE SAME</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Callings are a gift given to those learned enough to understand and use them. They come from God, but using a Call is not commanding God. It is like throwing a rock off a bridge and telling God to make it fall and splash. The rock falls because that is how the world works.</p>
+<p>In Crown&#x27;s Calling, magic is a force of nature, like gravity. It simply is. Mortals who have learned MAGIC may shape that force through Callings (see M1-M11).</p>
+<p>Petitioning God through prayer and FAITH is a different matter. God is not a force to be aimed. The GM decides at the time what, if anything, comes of a sincere petition. Guidance, Critical Opportunities, and Petition for the Dead (F1-F6) are the current mechanical handles. They never obligate God.</p>
+<div class="example"><strong>At the Table</strong><br>A Caller shaping flame uses MAGIC because flame-calling follows created rules. A character begging God to spare a dying friend is exercising FAITH and Petition, not casting a Call.</div>
+<h3 id="g8">G8. SPIRIT OF THE RULES</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Play the intent of a rule, not a wording hole.
+If the intent is clear, that intent wins even when a clever reading would get you more.
+The GM decides when the table disagrees, then play continues. Talk it out after the scene.</p>
+<div class="example"><strong>At the Table</strong><br>If wording seems to permit carrying twenty readied polearms because no encumbrance formula forbids it, the GM applies the obvious intent and keeps play moving.</div>
+</section>
+<section class="card" id="s2capabilities">
+<h2>2. CAPABILITIES</h2><p class="flavor">A hero is not a class. A hero is a collection of strengths, weaknesses, convictions, training, and choices. Capabilities put numbers to those strengths without deciding the character for you.</p>
+<h3 id="c1">C1. THE EIGHT CAPABILITIES</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Every character has eight Capabilities, each rated from 0 to 20:</p>
+<div class="mono">  WEAPONS   — Hand-wielded martial weapons (attacking and defending with them)
+  RANGED    — Bows, thrown weapons, and other ranged attacks
+  ATHLETICS — Physical ability: strength, agility, endurance, climbing, jumping, swimming, grappling, and bodily control. Also determines Speed.
+  THIEVERY  — Stealth, locks, pickpocketing, traps, guile, social cunning, and getting what you want through cleverness or deception.
+  SENSE     — Common sense, practical wisdom, awareness, intuition, judgment, reading people and situations, understanding animal behavior, and handling mounts or animals.
+  MAGIC     — The ability to Call supernatural effects.
+  ACADEMICS — Learned knowledge: reading, writing, mathematics, history, languages, scholarship, and specialized study.
+  FAITH     — Commitment, trust, obedience, and love toward God. This is distinct from academic knowledge of religion or Scripture.</div>
+<div class="example"><strong>At the Table</strong><br>To climb a crumbling wall, use ATHLETICS. To recognize the heraldry carved above it, use ACADEMICS. To notice that the 'guard' is watching exits rather than visitors, SENSE may fit.</div>
+<h3 id="c2">C2. CAPABILITY SCALE</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<div class="mono">  0     — Ordinary (non-hero) average competence. The everyday person. Not untrained, just not heroic.
+  1–3   — Noticeably capable. Clearly above ordinary competence; a standout in that area among common folk.
+  4–6   — Skilled; clearly better than a merely capable practitioner.
+  7–9   — Expert; among the better practitioners.
+  10–12 — Exceptional; remarkably capable.
+  13–15 — Masterful; rare.
+  16–18 — Extraordinary; very few people reach this level.
+  19–20 — Legendary.</div>
+<p>A score of 0 is the baseline for ordinary people. Scores of 1 or higher mark increasing heroic mastery. A Capability left at 0 is still usable at ordinary competence; it is not a gap or a disability.</p>
+<div class="example"><strong>At the Table</strong><br>A farmer with ATHLETICS 0 is an ordinary capable adult, not helpless. ATHLETICS 8 represents an expert whose physical ability stands well above ordinary people.</div>
+<h3 id="c3">C3. STARTING CAPABILITY POINTS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>New characters begin with all Capabilities at 0 and receive 15 Capability Points. These points must be distributed across exactly five Capabilities. Each of those five Capabilities must receive a minimum of 1 point and a maximum of 5 points. The other three Capabilities remain at 0 (ordinary non-hero competence; see C2).</p>
+<p>Example: A player might create</p>
+<div class="mono">  WEAPONS 5, ATHLETICS 4, SENSE 3, FAITH 2, THIEVERY 1</div>
+<p>or</p>
+<div class="mono">  MAGIC 5, ACADEMICS 4, SENSE 3, FAITH 2, WEAPONS 1</div>
+<p>or</p>
+<div class="mono">  WEAPONS 4, RANGED 3, ATHLETICS 3, THIEVERY 3, SENSE 2.</div>
+<div class="example"><strong>At the Table</strong><br>Mara begins with WEAPONS 5, ATHLETICS 4, SENSE 3, FAITH 2, and ACADEMICS 1. Her other three Capabilities remain at 0 and are still usable.</div>
+<h3 id="c4">C4. ADVANCEMENT</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>There are no traditional levels. The GM awards additional Capability Points when characters accomplish significant milestones. Players may place these points wherever they wish, including in previously undeveloped Capabilities. A soft campaign ceiling of roughly 80–100 total points is recommended so that long-term investment decisions remain meaningful.</p>
+<div class="example"><strong>At the Table</strong><br>After the party survives a major campaign milestone, the GM awards a Capability Point. Mara can deepen WEAPONS or begin developing MAGIC from 0 to 1.</div>
+<h3 id="c5">C5. WOUND PENALTIES ON CAPABILITIES</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Wounds reduce WEAPONS, RANGED, ATHLETICS, THIEVERY, and SENSE by the character&#x27;s current Wound Level. MAGIC, ACADEMICS, and FAITH are unaffected by wounds.</p>
+<p>Speed does not suffer wound penalties. Calculate Speed from Base Speed + full ATHLETICS (T3), even when ATHLETICS rolls are reduced by C5.</p>
+<p>Wound Level is a number of steps:</p>
+<div class="mono">  FLSH 1   LITE 2   DEEP 3
+  SEVR 4   GRAV 5   MORT 6</div>
+<p>Use the worst current wound. Do not add the binary W8 values as the penalty.</p>
+<p>Creatures that can suffer more than one MORT and remain standing add +1 Wound Level for each MORT after the first (see W7, W9). Example: 1 MORT is -6, 2 MORT is -7.</p>
+<div class="example"><strong>At the Table</strong><br>A hero with WEAPONS 7 and a DEEP wound has Wound Level 3, so affected WEAPONS rolls use 4 before other modifiers. His MAGIC and FAITH remain unchanged.</div>
+</section>
+<section class="card" id="s3resolution">
+<h2>3. RESOLUTION</h2><p class="flavor">When the outcome matters and nobody knows what happens next, the dice enter the story. Most uncertainty comes down to one roll and a clear comparison.</p>
+<h3 id="r1">R1. THE D20</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>When the outcome of an action is uncertain, resolve it with a d20 roll. Add the appropriate Capability and any relevant modifiers.</p>
+<p>If another character or creature actively opposes the action, use an Opposed Roll (R2). Both sides roll, and the higher total wins. Opposed Rolls resolve themselves. The GM does not set a Target Number.</p>
+<p>If no character or creature actively opposes the action, use an Unopposed Roll (R3). The player rolls against a Target Number set by the GM (see R5).</p>
+<p>When the outcome is clear from the fiction, no roll is necessary. The GM may simply declare the result (see G1).</p>
+<div class="example"><strong>At the Table</strong><br>Picking up a dropped key needs no roll. Picking a lock under pressure is unopposed. Wrestling the key from a guard is opposed.</div>
+<h3 id="r2">R2. OPPOSED ROLLS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>When two characters directly compete or one acts against another’s resistance, both sides roll:</p>
+<div class="mono">  d20 + Capability + applicable modifiers</div>
+<p>The higher total wins. The difference between the two totals is the Margin of Victory (MoV).</p>
+<p>There is no static Armor Class. Defense is always an active roll.</p>
+<p>Example: A warrior attacks with a longsword (WEAPONS 7, 2H Wielding Modifier +1). The defender tries to parry with a shortsword (WEAPONS 5, 1H Wielding Modifier +1).</p>
+<div class="mono">  Attacker: d20 (14) + 7 + 1 = 22
+  Defender: d20 (11) + 5 + 1 = 17
+  Attacker wins with MoV 5.</div>
+<div class="example"><strong>At the Table</strong><br>An attacker totals 22 and the defender 17. The attacker wins by MoV 5; in combat that MoV can then be translated into wound severity under W3.</div>
+<h3 id="r3">R3. UNOPPOSED TASKS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>When no one is actively opposing the action, the player rolls d20 + Capability + modifiers. The GM sets a Target Number using R5 and decides whether the result succeeds. Circumstances, tools, time, and conditions may adjust the Target Number.</p>
+<div class="example"><strong>At the Table</strong><br>The GM calls crossing a rotten beam Moderate (TN 15). A hero rolls 12 + ATHLETICS 4 = 16 and makes it across.</div>
+<h3 id="r4">R4. DEFENSE CHOICES</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A defender chooses an appropriate means of defense when circumstances permit: weapon, shield, ATHLETICS (dodge/evade), or another reasonable action. The GM has final say on whether a proposed defense is plausible, but the general philosophy is to allow creative attempts.</p>
+<div class="example"><strong>At the Table</strong><br>An arrow comes in. A warrior might interpose a shield; an unarmed scout may dodge with ATHLETICS. The defense must make sense in the fiction.</div>
+<h3 id="r5">R5. DIFFICULTY GUIDELINES</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>When no one is actively opposing an action, the GM sets a Target Number. Meeting or exceeding that number succeeds. Use the column that matches the dice in play (see O3).</p>
+<div class="mono">Difficulty   1d20   3d6   4d6 drop 1   Who succeeds consistently
+Routine        10    12      14        CAP 1-4. Ordinary tasks most competent people manage.
+Moderate       15    15      17        CAP 5-8. Noticeably difficult; requires real ability.
+Hard           20    20      21        CAP 9-12. Demanding even for the skilled.
+Extreme        25    23      25        CAP 13-16. Exceptional; failure is likely without help.
+Legendary      30    26      28        CAP 17-20 plus favorable conditions. Near-impossible for almost anyone.</div>
+<p>4d6 drop 1 means roll 4d6 and drop the lowest die (O3 Stable). These TNs keep about the same success rate as the 1d20 column across typical CAP scores. They are not a perfect match at every CAP.</p>
+<p>The GM may also rule partial success, success with cost, or interesting failure. A margin of 5 or more either way may mark an especially strong success or failure.</p>
+<div class="example"><strong>At the Table</strong><br>A routine climb might be TN 10 on 1d20; scaling the rain-slick outer wall of a fortress could be Hard at TN 20. The GM chooses the difficulty from the situation.</div>
+</section>
+<section class="card" id="s4combat">
+<h2>4. COMBAT</h2><p class="flavor">Steel is dangerous here. A single clean blow can change a fight, and every choice between attack and defense matters.</p>
+<h3 id="w1">W1. AGGRESSION</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A character may set Aggression anywhere from −10 to +10 (0 is neutral). Setting it is free.</p>
+<p>You may set a non-zero Aggression only while adjacent (within 5 feet) to an enemy in the fight. If you are not adjacent, Aggression is 0.</p>
+<p>If you begin your Turn already adjacent, set it at the start of the Turn. If you become adjacent during your Turn, you may set it in PREP before you strike.</p>
+<p>Aggression applies only to melee offense and melee defense, including an unarmed or dodging defense.</p>
+<div class="mono">  +5 Aggression → +5 melee Offense, −5 melee Defense
+  −3 Aggression → −3 melee Offense, +3 melee Defense</div>
+<p>Ranged attacks never use Aggression. Defense against a ranged attack never uses Aggression.</p>
+<div class="example"><strong>At the Table</strong><br>A fighter chooses Aggression +4. His melee attack gains +4, but his melee defense loses 4 until the choice changes. He is deliberately opening himself to press the attack.</div>
+<h3 id="w1a">W1a. RANGED REACH</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A ranged attack (thrown or launched) may be made only against a target 10 feet away or farther. Inside 10 feet, fight in melee or withdraw (W1b).</p>
+<div class="example"><strong>At the Table</strong><br>An enemy is 5 feet away. The archer cannot make a ranged attack at that distance; she must fight in melee or create distance first.</div>
+<h3 id="w1b">W1b. ENGAGED</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>You are Engaged while adjacent to an enemy in the fight who is willing to oppose you.</p>
+<p>Leaving a square that would break that adjacency takes your entire ACT. You MOVE only if the withdraw succeeds. You do not strike this Turn.</p>
+<p>Roll once against each adjacent enemy who opposes the withdraw: d20 + WEAPONS or ATHLETICS, Opposed. An enemy may let you go and skip that roll.</p>
+<p>Win every opposed withdraw: take a legal path out.
+Lose any of them: you stay in the square. No free hit.</p>
+<p>Aggression is separate (W1). You may set −10 before the attempt. That is a choice, not a cost of leaving.</p>
+<div class="example"><strong>At the Table</strong><br>A hero adjacent to two hostile guards tries to withdraw. Both contest it. He must win both opposed withdraw rolls to leave; losing either keeps him in place.</div>
+<h3 id="w2">W2. WIELDING MODIFIERS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Every weapon or piece of equipment has separate Wielding Modifiers for one-handed and two-handed use. These modifiers are applied to the relevant roll.</p>
+<p>The full playtest list of melee weapons, launchers, and projectiles is W11.</p>
+<p>A character may use a weapon one-handed even if the modifier is heavily negative; the modifier simply reflects how ineffective that choice is. Launchers may forbid one-handed firing even when a 1H melee line exists.</p>
+<div class="example"><strong>At the Table</strong><br>A longsword is awkward one-handed but better two-handed. The listed 1H or 2H modifier is simply added to the relevant roll for the grip being used.</div>
+<h3 id="w3">W3. MARGIN OF VICTORY AND WOUND SEVERITY</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>The Margin of Victory determines the raw severity of the wound:</p>
+<div class="mono">  MoV 1–4   → FLSH (Flesh)
+  MoV 5–8   → LITE (Light)
+  MoV 9–12  → DEEP (Deep)
+  MoV 13–16 → SEVR (Severe)
+  MoV 17–20 → GRAV (Grave)
+  MoV 21+   → MORT (Mortal)</div>
+<p>These thresholds are the current baseline and may be adjusted by the GM during playtesting.</p>
+<div class="example"><strong>At the Table</strong><br>An attack wins by 14. That is a raw SEVR wound before weapon ceiling and armor modify the result.</div>
+<h3 id="w4">W4. WEAPON WOUND CEILING</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Each weapon has a maximum Wound Severity it can inflict, regardless of how high the MoV is. A knife cannot produce a Mortal wound no matter how well the attacker rolls.</p>
+<div class="example"><strong>At the Table</strong><br>A dagger attack somehow wins by MoV 22, normally MORT. If the dagger's ceiling is LITE, the wound stops at LITE before armor is applied.</div>
+<h3 id="w5">W5. ARMOR</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Armor does not make a character harder to hit. It reduces the severity of the wound received:</p>
+<div class="mono">  No Armor   +1 severity
+  Leather     0
+  Chainmail  −1 severity
+  Plate      −2 severity</div>
+<p>Example: An attack that would inflict DEEP becomes LITE against chainmail, or SEVR against an unarmored target.</p>
+<div class="example"><strong>At the Table</strong><br>A raw DEEP wound against chainmail shifts down one step to LITE. The same raw DEEP wound against an unarmored target shifts up to SEVR.</div>
+<h3 id="w6">W6. MORTAL WOUND</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>For ordinary (Scale 1) characters, a Mortal Wound renders the character unconscious and dying. The character does not die from that Mortal Wound itself. Any subsequent wound received while Mortal kills the character. This creates a short, high-stakes window in which allies may intervene.</p>
+<p>When a Scale 1 character takes MORT, they drop. The GM secretly rolls the dice in play (O3). That total is how many seconds they have before they bleed out. Do not tell the table the number.</p>
+<p>Anyone may stem the bleed. It takes two free hands and the whole ACT at the body. No Capability is required. If you arrive in time they stay unconscious and Mortal, but they are no longer bleeding out. They are not healed. Any wound while Mortal still kills them.</p>
+<p>If no one stems the bleed in time, they die. The GM reveals that when the clock ran out or when someone reaches the body.</p>
+<p>The GM may set the number by fiction instead of rolling when a hidden die would be cruel or silly.</p>
+<div class="example"><strong>At the Table</strong><br>A Scale 1 hero takes MORT and collapses. The GM secretly rolls the bleed-out time. An ally reaching him in time can spend an ACT with two free hands to stop the bleeding, but he remains Mortal.</div>
+<h3 id="w7">W7. NO WOUNDS ABOVE MORT</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>There are no wound ranks above MORT.</p>
+<p>Wounds never combine past MORT. A second MORT stays a second MORT. It does not become a new tier.</p>
+<p>Some larger or stronger creatures can take more than one MORT before they die (see W9). Those creatures stay on their feet until they reach their MORT quota. Each MORT after the first adds +1 to their C5 Wound Level (MORT is 6; two MORT is 7).</p>
+<p>Healing that peels one GRAV off a MORT removes one MORT box (see W8).</p>
+<div class="example"><strong>At the Table</strong><br>A Scale 2 ogre already has one MORT and keeps fighting. A second MORT defeats it; the wounds do not invent a severity beyond MORT.</div>
+<h3 id="w8">W8. WOUND TRACKING AND COMBINING</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Player characters track their own wounds openly. Wounds combine and break in pairs up and down the ladder:</p>
+<div class="mono">  2 FLSH = 1 LITE
+  2 LITE = 1 DEEP
+  2 DEEP = 1 SEVR
+  2 SEVR = 1 GRAV
+  2 GRAV = 1 MORT</div>
+<p>Two wounds of the same severity become one wound of the next higher severity. Healing or other reduction subtracts a stated piece; rewrite what remains as the fewest wounds that match that value.</p>
+<p>Example: A character with only SEVR is healed of 1 LITE. SEVR = DEEP + 2 LITE. Remove 1 LITE. Remainder = DEEP + LITE.</p>
+<p>Example: A character with only MORT is healed of 1 GRAV. MORT = 2 GRAV. Remainder = 1 GRAV. The character is no longer Mortal.</p>
+<p>GM aid: the ladder is binary. Counting in FLSH units:</p>
+<div class="mono">  FLSH 1, LITE 2, DEEP 4, SEVR 8, GRAV 16, MORT 32.</div>
+<p>Only the character&#x27;s worst current Wound Level normally imposes the Capability penalty (see C5).</p>
+<div class="example"><strong>At the Table</strong><br>Two LITE wounds combine into one DEEP. If healing later removes one LITE worth of value from that DEEP, rewrite the remainder as one LITE.</div>
+<h3 id="w9">W9. SCALE</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Scale is how many Mortal wounds defeat a creature. Scale does not raise Capability scores.</p>
+<div class="mono">  Scale 1  People. One MORT drops them (W6). The next wound kills them.
+  Scale 2  Larger or stronger. Two MORT to defeat. They stay up until the second.
+  Scale 3+ Rare. The GM may require 3 or more MORT.</div>
+<p>Larger creatures may carry heavier weapons. That can mean a higher wound ceiling and a better wielding modifier. Scale itself does not add wound steps.</p>
+<div class="example"><strong>At the Table</strong><br>A human is normally Scale 1. A huge monster might be Scale 2, meaning it requires two MORT wounds to defeat, but it does not gain bonus CAP merely for being large.</div>
+<h3 id="w10">W10. MULTIPLE WEAPONS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A character may use multiple weapons during one ACT when reasonably possible. Attacking with two weapons can therefore produce two separate attack rolls.</p>
+<p>Melee attack rolls this Turn use the Aggression you set. Melee defense this Turn subtracts that same Aggression. Ranged rolls ignore Aggression (W1). The two rolls may be against one target or two if the fiction allows.</p>
+<div class="example"><strong>At the Table</strong><br>A character holding a dagger in each hand may make two attacks during the ACT when the fiction allows it. Each attack is rolled separately and can wound separately.</div>
+<h3 id="w11">W11. RANGED WEAPONS AND THE DEFAULT LIST</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Ranged attacks are THROWN or LAUNCHED. Both use the RANGED Capability. A ranged attack needs 10 feet or more to the target (W1a).</p>
+<p>THROWN
+The object is the weapon. Use that weapon&#x27;s Wielding Modifier and Wound Ceiling. The roll is RANGED, not WEAPONS. Thrown attacks take −1 for every 10 feet to the target.</p>
+<p>The GM may allow a thrown object that is not a listed weapon. Treat it as Stone or Improvised, or as the nearest listed weapon.</p>
+<p>Example: A knife at 30 feet is −3. The same knife at 200 feet is −20. The attempt is legal; the math is the cost.</p>
+<p>LAUNCHED
+A launcher and a projectile are two items. The projectile supplies the attack&#x27;s Wielding Modifier and Wound Ceiling. The launcher supplies effective range, the range penalty, which projectiles it may use, and whether it may be fired one-handed.</p>
+<p>You may fire only a projectile on that launcher&#x27;s list. Range penalty starts after effective range.</p>
+<p>LOADING
+Sling, shortbow, longbow, light crossbow, and blowgun: loading is PREP. The ACT fires.</p>
+<p>Heavy crossbow: spanning is the ACT. Fire on a later Turn. You may not span and fire on the same Turn.</p>
+<p>One-hand firing is illegal except a spanned heavy crossbow. A launcher used as a club is a melee attack (WEAPONS) and uses the launcher&#x27;s melee line, not the projectile.</p>
+<p>HEAVY CROSSBOW
+A Heavy Bolt fired from a heavy crossbow gains +1 wound step after MoV, then apply ceiling and armor. Light Bolts from a heavy crossbow do not gain that bonus.</p>
+<p>The GM may rule a shot past any listed range is impossible.</p>
+<p>Legal ammo:</p>
+<div class="mono">  Sling             Sling Stone, Sling Bullet
+  Shortbow          Short Arrow
+  Longbow           Short Arrow, War Arrow
+  Light Crossbow    Light Bolt
+  Heavy Crossbow    Light Bolt, Heavy Bolt
+  Blowgun           Dart</div>
+<p>Launchers:</p>
+<div class="mono">  Launcher           Eff. Range   Beyond         Melee 1H/2H   Melee ceil   Fire
+  Sling              40 ft        −1 / 20 ft     +1 / +1       LITE         1
+  Shortbow           100 ft       −1 / 20 ft     +0 / +1       LITE         2
+  Longbow            200 ft       −1 / 20 ft     −1 / +1       LITE         2
+  Light Crossbow     100 ft       −1 / 20 ft     +0 / +1       LITE         2
+  Heavy Crossbow     150 ft       −1 / 20 ft     −2 / +0       LITE         2 to span; 1 if spanned
+  Blowgun            60 ft        −1 / 20 ft     −2 / −1       LITE         2</div>
+<p>Projectiles:</p>
+<div class="mono">  Projectile      Wield   Ceiling   Launchers
+  Short Arrow     +0      DEEP      Shortbow, Longbow
+  War Arrow       +0      SEVR      Longbow
+  Light Bolt      +0      DEEP      Light CB, Heavy CB
+  Heavy Bolt      +0      GRAV      Heavy CB only
+  Sling Stone     +0      DEEP      Sling only
+  Sling Bullet    +0      SEVR      Sling only
+  Dart            +1      LITE      Blowgun</div>
+<p>A Stone is a rock from the ground (Thrown, LITE). A Sling Stone is sling ammo (Launched, DEEP). They are not the same item.</p>
+<p>DEFAULT WEAPONS, LAUNCHERS, AND PROJECTILES</p>
+<div class="mono">Item                   1H     2H     Ceiling   Notes
+Dagger                 +2     +3     LITE      Thrown OK
+Hunting Knife          +2     +3     LITE      Thrown OK
+Shortsword             +1     +2     DEEP
+Arming Sword           +0     +2     DEEP
+Longsword              −1     +1     GRAV
+Bastard Sword          −2     +1     GRAV
+Greatsword             −5     −2     MORT
+Falchion               +1     +2     DEEP
+Scimitar               +1     +2     DEEP
+Hand Axe               +1     +2     DEEP      Thrown OK
+Battleaxe              −1     +1     MORT
+Greataxe               −4     −1     MORT
+Mace                   +0     +2     SEVR
+Morningstar            −1     +1     SEVR
+Warhammer              −1     +1     GRAV
+Maul                   −4     −1     MORT
+Club                   +1     +2     LITE      Thrown OK
+Quarterstaff           −1     +2     DEEP
+Spear                  +1     +2     SEVR      Thrown OK
+Short Spear            +1     +2     DEEP      Thrown OK
+Pike                   −3     +0     SEVR
+Halberd                −3     +0     GRAV
+Glaive                 −2     +1     GRAV
+Bill / Billhook        −2     +1     SEVR
+Lance (mounted)        +0     +1     GRAV
+Javelin                +1     +2     DEEP      Thrown OK
+Throwing Axe           +1     +2     DEEP      Thrown OK
+Shield (Light)         +2     +4     LITE
+Shield (Heavy)         +1     +3     LITE
+Improvised Weapon      −2     −1     LITE      Thrown OK
+Stone                  +0     +0     LITE      Thrown only
+Sling                  +1     +1     LITE      Launcher
+Shortbow               +0     +1     LITE      Launcher; no 1H fire
+Longbow                −1     +1     LITE      Launcher; no 1H fire
+Light Crossbow         +0     +1     LITE      Launcher
+Heavy Crossbow         −2     +0     LITE      Launcher; span = ACT
+Blowgun                −2     −1     LITE      Launcher
+Short Arrow            +0     +0     DEEP      Ammo
+War Arrow              +0     +0     SEVR      Ammo; longbow
+Light Bolt             +0     +0     DEEP      Ammo
+Heavy Bolt             +0     +0     GRAV      Ammo; heavy CB
+Sling Stone            +0     +0     DEEP      Ammo; sling only
+Sling Bullet           +0     +0     SEVR      Ammo; sling only
+Dart                   +1     +1     LITE      Ammo; blowgun</div>
+<div class="example"><strong>At the Table</strong><br>A knife thrown 30 feet uses RANGED and takes -3. A longbow shot uses the arrow's wound ceiling and modifier but the longbow's range rules.</div>
+</section>
+<section class="card" id="s5turnsmovementandinitiative">
+<h2>5. TURNS, MOVEMENT, AND INITIATIVE</h2><p class="flavor">A fight is not a queue of statues waiting their turn. Movement, preparation, protection, and action flow together inside a short, violent Round.</p>
+<h3 id="t1">T1. ROUNDS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A Round represents up to seven seconds of activity. Once every character and relevant NPC has completed a Turn, the Round ends and a new one begins.</p>
+<div class="example"><strong>At the Table</strong><br>If five heroes and three enemies are involved, the Round ends after all eight have completed their Turns. In the fiction, that activity overlaps within roughly seven seconds.</div>
+<h3 id="t2">T2. TURN STRUCTURE (MPA)</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Each Turn consists of three parts that may be interwoven:</p>
+<div class="mono">  MOVE — Movement up to the character’s Speed. May be split before, during, or after ACT. Leaving an Engaged square is not leftover Speed; it is a withdraw (W1b).
+  PREP — A brief activity that can reasonably be completed in one second or less (draw a readily accessible weapon, drop an item, change grip, pick up something immediately at hand, set Aggression). PREP may often be performed while moving.
+  ACT  — The character’s primary undertaking for the Turn. May include multiple related actions (for example, two attacks with two weapons).</div>
+<div class="example"><strong>At the Table</strong><br>A hero can move toward a door, PREP by drawing a sword, ACT to strike an enemy, then use remaining legal movement afterward if the situation permits.</div>
+<h3 id="t3">T3. SPEED</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Speed = Base Speed (determined by species) + ATHLETICS, rounded up to the nearest 5 feet.
+Typical human Base Speed is 30 feet.
+Alpha playable species is human. Other species are not in this book.</p>
+<p>If the GM says you cannot move like that with what you are carrying, you cannot. There is no encumbrance math.</p>
+<p>Example: ATHLETICS 7 → 30 + 7 = 37 → rounded up to 40 feet.</p>
+<p>On a 5-foot grid, Speed in squares equals Speed divided by 5. Up to half of those squares (round down) may be diagonal. The rest must be orthogonal (N, S, E, or W). A diagonal still costs one square.</p>
+<p>Adjacent means the eight squares around you, including diagonals. Melee reach is adjacent unless a weapon says otherwise.</p>
+<p>Example: Speed 50 is 10 squares. At most 5 may be diagonal; the other 5 must be orthogonal.</p>
+<div class="example"><strong>At the Table</strong><br>A human with ATHLETICS 7 has 37 feet before rounding, so Speed becomes 40 feet. On the grid that is 8 squares, with at most 4 diagonal.</div>
+<h3 id="t4">T4. DOUBLE MOVE</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A character may forgo their ACT to move up to their Speed a second time during the same Round.</p>
+<div class="example"><strong>At the Table</strong><br>A scout with Speed 40 gives up the ACT and can move up to 80 feet that Round, subject to terrain and engagement rules.</div>
+<h3 id="t5">T5. INITIATIVE</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>At the beginning of combat the GM rolls 1d20:</p>
+<div class="mono">  11–20 → Player characters act first
+  1–10  → NPCs act first</div>
+<p>Each side then chooses the order in which its members act.</p>
+<div class="example"><strong>At the Table</strong><br>The GM rolls 16 at combat start, so the player side acts first. The players decide among themselves which hero takes the first Turn.</div>
+<h3 id="t6">T6. HOLD</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Instead of taking a Turn, a character may HOLD. When the character later re-enters the initiative order, they choose any position. The new order persists until someone HOLDs again. NPCs follow the same rules.</p>
+<div class="example"><strong>At the Table</strong><br>Mara HOLDs rather than acting now. Later she re-enters at a position she chooses, and that becomes her place in the initiative order.</div>
+<h3 id="t7">T7. PROTECT</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>During PREP on your Turn you may declare &quot;I protect [name]&quot; or &quot;I protect [name] from [enemy].&quot; You cannot start this after your Turn is over.</p>
+<p>Leftover movement may be used only for this rule.</p>
+<p>Protection lasts until you take the hit, or until your next Turn starts, whichever comes first.</p>
+<p>You may protect only against a melee attack aimed at the person you named.</p>
+<p>Open (&quot;I protect Ted&quot;): the first melee attack on Ted that you can reach, you must take.</p>
+<p>Named enemy (&quot;I protect Ted from the ogre&quot;): you must take the hit only when that enemy melee-attacks Ted.</p>
+<p>To protect, reserved Speed must place you in a square adjacent to both the person you named and the attacker. You move there and become the target. Resolve the attack as a normal defense roll (R4).</p>
+<p>You may Protect only if reserved Speed can put you in the legal square and you could legally be the target of that same melee attack once you arrive.</p>
+<p>If the GM says there is no path, you cannot protect.</p>
+<p>You do this at most once per Turn. If several people have declared Protect on the same person, they take hits in the order of declaration.</p>
+<p>After you protect (successfully or not) you stay where you arrived. Your next Turn begins there. If that square is adjacent to an enemy willing to oppose you, you are Engaged (W1b). You do not stroll off. Withdraw is the ACT.</p>
+<div class="example"><strong>At the Table</strong><br>A guard declares 'I protect the prince' and reserves enough Speed. When an adjacent enemy attacks the prince in melee, the guard moves into the legal square and becomes the target.</div>
+<h3 id="t8">T8. COVER AND CONCEALMENT</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>The GM may give a modifier when someone is behind cover or is concealed. Use a Capability that fits (often RANGED to hit, SENSE to spot). The number is for this moment. It is not a standing bonus.</p>
+<div class="example"><strong>At the Table</strong><br>An archer firing through a narrow arrow slit may face a situational modifier. The GM sets it for that shot rather than creating a permanent cover statistic.</div>
+</section>
+<section class="card" id="s6magiccalling">
+<h2>6. MAGIC — CALLING</h2><p class="flavor">Magic is part of creation: wondrous, dangerous, learnable, and bounded. A Caller shapes what already exists; he does not command the Creator.</p>
+<h3 id="m1">M1. MAGIC AS CALLING</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Magic is expressed through Callings. In the world, magic is a created force of nature, like gravity (see G7). Using a Call is learned skill, not a command issued to God.</p>
+<p>The alpha book uses a controlled list. The 20 Combat Callings in the appendix are that list. Each name shows (MAGIC N): you need MAGIC at least N to use it. That number is access only. It does not change MoV or the M6 ceiling.</p>
+<p>Say what you are doing from the list (&quot;I call Flame at that enemy&quot;). You may use only listed Callings you qualify for. A new Calling is a written playtest add, not something invented in the moment. G4 still lets you try ordinary actions. It does not let you invent a Calling mid-fight.</p>
+<div class="example"><strong>At the Table</strong><br>A player with the required MAGIC says, 'I Call Flame at the bandit.' The player chooses from the written Callings; inventing 'Ice Prison' mid-fight is not permitted unless it is already an approved Calling.</div>
+<h3 id="m2">M2. MAGIC POWER</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>The power and effectiveness of a Call scale with the character’s MAGIC Capability. Magic does not automatically allow a character to bypass the normal power curve of the game.</p>
+<p>Each listed Call shows (MAGIC N). That is the MAGIC score required to use it. The number does not change MoV or the M6 ceiling. You cannot use a Call whose MAGIC number is higher than your MAGIC.</p>
+<div class="example"><strong>At the Table</strong><br>A Call marked MAGIC 6 cannot be used by a Caller with MAGIC 5. Reaching MAGIC 6 grants access; the printed 6 is not added to damage.</div>
+<h3 id="m3">M3. AREA EFFECTS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>An Area Call is one Call, not a copy of the same Call on every target. The Caller names every target included in the blast.</p>
+<p>The blast is a single Opposed Roll. The GM chooses the defender from the named list. That defender is the strongest link: the best relevant defense among those targets. For a damaging Call that is the highest MAGIC (see M7). If two or more tie, the GM picks one of them.</p>
+<p>If the Caller wins, the virtual wound from that one MoV is split among all named targets rather than applied in full to each. If the Caller loses, the blast fails and no named target takes that Call&#x27;s wound.</p>
+<p>Split guideline:</p>
+<div class="mono">  1 target     → full power
+  2 targets    → reduce one step
+  3-4 targets  → reduce two steps
+  5-8 targets  → reduce three steps
+  9-16 targets → reduce four steps</div>
+<p>Apply the split first, then each target&#x27;s M6 ceiling and armor (see M6). The Caller cannot pick a weak target to splash a stronger one. Including the strong target means beating that target.</p>
+<div class="example"><strong>At the Table</strong><br>A blast names four targets. One opposed roll is made against the strongest relevant defender. On a win, the virtual wound is reduced two steps before each target's ceiling and armor are applied.</div>
+<h3 id="m4">M4. GATHERING</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A Caller may Gather by spending consecutive Turns completely still: no MOVE, no PREP, no ACT, and no communication.</p>
+<p>Maximum Gather is 3 Rounds. That stores 3 extra Callings. On the release Turn the Caller may also use the Call of that Turn, for a maximum of 4 Callings.</p>
+<p>Gathered power may be held up to 1 minute. Holding does not add more Callings. After 3 Rounds the Caller must remain in the Gathering state until the power is used or lost: no movement and no communication.</p>
+<p>Release consumes the entire Turn. All stored power must be used on that Turn. There is no MOVE and no PREP. Unused store is lost when the Turn ends.</p>
+<p>If the minute expires unused, the store fades.</p>
+<p>If the Caller is attacked while Gathering or holding:</p>
+<div class="mono">  Continue Gathering: the store is kept, but the Caller&#x27;s defense die is a 1. Add CAP and modifiers as usual. If that attack deals a wound, the store is dumped.</div>
+<div class="mono">  Abandon Gathering: defend normally. The entire store is lost, even if the attack misses.</div>
+<p>Example: Gather 3 Rounds, then on a later Turn release 4 Callings and do nothing else that Turn.</p>
+<div class="example"><strong>At the Table</strong><br>A Caller Gathers for three Rounds, remaining still and silent. On release, the stored three plus that Turn's Call allow up to four Callings, and the release consumes the Turn.</div>
+<h3 id="m5">M5. MAGIC PROGRESSION TITLES (OPTIONAL FLAVOR)</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Some groups enjoy mapping MAGIC scores to titles for flavor:</p>
+<div class="mono">  1–3   Apprentice / Journeyman / Master Initiate
+  4–6   Apprentice / Journeyman / Master Acolyte
+  7–9   Apprentice / Journeyman / Master Caller
+  10–12 Apprentice / Journeyman / Master Magus
+  13–15 Apprentice / Journeyman / Master Adept
+  16–18 Apprentice / Journeyman / Master Sage
+  19–20 Journeyman / Master Grand Sage</div>
+<p>These titles are purely descriptive and carry no additional mechanical effects unless the GM decides otherwise.</p>
+<div class="example"><strong>At the Table</strong><br>A character reaching MAGIC 8 might be known in-world as a Journeyman Caller under the optional titles. The title grants no bonus by itself.</div>
+<h3 id="m6">M6. CALL WOUND CEILINGS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Damaging Callings have a base Wound Ceiling of DEEP.</p>
+<p>The Caller&#x27;s MAGIC raises that ceiling:</p>
+<div class="mono">  MAGIC 1-5    +0  (DEEP)
+  MAGIC 6-10   +1  (SEVR)
+  MAGIC 11-15  +2  (GRAV)
+  MAGIC 16-20  +3  (MORT)</div>
+<p>MoV still determines the raw wound. The ceiling only limits how severe that wound can become. Armor then adjusts severity as usual.</p>
+<p>This bonus does not apply to non-damaging Callings. Area Callings split power first (M3), then apply the ceiling to each target. Gathering does not raise the ceiling further.</p>
+<div class="example"><strong>At the Table</strong><br>A MAGIC 8 Caller has a SEVR ceiling for damaging Calls. Even if MoV indicates GRAV, the Call is capped at SEVR before armor.</div>
+<h3 id="m7">M7. DEFENDING AGAINST CALLINGS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Damaging Callings are Opposed Rolls of the Caller&#x27;s MAGIC versus the target&#x27;s MAGIC.</p>
+<p>Martial attacks are not defended with MAGIC. They are defended with WEAPONS, a shield, or ATHLETICS as usual (see R4).</p>
+<p>A target with MAGIC 0 still rolls d20 + 0.</p>
+<p>Narrow exceptions:
+- Arcane Shield may add to the defense it was Called to aid.
+- Knockback or trip effects may still allow ATHLETICS to stay standing.
+- Illusions may be resisted with SENSE.</p>
+<div class="example"><strong>At the Table</strong><br>A damaging Call targets a warrior with MAGIC 0. The warrior still defends with a die + 0; he does not substitute WEAPONS merely because it is higher.</div>
+<h3 id="m8">M8. CONVERTED COMBAT HEALING</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A Caller may convert a damaging Call into healing instead of wounding the target. Area Callings (M3) cannot be converted. Only a single-target damaging Call may use this rule.</p>
+<p>The Caller must announce this intent and name the willing ally (or self) before rolling. The Opposed Roll is MAGIC vs an enemy in the fight (M7). A friend, a willing target, a bound prisoner, or the ally you mean to heal cannot be the opposed creature. You cannot Call at an ally to feed this rule.</p>
+<p>The GM decides who counts. The spirit of the rule is a foe still in the exchange who can still defend. The helpless are not a convert-heal dummy.</p>
+<p>If the Caller wins, determine the virtual wound from MoV and the M6 ceiling, before the enemy&#x27;s armor. Do not apply that wound to the enemy. Instead heal the named ally one step lower:</p>
+<div class="mono">  Virtual wound    Ally loses
+  FLSH             nothing
+  LITE             1 FLSH
+  DEEP             1 LITE
+  SEVR             1 DEEP
+  GRAV             1 SEVR
+  MORT             1 GRAV</div>
+<p>If the Caller loses the Opposed Roll, no one is wounded and no one is healed. Rewrite the ally&#x27;s remaining wounds using W8.</p>
+<p>A converted MORT result peels one GRAV. It does not clear two GRAVs in one Call. If that leaves the ally at GRAV or less, they are no longer Mortal.</p>
+<div class="example"><strong>At the Table</strong><br>A Caller declares converted healing for an ally, then wins a legitimate enemy opposed roll with a virtual SEVR result. Instead of hurting the enemy, the ally loses one DEEP worth of wound value.</div>
+<h3 id="m9">M9. CALL RANGE, AREA, AND VISIBILITY</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Range in feet equals 5 times the Caller&#x27;s MAGIC.
+Area equals the Caller&#x27;s MAGIC in 5-foot squares (25 square feet each).</p>
+<div class="mono">  MAGIC    Range     Squares
+  1        5 ft      1
+  5        25 ft     5
+  10       50 ft     10
+  15       75 ft     15
+  20       100 ft    20</div>
+<p>The Caller paints those squares in any contiguous shape (block, line, hook, snake). Squares must touch on an edge. Allies may be left out by leaving their squares unpainted. Every painted square must be within range of the Caller. The Caller needs a path of unblocked squares; a wall ends the snake.</p>
+<p>Anyone standing in a painted square is a named target for M3. Two people in one square are both targets.</p>
+<p>Calling is visible unless a Call says otherwise. Enemies can see the Caller work and can see which squares the effect occupies. Gathering (M4) is obvious: the Caller is still and doing nothing else.</p>
+<div class="example"><strong>At the Table</strong><br>A Caller with MAGIC 10 has 50-foot range and may paint up to 10 contiguous 5-foot squares, provided every square is within range and the path is not blocked.</div>
+<h3 id="m10">M10. CALL REQUIREMENTS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Every Call lists only the requirements it needs. A Call may use any of the following. Unlisted requirements do not apply.</p>
+<div class="mono">  MOTION        One free hand, arm, or the listed movement.
+  MOTION x2     Both hands (or the full listed movement).
+  WORDS         The Caller must speak the words aloud.
+  SIGHT         The Caller must see the target, or the painted squares (M9).
+  TOUCH         One hand on the target.
+  TOUCH x2      Both hands on the target.
+  TIME          The listed time. If TIME is omitted, the Call uses the ACT.
+  ARMOR         The heaviest armor allowed: Leather, Chain, or Plate. &quot;Leather&quot; includes no armor. If omitted, any armor is allowed.
+  MEDITATION    The Caller must be meditating (O6). Time spent on the Call counts against the daily FAITH x 15 minutes. A character with FAITH 0 cannot meet this tag.</div>
+<p>A Call can be performed only when every listed requirement is met.</p>
+<p>A shield is not armor for the ARMOR tag. It may occupy a hand and so block MOTION or MOTION x2.</p>
+<p>MEDITATION and combat do not mix. If a Call lists MEDITATION, it cannot be used as a combat ACT.</p>
+<p>Example: Bearing the Burden (O5) is TOUCH x2 and TIME 1 minute. It does not list MEDITATION.</p>
+<p>Example: A Call tagged MEDITATION, TIME 15 minutes requires a meditating Caller and uses 15 minutes of that day&#x27;s Meditation budget.</p>
+<div class="example"><strong>At the Table</strong><br>A Call requiring WORDS and MOTION cannot be used while Mute or without a free hand. A requirement not printed on the Call does not secretly apply.</div>
+<h3 id="m11">M11. GATHERING REQUIREMENTS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Gathering (M4) always requires MOTION x2. The Caller is still, silent, and uses both hands on the work. Gathering has ARMOR Leather unless a specific Call says otherwise.</p>
+<p>Release uses each Call&#x27;s own tags. If a released Call lists WORDS and the Caller is Mute, that Call cannot be released until Mute is resolved. Other stored Callings with no WORDS tag may still be released.</p>
+<div class="example"><strong>At the Table</strong><br>While Gathering, the Caller must satisfy MOTION x2 and the Leather armor restriction. On release, each stored Call must satisfy its own listed requirements.</div>
+</section>
+<section class="card" id="s7faithcriticalsandthedivine">
+<h2>7. FAITH, CRITICALS, AND THE DIVINE</h2><p class="flavor">Faith matters, but it is never a lever attached to God. These rules give faith a place at the table without reducing divine action to a spell list.</p>
+<h3 id="f1">F1. NATURAL 20 — CRITICAL SUCCESS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A natural 20 on a combat roll creates a Critical Opportunity. A combat roll is an Opposed Roll made to attack or defend in a fight: WEAPONS, RANGED, a shield, ATHLETICS used to dodge, or a damaging Call. Jumps, locks, lectures, and other unopposed tasks are not combat rolls.</p>
+<p>The player chooses one:</p>
+<div class="mono">  a) Immediately add the character&#x27;s FAITH to the original roll, or
+  b) Attempt to bank Guidance.</div>
+<div class="example"><strong>At the Table</strong><br>A fighter rolls a natural 20 on a combat defense. She may add her FAITH immediately or give up that immediate benefit to attempt banking Guidance.</div>
+<h3 id="f2">F2. BANKING GUIDANCE</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>To bank Guidance, the player rolls d20 + FAITH. If the total is greater than 20, the character gains 1 Guidance Point. A character may never have more than one Guidance Point banked at a time. If the banking roll fails, the opportunity is lost and cannot be applied to the original roll.</p>
+<div class="example"><strong>At the Table</strong><br>A hero with FAITH 4 rolls 17 while trying to bank Guidance: 17 + 4 = 21, greater than 20, so one Guidance Point is banked.</div>
+<h3 id="f3">F3. SPENDING GUIDANCE</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A banked Guidance Point may later be spent to add the character&#x27;s FAITH to a combat roll (see F1), even after seeing the result of that roll. Guidance does not add FAITH to unopposed tasks. Petition for the Dead is its own rule (F6).</p>
+<div class="example"><strong>At the Table</strong><br>Later, after seeing a close combat roll, the hero spends the banked Guidance Point and adds FAITH to that roll. The point is then gone.</div>
+<h3 id="f4">F4. NATURAL 1 — CRITICAL FAILURE</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A natural 1 may introduce a meaningful complication, but it does not automatically cause the action to fail if the character’s total still wins the Opposed Roll.</p>
+<div class="example"><strong>At the Table</strong><br>A defender rolls a natural 1 but has such strong modifiers that the final total still beats the attack. The defense succeeds, though the GM may introduce an appropriate complication.</div>
+<h3 id="f5">F5. DIVINE WORKS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Faith may enable supernatural Works such as healing, but divine power is not mechanically controlled or guaranteed by the player. God is not a resource. Prayer and Petition are not Callings. Prayer never copies a Call. It can change a circumstance the GM already thought was possible. The GM makes a rational ruling at the time (see G7).</p>
+<div class="example"><strong>At the Table</strong><br>A character prays for an unexpected door to open during a crisis. The GM may rule on the circumstance, but the player cannot demand a specific supernatural result by invoking FAITH.</div>
+<h3 id="f6">F6. PETITION FOR THE DEAD</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>When a character dies, a surviving character may Petition God on their behalf. This is an extraordinary appeal, not a routine ability.</p>
+<p>The current preferred resolution is simple:</p>
+<div class="mono">  The petitioner rolls 1d20.
+  The GM rolls 1d20.
+  If the petitioner’s roll is higher, the dead character may be restored.
+  If the rolls are tied or the GM’s roll is higher, the character remains dead.</div>
+<p>The petitioner’s FAITH does not automatically modify this roll. A banked Guidance Point may be invoked if the player chooses. Repeated successful restorations during a campaign become progressively more difficult (the GM may add increasing bonuses to their roll). The GM may require the petitioner to make a Promise or commitment; God remains sovereign and is never obligated.</p>
+<div class="example"><strong>At the Table</strong><br>A companion dies. A survivor Petitions: player and GM each roll d20. Only if the petitioner's result is higher may restoration occur under this rule.</div>
+</section>
+<section class="card" id="s8otherrules">
+<h2>8. OTHER RULES</h2><p class="flavor">These procedures handle the hard edges of adventure: recovery, conditions, ambushes, meditation, and the consequences that remain after the swords are sheathed.</p>
+<h3 id="o1">O1. ACTIVE AND RESTING RECOVERY</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>Characters recover wound value as time passes. Recovery is a clock, not a gift. Nothing in these rules restores a body to new in a moment. Converted Call healing (M8) spends a blow that could have wounded an enemy. Bearing (O5) moves wound value; it does not erase it. Tending only changes which clock the patient uses.</p>
+<div class="mono">  Active      1 FLSH every 1 hour
+  Resting     1 FLSH every 30 minutes
+  Meditating  1 FLSH every 15 minutes (see O6)</div>
+<p>Resting means lying still, as in a bed or on a bedroll. It is not eating, talking, visiting, or keeping watch. Sleep is not required.</p>
+<p>These rates do not stack. Use only one at a time. Recovery pauses in combat. When combat ends, the clock resumes. Reduce remaining wounds with W8.</p>
+<p>TENDING
+A character with SENSE or ACADEMICS of 1 or higher may Tend another character. Tending takes a full hour of work. The tender is not Resting or Meditating during that hour. For that hour the patient uses the Resting rate even if they are traveling or otherwise Active. Tending does not stack with Meditation. Tending does not create extra wound value. There are no potions or Callings that skip the clock.</p>
+<p>Example: A DEEP wound is 4 FLSH.</p>
+<div class="mono">  Active      4 hours
+  Resting     2 hours
+  Meditating  1 hour
+  Tended Active  2 hours</div>
+<p>This rule replaces Full Rest.</p>
+<div class="example"><strong>At the Table</strong><br>A DEEP wound equals 4 FLSH. Resting removes 1 FLSH every 30 minutes, so clearing that value requires two hours if nothing interrupts the recovery clock.</div>
+<h3 id="o2">O2. NO SURPRISE MECHANIC</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>There is no formal surprise rule. The GM handles ambushes and unexpected situations through roleplay, positioning, and Aggression.</p>
+<div class="example"><strong>At the Table</strong><br>Bandits hidden above a road do not trigger a separate 'surprised' condition. The GM resolves what characters noticed, where everyone is positioned, and what actions are fictionally possible.</div>
+<h3 id="o3">O3. DICE MODES (GM TOOL)</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>The GM may choose the dice used for Opposed Rolls to shape volatility:</p>
+<div class="mono">  Lethal   1d20              high variance (standard)
+  Risky    3d6               tighter cluster
+  Stable   4d6, drop lowest  high consistency</div>
+<p>Modes may be mixed by character or by encounter. They change only the dice. CAP, Aggression, wounds, and the rest stay the same.</p>
+<p>Throughout this book, &quot;1d20&quot; means a die roll. When a mode other than Lethal is in play, replace that 1d20 with the dice for that mode. &quot;Roll 1d20 + CAP&quot; under Risky is &quot;roll 3d6 + CAP.&quot; Under Stable it is &quot;roll 4d6, drop the lowest, + CAP.&quot;</p>
+<p>Unopposed Target Numbers use the matching column in R5.</p>
+<p>Example: Against ordinary guards the GM might use Risky for the guards and Stable for the heroes so Capability matters more than luck.</p>
+<div class="example"><strong>At the Table</strong><br>The GM chooses Risky for guards, so their 'd20 + CAP' opposed rolls become 3d6 + CAP. All other modifiers work exactly as before.</div>
+<h3 id="o4">O4. CONDITIONS</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>One condition, one effect. Two different conditions may stack if the GM says both apply.</p>
+<p>ENTANGLED
+You cannot MOVE. You may still PREP and ACT. Break free with an Opposed ATHLETICS or THIEVERY roll as your ACT (or when the fiction allows). Covers being grappled or bound.</p>
+<p>PRONE
+You are on the ground. Standing costs your MOVE. While Prone, WEAPONS, RANGED, and ATHLETICS are at -2. Melee attacks against you gain +2.</p>
+<p>BLIND
+You cannot see. Sight-based SENSE fails. Attack rolls and defense rolls that need sight are at -4.</p>
+<p>DEAF
+You cannot hear. Spoken information does not reach you. You cannot use or understand shouted commands.</p>
+<p>MUTE
+You cannot speak audibly. You cannot give spoken commands. Gathering already forbids communication (M4).</p>
+<p>AFFLICTED
+A harmful bodily state (poison, disease, similar). While it lasts, take -2 to ATHLETICS, THIEVERY, and SENSE. The source of the affliction sets duration.</p>
+<p>IMPEDED
+The ground or the situation hinders you. Speed is halved (round down to 5 ft). Jump, climb, and similar ATHLETICS tests are one step harder (R5).</p>
+<div class="example"><strong>At the Table</strong><br>A Prone hero spends MOVE to stand. If also AFFLICTED, the separate condition effects can both matter because they represent different problems.</div>
+<h3 id="o5">O5. BEARING THE BURDEN</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A character with MAGIC 5 or higher may Call to take another&#x27;s wounds. This is not a combat Call. It takes one minute. Both of the Caller&#x27;s hands must rest on the target the whole time.</p>
+<p>The Caller may move any amount of wound value from the target to himself. The target loses that value. The Caller gains the same value. Then combine with W8.</p>
+<p>The burden is real. If the transferred wounds leave the Caller Mortal, he drops, unconscious and dying (W6).</p>
+<p>Example: A companion is Mortal (32 FLSH). The Caller bears 16 FLSH. The companion is left at GRAV. The Caller is at GRAV.</p>
+<p>Example: A companion has 32 FLSH. The Caller bears all of it. The companion is clear. The Caller is Mortal and falls.</p>
+<div class="example"><strong>At the Table</strong><br>A companion has MORT (32 FLSH). A MAGIC 5+ Caller bears 16 FLSH; the companion is rewritten to GRAV and the Caller takes GRAV. No wound value vanished.</div>
+<h3 id="o6">O6. MEDITATION</h3><div class="rule-tools"><a href="#index">Index</a><a href="#top">Top ↑</a></div>
+<p>A character with FAITH 1 or higher may meditate up to FAITH x 15 minutes each day.</p>
+<p>While meditating, recover 1 FLSH every 15 minutes. Meditation does not stack with Active or Resting.</p>
+<p>While meditating, the character is unaware of their surroundings. They may walk or travel. They cannot keep watch or do work that needs attention.</p>
+<p>If attacked:</p>
+<div class="mono">  DEFEND: defend normally. You may PREP (draw, shield). Meditation ends.</div>
+<div class="mono">  CONTINUE: defense die is 1. Add CAP and modifiers as usual. Meditation continues.</div>
+<p>Ranged attacks: you cannot meaningfully defend. Defense die is 1. Add CAP and modifiers as usual.</p>
+<p>Meditation is Faith, not Magic. MAGIC does not grant minutes or the Meditating rate.</p>
+<div class="example"><strong>At the Table</strong><br>A hero with FAITH 4 may meditate up to 60 minutes that day. Fifteen uninterrupted minutes can recover 1 FLSH at the meditation rate.</div>
+</section>
+<section class="card" id="s9quickreferencesummary">
+<h2>9. QUICK REFERENCE SUMMARY</h2><p class="flavor">When play is moving quickly, start here. This section gathers the numbers and procedures most often needed at the table.</p>
+<p>CAPABILITIES (0–20)</p>
+<div class="mono">  WEAPONS | RANGED | ATHLETICS | THIEVERY | SENSE | MAGIC | ACADEMICS | FAITH</div>
+<p>RESOLUTION</p>
+<div class="mono">  Opposed (R2): both sides roll. Higher total wins. No GM Target Number.
+  Unopposed (R3/R5): player vs GM Target Number.
+  MoV determines Wound Severity.
+  Unopposed TNs (R5), 1d20 / 3d6 / 4d6-drop-1:
+  Routine 10/12/14, Moderate 15/15/17, Hard 20/20/21, Extreme 25/23/25, Legendary 30/26/28.</div>
+<p>COMBAT</p>
+<div class="mono">  Aggression (−10 to +10): melee only, and only while adjacent (W1).
+  Ranged never uses it. Ranged needs 10 ft or more (W1a).
+  Engaged (W1b): leaving adjacency is the ACT. Opposed withdraw vs each enemy who contests. Fail any: stay. No free hit.
+  Melee Offense = CAP + Wield Mod + Aggression − Wound Level
+  Melee Defense = CAP + Wield Mod − Aggression − Wound Level
+  Armor reduces severity: None +1, Leather 0, Chain −1, Plate −2
+  Wound Level: FLSH 1 through MORT 6; extra MORT +1 each
+  Scale 1: MORT downs; next wound kills
+  Scale 2+: that many MORT to defeat; stay up until then
+  Thrown: RANGED, −1 / 10 ft. Launched: projectile ceiling, launcher range (W11).
+  Load = PREP except heavy crossbow span = ACT. Stone ≠ Sling Stone.</div>
+<p>TURNS</p>
+<div class="mono">  MOVE + PREP + ACT
+  Speed = Base + ATHLETICS (round up to nearest 5 ft).
+  Grid: up to half of squares (round down) may be diagonal (T3).
+  Forgo ACT for a second Move
+  Protect (T7): PREP &quot;I protect [name]&quot;; leftover Speed only to take a melee hit meant for them.</div>
+<p>MAGIC</p>
+<div class="mono">  Propose Callings; GM adjudicates. Power scales with MAGIC.
+  Listed Combat Callings show (MAGIC N): MAGIC must be at least N to use that Call (M2). That number is not a damage bonus. Alpha list only; no invented Callings mid-fight (M1).
+  AOE: one roll vs strongest named defender; split power (M3). Range 5 ft x MAGIC; MAGIC squares, contiguous, all in range (M9).
+  Damaging Call ceiling starts at DEEP; +1 per MAGIC band (6-10 / 11-15 / 16-20). Defend Callings with MAGIC (M6, M7).
+  Tags (M10): MOTION, WORDS, SIGHT, TOUCH, TIME, ARMOR, MEDITATION. Gathering: MOTION x2, Leather (M11).
+  Converted heal (M8): single-target only, not AOE; announce first; peel one step lower (W8).</div>
+<p>FAITH</p>
+<div class="mono">  Natural 20 on a combat roll: add FAITH now or try to bank Guidance.
+  Guidance (max 1) adds FAITH to a later combat roll, even after that roll is seen.
+  Petition for the dead is an extraordinary opposed d20.
+  No classes. Magic is a created force; Faith is Petition (G6, G7).</div>
+<p>RECOVERY</p>
+<div class="mono">  Clock, not a gift (O1). Active 1 FLSH/hour. Resting 1/30 min. Meditating 1/15 min (O6). Tend (SENSE or ACADEMICS): patient uses Resting while traveling that hour. No potions. Bearing (O5) moves value; M8 spends a blow.</div>
+<p>CONDITIONS (O4)</p>
+<div class="mono">  Entangled: no MOVE. Prone: stand costs MOVE, -2 physical, +2 melee vs you. Blind -4 if you need sight. Deaf / Mute block speech. Afflicted -2 ATHLETICS, THIEVERY, SENSE. Impeded: half Speed.</div>
+</section>
+<section class="card" id="s10closingnotes">
+<h2>10. CLOSING NOTES</h2><p class="flavor">The rules are still being forged. Play them hard, find where they bend, and remember that the goal is not machinery—it is adventure.</p>
+<p>Crown’s Calling is still a living design. Numerical values—exact MoV thresholds, starting CAP Points, Aggression range extremes, Scale MORT quotas, and critical details—should be tested at the table and adjusted as needed.</p>
+<p>The first goal is not a perfect rulebook. The first goal is a game that people actually want to sit down and play: one in which capable characters feel capable, dangerous enemies feel dangerous, wounds matter, clever ideas are worth attempting, magic feels wondrous, and Faith remains meaningful without becoming a mechanism for controlling God.</p>
+<p>The rules should get out of the way when the players start having fun.</p>
+<p>Take up your calling. The Crown awaits.</p>
+<p>— End of Player Manual —</p>
+</section>
+<p style="text-align:center;margin:28px 0"><a href="CC_Home.html">← Return to Crown &amp; Call Home</a> &nbsp; · &nbsp; <a href="#index">Rule Index</a> &nbsp; · &nbsp; <a href="#top">Back to Top ↑</a></p><p class="foot">Ver. 202609200907 · source ruleset 202609190716 · © 2026 Thomas Paige · playtest, not for redistribution</p>
+</div></body></html>
