@@ -47,20 +47,61 @@ h1{color:var(--gold-soft);font-size:clamp(30px,5vw,48px);line-height:1.08;margin
 
 <section class="card" id="coordinates"><h2><span class="lantern-mark"></span>1. One Continuous Coordinate World</h2>
 <p>The outdoor world is based on coordinates rather than numbered rooms. A character may stand at a precise world position, and physical things occupy positions and dimensions around that character.</p>
-<div class="mono">Jake
-x = 1,847,392 ft
-y = 3,291,044 ft
-z = 1,240 ft
 
-Oak Tree
-x = 1,847,410 ft
-y = 3,291,031 ft
-z = 1,241 ft
+<h3>Coordinate Standard</h3>
+<p>World positions use <strong>signed 64-bit integer coordinates</strong>, with <strong>one coordinate unit equal to one inch</strong>. This provides exact inch-level position granularity while leaving a coordinate range vastly larger than the playable world could ever require. PostgreSQL can store these values directly as <code>BIGINT</code>; Python integers comfortably represent them as well.</p>
+<div class="mono">1 unit       = 1 inch
+12 units     = 1 foot
+1,200 units  = 100 feet
+63,360 units = 1 mile
 
-Jake's Cabin
-center = (1,847,450, 3,291,080)
-size   = 30 × 40 × 18 ft</div>
-<p>Coordinates are an engine concept, not a burden placed on the player. Players navigate naturally: <em>north</em>, <em>follow road</em>, <em>approach rider</em>, <em>go tavern</em>, <em>go light</em>. The engine translates intention into movement through coordinate space.</p>
+Signed 64-bit range:
+-9,223,372,036,854,775,808
+through
++9,223,372,036,854,775,807</div>
+<p>At one-inch granularity, the positive half of a signed 64-bit coordinate alone extends roughly 145 trillion miles from the origin. The practical size of Crown &amp; Call's world can therefore be chosen entirely for gameplay reasons rather than datatype limitations.</p>
+
+<h3>The World Origin</h3>
+<p><strong>(0,0)</strong> is the mathematical center of the coordinate system. Coordinates are signed naturally around that origin rather than artificially offsetting the entire world into enormous positive numbers.</p>
+<div class="flow">                 NORTH
+                   +Y
+                    ↑
+                    |
+       WEST         |         EAST
+        -X ←────── (0,0) ─────→ +X
+                    |
+                    ↓
+                   -Y
+                 SOUTH</div>
+<p>The convention is simple: east is positive X, west is negative X, north is positive Y and south is negative Y. Elevation uses Z, with positive and negative values around an appropriate reference such as sea level.</p>
+<div class="mono">X = east / west
+Y = north / south
+Z = elevation
+
+Example:
+Character at (+1200, +600)
+= 100 feet east and 50 feet north of the origin.
+
+Character at (-126720, -63360)
+= 2 miles west and 1 mile south of the origin.</div>
+<p>The origin is an engine reference point and need not have special importance in the fiction, although locating the initial development area reasonably near it makes coordinates easier for developers to read and debug.</p>
+
+<h3>Distance and Heading</h3>
+<p>Negative coordinates do not complicate spatial mathematics. Distance, direction, perception and movement normally depend on the <em>difference</em> between two positions. Even an artificially all-positive coordinate system immediately produces negative displacement values whenever a target lies west or south of the observer.</p>
+<div class="mono">Observer: ( 5321, -48999)
+Target:   ( -125,   4999)
+
+dx = -125 - 5321      = -5,446 inches
+dy = 4999 - (-48999)  = 53,998 inches
+
+The target is therefore mostly north
+and slightly west of the observer.</div>
+<p>Headings can be derived from the displacement with ordinary Cartesian mathematics such as <code>atan2</code>. Integer coordinates guarantee exact one-inch <em>positions</em>; calculated distances and headings may naturally be fractional values. For example, points one inch apart on both X and Y are approximately 1.414 inches apart diagonally.</p>
+<p>Signed coordinates also make world geography easier for developers to understand at a glance. A negative X and positive Y immediately identifies the northwest quadrant; positive X and negative Y identifies the southeast quadrant.</p>
+
+<h3>Player-Facing Movement</h3>
+<p>Coordinates are an engine concept, not a burden placed on the player. Players navigate naturally: <em>north</em>, <em>follow road</em>, <em>approach rider</em>, <em>go tavern</em>, <em>go light</em>. The engine translates intention into movement through coordinate space. Players ordinarily never need to see raw coordinate values.</p>
+<div class="callout"><strong>Coordinate rule:</strong> Signed 64-bit X/Y/Z integers use one-inch units. The coordinate system is centered on (0,0), with +X east, -X west, +Y north and -Y south.</div>
 <div class="callout"><strong>Scale is not the enemy.</strong> A world a million square miles across does not require a million square miles of active simulation. Most of the world can remain mathematical geography until something happens there.</div>
 </section>
 
