@@ -111,6 +111,10 @@ Wagon track
 Stumps
 Fruit trees</div>
 <p>The homestead does not need to become a special numbered “Jake's Homestead Room.” It remains part of the same coordinate world. Another player can genuinely discover it by physically reaching that location.</p>
+<h3>Construction Is Physical</h3>
+<p>Construction materials must actually be brought to the worksite. A Craft cannot silently consume lumber, stone or tools merely because they are owned by the character or happen to exist hundreds of feet away in the same open Space. Materials carried by the character or staged within the defined work area are eligible; distant materials are not.</p>
+<div class="callout"><strong>Plain-language rule:</strong> If you are going to use it, get it to where you are going to use it.</div>
+<p>This makes hauling, wagons, roads, storage, workshops and the location of natural resources meaningful without inventing separate logistics mechanics. A stack of lumber beside an unfinished cabin is a real collection of world objects that another character can perceive and, subject to ownership rules, interact with.</p>
 </section>
 
 <section class="card" id="chunks"><h2><span class="lantern-mark"></span>5. Chunks &amp; Spatial Indexing</h2>
@@ -177,6 +181,22 @@ apply_elapsed_change(area, elapsed)</div>
         │   └── Upstairs
         └── Blacksmith</div>
 <p>A 50 × 100 foot tavern has real boundaries within town coordinates. While a character is inside, walls constrain perception to the interior. Stepping through its front door may move the character only a few feet but changes the active perception space from <em>Tavern</em> to <em>Street</em>.</p>
+<h3>Buildings Are Geometry</h3>
+<p>A constructed building literally occupies its dimensions in the game world. A 15 × 15 foot cabin encloses those 225 square feet at the coordinates where it was built. Entering the cabin does not teleport the character to an unrelated numbered room; the character crosses the doorway into the bounded interior while remaining at the corresponding world coordinates.</p>
+<div class="mono">15 × 15 CABIN
+
+        NORTH
+          ↑
+      ┌───────────────┐
+      │               │
+      │    INTERIOR   │
+      │    15 × 15    │
+      │               │
+      └───────┬───────┘
+              │ door</div>
+<p>Walls constrain movement because walls physically occupy the boundary, not because a room lacks a north exit. Interior objects have positions of their own. A chest can sit against the west wall, a bed in the northeast corner and a lantern near the center. Larger structures can contain nested Spaces such as offices, kitchens, stalls or storerooms.</p>
+<p>Player construction therefore changes navigable geography. Buildings can block movement and sight, shelter occupants from weather, muffle sound and contain portals such as doors and windows. The exact sophistication of collision and line-of-sight calculations can grow over time without changing this underlying model.</p>
+<div class="quote">“Buildings are not destinations. Buildings are geometry.”</div>
 <h3>Portals</h3>
 <p>Doors, windows, gates, cave mouths and stairways connect spaces. Their state can control movement, vision, sound and light. A closed tavern door might block movement and vision while muffling sound; opening it allows those effects to cross the boundary.</p>
 </section>
@@ -286,12 +306,57 @@ CAP Requirements:
 Learning Time:
   7 real-world days</div>
 
+<h3>General Crafts, Specific World States</h3>
+<p>Crafts should remain as broad and reusable as practical knowledge permits. Construction need not have a separate Craft for every tiny stage or building variation. A general <strong>Build Foundation</strong> Craft, for example, can produce foundation objects that later building-specific Crafts consume or transform.</p>
+<div class="mono">Build Foundation
+       ↓
+  Foundation(s)
+       │
+       ├── Frame Cabin ──────→ Cabin Frame ──────→ Finish Cabin
+       ├── Frame House ──────→ House Frame ──────→ Finish House
+       └── Frame Commercial ─→ Commercial Frame ─→ Finish Commercial</div>
+<p>Scale can come from quantities and world state rather than multiplying nearly identical Crafts. A cabin might require one suitable foundation while a commercial building might require four. Exact quantities, dimensions and construction stages remain design values to be worked out.</p>
+<p>The world object carries the specific state. A foundation knows its dimensions and location; a framed cabin knows that it is a cabin under construction. Crafts define meaningful transformations of those objects.</p>
+
+<h3>Proximity Resolves Craft Targets</h3>
+<p>Crafting should respect the coordinate world. When several valid targets exist, the nearest valid target within the Craft's interaction range is normally used. A held or carried valid object takes precedence over nearby ground objects. The player therefore resolves most ambiguity by physically positioning the character rather than by attaching object numbers to every Craft command.</p>
+<div class="mono">Three deer carcasses nearby:
+
+> butcher deer
+Uses the nearest valid carcass.
+
+Want a different one?
+> approach 2.deer
+> butcher deer
+
+Carrying a carcass?
+> butcher deer
+The held carcass takes precedence.</div>
+<p>The same rule applies to construction. A character approaches the intended cabin, worksite, forge, tree or other target and then performs the Craft. Ordinal targeting can remain useful for commands such as <code>approach 2.cabin</code>, but commands such as <code>build cabin</code> or <code>butcher deer</code> should not normally require numbered-object syntax.</p>
+<p>Required materials follow the same physical principle. Carried materials and materials within the Craft's defined work area may be consumed; materials hundreds of feet away do not count merely because they are visible or owned by the character.</p>
+
 <h3>Deterministic Crafting</h3>
 <p>Once a Craft is learned, performing it is deterministic when its requirements are met. Better CAPs or better tools may eventually influence sensible factors such as work time or efficiency, but they should not turn a known Craft into a gambling mechanic.</p>
 <div class="flow">KNOWLEDGE + CAPABILITY + TOOLS + MATERIALS + TIME
                          ↓
                       SUCCESS</div>
 <p>If work is interrupted by combat, movement or another world event, that is an interruption rather than a random Craft failure. The design should avoid destroying carefully gathered materials merely because an RNG check failed.</p>
+
+<h3>Work Timer</h3>
+<p>Performing Crafts consumes abstract work capacity through a single character <strong>Work Timer</strong>. The Craft's result occurs immediately when the command succeeds; its Work Time is then added to the character's accumulated work debt. The timer continuously winds down in real-world elapsed time whether the character is online or offline.</p>
+<p>A character may begin a Craft only while the current Work Timer is <strong>below 48 hours</strong>. The 48-hour value is a starting threshold, not a maximum. A Craft begun at 47 hours may add another 48 hours and leave approximately 95 hours of work debt. The character remains free to play normally but cannot begin another Craft until the timer falls below the threshold again.</p>
+<div class="mono">Current Work Timer: 47 hours
+Craft Work Time:     48 hours
+                         ↓
+Craft succeeds immediately
+New Work Timer:      95 hours
+                         ↓
+Real-world time passes online or offline
+                         ↓
+Below 48 hours → Crafting available again</div>
+<p>Small Crafts use the same mechanism. Gathering or preparing something might add only minutes, while a major construction operation may add many hours. There is no need for separate major/minor Craft timer systems.</p>
+<p>An implementation can store the debt as a future timestamp rather than decrementing a counter. When work is performed, its duration is added to the later of the current time or the existing work-until timestamp. This naturally handles offline recovery without periodic timer ticks.</p>
+<div class="callout"><strong>Work Timer is labor debt, not a job-completion timer.</strong> The work happens now and the world changes now. The timer represents how much work capacity the character has already spent.</div>
 
 <h3>Learning Timers</h3>
 <p>Each Craft has a <strong>Learning Time</strong>. There is no separate learning cooldown. A character may learn only one Craft at a time, and the Learning Time itself controls the rate of knowledge advancement.</p>
@@ -316,6 +381,7 @@ Completes:
 A new Craft cannot be started until
 Timber Framing has been learned.</div>
 <p>Because the commitment may last days or weeks, the interface must clearly show prerequisites, CAP requirements, Learning Time and the exact completion date before the player confirms the choice.</p>
+<p>The Learning Timer and Work Timer are independent. A character may continue learning one new Craft in the background while performing Crafts already known, subject to the Work Timer.</p>
 
 <h3>Avoid Craft Explosion</h3>
 <p>A Craft should represent a meaningful body of practical knowledge, not every tiny variation of an action. The system should not recreate a giant traditional skill list under a different name. For example, a general body of pastry knowledge may ultimately be more appropriate than separate advanced Crafts for every individual pie.</p>
@@ -333,7 +399,9 @@ Timber Framing has been learned.</div>
 <div class="pillar"><strong>Position ≠ Space</strong>Position says where; Space says what environment contains that position.</div>
 <div class="pillar"><strong>Perception ≠ Activation</strong>Distant landmarks can be perceived without waking distant simulation.</div>
 <div class="pillar"><strong>Generated ≠ Disposable</strong>Procedural features become persistent exceptions when players change them.</div>
-<div class="pillar"><strong>Time ≠ Ticks</strong>Long-term change can be calculated from elapsed time when an area wakes.</div>
+<div class="pillar"><strong>Time ≠ Ticks</strong>Long-term change and character timers can be calculated from timestamps rather than continuous ticking.</div>
+<div class="pillar"><strong>Proximity Has Meaning</strong>Actions affect what is physically near the character; ownership or visibility alone does not make an object available.</div>
+<div class="pillar"><strong>Buildings Are Geometry</strong>Construction adds real boundaries and navigable space to the coordinate world rather than creating detached numbered rooms.</div>
 <div class="pillar"><strong>Client ≠ Authority</strong>The browser presents the world; the Python server owns rules and authoritative state.</div>
 </div>
 <h3>System Direction</h3>
