@@ -41,7 +41,7 @@ h1{color:var(--gold-soft);font-size:clamp(30px,5vw,48px);line-height:1.08;margin
 <div class="pillar"><strong>Perception, Not Rooms</strong>A player sees, hears and senses what the world says is perceptible from that position.</div>
 </div>
 <nav class="toc">
-<a href="#coordinates">1. Coordinate World</a><a href="#generation">2. Generated Wilderness</a><a href="#persistence">3. Persistence by Exception</a><a href="#homesteads">4. Player Construction</a><a href="#chunks">5. Chunks &amp; Spatial Indexing</a><a href="#sleep">6. Sleeping &amp; Waking</a><a href="#time">7. Time &amp; Reclamation</a><a href="#spaces">8. Spaces &amp; Boundaries</a><a href="#perception">9. Perception</a><a href="#communication">10. Movement &amp; Communication</a><a href="#history">11. Discovery &amp; History</a><a href="#principles">12. Architectural Principles</a>
+<a href="#coordinates">1. Coordinate World</a><a href="#generation">2. Generated Wilderness</a><a href="#persistence">3. Persistence by Exception</a><a href="#homesteads">4. Player Construction</a><a href="#chunks">5. Chunks &amp; Spatial Indexing</a><a href="#sleep">6. Sleeping &amp; Waking</a><a href="#time">7. Time &amp; Reclamation</a><a href="#spaces">8. Spaces &amp; Boundaries</a><a href="#perception">9. Perception</a><a href="#communication">10. Movement &amp; Communication</a><a href="#history">11. Discovery &amp; History</a><a href="#crafts">12. CAPs, Crafts &amp; Learning</a><a href="#principles">13. Architectural Principles</a>
 </nav>
 </section>
 
@@ -240,7 +240,94 @@ Exact distances are gameplay values to tune.</div>
 <p>This is the intended character of the world: players do not merely consume locations created by designers. They can create locations that become part of the world's archaeology for later players.</p>
 </section>
 
-<section class="card" id="principles"><h2><span class="lantern-mark"></span>12. Architectural Principles to Preserve</h2>
+
+<section class="card" id="crafts"><h2><span class="lantern-mark"></span>12. CAPs, Crafts &amp; Learning</h2>
+<p>Crown &amp; Call should avoid a traditional skill system. <strong>CAPs describe what a character is capable of; Crafts describe practical knowledge the character has actually learned.</strong> Characters develop by choosing new Crafts whose prerequisites and CAP requirements they satisfy.</p>
+<div class="callout"><strong>Core rule:</strong> A learned Craft never fails randomly. If the character knows the Craft and meets its requirements for tools, materials, conditions and time, the Craft succeeds. Crafting never requires a die roll merely to determine whether gathered materials are wasted.</div>
+
+<h3>Knowledge Progression</h3>
+<p>Advanced Crafts are reached through prerequisite Crafts rather than being immediately available. Knowing how to fell a tree does not imply knowing how to mill lumber, and knowing how to mill lumber does not imply knowing how to frame a cabin. A character deliberately chooses what to learn next; new Crafts are not unlocked randomly.</p>
+<div class="flow">CAP REQUIREMENTS + PREREQUISITE CRAFTS
+                 ↓
+       CHOOSE AN AVAILABLE CRAFT
+                 ↓
+          REAL-WORLD LEARNING TIME
+                 ↓
+             CRAFT LEARNED
+                 ↓
+       NEW CRAFTS MAY BECOME AVAILABLE</div>
+<p>Prerequisites should form a knowledge graph rather than a single rigid tree. One Craft may support several later disciplines, and an advanced Craft may require knowledge drawn from several branches.</p>
+<div class="mono">Fell Tree ──→ Prepare Log ──→ Hew Timber ──┐
+                                             │
+Basic Joinery ────────────────────────────────┤
+                                             ↓
+                                      Timber Framing
+                                             │
+                         ┌───────────────────┴──────────────┐
+                         ↓                                  ↓
+                    Wall Framing                       Roof Framing
+                         └───────────────┬──────────────────┘
+                                         ↓
+                                 Cabin Construction</div>
+
+<h3>CAPs Gate Knowledge; They Do Not Create Failure Rolls</h3>
+<p>A Craft may require one CAP or a combination of CAPs before it can be learned. Higher or different CAP requirements can distinguish simple practical knowledge from advanced work without creating separate numerical skills. Difficulty is expressed through prerequisites, CAP requirements, tools, materials and work time—not an arbitrary percentage chance to fail.</p>
+<div class="mono">CRAFT: Timber Framing
+
+Prerequisite Crafts:
+  Fell Tree
+  Hew Timber
+  Basic Joinery
+
+CAP Requirements:
+  ATHLX 3
+  ACADX 4
+
+Learning Time:
+  7 real-world days</div>
+
+<h3>Deterministic Crafting</h3>
+<p>Once a Craft is learned, performing it is deterministic when its requirements are met. Better CAPs or better tools may eventually influence sensible factors such as work time or efficiency, but they should not turn a known Craft into a gambling mechanic.</p>
+<div class="flow">KNOWLEDGE + CAPABILITY + TOOLS + MATERIALS + TIME
+                         ↓
+                      SUCCESS</div>
+<p>If work is interrupted by combat, movement or another world event, that is an interruption rather than a random Craft failure. The design should avoid destroying carefully gathered materials merely because an RNG check failed.</p>
+
+<h3>Learning Timers</h3>
+<p>Each Craft has a <strong>Learning Time</strong>. There is no separate learning cooldown. A character may learn only one Craft at a time, and the Learning Time itself controls the rate of knowledge advancement.</p>
+<p><strong>All Learning Times use real-world elapsed time.</strong> They continue while the player is offline. Learning must never require remaining logged in, accumulating in-game hours, performing repetitive practice actions, or pausing ordinary play.</p>
+<div class="mono">learning_craft_id = TIMBER_FRAMING
+learning_completes = 2026-09-28 10:30
+
+if current_time >= learning_completes:
+    add craft to known crafts
+    clear active learning
+    character may immediately choose another craft</div>
+<p>Basic Crafts may take hours or a day or two to learn. Advanced Crafts may require weeks. Exact durations are balance values to be determined through playtesting; long timers should represent genuinely substantial bodies of knowledge rather than making trivial techniques tedious.</p>
+
+<h3>Learning Is a Commitment</h3>
+<p>Once a character begins learning a Craft, that choice is committed until the Learning Time completes. Learning cannot be paused, swapped, banked or partially preserved. This deliberately avoids tracking fractional learning progress and prevents a secondary system of resumable learning queues.</p>
+<div class="mono">Currently Learning:
+  Timber Framing
+
+Completes:
+  September 28, 2026
+
+A new Craft cannot be started until
+Timber Framing has been learned.</div>
+<p>Because the commitment may last days or weeks, the interface must clearly show prerequisites, CAP requirements, Learning Time and the exact completion date before the player confirms the choice.</p>
+
+<h3>Avoid Craft Explosion</h3>
+<p>A Craft should represent a meaningful body of practical knowledge, not every tiny variation of an action. The system should not recreate a giant traditional skill list under a different name. For example, a general body of pastry knowledge may ultimately be more appropriate than separate advanced Crafts for every individual pie.</p>
+<div class="callout"><strong>Open design question:</strong> Specific recipes, plans or patterns may eventually form a layer beneath broader Crafts—for example, a Pastry Craft with individual recipes, or a construction Craft with individual building plans. This distinction is promising but is not yet a locked rule.</div>
+
+<h3>Specialization Without Classes</h3>
+<p>Because learning consumes real-world time, characters can specialize organically without hard classes. One character may spend months developing forestry and construction knowledge while another develops mining, smelting and metalworking. Nothing necessarily forbids eventually learning both, but time makes broad mastery a meaningful long-term investment.</p>
+<div class="quote">“CAPs measure ability. Crafts grant knowledge. Tools enable work. The world provides materials.”</div>
+<p class="small">Craft design remains under active development. Prerequisite graphs, CAP combinations, Learning Times and the possible recipe/plan layer should be expanded as the system is discussed and tested.</p>
+</section>
+
+<section class="card" id="principles"><h2><span class="lantern-mark"></span>13. Architectural Principles to Preserve</h2>
 <div class="pillars">
 <div class="pillar"><strong>Existence ≠ Simulation</strong>An object can persist for years without being actively processed.</div>
 <div class="pillar"><strong>Position ≠ Space</strong>Position says where; Space says what environment contains that position.</div>
