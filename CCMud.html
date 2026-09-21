@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!--
+Crown & Call MUD world design reference
+Version: 20260921
+Copyright (c) 2026 Thomas Paige. All rights reserved.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crown &amp; Call — Persistent World Design</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<style>
+:root{--slate:#0c1016;--panel:#161b22;--panel2:#1c222b;--gold:#c9a44a;--gold-soft:#e4d2a0;--ink:#e8eaed;--muted:#9aa3ad;--amber:#e0a84a;--line:rgba(201,164,74,.28);--deep:#080b0f}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:72px}body{margin:0;background:radial-gradient(ellipse at 50% 0%,#1c2430 0%,var(--slate) 58%);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.65}
+a{color:var(--gold-soft)}a:hover{color:#fff}.topbar{position:sticky;top:0;z-index:20;background:rgba(12,16,22,.96);border-bottom:1px solid var(--line);box-shadow:0 4px 18px rgba(0,0,0,.45)}.topbar-inner{max-width:1180px;margin:auto;display:flex;align-items:center;gap:14px;padding:9px 18px}.brand{color:var(--gold-soft);font-weight:700;letter-spacing:.08em;white-space:nowrap}.topbar a{color:var(--gold-soft);text-decoration:none;font:13px Arial,sans-serif}.spacer{flex:1}
+.hero{max-width:1120px;margin:0 auto;padding:20px 18px 4px;text-align:center}.hero-logo{display:block;width:min(860px,95vw);height:auto;margin:0 auto -8px;filter:drop-shadow(0 12px 28px rgba(0,0,0,.55))}.hero .kicker{font:700 12px Arial,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}.hero .tagline{max-width:780px;margin:4px auto 16px;font-size:20px;color:var(--gold);font-style:italic}
+.wrap{max-width:1120px;margin:0 auto;padding:16px 18px 70px}.intro,.card{background:linear-gradient(180deg,rgba(22,27,34,.96),rgba(12,16,22,.96));border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.3);border-radius:14px;margin:0 0 24px;padding:30px 34px}.intro{border-top:3px solid var(--gold)}
+h1{color:var(--gold-soft);font-size:clamp(30px,5vw,48px);line-height:1.08;margin:0 0 12px}h2{font-size:27px;margin:0 0 18px;color:var(--gold-soft);border-bottom:1px solid var(--line);padding-bottom:10px;letter-spacing:.025em}h3{font-size:20px;margin:28px 0 10px;color:var(--gold)}p{margin:0 0 13px}.sub{text-align:center;color:var(--muted);font-size:14px}.foot{text-align:center;color:#6e7780;font:12px Arial,sans-serif}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin:18px 0 8px}.toc a{display:block;text-decoration:none;color:var(--gold-soft);background:#10151c;border:1px solid var(--line);border-radius:7px;padding:9px 11px;font:700 12px Arial,sans-serif}.toc a:hover{background:#202833;border-color:var(--gold)}
+.mono{font-family:Consolas,"Courier New",monospace;background:#080b0f;color:#e8eaed;border-left:4px solid var(--gold);border-radius:5px;padding:13px 15px;font-size:13px;line-height:1.55;margin:10px 0 16px;white-space:pre-wrap;overflow-x:auto}.callout{background:#111820;border:1px solid rgba(224,168,74,.18);border-left:4px solid var(--amber);padding:14px 17px;margin:14px 0 20px;border-radius:0 7px 7px 0}.callout strong{color:var(--amber)}
+.lantern-mark{display:inline-block;width:17px;height:17px;margin-right:8px;vertical-align:-3px;background:radial-gradient(circle at 50% 58%,var(--amber),#8a5a12 55%,transparent 56%),#2a2f36;border:1px solid var(--gold);border-radius:3px;box-shadow:0 0 10px rgba(224,168,74,.2)}
+.nick-note{display:grid;grid-template-columns:110px 1fr;gap:16px;align-items:center;background:linear-gradient(135deg,#1b2028,#0d1117);border:1px solid rgba(201,164,74,.42);border-left:4px solid var(--gold);border-radius:12px;padding:12px 16px;margin:18px 0 24px;box-shadow:0 10px 25px rgba(0,0,0,.2)}.nick-note img{width:105px;height:105px;object-fit:cover;object-position:center;border-radius:50%;border:2px solid rgba(201,164,74,.5)}.nick-note strong{display:block;color:var(--gold);font:700 12px Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase;margin-bottom:4px}.nick-note p{margin:0;color:#d8dadd;font-style:italic}
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:18px 0}.pillar{background:#10151c;border:1px solid var(--line);border-radius:9px;padding:16px}.pillar strong{display:block;color:var(--gold);font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}.flow{text-align:center;font-family:Consolas,"Courier New",monospace;background:#080b0f;border:1px solid var(--line);border-radius:9px;padding:18px;margin:16px 0;white-space:pre-wrap;color:#ddd}table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:14px}th,td{padding:8px 9px;border-bottom:1px solid var(--line);text-align:left}th{background:#10151c;color:var(--gold-soft)}
+.quote{font-size:21px;color:var(--gold-soft);font-style:italic;text-align:center;padding:14px 6%;margin:14px 0}.small{color:var(--muted);font-size:14px}
+@media(max-width:650px){.topbar-inner{padding:8px 10px;gap:9px}.brand{font-size:12px}.hero{padding-top:12px}.intro,.card{padding:22px 18px}.wrap{padding:12px 10px 50px}h2{font-size:23px}h3{font-size:18px}.nick-note{grid-template-columns:72px 1fr}.nick-note img{width:68px;height:68px}.topbar .optional{display:none}}
+@media print{.topbar,.nick-note img{display:none}body{background:white;color:#111}.card,.intro{background:white;color:#111;box-shadow:none;border:1px solid #aaa}.card h2,.card h3,.intro h2{color:#111}.mono,.flow{background:#eee;color:#111}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-inner"><span class="brand">CROWN &amp; CALL</span><a href="index.html">Home</a><a href="#contents">Contents</a><span class="spacer"></span><a class="optional" href="CC_Ruleset.html">Ruleset</a><a href="#top">Top ↑</a></div></div>
+<header class="hero" id="top"><a href="index.html"><img class="hero-logo" src="images/CC-logo-banner-transparent.png" alt="Crown &amp; Call"></a><div class="kicker">Persistent World Design Reference</div><p class="tagline">A generated world provides the geography. Player actions create its history. Time transforms what they leave behind.</p></header>
+<main class="wrap">
+<section class="intro" id="contents">
+<div class="nick-note"><img src="images/NickMapReader.png" alt="Nick the squirrel reading a map"><div><strong>Nick's Notes · The Big Idea</strong><p>This is not a traditional MUD made from thousands of numbered rooms. It is a persistent coordinate world that becomes detailed where people actually live, explore, build, fight, and leave their mark.</p></div></div>
+<h2>World Design at a Glance</h2>
+<div class="pillars">
+<div class="pillar"><strong>Everything Has a Place</strong>Characters, trees, buildings, roads, objects and landmarks occupy real positions in a common coordinate world.</div>
+<div class="pillar"><strong>Persistence by Exception</strong>The untouched world can be regenerated. The database remembers what players changed.</div>
+<div class="pillar"><strong>Sleep &amp; Wake</strong>Empty wilderness consumes essentially no simulation time. Areas wake when someone approaches or interacts.</div>
+<div class="pillar"><strong>Perception, Not Rooms</strong>A player sees, hears and senses what the world says is perceptible from that position.</div>
+</div>
+<nav class="toc">
+<a href="#coordinates">1. Coordinate World</a><a href="#generation">2. Generated Wilderness</a><a href="#persistence">3. Persistence by Exception</a><a href="#homesteads">4. Player Construction</a><a href="#chunks">5. Chunks &amp; Spatial Indexing</a><a href="#sleep">6. Sleeping &amp; Waking</a><a href="#time">7. Time &amp; Reclamation</a><a href="#spaces">8. Spaces &amp; Boundaries</a><a href="#perception">9. Perception</a><a href="#communication">10. Movement &amp; Communication</a><a href="#history">11. Discovery &amp; History</a><a href="#principles">12. Architectural Principles</a>
+</nav>
+</section>
+
+<section class="card" id="coordinates"><h2><span class="lantern-mark"></span>1. One Continuous Coordinate World</h2>
+<p>The outdoor world is based on coordinates rather than numbered rooms. A character may stand at a precise world position, and physical things occupy positions and dimensions around that character.</p>
+<div class="mono">Jake
+x = 1,847,392 ft
+y = 3,291,044 ft
+z = 1,240 ft
+
+Oak Tree
+x = 1,847,410 ft
+y = 3,291,031 ft
+z = 1,241 ft
+
+Jake's Cabin
+center = (1,847,450, 3,291,080)
+size   = 30 × 40 × 18 ft</div>
+<p>Coordinates are an engine concept, not a burden placed on the player. Players navigate naturally: <em>north</em>, <em>follow road</em>, <em>approach rider</em>, <em>go tavern</em>, <em>go light</em>. The engine translates intention into movement through coordinate space.</p>
+<div class="callout"><strong>Scale is not the enemy.</strong> A world a million square miles across does not require a million square miles of active simulation. Most of the world can remain mathematical geography until something happens there.</div>
+</section>
+
+<section class="card" id="generation"><h2><span class="lantern-mark"></span>2. Procedurally Generated Wilderness</h2>
+<p>The untouched wilderness does not need to be stored tree by tree. Regions can be described by deterministic generation data: biome, elevation, rainfall, terrain, vegetation density and a world seed.</p>
+<div class="mono">REGION: Northern Wilderness
+biome: mixed forest
+elevation: generated terrain model
+rainfall: moderate
+tree density: heavy
+terrain seed: 83719244</div>
+<p>Given the same seed and coordinates, the generator produces the same landscape every time. If an oak grows at a particular coordinate today, that same oak will be generated when someone returns later—unless the persistent world records that something happened to it.</p>
+<p>This permits an enormous wilderness containing conceptual millions of trees, rocks and other mundane features without requiring a database row for every untouched object.</p>
+</section>
+
+<section class="card" id="persistence"><h2><span class="lantern-mark"></span>3. Persistence by Exception</h2>
+<p>The generated world is the baseline. The database stores <strong>differences from that baseline</strong>.</p>
+<div class="flow">PROCEDURAL WORLD
+Large Oak at (18271, 98172)
+        ↓
+Jake chops the oak
+        ↓
+PERSISTENT OVERRIDE
+Oak = removed
+Stump = created
+cut_at = 2031-05-12
+        ↓
+Future generation still predicts the oak,
+but persistent history wins.</div>
+<p>This is the heart of world persistence. An untouched acre may need almost no stored detail. An acre where people have lived for twenty years may contain a rich history of construction, destruction, regrowth and abandoned possessions.</p>
+<div class="quote">“The world becomes more detailed where its history happens.”</div>
+</section>
+
+<section class="card" id="homesteads"><h2><span class="lantern-mark"></span>4. Player Construction &amp; Homesteading</h2>
+<p>A player can travel deep into wilderness, clear land and create a place that never existed in the original world design. Cabins, wells, fences, fields, barns, roads, trails and other alterations become persistent world objects.</p>
+<div class="mono">HOMESTEAD #127
+Owner: Jake
+Location: (1,847,450, 3,291,080)
+
+Cabin
+Barn
+Well
+Fence
+Field
+Woodpile
+Firepit
+Wagon track
+Stumps
+Fruit trees</div>
+<p>The homestead does not need to become a special numbered “Jake's Homestead Room.” It remains part of the same coordinate world. Another player can genuinely discover it by physically reaching that location.</p>
+</section>
+
+<section class="card" id="chunks"><h2><span class="lantern-mark"></span>5. Chunks &amp; Spatial Indexing</h2>
+<p>The world is divided internally into invisible chunks. Chunks are an engine optimization used for spatial lookup, generation, persistence and simulation; players never see them.</p>
+<div class="flow">┌───────┬───────┬───────┐
+│ C41   │ C42   │ C43   │
+├───────┼───────┼───────┤
+│ C51   │ JAKE  │ C53   │
+├───────┼───────┼───────┤
+│ C61   │ C62   │ C63   │
+└───────┴───────┴───────┘</div>
+<p>Spatial indexes prevent perception from becoming “search every object in the world.” Nearby queries examine only nearby cells/chunks. Long-distance queries examine only entities capable of mattering at long distance.</p>
+<p>Chunk size and indexing strategy are implementation details to tune experimentally; they should never become gameplay concepts.</p>
+</section>
+
+<section class="card" id="sleep"><h2><span class="lantern-mark"></span>6. Sleeping &amp; Waking Areas</h2>
+<p>Most of the world is dormant. A cabin, fence, stump and abandoned field can all continue to <em>exist</em> without consuming active CPU time.</p>
+<div class="flow">DORMANT
+Persistent state exists; no active simulation
+        ↓ player approaches
+WAKING
+Load local changes + calculate elapsed effects
+        ↓
+ACTIVE
+Movement, NPCs, combat, sound, light, interaction
+        ↓ nobody remains nearby
+SLEEP
+Persist meaningful changes + timestamp state</div>
+<p>Waking is driven by interaction range, not by mere visibility. Seeing a mountain thirty miles away should not wake the mountain's local simulation.</p>
+<div class="callout"><strong>Foundational rule:</strong> Wake what is close enough to interact with. Query what is far enough to perceive.</div>
+</section>
+
+<section class="card" id="time"><h2><span class="lantern-mark"></span>7. Time, Decay &amp; Wilderness Reclamation</h2>
+<p>Time does not require continuous simulation. If nobody visits Jake's abandoned homestead for five years, the server does not need to simulate weeds growing hour by hour.</p>
+<div class="mono">last_updated = 2031-05-01
+area_wakes   = 2036-09-01
+elapsed      = 5 years, 4 months
+
+apply_elapsed_change(area, elapsed)</div>
+<p>When the area wakes, long-term systems calculate the accumulated effects of elapsed time. Reclamation can depend on biome, climate, materials, construction quality and previous state.</p>
+<table><thead><tr><th>Elapsed Time</th><th>Possible Changes</th></tr></thead><tbody>
+<tr><td>Months</td><td>Fields weed over, trails soften, wood weathers.</td></tr>
+<tr><td>Several years</td><td>Brush overtakes fields, fence sections collapse, stumps rot, saplings appear, roofs deteriorate.</td></tr>
+<tr><td>Decades</td><td>Young forest reclaims fields, roads nearly disappear, cabins become ruins, wells collapse, old fruit trees may remain as evidence.</td></tr>
+</tbody></table>
+<h3>The Stump as a Model of History</h3>
+<p>A freshly cut oak becomes a persistent stump. Years later, when the area wakes, it may become weathered and moss-covered. Decades later it may rot away entirely while nearby trees reclaim the opening. No daily “stump update” is required; its current state is derived when someone next has reason to care.</p>
+<div class="flow">Living Oak → Fresh Stump → Weathered Stump → Rotting Stump → Gone
+                 ↑
+          player-created history</div>
+<p>Randomness may influence these transformations, but results should be stable and deterministic enough that repeatedly loading an area does not make its history change arbitrarily.</p>
+</section>
+
+<section class="card" id="spaces"><h2><span class="lantern-mark"></span>8. Spaces, Buildings &amp; Boundaries</h2>
+<p>Coordinates answer <strong>where</strong> something is. A <strong>Space</strong> describes the environmental and perception context that contains it. Spaces can range from a jail cell to a hundred-square-mile plain.</p>
+<div class="mono">WORLD
+└── Rolling Plains
+    └── Town of Westhaven
+        ├── Market Street
+        ├── Market Square
+        ├── Crown & Stag Tavern
+        │   ├── Common Room
+        │   ├── Kitchen
+        │   └── Upstairs
+        └── Blacksmith</div>
+<p>A 50 × 100 foot tavern has real boundaries within town coordinates. While a character is inside, walls constrain perception to the interior. Stepping through its front door may move the character only a few feet but changes the active perception space from <em>Tavern</em> to <em>Street</em>.</p>
+<h3>Portals</h3>
+<p>Doors, windows, gates, cave mouths and stairways connect spaces. Their state can control movement, vision, sound and light. A closed tavern door might block movement and vision while muffling sound; opening it allows those effects to cross the boundary.</p>
+</section>
+
+<section class="card" id="perception"><h2><span class="lantern-mark"></span>9. Generated Perception Instead of Static Room Descriptions</h2>
+<p><code>look</code> does not merely print a stored room paragraph. It asks what the character can perceive from the current position and Space, then generates prose from the answer.</p>
+<div class="flow">LOOK
+ ↓
+Where is Jake?
+ ↓
+What Space contains him?
+ ↓
+What nearby and distant things are perceptible?
+ ↓
+How much detail can he perceive?
+ ↓
+Generate the description</div>
+<p>An outdoor result might mention the muddy road underfoot, a sign nearby, a town wall behind, smoke miles away and a mountain on the horizon. Each observation corresponds to something that actually exists.</p>
+<h3>Perception Bands</h3>
+<table><thead><tr><th>Band</th><th>Illustrative Scale</th><th>Examples</th></tr></thead><tbody>
+<tr><td>Immediate</td><td>0–15 ft</td><td>Mug, sword, coin, nearby person</td></tr>
+<tr><td>Near</td><td>15–100 ft</td><td>Person, horse, lantern, doorway</td></tr>
+<tr><td>Local</td><td>100–1,000 ft</td><td>Building, wagon, large tree</td></tr>
+<tr><td>Distant</td><td>1,000 ft–2 mi</td><td>Town, tower, smoke, large fire</td></tr>
+<tr><td>Landmark</td><td>2–50+ mi</td><td>Mountain, hilltop castle, enormous smoke plume</td></tr>
+</tbody></table>
+<p>These are conceptual bands, not fixed final ranges. Crucially, a ten-mile query does not inspect every coin, sword, stump and squirrel within ten miles. It searches only indexes containing entities capable of being perceived at that scale.</p>
+<h3>One Object, Several Perceptions</h3>
+<div class="mono">LANTERN
+physical object     visible nearby
+light source        visible much farther at night
+illumination        affects a small surrounding area
+
+CAMPFIRE
+fire                local visibility
+light               long night visibility
+smoke               long daylight visibility
+sound               shorter range
+smell               separate range</div>
+<p>At close range a player may see “a brass lantern beside the road.” Far away at night the same entity may produce only “a faint yellow light flickers to the northeast.” In daylight, nothing may be noticeable from that distance.</p>
+<h3>Distance Changes Detail</h3>
+<p>The same person might be “a figure on the road” at long distance, “a man carrying a shield” closer in, and finally “Jake carrying a battered shield” at recognition distance. Perception is not merely visible/not-visible; it controls how much information is available.</p>
+</section>
+
+<section class="card" id="communication"><h2><span class="lantern-mark"></span>10. Natural Movement &amp; Spatial Communication</h2>
+<p>Generated perceptions retain references to the entities that produced them. If the player sees “a faint light to the east,” the command <code>go light</code> can resolve that phrase to the actual light source. The same idea supports <code>go mountain</code>, <code>approach tavern</code>, <code>follow rider</code> and <code>go smoke</code>.</p>
+<p>Speech also uses position instead of “send to everyone in the room.” A whisper may carry only a few feet, normal speech farther, and a shout much farther. Walls and closed doors can reduce or block sound.</p>
+<div class="mono">whisper      very short range
+say          conversational range
+speak loudly larger local range
+shout        long local range
+
+Exact distances are gameplay values to tune.</div>
+<p>This permits two people at opposite ends of a large hall to experience communication differently from two people sitting together at the same table.</p>
+</section>
+
+<section class="card" id="history"><h2><span class="lantern-mark"></span>11. Genuine Discovery &amp; Emergent History</h2>
+<p>A remote homestead can genuinely remain undiscovered. The game need not advertise “Jake's Cabin — 150 miles northeast.” Another player may instead discover an old wagon track, follow it through the woods, notice chimney smoke, and eventually find the clearing.</p>
+<p>Years after abandonment, that same player might find only a sagging cabin, collapsed fence, overgrown field and old fruit trees. Nobody needed to author an “Ancient Abandoned Farm” quest. It became old because someone built it, lived there, left it, and time passed.</p>
+<div class="quote">“The generated world provides geography. Player actions create history. Time transforms that history.”</div>
+<p>This is the intended character of the world: players do not merely consume locations created by designers. They can create locations that become part of the world's archaeology for later players.</p>
+</section>
+
+<section class="card" id="principles"><h2><span class="lantern-mark"></span>12. Architectural Principles to Preserve</h2>
+<div class="pillars">
+<div class="pillar"><strong>Existence ≠ Simulation</strong>An object can persist for years without being actively processed.</div>
+<div class="pillar"><strong>Position ≠ Space</strong>Position says where; Space says what environment contains that position.</div>
+<div class="pillar"><strong>Perception ≠ Activation</strong>Distant landmarks can be perceived without waking distant simulation.</div>
+<div class="pillar"><strong>Generated ≠ Disposable</strong>Procedural features become persistent exceptions when players change them.</div>
+<div class="pillar"><strong>Time ≠ Ticks</strong>Long-term change can be calculated from elapsed time when an area wakes.</div>
+<div class="pillar"><strong>Client ≠ Authority</strong>The browser presents the world; the Python server owns rules and authoritative state.</div>
+</div>
+<h3>System Direction</h3>
+<p>The intended server architecture is a browser-based JavaScript client connected by WebSocket to a Python game server. The Python process owns the live world and Crown &amp; Call rules. A relational database such as PostgreSQL stores persistent accounts, characters and world changes. A reverse proxy such as Nginx can handle public HTTPS/WebSocket traffic.</p>
+<p>Live activity should generally operate on in-memory state. Persistence should be transactional. Empty wilderness should remain dormant. The architecture should be built outward from a small playable world rather than beginning with a giant general-purpose MUD engine.</p>
+<div class="callout"><strong>Design test:</strong> If Jake cuts down a tree, builds a cabin, abandons it, and nobody returns for twenty years, the engine should be able to tell the next visitor what remains—without having spent twenty years simulating the empty clearing.</div>
+</section>
+
+<p class="foot">Crown &amp; Call — Persistent World Design Reference<br>Copyright &copy; 2026 Thomas Paige. All rights reserved.<br>Version 20260921</p>
+</main>
+</body>
+</html>
