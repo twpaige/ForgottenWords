@@ -106,32 +106,53 @@ and slightly west of the observer.</div>
 </section>
 
 <section class="card" id="generation"><h2><span class="lantern-mark"></span>2. Procedurally Generated Wilderness</h2>
-<p>The untouched wilderness does not need to be stored tree by tree. Regions can be described by deterministic generation data: biome, elevation, rainfall, terrain, vegetation density and a world seed.</p>
-<div class="mono">REGION: Northern Wilderness
-biome: mixed forest
-elevation: generated terrain model
-rainfall: moderate
-tree density: heavy
-terrain seed: 83719244</div>
-<p>Given the same seed and coordinates, the generator produces the same landscape every time. If an oak grows at a particular coordinate today, that same oak will be generated when someone returns later—unless the persistent world records that something happened to it.</p>
-<p>This permits an enormous wilderness containing conceptual millions of trees, rocks and other mundane features without requiring a database row for every untouched object.</p>
+<p>The untouched wilderness does not need to be instantiated tree by tree, rock by rock or blade of grass by blade of grass. Procedural generation describes the <strong>character and resources of the landscape</strong>: biome, elevation, moisture, terrain, vegetation density, dominant species and similar environmental properties.</p>
+<div class="mono">LANDSCAPE AT (x,y)
+
+terrain:       gently rolling grassland
+moisture:      moderate
+tree cover:    light
+dominant tree: oak
+ground cover:  tall grass
+seed:          83719244</div>
+<p>Given the same seed and coordinates, the generator produces the same underlying landscape whenever that area is needed. An oak-forested area does not require thousands of generated Oak objects. It simply provides oak as part of the local landscape.</p>
+<h3>Interaction Creates Specific History</h3>
+<p>If a character cuts down an oak in suitable oak woodland, the engine does not need to identify a pre-existing procedural tree at an exact coordinate. The landscape supplies the tree. The player's action creates the specific things that now matter: logs, a stump, work performed and any meaningful change to the surrounding land.</p>
+<div class="flow">PROCEDURAL LANDSCAPE
+Light oak woodland
+        ↓
+Character cuts an oak
+        ↓
+PLAYER-CREATED HISTORY
+Oak logs + oak stump
+        ↓
+Time and environment act on the traces
+        ↓
+Traces eventually disappear
+        ↓
+Procedural baseline remains</div>
+<p>Small actions need not rewrite the terrain itself. One stump in oak woodland does not mean the forest is now materially different. If repeated activity becomes significant—such as clearing a large area—the world can store a broader landscape modifier describing reduced tree cover, a clearing, field, burn scar or similar change.</p>
+<div class="callout"><strong>Generation rule:</strong> Do not instantiate nature merely because it could be interacted with. Instantiate the persistent consequences when someone actually changes it.</div>
 </section>
 
 <section class="card" id="persistence"><h2><span class="lantern-mark"></span>3. Persistence by Exception</h2>
-<p>The generated world is the baseline. The database stores <strong>differences from that baseline</strong>.</p>
+<p>The generated landscape is the baseline. The database stores <strong>history and meaningful differences from that baseline</strong>.</p>
 <div class="flow">PROCEDURAL WORLD
-Large Oak at (18271, 98172)
+Oak woodland
         ↓
-Jake chops the oak
+Jake chops an oak
         ↓
-PERSISTENT OVERRIDE
-Oak = removed
-Stump = created
+PERSISTENT HISTORY
+Logs created
+Stump created at Jake's position
 cut_at = 2031-05-12
         ↓
-Future generation still predicts the oak,
-but persistent history wins.</div>
-<p>This is the heart of world persistence. An untouched acre may need almost no stored detail. An acre where people have lived for twenty years may contain a rich history of construction, destruction, regrowth and abandoned possessions.</p>
+Stump weathers, becomes obscured and decays
+        ↓
+Stump eventually disappears
+        ↓
+No exception remains; procedural baseline is enough again</div>
+<p>This is the heart of world persistence. An untouched acre may need almost no stored detail. An acre where people have lived for twenty years may contain a rich history of construction, clearing, trails, ruins and possessions. As temporary traces disappear and nature reclaims an area, obsolete exceptions can eventually be removed.</p>
 <div class="quote">“The world becomes more detailed where its history happens.”</div>
 </section>
 
@@ -281,6 +302,44 @@ smell               separate range</div>
 <h3>Distance Changes Detail</h3>
 <p>The same person might be “a figure on the road” at long distance, “a man carrying a shield” closer in, and finally “Jake carrying a battered shield” at recognition distance. Perception is not merely visible/not-visible; it controls how much information is available.</p>
 </section>
+
+<h3>Existence Does Not Guarantee Perception</h3>
+<p>A persistent object may physically exist for years without being obvious to a passing character. Objects and traces have perceptibility appropriate to their size, age and condition. A freshly cut stump may be noticeable at useful distance; months later grass and brush may hide it except at close range even though the stump itself may take years to rot away.</p>
+<div class="mono">Illustrative stump lifecycle
+
+Fresh stump        → relatively conspicuous nearby
+Months old         → weathered; grass and brush reduce noticeability
+Older stump        → easy to miss except at close range
+Snow-covered       → may be effectively invisible
+Years old          → decayed and increasingly obscure
+Eventually         → gone</div>
+<p>Weather and environment modify perception without necessarily modifying the persistent object. Snow can conceal a low stump; tall summer grass can obscure tracks or debris; darkness, fog and brush can reduce what is noticed. When those conditions change, the underlying object need not be recreated because it never ceased to exist.</p>
+
+<h3>Movement, Attention &amp; Search</h3>
+<p>Perception depends on what the observer is doing. A character galloping across country has far less opportunity to notice subtle traces than one walking, standing still or deliberately searching. Perception therefore should not be implemented as a simple rule that reveals every object inside a fixed radius.</p>
+<table><thead><tr><th>Observer State</th><th>General Awareness</th></tr></thead><tbody>
+<tr><td>Galloping / very fast travel</td><td>Very poor for subtle nearby details</td></tr>
+<tr><td>Jogging / hurried movement</td><td>Reduced</td></tr>
+<tr><td>Walking</td><td>Normal passive perception</td></tr>
+<tr><td>Standing still</td><td>Improved opportunity to notice details</td></tr>
+<tr><td>Active search / tracking</td><td>High attention to subtle evidence</td></tr>
+</tbody></table>
+<p>The same hidden stump forty feet away might go unnoticed while walking past it, become noticeable after stopping, and be very likely to be found during a deliberate search. Exact distances and modifiers are balance values rather than fixed rules at this stage.</p>
+<div class="mono">&gt; north
+You continue across gently rolling grassland.
+Scattered oaks stand along the ridge to the west.
+
+&gt; stop
+You stand among knee-high grass beneath scattered oaks.
+An old stump is partly concealed by brush nearby.
+
+&gt; search
+You study the surrounding ground carefully.
+Several weathered oak stumps are hidden among the grass,
+and faint depressions suggest wagons once passed this way.</div>
+<p>This creates a meaningful tradeoff between travel speed and awareness. A traveler may cover ground quickly and miss subtle evidence, or travel cautiously and notice more. Deliberate searching and tracking can reveal historical traces that ordinary passive perception would omit.</p>
+<div class="callout"><strong>Perception rule:</strong> Reveal what a character has a reasonable opportunity to notice, not everything technically within geometric range.</div>
+<div class="quote">“History can physically exist without being immediately discoverable.”</div>
 
 <section class="card" id="communication"><h2><span class="lantern-mark"></span>10. Natural Movement &amp; Spatial Communication</h2>
 <p>Generated perceptions retain references to the entities that produced them. If the player sees “a faint light to the east,” the command <code>go light</code> can resolve that phrase to the actual light source. The same idea supports <code>go mountain</code>, <code>approach tavern</code>, <code>follow rider</code> and <code>go smoke</code>.</p>
@@ -523,6 +582,7 @@ Round 100 → may legitimately arrive</div>
 <section class="card" id="principles"><h2><span class="lantern-mark"></span>14. Architectural Principles to Preserve</h2>
 <div class="pillars">
 <div class="pillar"><strong>Existence ≠ Simulation</strong>An object can persist for years without being actively processed.</div>
+<div class="pillar"><strong>Existence ≠ Perception</strong>An object may persist in the world without being noticeable; distance, age, environment, movement and attention determine whether a character perceives it.</div>
 <div class="pillar"><strong>Position ≠ Space</strong>Position says where; Space says what environment contains that position.</div>
 <div class="pillar"><strong>Perception ≠ Activation</strong>Distant landmarks can be perceived without waking distant simulation.</div>
 <div class="pillar"><strong>Generated ≠ Disposable</strong>Procedural features become persistent exceptions when players change them.</div>
