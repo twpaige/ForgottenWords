@@ -708,7 +708,56 @@ wherever the wagon has legitimately traveled.</div>
 <div class="quote">“Compress the uneventful. Never compress the interesting.”</div>
 </section>
 
-<section class="card" id="principles"><h2><span class="lantern-mark"></span>14. Architectural Principles to Preserve</h2>
+<section class="card" id="roleplay-communication">
+<h2><span class="lantern-mark"></span>14. Roleplay, Communication &amp; Sound</h2>
+<h3>Entity-Targeted Roleplay</h3>
+<p>Roleplay text may refer to perceived world entities through compact targeting syntax. <strong>~</strong> targets a character, <strong>*</strong> targets a seen object, and <strong>@</strong> refers to the acting character. These tokens are parser handles, not the prose shown to observers. The renderer substitutes the targeted entity's short description.</p>
+<div class="mono">emote looks over ~blon's shoulder, grinning as his eyes land on *cloth.
+
+→ A tall, hoary-haired man looks over a tall blonde woman's
+  shoulder, grinning as his eyes land on a bolt of crimson cloth.</div>
+<p>Targets must resolve through the normal perception/entity system. A character cannot use roleplay targeting to reveal an object or person the character has not perceived.</p>
+
+<h3>Parenthetical Emotes on Commands</h3>
+<p>Any appropriate character action may carry parenthetical roleplay describing how the action is performed. The mechanical command still determines what actually happens; the parenthetical text adds player-authored description and cannot dictate a mechanical outcome.</p>
+<div class="mono">hit salmon (grunting heavily as he attacks)
+
+→ You try to hit a salmon-haired young man,
+  grunting heavily as you attack.</div>
+<p>This syntax should be handled by the common command parser rather than independently reimplemented by combat, movement, object and communication commands.</p>
+
+<h3>Speech Family</h3>
+<p><strong>SAY, TELL, SHOUT, WHISPER, SCREAM and SING</strong> are forms of the same underlying speech system. They differ in such properties as direction, volume and audible range. Speech commands may freely alternate spoken text with parenthetical emote segments.</p>
+<div class="mono">shout (waves his hands in the air) I hate this place!
+(trips on a loose board, cursing) See! It's falling apart!
+(plops to the ground, tending his now-bleeding toe.)
+
+→ A tall, hoary-haired man waves his hands in the air,
+  "I hate this place!" He trips on a loose board, cursing,
+  "See! It's falling apart!" He plops to the ground,
+  tending his now-bleeding toe.</div>
+<p><strong>EMOTE</strong> itself is reserved for nonverbal roleplay rather than spoken dialogue. Ordinary physical sounds such as laughing, coughing, sighing or grunting may still be described by an emote; language-bearing communication belongs to the speech family.</p>
+
+<h3>Languages Are Binary</h3>
+<p>Language knowledge is binary. A character either knows a language and understands it completely, or does not know it and receives no mangled partial-language text. The system may distinguish a recognized language from an unfamiliar one, but there are no percentage language skills and no progressive gobbledygook.</p>
+<p>Because speech and physical emote segments remain distinct, a listener who cannot understand the language may still perceive the accompanying gestures and actions. Hearing, language comprehension and visual perception are separate questions.</p>
+
+<h3>Player Voice Is Preserved</h3>
+<p>Verbosity and accessibility settings may shorten, aggregate or expand <strong>system-generated narration</strong>, but they never abbreviate, summarize or rewrite another player's communication or emote. If a character perceives player-authored roleplay, the authored portion is delivered intact, subject only to legitimate perception such as hearing, language and visibility.</p>
+<p>System messages may be aggressively aggregated when useful. For example, a group of ten followers crossing an area need not generate ten repetitive arrival or departure notices. This is particularly important for players using screen readers.</p>
+<div class="quote">“Verbosity changes the game's narration, never the players' voices.”</div>
+
+<h3>Accessibility</h3>
+<p>The complete game should remain playable through text and keyboard alone. The browser client should be friendly to established screen readers through semantic HTML and appropriate live-region behavior, while optional built-in text-to-speech may be offered as a convenience rather than a replacement for a player's preferred accessibility tools. Visual styling, color and audio cues may reinforce information but must never be the only way to obtain essential information or perform an action.</p>
+
+<h3>Sound Has Physical Range</h3>
+<p>Speech and other noises are physical events originating at world coordinates. Central setup/configuration data should define tunable base hearing radii and related sound properties for speech forms such as whisper, say/tell, sing, shout and scream, as well as environmental sounds such as doors, galloping horses, falling trees, bells, gunshots or explosions if those sounds exist in the setting. Exact distances remain playtest values rather than hard-coded command rules.</p>
+<p>Distance, Spaces, portals and environment may modify what a listener receives. A nearby listener may understand the actual words; a more distant listener may merely hear shouting; a wall or closed door may muffle or block sound. Large sounds can be perceived at greater distances without requiring distant empty terrain to be actively simulated.</p>
+<p>The sound system should therefore produce structured events with an origin, sound type and configured range, then allow the perception system to determine whether each potential listener hears it, how clearly, from what direction, and—when language is involved—whether the words are understood.</p>
+<div class="callout"><strong>Sound rule:</strong> Commands produce configured sound events; the perception system decides what each listener can actually hear.</div>
+</section>
+
+<section class="card" id="principles"><h2><span class="lantern-mark"></span>15. Architectural Principles to Preserve</h2>
 <div class="pillars">
 <div class="pillar"><strong>Existence ≠ Simulation</strong>An object can persist for years without being actively processed.</div>
 <div class="pillar"><strong>Existence ≠ Perception</strong>An object may persist in the world without being noticeable; distance, age, environment, movement and attention determine whether a character perceives it.</div>
