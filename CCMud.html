@@ -646,21 +646,65 @@ Round 100 → may legitimately arrive</div>
 <p>This is deliberately preferable to temporary immunity or “safe passage.” Gus is not protected from attack after surviving a fight. Anyone who could physically have reached Gus may attack him. Someone five miles away simply remains five-miles-worth-of-time away.</p>
 <p>This reinforcement/travel-envelope system is a <strong>future implementation</strong>, not a requirement for the first playable combat prototype. The initial architecture should preserve the information needed to add it later: authoritative positions, Engagement round counts and a fixed amount of represented world time per round.</p>
 
-<h3>Travel Is Compressed, Never Teleported</h3>
-<p>Ordinary nonmagical travel always represents actual movement through the coordinate world. A travel command may compress uneventful time for the player, but the character still traverses the physical distance. Magical transportation, if it exists, is a separate rules question and must not contaminate normal travel mechanics.</p>
-<p>As an initial example, normal walking might be approximately <strong>3 mph</strong> and jogging approximately <strong>6 mph</strong> in world terms. The server may apply a configurable travel-compression multiplier to reduce player waiting. At 5× compression, a 3 mph walk is experienced by the player at an effective 15 mph, or about four real minutes per mile.</p>
-<table><thead><tr><th>Movement</th><th>Physical World Speed</th><th>At 5× Player Compression</th></tr></thead><tbody>
-<tr><td>Walk</td><td>~3 mph</td><td>~15 mph experienced; 1 mile in ~4 real minutes</td></tr>
-<tr><td>Jog</td><td>~6 mph</td><td>~30 mph experienced; 1 mile in ~2 real minutes</td></tr>
-<tr><td>Ride / Wagon</td><td>To be determined</td><td>Same configurable compression principle</td></tr>
+<h3>World Time &amp; Movement Scale</h3>
+<p>Crown &amp; Call uses a <strong>6× world-time multiplier</strong>. Six hours pass in the game world for every real-world hour, so one complete 24-hour game day lasts four real hours. This allows day, night, weather and other time-dependent conditions to change meaningfully during ordinary play.</p>
+<div class="mono">WORLD TIME MULTIPLIER: 6×
+
+10 real minutes = 1 game hour
+1 real hour     = 6 game hours
+4 real hours    = 1 full game day</div>
+<p>Ordinary physical movement uses a separate, fixed <strong>4× speed multiplier</strong>. A real-world human walking pace of approximately 4 mph therefore becomes a baseline game-world walking speed of approximately <strong>16 miles per game hour</strong>. Because six game hours pass during one real hour, uninterrupted walking covers approximately <strong>96 world miles per real hour</strong>.</p>
+<div class="mono">BASE WALKING SPEED
+4 mph × 4× movement multiplier = 16 world mph
+
+With 6× world time:
+16 world mph × 6 game hours per real hour
+= 96 world miles per real hour
+
+Rule of thumb:
+~100 world miles ≈ 1 real hour on foot</div>
+<table><thead><tr><th>Distance</th><th>Approx. Walking Time</th><th>Approx. Mounted Time at 2× Walking</th></tr></thead><tbody>
+<tr><td>25 miles</td><td>16 minutes</td><td>8 minutes</td></tr>
+<tr><td>50 miles</td><td>31 minutes</td><td>16 minutes</td></tr>
+<tr><td>100 miles</td><td>1 hour 3 minutes</td><td>31 minutes</td></tr>
+<tr><td>500 miles</td><td>5 hours 13 minutes</td><td>2 hours 36 minutes</td></tr>
+<tr><td>1,000 miles</td><td>10 hours 25 minutes</td><td>5 hours 13 minutes</td></tr>
 </tbody></table>
-<p>The multiplier is a balance value, not a physical law. It may eventually be 2×, 5×, 10× or another value after playtesting. Movement mode determines physical speed; the compression setting determines how long the human player waits through otherwise uneventful travel.</p>
-<div class="callout"><strong>Travel rule:</strong> Accelerated travel is time compression, never teleportation. Every journey has physical distance, movement and corresponding world-time duration even when the uneventful portion is presented quickly to the player.</div>
+<p>Mounted travel at roughly twice normal walking speed provides a useful planning estimate of nearly 200 world miles per real hour. Exact horse, wagon, terrain, injury, encumbrance and travel-mode modifiers can be refined later without changing the underlying 6× time and 4× movement standards.</p>
+
+<h3>Travel Is Movement, Never Teleportation</h3>
+<p>These multipliers make long-distance travel practical without erasing geography. A character traveling 1,000 miles still physically crosses those 1,000 miles of coordinate world. The journey may be interrupted by terrain, encounters, tracks, weather, other characters or anything else that becomes significant along the route. Magical transportation, if it exists, is a separate future rules question.</p>
+<p>Travel speed also remains linked to perception. A character deliberately tracking, searching or moving cautiously sacrifices speed in exchange for greater opportunity to notice subtle features. The baseline rates above describe ordinary purposeful travel, not detailed searching.</p>
+<div class="callout"><strong>Locked travel standard:</strong> World time passes at 6× real time and ordinary movement speeds are multiplied by 4×. A baseline 4 mph human walking pace therefore becomes 16 world mph, or approximately 96 world miles traveled per real hour.</div>
+
+<h3>Geographical Separation Is Intentional</h3>
+<p>The world is deliberately large enough for players to leave the original population center and establish genuinely remote homes, settlements and communities. The design should <strong>not</strong> artificially force remote players back into a central hub merely to increase player density. A group that prefers to roleplay primarily among itself may travel hundreds or thousands of miles away and create its own local community.</p>
+<p>At this scale, privacy can arise naturally from geography. A settlement somewhere within a 1,000-mile radius is hidden among roughly four million square miles of possible territory. A systematic half-mile search pattern across a 2,000-by-2,000-mile region would require on the order of eight million miles of travel. Blind searching is therefore impractical; finding a remote settlement should normally depend on information and physical evidence rather than exhaustive geographic sweeps.</p>
+<div class="quote">“Distance is not a problem to solve. Distance is part of the world.”</div>
+
+<h3>Discovery Requires Information</h3>
+<p>Remote characters do not broadcast their coordinates merely because they are online. Settlements are discovered through things that plausibly reveal them: directions, maps, guides, rumors, maintained roads, repeated wagon traffic, smoke, lights, tracks, trails, discarded objects, altered landscape, or eventually intentional magical means.</p>
+<p>Temporary traces should remain temporary. Ordinary footprints, horse tracks and the evidence of a one-time journey may disappear in a day or two under typical conditions, with weather and terrain able to shorten or extend that period. Repeated traffic is different: frequent wagon passage can create persistent ruts, trails and eventually roads. A community that regularly connects itself to civilization therefore becomes easier to find than one that deliberately minimizes traffic.</p>
+<p>A determined group can migrate again if its location becomes too well known. Its abandoned settlement remains behind as persistent history while roads deteriorate, fields overgrow, temporary tracks vanish and nature gradually reclaims the site. Future explorers may discover those ruins without knowing where the former residents went.</p>
+
+<h3>Group Migration &amp; Offline Passengers</h3>
+<p>Long journeys should not require every member of a group to remain online simultaneously. With appropriate consent and travel permissions, a character may log out while physically riding as a passenger in a wagon or similar conveyance. The offline character continues to exist at the conveyance's position and moves with it while another player drives.</p>
+<div class="mono">MIGRATING WAGON
+
+Sarah   — driving, online
+Tom     — passenger, online
+Jake    — passenger, offline
+Rachel  — passenger, offline
+
+The wagon moves through the coordinate world.
+All passengers remain physically with the wagon.
+When Jake or Rachel logs in, the character is
+wherever the wagon has legitimately traveled.</div>
+<p>This makes migrations of hundreds or thousands of miles practical for groups whose players cannot all share the same long play session. It must require prior consent or an equivalent trusted-group permission so that offline characters cannot be moved unwillingly.</p>
 
 <h3>Remote Wilderness Should Feel Remote</h3>
-<p>Compressed travel must not destroy the value of distance. A character who explores a hundred miles from the main settlement should be genuinely difficult to find. Other players should not receive omniscient coordinates merely because that character is online.</p>
-<p>Discovery should come from information in the physical world: tracks, wagon ruts, smoke, trails, felled trees, discarded objects, maps, landmarks, reports from other characters or NPCs, and eventually whatever magical means the rules intentionally provide. Tracking can therefore become a way to discover people who have deliberately traveled far from civilization.</p>
-<p>Long journeys may be compressed while nothing interesting occurs, then interrupted when something worth playing happens: a trail crosses the route, smoke appears over a ridge, a river blocks the way, an animal is encountered, or another active event becomes relevant.</p>
+<p>Long journeys may proceed quickly while nothing interesting occurs, then slow or interrupt when something worth playing happens: a trail crosses the route, smoke appears over a ridge, a river blocks the way, an animal is encountered, another active event becomes relevant, or the traveler deliberately begins searching or tracking.</p>
+<p>A settlement 10,000 miles from the game's original center should be extraordinarily difficult to locate without useful information. That is intentional. If its residents choose isolation, maintain little traffic and allow their temporary tracks to disappear, geography itself provides meaningful privacy without invisible walls, private instances or artificial safe zones.</p>
 <div class="quote">“Compress the uneventful. Never compress the interesting.”</div>
 </section>
 
