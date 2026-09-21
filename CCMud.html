@@ -41,7 +41,7 @@ h1{color:var(--gold-soft);font-size:clamp(30px,5vw,48px);line-height:1.08;margin
 <div class="pillar"><strong>Perception, Not Rooms</strong>A player sees, hears and senses what the world says is perceptible from that position.</div>
 </div>
 <nav class="toc">
-<a href="#coordinates">1. Coordinate World</a><a href="#generation">2. Generated Wilderness</a><a href="#persistence">3. Persistence by Exception</a><a href="#homesteads">4. Player Construction</a><a href="#chunks">5. Chunks &amp; Spatial Indexing</a><a href="#sleep">6. Sleeping &amp; Waking</a><a href="#time">7. Time &amp; Reclamation</a><a href="#spaces">8. Spaces &amp; Boundaries</a><a href="#perception">9. Perception</a><a href="#communication">10. Movement &amp; Communication</a><a href="#history">11. Discovery &amp; History</a><a href="#crafts">12. CAPs, Crafts &amp; Learning</a><a href="#principles">13. Architectural Principles</a>
+<a href="#coordinates">1. Coordinate World</a><a href="#generation">2. Generated Wilderness</a><a href="#persistence">3. Persistence by Exception</a><a href="#homesteads">4. Player Construction</a><a href="#chunks">5. Chunks &amp; Spatial Indexing</a><a href="#sleep">6. Sleeping &amp; Waking</a><a href="#time">7. Time &amp; Reclamation</a><a href="#spaces">8. Spaces &amp; Boundaries</a><a href="#perception">9. Perception</a><a href="#communication">10. Movement &amp; Communication</a><a href="#history">11. Discovery &amp; History</a><a href="#crafts">12. CAPs, Crafts &amp; Learning</a><a href="#combat">13. Combat &amp; Engagements</a><a href="#principles">14. Architectural Principles</a>
 </nav>
 </section>
 
@@ -393,7 +393,93 @@ Timber Framing has been learned.</div>
 <p class="small">Craft design remains under active development. Prerequisite graphs, CAP combinations, Learning Times and the possible recipe/plan layer should be expanded as the system is discussed and tested.</p>
 </section>
 
-<section class="card" id="principles"><h2><span class="lantern-mark"></span>13. Architectural Principles to Preserve</h2>
+
+<section class="card" id="combat"><h2><span class="lantern-mark"></span>13. Combat &amp; Engagements</h2>
+<p>Combat should use the Crown &amp; Call rules directly rather than an automated MUD combat loop that rapidly exchanges attacks until somebody dies. Combat is turn-based, giving every participant time to make meaningful decisions: attack, defend, move, flee, use an item, make a Calling, Gather, or take another appropriate action.</p>
+<div class="callout"><strong>Core direction:</strong> Combat is an open, spatial Engagement resolved in rounds. The world does not freeze around the combatants, and the original participant list is not protected by an invisible force field.</div>
+
+<h3>Rounds Represent World Time</h3>
+<p>A combat round currently represents approximately <strong>7 seconds of world time</strong>. Players may be allowed substantially longer in real time to choose their actions—perhaps as much as a minute—but the time spent by humans deciding does not become extra time for their characters or for distant characters elsewhere in the world.</p>
+<div class="mono">ROUND 1   world time 14:32:00–14:32:07
+ROUND 2   world time 14:32:07–14:32:14
+ROUND 3   world time 14:32:14–14:32:21
+...
+ROUND 9   approximately 63 seconds of world time
+
+The players may have spent roughly 9–10 real minutes
+making those decisions. The characters have not.</div>
+<p>Actions should generally be declared during the round and then resolved by the server. This avoids a five-person battle taking five times as long merely because every combatant must wait through a traditional sequential turn order. Exact declaration windows and resolution details remain to be designed and playtested.</p>
+
+<h3>Engagements Are Open</h3>
+<p>An Engagement records the characters actively affecting a fight, but participation is not permanently locked when combat begins. If four characters fight in a crowded tavern, the people standing nearby can watch, flee, shout for help or choose to interfere. A bystander who attacks, grabs or otherwise meaningfully affects a combatant can enter the Engagement at an appropriate round boundary.</p>
+<p>This also preserves forced combat. A character cannot refuse an attack merely because that character did not voluntarily join an encounter, and combatants cannot become untouchable to the surrounding world merely because their fight began first.</p>
+<div class="quote">“Joining an Engagement means affecting the fight, not entering an instance.”</div>
+
+<h3>Ranged Participation</h3>
+<p>A character does not need to move into a melee cluster to participate. A nearby archer, for example, may enter an Engagement by firing at a combatant from the character's actual position. A magic user may likewise affect the Engagement from whatever range the relevant Calling permits.</p>
+<div class="mono">Tom ↔ Sam
+
+                         Jake
+                         80 ft away
+
+Jake:
+> shoot Tom
+
+Jake remains 80 feet away.
+If the shot is valid, Jake becomes a participant
+at the appropriate round boundary.</div>
+<p>Range, line of sight, cover and geometry remain real. A ranged participant can retreat, advance, seek cover or be charged by another combatant. Combat never collapses all participants into an abstract room or common melee position.</p>
+
+<h3>Reinforcements Must Physically Arrive</h3>
+<p>A persistent multiplayer world creates a special problem when outside communication is available. A character being attacked may contact friends through Discord or another external service. The game cannot prevent that communication, but it can prevent distant characters from exploiting the slow real-time pace of turn-based combat.</p>
+<p>When an Engagement begins, a future system can snapshot the physical positions of characters and determine the earliest combat round at which each could legitimately reach or affect the Engagement. Travel time is converted into combat rounds using the approximate seven seconds of world time represented by each round.</p>
+<div class="mono">ENGAGEMENT BEGINS
+
+Gus      participant
+Sam      participant
+
+Rachel    nearby       → earliest intervention: Round 4
+Jake      250 yd away  → earliest intervention: Round 15
+Max       2 mi away    → much later
+Malfoy    5 mi away    → much later still
+
+Illustrative only; actual values depend on
+movement rate, terrain, range and other conditions.</div>
+<p>A nearby character may therefore be able to run toward the fight and join after several rounds. A character five miles away cannot convert ten real minutes spent while the combatants choose nine actions into ten minutes of character travel; only about one minute of combat-world time has elapsed.</p>
+
+<h3>The Causal Travel Envelope</h3>
+<p>The future reinforcement system should constrain not merely the final arrival round but how much progress a distant character could legitimately have made toward the Engagement. If Malfoy is five miles away and could not arrive until Round 100, then at Round 50 he can have covered at most approximately half of that legitimate journey toward the fight.</p>
+<div class="mono">Malfoy starts 5 miles away
+Earliest arrival: Round 100
+
+Round   0 → 5.00 miles away
+Round  25 → no closer than about 3.75 miles
+Round  50 → no closer than about 2.50 miles
+Round  75 → no closer than about 1.25 miles
+Round 100 → may legitimately arrive</div>
+<p>The Engagement ending must not erase this constraint. Otherwise distant reinforcements could wait for the fight to finish, use compressed travel to arrive immediately, and attack the survivor. The event's causal travel envelope can continue expanding after combat ends until the restriction no longer matters.</p>
+<p>This is deliberately preferable to temporary immunity or “safe passage.” Gus is not protected from attack after surviving a fight. Anyone who could physically have reached Gus may attack him. Someone five miles away simply remains five-miles-worth-of-time away.</p>
+<p>This reinforcement/travel-envelope system is a <strong>future implementation</strong>, not a requirement for the first playable combat prototype. The initial architecture should preserve the information needed to add it later: authoritative positions, Engagement round counts and a fixed amount of represented world time per round.</p>
+
+<h3>Travel Is Compressed, Never Teleported</h3>
+<p>Ordinary nonmagical travel always represents actual movement through the coordinate world. A travel command may compress uneventful time for the player, but the character still traverses the physical distance. Magical transportation, if it exists, is a separate rules question and must not contaminate normal travel mechanics.</p>
+<p>As an initial example, normal walking might be approximately <strong>3 mph</strong> and jogging approximately <strong>6 mph</strong> in world terms. The server may apply a configurable travel-compression multiplier to reduce player waiting. At 5× compression, a 3 mph walk is experienced by the player at an effective 15 mph, or about four real minutes per mile.</p>
+<table><thead><tr><th>Movement</th><th>Physical World Speed</th><th>At 5× Player Compression</th></tr></thead><tbody>
+<tr><td>Walk</td><td>~3 mph</td><td>~15 mph experienced; 1 mile in ~4 real minutes</td></tr>
+<tr><td>Jog</td><td>~6 mph</td><td>~30 mph experienced; 1 mile in ~2 real minutes</td></tr>
+<tr><td>Ride / Wagon</td><td>To be determined</td><td>Same configurable compression principle</td></tr>
+</tbody></table>
+<p>The multiplier is a balance value, not a physical law. It may eventually be 2×, 5×, 10× or another value after playtesting. Movement mode determines physical speed; the compression setting determines how long the human player waits through otherwise uneventful travel.</p>
+<div class="callout"><strong>Travel rule:</strong> Accelerated travel is time compression, never teleportation. Every journey has physical distance, movement and corresponding world-time duration even when the uneventful portion is presented quickly to the player.</div>
+
+<h3>Remote Wilderness Should Feel Remote</h3>
+<p>Compressed travel must not destroy the value of distance. A character who explores a hundred miles from the main settlement should be genuinely difficult to find. Other players should not receive omniscient coordinates merely because that character is online.</p>
+<p>Discovery should come from information in the physical world: tracks, wagon ruts, smoke, trails, felled trees, discarded objects, maps, landmarks, reports from other characters or NPCs, and eventually whatever magical means the rules intentionally provide. Tracking can therefore become a way to discover people who have deliberately traveled far from civilization.</p>
+<p>Long journeys may be compressed while nothing interesting occurs, then interrupted when something worth playing happens: a trail crosses the route, smoke appears over a ridge, a river blocks the way, an animal is encountered, or another active event becomes relevant.</p>
+<div class="quote">“Compress the uneventful. Never compress the interesting.”</div>
+</section>
+
+<section class="card" id="principles"><h2><span class="lantern-mark"></span>14. Architectural Principles to Preserve</h2>
 <div class="pillars">
 <div class="pillar"><strong>Existence ≠ Simulation</strong>An object can persist for years without being actively processed.</div>
 <div class="pillar"><strong>Position ≠ Space</strong>Position says where; Space says what environment contains that position.</div>
@@ -402,6 +488,8 @@ Timber Framing has been learned.</div>
 <div class="pillar"><strong>Time ≠ Ticks</strong>Long-term change and character timers can be calculated from timestamps rather than continuous ticking.</div>
 <div class="pillar"><strong>Proximity Has Meaning</strong>Actions affect what is physically near the character; ownership or visibility alone does not make an object available.</div>
 <div class="pillar"><strong>Buildings Are Geometry</strong>Construction adds real boundaries and navigable space to the coordinate world rather than creating detached numbered rooms.</div>
+<div class="pillar"><strong>Travel ≠ Teleportation</strong>Compressed travel shortens player waiting; it never erases the physical distance or world time a character must traverse.</div>
+<div class="pillar"><strong>Real Time ≠ World Time</strong>Slow human decisions during turn-based combat do not grant distant characters extra movement through the world.</div>
 <div class="pillar"><strong>Client ≠ Authority</strong>The browser presents the world; the Python server owns rules and authoritative state.</div>
 </div>
 <h3>System Direction</h3>
