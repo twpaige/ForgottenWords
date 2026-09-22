@@ -41,7 +41,7 @@ h1{color:var(--gold-soft);font-size:clamp(30px,5vw,48px);line-height:1.08;margin
 <div class="pillar"><strong>Perception, Not Rooms</strong>A player sees, hears and senses what the world says is perceptible from that position.</div>
 </div>
 <nav class="toc">
-<a href="#coordinates">1. Coordinate World</a><a href="#generation">2. Generated Wilderness</a><a href="#persistence">3. Persistence by Exception</a><a href="#homesteads">4. Player Construction</a><a href="#chunks">5. Chunks &amp; Spatial Indexing</a><a href="#sleep">6. Sleeping &amp; Waking</a><a href="#time">7. Time &amp; Reclamation</a><a href="#spaces">8. Spaces &amp; Boundaries</a><a href="#perception">9. Perception</a><a href="#communication">10. Movement &amp; Communication</a><a href="#history">11. Discovery &amp; History</a><a href="#crafts">12. CAPs, Crafts &amp; Learning</a><a href="#combat">13. Combat &amp; Engagements</a><a href="#principles">14. Architectural Principles</a>
+<a href="#coordinates">1. Coordinate World</a><a href="#generation">2. Generated Wilderness</a><a href="#persistence">3. Persistence by Exception</a><a href="#homesteads">4. Player Construction</a><a href="#chunks">5. Chunks &amp; Spatial Indexing</a><a href="#sleep">6. Sleeping &amp; Waking</a><a href="#time">7. Time &amp; Reclamation</a><a href="#spaces">8. Spaces &amp; Boundaries</a><a href="#perception">9. Perception</a><a href="#communication">10. Movement &amp; Communication</a><a href="#history">11. Discovery &amp; History</a><a href="#crafts">12. CAPs, Crafts &amp; Learning</a><a href="#combat">13. Combat &amp; Engagements</a><a href="#roleplay-communication">14. Roleplay, Communication &amp; Sound</a><a href="#principles">15. Architectural Principles</a><a href="#objects">16. Objects, Stacking &amp; Samples</a>
 </nav>
 </section>
 
@@ -261,6 +261,14 @@ apply_elapsed_change(area, elapsed)</div>
 <div class="quote">“Buildings are not destinations. Buildings are geometry.”</div>
 <h3>Portals</h3>
 <p>Doors, windows, gates, cave mouths and stairways connect spaces. Their state can control movement, vision, sound and light. A closed tavern door might block movement and vision while muffling sound; opening it allows those effects to cross the boundary.</p>
+<h3>Vertical Levels</h3>
+<p>Multiple floors do not require traditional room IDs or a special floor system. A level is defined by its <strong>elevation, ceiling height, floor type and ceiling type</strong>. Characters may occupy the same X/Y position on different Z elevations while remaining in separate Spaces. Floors and ceilings normally separate sight and sound; stairs simply provide the legitimate route for changing elevation and entering the adjoining level.</p>
+<div class="mono">Basement      elevation -96&quot;
+First floor   elevation   0&quot;
+Second floor  elevation +120&quot;
+
+Same X/Y, different Z and containing Space.</div>
+<p>Hearing between levels can remain deliberately simple. The normal radius-based hearing check still identifies nearby listeners; Space and boundary information may then suppress or reduce what crosses a floor, wall, grate or other opening. A solid floor may convey only footsteps or indistinct murmurs while an open grate can allow clearer speech. Exact acoustics are not a priority and should not become a simulation burden.</p>
 </section>
 
 <section class="card" id="perception"><h2><span class="lantern-mark"></span>9. Generated Perception Instead of Static Room Descriptions</h2>
@@ -525,7 +533,25 @@ The held carcass takes precedence.</div>
 <div class="flow">KNOWLEDGE + CAPABILITY + TOOLS + MATERIALS + TIME
                          ↓
                       SUCCESS</div>
-<p>If work is interrupted by combat, movement or another world event, that is an interruption rather than a random Craft failure. The design should avoid destroying carefully gathered materials merely because an RNG check failed.</p>
+<h3>Atomic Craft Execution</h3>
+<p>Crafts are deliberately blunt and transactional. There are <strong>no timed Craft steps, delayed room echoes or intermediate Craft states</strong>. When a Craft command is issued, the server validates every requirement before changing anything. If any requirement fails, nothing is consumed and nothing is created. If all requirements pass, material consumption, product creation and Work Timer debt are committed together as one atomic operation.</p>
+<div class="flow">VALIDATE EVERYTHING
+        ↓
+requirements fail → CHANGE NOTHING
+        ↓
+requirements pass
+        ↓
+CONSUME + CREATE + ADD WORK TIME
+        ↓
+COMMIT → “You craft a linen shirt.”</div>
+<p>A disconnect or server failure must never leave a character with consumed materials but no finished product, or a finished product without its required materials having been consumed. Other characters cannot interfere halfway through a Craft because there is no mechanically exposed halfway point.</p>
+<p>Roleplay around crafting remains entirely voluntary through EMOTE, communication and parenthetical roleplay on the Craft command. The Craft engine itself does not force players to wait through descriptive stages.</p>
+<div class="quote">“Validate → Commit → Done.”</div>
+
+<h3>Keyed Crafts</h3>
+<p>A single Craft may use one key to select a variation from the material or consumable actually supplied. For example, <strong>Tailor Shirt</strong> can accept linen, cotton, wool, silk or another permitted cloth and produce the corresponding material shirt without requiring a separate Craft for every material. A later dye Craft may key from the dye color. Five materials and twelve colors can therefore yield sixty shirt variations without sixty shirt Crafts.</p>
+<p>The input determines the keyed result. Raw bolts need not accept every transformation merely because a property exists; for example, dyeing may be valid for finished garments while raw linen bolts are not valid dye targets.</p>
+<div class="quote">One Craft, one key. Let the input determine the variation.</div>
 
 <h3>Work Timer</h3>
 <p>Performing Crafts consumes abstract work capacity through a single character <strong>Work Timer</strong>. The Craft's result occurs immediately when the command succeeds; its Work Time is then added to the character's accumulated work debt. The timer continuously winds down in real-world elapsed time whether the character is online or offline.</p>
@@ -755,6 +781,73 @@ wherever the wagon has legitimately traveled.</div>
 <p>Distance, Spaces, portals and environment may modify what a listener receives. A nearby listener may understand the actual words; a more distant listener may merely hear shouting; a wall or closed door may muffle or block sound. Large sounds can be perceived at greater distances without requiring distant empty terrain to be actively simulated.</p>
 <p>The sound system should therefore produce structured events with an origin, sound type and configured range, then allow the perception system to determine whether each potential listener hears it, how clearly, from what direction, and—when language is involved—whether the words are understood.</p>
 <div class="callout"><strong>Sound rule:</strong> Commands produce configured sound events; the perception system decides what each listener can actually hear.</div>
+</section>
+
+<section class="card" id="objects">
+<h2><span class="lantern-mark"></span>16. Objects, Stacking &amp; Samples</h2>
+<h3>Capabilities Instead of Rigid Object Types</h3>
+<p>Objects should not use a fixed array of generic value slots whose meanings change according to a rigid object type. Universal fields such as keywords, short description, long description, full description and weight should retain one meaning everywhere. Specialized behavior is attached through named capabilities/components with clearly named properties.</p>
+<div class="mono">SWORD
+  object:  keywords, descriptions, weight
+  weapon:  wielding properties, wound ceiling
+
+OAK TABLE
+  object:   keywords, descriptions, weight
+  seating:  seats = 4
+
+WAGON
+  object
+  seating
+  container
+  vehicle</div>
+<p>An object may possess any sensible combination of capabilities. A storage bench can be both seating and a container; a wagon can be seating, storage and a vehicle. Components describe specialized behavior rather than forcing an object into one exclusive type.</p>
+<div class="quote">“An object is not a type. An object has capabilities.”</div>
+
+<h3>Improvised Wielding</h3>
+<p>Physical objects do not need an explicit Weapon capability merely to be swung at another character. If a character can reasonably wield an object that lacks defined weapon properties, combat may treat it under generic improvised-object rules. Purpose-built weapons carry explicit weapon properties; ordinary tables, belts, stools, mugs and similar objects remain ordinary objects until a player decides to use one creatively.</p>
+<div class="mono">wield leather belt
+→ You wield a worn leather belt.
+
+A table may still provide four seats while also being
+wielded, swung or used to parry if the physical rules permit it.</div>
+<p>This favors general physical rules over proliferating special object types such as weaponized tables or improvised-weapon belts.</p>
+
+<h3>Stacking</h3>
+<p>Identical discrete objects automatically stack when they occupy the same inventory, container or location. The stack is represented internally as a single object with a quantity/count rather than one database object per copy.</p>
+<div class="mono">a china plate (x7)</div>
+<p>The seven plates remain conceptually seven discrete plates. Taking or consuming one decrements the count; any change that makes an individual plate non-identical causes that object to split from the stack. Material, color, condition, inscriptions and other meaningful state therefore participate in stack compatibility.</p>
+
+<h3>Sampled Objects</h3>
+<p>Sampled objects remain useful for <strong>continuous divisible materials</strong>, while stacks represent separate interchangeable things. A bolt of linen may hold twelve yards, a spool of thread a number of lengths, and a liquid container a number of <strong>sips</strong>. Crafts consume the required amount from the sample atomically.</p>
+<div class="mono">STACK                         SAMPLE
+
+a china plate (x7)            bolt of linen
+7 discrete plates             12 / 12 yards
+
+an iron nail (x40)            spool of thread
+40 discrete nails             20 / 20 lengths
+
+                              waterskin
+                              8 / 8 sips</div>
+<p>Look may describe a sample qualitatively as full, nearly full, partially used or nearly depleted, while examining it may reveal the remaining quantity more precisely.</p>
+
+<h3>Full Samples May Stack</h3>
+<p>A sampled object may stack only while it is completely full. Thus <em>a bolt of linen (x12)</em> unambiguously means twelve complete bolts. If each full bolt contains twelve yards, the stack represents 144 yards. When a Craft consumes from one member of the stack, one full sample splits away and becomes the partial object while the remaining full samples stay stacked.</p>
+<div class="mono">Before:
+  a bolt of linen (x12)
+  each bolt = 12 / 12 yards
+
+Craft consumes 1 yard:
+
+After:
+  a bolt of linen (x11)
+  a nearly full bolt of linen = 11 / 12 yards</div>
+<p>Partial samples do not auto-stack. Compatible partial samples may support an explicit combine operation when physically sensible and when the result does not exceed the sample maximum. The exact compatibility rules can remain simple and material-specific.</p>
+
+<h3>Prototype Versus Instance State</h3>
+<p>Prototypes define what all examples of an object share: descriptions, normal weight and available capabilities. Individual instances store only state that can vary, such as remaining sample quantity, stack count, color, material, condition or an inscription. This avoids multiplying prototypes merely to represent cosmetic variations.</p>
+<p>A shirt prototype can therefore become linen, cotton, wool or silk through keyed crafting and later take one of several dye colors while remaining the same fundamental object design.</p>
+<div class="quote">Prefer transformations and instance state over multiplying prototypes.</div>
 </section>
 
 <section class="card" id="principles"><h2><span class="lantern-mark"></span>15. Architectural Principles to Preserve</h2>
