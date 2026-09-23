@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–26 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Resume with Question 27.
+Questions 1–30 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Resume with Question 31.
 
 
 PROJECT REFERENCES
@@ -466,13 +466,69 @@ In Origin, maps and compasses are readily available for purchase. A wilderness c
 Exact mineral requirements and crafting procedures remain to be designed.
 
 
+QUESTION 27 — ESSENTIAL SERVICES IN ORIGIN
+------------------------------------------
+
+Origin begins as a functional frontier settlement of roughly 200 NPCs. Its initial services and structures include at least:
+
+- Tavern/inn.
+- General store.
+- Stable/farrier.
+- Stockyards.
+- Lumberyard.
+- Blacksmith.
+- Stonemason.
+- Houses.
+- Apartments.
+- Doctor's office.
+- Metalsmith.
+- Armorsmith.
+- Weaponsmith.
+- Gunsmith.
+- Baker.
+
+This list is deliberately not exhaustive or final. Additional businesses and services may be added naturally when Origin is actually designed. The important decision is that Origin should function as a believable small settlement rather than merely as a collection of player-service NPCs.
+
+
+QUESTION 28 — WHO OPERATES INITIAL CIVILIZATION?
+-------------------------------------------------
+
+NPCs operate Origin and all of its storefronts from the beginning. Each storefront is available for eventual purchase by a player.
+
+When a player purchases a storefront, the existing NPC merchant remains and continues operating normal sales and day-to-day business functions. Player ownership therefore does not remove the NPC who previously ran the business.
+
+If the player-owner dies, retires, leaves, or otherwise ceases operating the business, the NPC takes over its operation again. Exact later rules for legal ownership, inheritance, inventory, profits, resale, and related consequences remain to be designed.
+
+The important principle is that Origin and its economy continue functioning even when particular players disappear.
+
+
+QUESTION 29 — CHARACTERS AND ACCOUNTS PER PERSON
+-------------------------------------------------
+
+Ordinary players are limited to one character per account and one account per real person.
+
+Staff members may receive exceptions allowing additional accounts or characters when required for staff duties, administration, testing, events, NPC portrayal, or similar legitimate purposes. Staff exceptions do not create ordinary gameplay privileges.
+
+Multiple accounts connecting from the same IP address are not automatically prohibited because multiple real people may share a household or connection. However, shared-IP accounts may be required to provide reasonable proof that they represent separate real people. Exact verification and privacy-conscious enforcement procedures remain to be designed under administration policy.
+
+The one-time accidental/environmental death reprieve established in Question 25 therefore belongs to the player's single ordinary account and cannot be refreshed by creating alternate characters or accounts.
+
+
+QUESTION 30 — SAME-ACCOUNT CHARACTER INTERACTION
+-------------------------------------------------
+
+Skipped as inapplicable for ordinary players.
+
+Question 29 establishes one character per ordinary account and one account per real person. Ordinary players therefore cannot use same-account alternate characters to share property, maps, messages, inheritance, or other resources. Staff-only exceptions exist for legitimate staff functions and must not provide ordinary gameplay advantages.
+
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 27 — ESSENTIAL SERVICES IN ORIGIN
+NEXT QUESTION: QUESTION 31 — SIMULTANEOUS CHARACTERS PER ACCOUNT
 
 Important context:
-Questions 17–26 are now locked. Origin is the single hand-designed starting settlement, initially about 200 NPCs, with one nearby military fort and additional forts added later. Characters may choose the conventional Normal tavern start or randomized remote starts. Magical arrival, agelessness, retained memories, and the per-player accidental-death reprieve are canonical. Maps and compasses are not automatic starting knowledge or equipment.
+Questions 27–30 are now locked. Origin's initial service mix is intentionally non-exhaustive. NPCs operate its businesses, storefronts may be player-owned while their NPC operators remain, and ordinary players are limited to one account per real person and one character per account. Staff may receive tightly scoped exceptions.
 
 Proceed one numbered question at a time.
 
