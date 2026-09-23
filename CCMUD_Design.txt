@@ -334,15 +334,43 @@ None of those lore possibilities is currently canonical.
 The only locked portion is the technological and social direction recorded under Question 13. Mechanical design may continue without determining the ultimate metaphysics, outside world, synthetic-body premise, resurrection explanation, or hidden lore.
 
 
+QUESTION 15 — FIREARMS
+----------------------
+
+Firearm technology is deliberately mixed rather than tied to exact Earth chronology.
+
+- Percussion-cap muzzle-loading firearms exist alongside cartridge firearms.
+- Colt Peacemaker-style cartridge revolvers exist.
+- Lever-action rifles exist.
+- Shotguns may be single-shot or double-barrel.
+- Firearms operate as single-shot attacks in combat: one projectile is fired per attack action, comparable conceptually to firing one arrow from a bow. There are no automatic weapons in this technology model.
+- Firearms and bows may cause broadly comparable wounds depending on the hit, but weapon type, range, accuracy, and power matter substantially.
+- Rifles have a major advantage in effective range, accuracy, and potential lethality. An appropriate rifle may plausibly kill a deer with a single well-placed shot at roughly 100 yards, while hitting the same target at that distance with a pistol should be extremely unlikely.
+- Firearms are extremely expensive compared with bows and other simple weapons.
+- An established adventurer carrying both a pistol and rifle may be fairly common, but acquiring them represents a significant investment and progression beyond inexpensive bows and arrows.
+- Exact combat statistics, range bands, damage, reload times, and accuracy modifiers remain to be decided with the later combat rules.
+
+
+QUESTION 16 — INITIAL TRANSPORTATION
+------------------------------------
+
+Initial implemented transportation consists of:
+
+- Walking on foot.
+- Riding horses.
+
+Wagons and boats fit the setting and remain planned, but they will be implemented later rather than being required for the initial playable system.
+
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 15 — DO FIREARMS EXIST?
+NEXT QUESTION: QUESTION 17 — MAGIC IN THE SETTING
 
 Important context:
-Question 13 already establishes that pistols, rifles, and shotguns exist at the setting level. Question 15 should therefore refine the firearm decision rather than ask whether firearms exist at all. Discuss which firearm technologies are available, how common they are, whether weapons are muzzle-loading or cartridge-based, what kinds of revolvers exist, and how firearms coexist with bows, melee weapons, armor, and Crown & Call combat.
+Questions 15 and 16 are now locked. Resume by determining what magic is in the setting and how common it should be. Question 18 will separately address how Callings relate to magic or divine action.
 
-Stop after discussing and recording Question 15, then proceed one numbered question at a time.
+Proceed one numbered question at a time.
 
 
 REMAINING ORIGINAL DISCUSSION QUEUE
