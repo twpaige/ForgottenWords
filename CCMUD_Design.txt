@@ -1,49 +1,352 @@
-CCMUD DESIGN DISCUSSION QUEUE
-================================
+CCMUD DESIGN INTERVIEW — CONTINUATION DOCUMENT
+================================================
 
-Source reviewed: CCMud.html, including the recovered design decisions and Questions 122–218.
+CONTINUATION PROMPT FOR A NEW CHAT
+----------------------------------
 
-The document gives CCMud an unusually strong philosophical and architectural foundation. The largest remaining gap is not “What kind of game is this?” We know that. The gap is defining the minimum playable game loop and the concrete rules needed to implement it.
+Read this entire file and then read CCMud.html in the same repository. CCMud.html is the main design document and authoritative ledger of previously locked CCMud decisions. This file records the current structured design interview and identifies where it should resume.
 
-Below is the discussion queue I recommend. I deliberately avoided questions already answered in the document.
+Goal:
+Work through the remaining design questions one at a time with Thomas so CCMud has enough concrete design decisions to become a playable persistent coordinate-world MUD.
+
+Process:
+1. Begin at the BOOKMARK below unless Thomas directs otherwise.
+2. Ask one numbered question at a time.
+3. Discuss the answer with Thomas rather than merely collecting yes/no responses.
+4. When Thomas answers, restate the decision clearly as a concise locked design entry.
+5. Identify important consequences or ambiguities, but do not reopen decisions already settled unless Thomas wants to.
+6. Then ask the next applicable numbered question.
+7. Skip questions made irrelevant by earlier answers and record why they were skipped.
+8. Do not implement code merely because a design answer was given. This interview is for design decisions.
+9. When Thomas pauses the interview, update this file with the new answers, clean rewordings, and the next-question bookmark.
+10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
+
+Current status:
+Questions 1–14 have been discussed. Lore surrounding the ultimate nature of the world was deliberately deferred. Resume with Question 15.
 
 
-PHASE I — DEFINE THE FIRST PLAYABLE CCMUD
+PROJECT REFERENCES
+------------------
+
+Main design document:
+CCMud.html
+
+This interview document:
+CCMudDesign.txt
+
+Repository:
+twpaige/ForgottenWords
+
+
+LOCKED INTERVIEW DECISIONS
+==========================
+
+QUESTION 1 — EXPERIENCE THE FIRST PLAYABLE RELEASE MUST PROVE
+-------------------------------------------------------------
+
+The first playable release must demonstrate coordinate travel, exploration, gathering, construction, roleplay, combat/hunting, light crafting, and persistence through a compact frontier-survival experience.
+
+A player must be able to:
+
+- Create a character and begin in the starting town.
+- Travel continuously through the coordinate world.
+- Explore and perceive generated terrain.
+- Gather basic natural materials.
+- Perform light crafting.
+- Obtain or improvise a hunting weapon.
+- Throw a rock as a rudimentary weapon.
+- Carve a rudimentary bow and arrows.
+- Locate and hunt a rabbit.
+- Recover and skin the rabbit.
+- Butcher, cook, and eat the rabbit.
+- Gather fuel and light a fire.
+- Construct and set up a simple shelter or tent.
+- Use the rabbit hide to make a waterskin.
+- Abstract the initial tanning process as part of the Craft. Descriptive text may say, “With the materials at hand, you tan and prepare the hide,” without initially simulating brains, tanning chemistry, or detailed hide preparation.
+- Return to town.
+- Sell appropriate hunted goods.
+- Purchase and drink a beer.
+- Log out and later find relevant character and world state preserved.
+
+This vertical slice is intended to exercise the defining CCMud architecture: coordinate movement, generated terrain, physical objects, perception, wildlife, ranged attacks, carcass processing, deterministic crafting, fire, cooking, consumption, NPC commerce, and persistence.
+
+
+QUESTION 2 — FIRST-HOUR EXPERIENCE
+-----------------------------------
+
+New characters begin in town with a small amount of coin. They are offered a choice of very simple introductory jobs instead of being forced through one scripted tutorial.
+
+Possible first jobs include:
+
+- Delivering a message or parcel to an NPC across the street.
+- Hunting and returning with a rabbit.
+- Gathering a small amount of basic material.
+- Performing another short, easily understood task.
+
+The delivery job teaches movement, targeting, NPC interaction, inventory, and payment with minimal danger. The rabbit job introduces wilderness travel, perception, hunting, carcass processing, and potentially cooking.
+
+During the first hour, a new player should be able to complete at least one job, earn a few coins, understand the basic interface, and possibly purchase a first beer.
+
+
+QUESTION 3 — REASONS TO RETURN
+-------------------------------
+
+Early jobs gradually lead characters away from dependence upon the starting town and toward finding their own place in the world.
+
+Return hooks may include:
+
+- Learning Fishing or another useful Craft.
+- An NPC offering a follow-up task.
+- Follow-up work that sends the character progressively farther beyond town.
+- Hunting animals and selling meat, hides, or other useful materials.
+- Learning that land outside town may eventually be claimed.
+- Prospecting and striking a resource claim.
+- Establishing a campsite and later building a cabin.
+- Developing a ranch, farm, workshop, wilderness homestead, or place within town.
+- Discovering more of the world and deciding where the character belongs.
+
+NPC follow-up appointments use relaxed in-world timing. An NPC might say:
+
+“Come back in a day or three, when you’ve got time. I’ll be here waiting.”
+
+The player may return four real hours later, the following real-world day, or later still. These invitations are not precise real-world appointments:
+
+- There is no penalty for returning late.
+- Ordinary absence does not fail the job.
+- The NPC remains available until the player chooses to continue.
+- The language remains compatible with CCMud’s 6× world-time clock.
+
+The town gives a character somewhere to begin. The wider world gives the character somewhere to belong.
+
+
+QUESTION 4 — SMALLEST SATISFYING CORE LOOP
+-------------------------------------------
+
+Claiming land is not part of the smallest core loop.
+
+The smallest complete gameplay loop is:
+
+1. Obtain or improvise a weapon by picking up and throwing a rock or by crafting a rudimentary bow and arrows.
+2. Travel into the wilderness.
+3. Locate and hunt a rabbit.
+4. Recover the rabbit’s carcass.
+5. Skin and butcher it.
+6. Gather fuel and light a fire.
+7. Roast the rabbit.
+8. Eat it.
+
+Claiming land, building a more permanent shelter, making a waterskin, selling the hide, and returning to town expand the experience but are not required to prove the smallest core loop.
+
+
+QUESTION 5 — ABSOLUTE MINIMUM PRIVATE-ALPHA SYSTEMS
+----------------------------------------------------
+
+The following package is the absolute minimum. Nothing in this list should be removed from the private-alpha vertical slice:
+
+- Account login and basic character creation.
+- Coordinate movement and generated terrain.
+- LOOK and basic perception.
+- Inventory, holding, dropping, and object targeting.
+- Gathering rocks, sticks, wood, and other basic materials.
+- Throwing rocks.
+- Crafting a rudimentary bow and arrows.
+- Rabbits that can be found, move, be attacked, and die.
+- Carcasses with skinning and butchering transformations.
+- Fire building and lighting.
+- Cooking raw rabbit into roasted rabbit.
+- Eating food.
+- Persistent character position, inventory, objects, fires, and world changes.
+- A small starting town.
+- Simple NPC interaction.
+- Introductory jobs.
+- Coins.
+- Selling hunted goods.
+- Purchasing and drinking a beer.
+- Physical maps.
+- Map bookmarks.
+- Compasses and bearings.
+- Simple tent construction.
+- Deploying and packing a tent.
+- Persistent tent location.
+- A combined tent, map, and compass tutorial.
+
+Maps, compasses, and tents belong in the private-alpha minimum because they demonstrate the coordinate world too strongly to postpone.
+
+
+QUESTION 6 — SYSTEMS DELIBERATELY EXCLUDED FROM THE PRIVATE ALPHA
+-----------------------------------------------------------------
+
+The following systems may be postponed until the minimum core works:
+
+- Formal land claims and ownership.
+- Cabins and advanced permanent construction.
+- Farming and ranching.
+- Mining and geological claims.
+- Horses, wagons, boats, and offline passengers.
+- Complex weather and seasons.
+- Full survival needs beyond demonstrating eating.
+- Advanced crafting trees and long learning timers.
+- Player-versus-player combat.
+- Large battles and causal travel envelopes.
+- Full wound treatment and FAITH healing.
+- Complex NPC economies.
+- Player shops and settlements.
+- Clans, governments, and territorial law.
+- Advanced tracking and concealment.
+- World reclamation across years.
+- Administrative succession and the complete moderation suite.
+
+These are postponed, not abandoned. Land claims, cabin construction, fishing, ranches, farms, and deeper settlement play remain important planned directions.
+
+
+QUESTION 7 — CLOSED PRIVATE ALPHA AND ACCOUNT CREATION
+------------------------------------------------------
+
+The game remains closed to Thomas and specifically invited testers until Thomas explicitly changes the policy.
+
+- Public account creation is disabled.
+- Only an authorized administrator may create a tester account.
+- The administrator assigns a temporary password and securely gives it to the tester.
+- The tester authenticates using the temporary password.
+- The tester must choose a new private password before creating a character or entering the game.
+- The temporary password becomes invalid immediately after the password change.
+- Until the password is changed, the account cannot create characters or enter the world.
+- Public registration may be enabled later only through an explicit administrative decision.
+
+
+QUESTION 8 — INITIAL PLAYER CAPACITY
+-------------------------------------
+
+The private-alpha system should be designed and tested for approximately 10–20 simultaneous players.
+
+A huge population is not expected. A small, committed community may nevertheless contain daily players. Architecture and data modeling should avoid assumptions that permanently limit expansion. Later support for hundreds of simultaneous players should be possible through optimization and scaling rather than fundamental redesign.
+
+
+QUESTION 9 — MEANING OF “UP AND RUNNING”
 -----------------------------------------
 
-These questions determine what we must build before inviting anyone else to play.
+The private alpha progresses through three stages:
 
-1. What exact experience should the first playable release prove: coordinate travel, exploration, gathering, construction, roleplay, combat—or some smaller combination?
+1. Development validation
+   The minimum package works on the development server, survives restart and reconnect testing, and supports the complete rabbit-survival and tent/map/compass loops without administrator intervention.
 
-2. What must a brand-new character be able to accomplish during the first hour of play?
+2. Thomas-only production play
+   The tested build is deployed to production, but no outside testers are invited. Thomas plays normally for an open-ended period to evaluate persistence, usability, pacing, reliability, and whether the game is genuinely enjoyable.
 
-3. What should give that player a reason to return the next day?
+3. Invitation-only private alpha
+   Once Thomas is satisfied with private production play, he may create accounts for selected testers.
 
-4. What is the smallest satisfying gameplay loop? For example: explore → discover resources → gather → craft equipment → establish a camp.
-
-5. Which systems are absolutely required for the private alpha?
-
-6. Which systems must deliberately be excluded from the private alpha even though the architecture anticipates them?
-
-7. Will the initial release support only Thomas and invited testers, or should public-account behavior be designed from the beginning?
-
-8. Approximately how many simultaneous players should the first production version support?
-
-9. What constitutes “up and running”: technically accessible, mechanically playable, or ready for outside players?
-
-10. Should development begin with a deliberately restricted starting region while the rest of the generated world remains physically present but inaccessible?
-
-11. If the initial world is restricted, what in-world explanation prevents travel beyond the testing area?
-
-12. Which first-release feature should demonstrate that CCMud is fundamentally different from a room-based MUD?
+There is no predetermined duration for Thomas-only production testing. Inviting testers requires Thomas’s explicit decision.
 
 
-PHASE II — SETTING AND STARTING EXPERIENCE
-------------------------------------------
+QUESTION 10 — UNRESTRICTED TRAVEL AND GRADUATED DANGER
+------------------------------------------------------
 
-13. What is the technological era of the setting?
+Travel is unrestricted from the beginning. Testers may travel anywhere the generated world permits.
 
-14. Is the setting medieval, early modern, frontier, or something uniquely Crown & Call?
+Early testers may establish permanent homesteads and retain them through private alpha, final release, and beyond. Test play is intended to become part of the world’s real history rather than disposable pre-release data.
+
+Danger increases gradually with distance from the origin and starting town:
+
+- Town to one mile: Extremely safe. Numerous guards patrol and respond to threats. Safety comes from an actual in-world presence rather than an invisible protected-zone rule.
+- One to five miles: Generally safe countryside without constant guard coverage.
+- Five to twenty-five miles: Wilderness danger increases gradually with distance.
+- Beyond twenty-five miles: Fully wild and potentially dangerous territory.
+
+Hostile wildlife, creature strength, encounter frequency, and environmental hazards may increase as civilization recedes. There is no invisible wall. A determined new character may travel directly into serious danger.
+
+
+QUESTION 11 — RESTRICTED-REGION EXPLANATION
+-------------------------------------------
+
+Skipped as inapplicable.
+
+The original Question 11 asked what in-world explanation should prevent travel beyond an early restricted region. Question 10 established that travel is unrestricted, so no such explanation or restriction is needed.
+
+
+QUESTION 12 — DEFINING NON-ROOM-BASED DEMONSTRATION
+----------------------------------------------------
+
+The introductory tent, map, and compass assignment should demonstrate that CCMud is fundamentally different from a traditional room-based MUD.
+
+The new character will:
+
+1. Obtain a physical map, compass, and basic tent-building instructions.
+2. Leave town through continuous coordinate travel.
+3. Travel at least two miles from town.
+4. Select any physically suitable location rather than being sent to a predetermined campsite.
+5. Build and pitch a tent.
+6. Mark the tent’s real location on the physical map.
+7. Travel far enough away to lose sight of it.
+8. Use the map and compass to navigate back.
+9. Find the same persistent tent waiting at its exact location.
+
+Two miles is the recommended distance for a new player because it moves the character beyond the heavily patrolled one-mile zone while keeping the character within the generally safe five-mile region.
+
+The two-mile requirement belongs to the introductory assignment, not to a universal camping rule. Characters may ordinarily camp wherever physical and ownership rules permit.
+
+A tent does not require a formal land claim. Before property systems exist, remoteness and concealment provide its protection.
+
+
+QUESTION 13 — TECHNOLOGICAL ERA
+--------------------------------
+
+CCMud uses an early-to-mid-19th-century frontier technology level, but it is not an American Old West setting.
+
+The world supports:
+
+- Pistols, rifles, and shotguns.
+- Bows and traditional melee weapons.
+- Knights and mounted warriors alongside gunfighters.
+- Horses and wagons.
+- Ranches, farms, homesteads, and prospecting.
+- Hand tools, blacksmithing, woodworking, and small workshops.
+- Sailing and other modest transportation where appropriate.
+
+The initial world does not contain:
+
+- Railroads.
+- Huge industrial machinery.
+- Major factories.
+- Enormous established cities.
+- A densely populated or fully developed civilization.
+
+The frontier-homesteading experience is central. The world is sparsely populated and largely a blank slate. Players determine where civilization spreads, what communities arise, and what those communities become. Administrators may add flavor, characters, events, mysteries, and roleplay without predetermining the world’s full development.
+
+“Knights on horseback brandishing revolvers” captures the desired setting character. The world is original and does not need to follow Earth’s exact firearm patents or historical dates.
+
+
+QUESTION 14 — NATURE AND LORE OF THE WORLD
+-------------------------------------------
+
+DEFERRED BY THOMAS. Do not attempt to settle this before continuing the mechanical design interview unless Thomas chooses to return to it.
+
+Ideas discussed but not locked include:
+
+- A Westworld-like setting in which people from a hectic advanced reality pay for access to a simpler frontier world.
+- Players inhabiting extremely lifelike synthetic bodies.
+- A dead synthetic character being physically recovered, returned to an administrative office, repaired, and placed back into the world.
+- Synthetic bodies still eating, drinking, sleeping, bleeding, healing, and experiencing the frontier life.
+- The truth being public character knowledge, concealed lore, or merely creative inspiration rather than literal reality.
+
+None of those lore possibilities is currently canonical.
+
+The only locked portion is the technological and social direction recorded under Question 13. Mechanical design may continue without determining the ultimate metaphysics, outside world, synthetic-body premise, resurrection explanation, or hidden lore.
+
+
+BOOKMARK — RESUME HERE
+======================
+
+NEXT QUESTION: QUESTION 15 — DO FIREARMS EXIST?
+
+Important context:
+Question 13 already establishes that pistols, rifles, and shotguns exist at the setting level. Question 15 should therefore refine the firearm decision rather than ask whether firearms exist at all. Discuss which firearm technologies are available, how common they are, whether weapons are muzzle-loading or cartridge-based, what kinds of revolvers exist, and how firearms coexist with bows, melee weapons, armor, and Crown & Call combat.
+
+Stop after discussing and recording Question 15, then proceed one numbered question at a time.
+
+
+REMAINING ORIGINAL DISCUSSION QUEUE
+===================================
 
 15. Do firearms exist?
 
