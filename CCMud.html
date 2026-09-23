@@ -871,6 +871,97 @@ After:
 <div class="callout"><strong>Design test:</strong> If Jake cuts down a tree, builds a cabin, abandons it, and nobody returns for twenty years, the engine should be able to tell the next visitor what remains—without having spent twenty years simulating the empty clearing.</div>
 </section>
 
+
+<section class="card" id="recovered-decisions">
+<h2><span class="lantern-mark"></span>Recovered Locked Design Decisions</h2>
+<p class="small"><strong>Status:</strong> Consolidated from the CCMud requirements interview. This is a recovered decision ledger, not a claim of verbatim question wording. These decisions should be preserved when later interview material is merged.</p>
+
+<h3>Geographic Naming</h3>
+<p>Named geographic features display their names automatically; players do not need to learn a name first. Roads may remain unnamed. Duplicate geographic names are prohibited within 500 miles. Admin reviewers see possible conflicts and can jump to the conflicting feature. Pending proposals are completely invisible to ordinary players. Admins may permanently edit names, manually name unnamed features, and remove a feature's name/identity without altering the underlying terrain. Admin-created names follow the same conflict rules. Previous names are retained as admin-only historical metadata. Even minor landmarks may be named.</p>
+<p>The submitting account/character is tracked. An account may submit one proposal every fixed 30 days, beginning at submission regardless of approval or rejection; cooldowns cannot be banked and pending proposals cannot be withdrawn. A character needs at least 31 total CAP points to submit. Competing proposals are allowed; the first approved name closes the others without refunding their cooldowns. Publicly approved names do not identify the submitter, but admins can see the submitter. Naming statistics and complete submission history are permanent. Naming-specific bans are superseded by COMM-BLOCK.</p>
+
+<h3>Player Pfile &amp; Admin Notes</h3>
+<p>Authorized admins may append positive, negative, informational, or warning notes to a player's account/pfile. Notes are visible to admins and the affected player, permanent, and append-only; corrections require a new note. Each note permits exactly one player response unless COMM-BLOCKED. There are no reply threads; further staff response requires another NOTE or WARN. Players may respond to NOTE, WARN, COMM-BLOCK, and GAME-BAN entries unless COMM-BLOCKED. A GAME-BANNED player may authenticate to a restricted account interface, read history, and make the permitted response, but cannot enter the world.</p>
+<div class="mono">NOTES twpaige
+NOTES Nimrod
+READ twpaige 22
+READ Nimrod 22
+NOTE Nimrod &lt;title&gt;
+WARN Nimrod &lt;title&gt;
+RESPOND Nimrod 22
+SEARCH NOTES &lt;text&gt;
+NOTES ADMIN &lt;admin&gt;</div>
+<p>NOTES lists newest first with number, date, type, admin and title. NOTE/WARN and RESPOND use the multiline editor. Moderation actions commit only after editor completion. A player response is permanent, tied to its entry, and generates admin NEWS. SEARCH NOTES searches titles, bodies and player responses across pfiles and returns note ID, player/character reference, date, type, admin, title and match location. Note IDs are stable and permanent within the pfile.</p>
+
+<h3>COMM-BLOCK</h3>
+<p>COMM-BLOCK is account-level and blocks OOC communication and staff-facing contribution systems while allowing ordinary play and IC communication. It blocks OOC channels, OOC tells/DMs, OOC boards/forums, responses to admin notes, geographic naming and similar future OOC systems. IC say, whisper, shout, character-written notes/letters and ordinary gameplay remain available. Deliberately using IC systems to evade a COMM-BLOCK may lead to GAME-BAN and this rule should be plainly published.</p>
+<p>Existing history remains visible. A COMM-BLOCK has a player-visible reason, start and expiration timestamps, original duration and live remaining duration. Very long durations may function as permanent. A newer restriction takes precedence; there is no separate extend operation. Manual early removal is logged; passive expiration is not. Expiration is determined lazily from timestamps. Applying a block writes a permanent pfile entry and admin NEWS.</p>
+
+<h3>GAME-BAN &amp; Moderation Queries</h3>
+<p>GAME-BAN is account-level and prevents entering the game world. It stores a player-visible reason, start, expiration and duration. A banned player retains restricted account access to history and the permitted response unless COMM-BLOCKED. Passive expiration creates no record and is determined lazily. A new ban replaces the currently effective restriction while old records remain immutable. New bans create pfile entries and NEWS; manual early removal is separately logged. The conceptual progression is NORMAL → COMM-BLOCK → GAME-BAN, with admin discretion rather than mandatory escalation.</p>
+<div class="mono">BANS
+BANS ACTIVE
+BANS EXPIRED
+BANS Nimrod
+BANS ADMIN &lt;admin&gt;
+
+Equivalent query structures apply to COMM-BLOCKS
+and WARNS ADMIN &lt;admin&gt;.</div>
+<p>These are indexed database queries/views, not duplicate physical files. Active/expired state and remaining time are computed on demand. The explicit ADMIN keyword avoids ambiguity.</p>
+
+<h3>Admin NEWS, Permissions &amp; Succession</h3>
+<p>Every new pfile moderation action generates generic admin NEWS; passive expiration does not. Each admin has an individual last-read position. READ NEW NEWS shows unread entries; VIEW NEWS 12 begins sequential viewing from entry 12. NEWS is a virtual administrative board.</p>
+<p>Every administrative capability has its own permission. Admins see help and commands only for capabilities they possess. Reusable role templates may bundle permissions, but assignment copies permissions rather than creating a live dependency. Vboard access is individually permission-controlled. Admin levels range 1–100: level establishes hierarchy while permissions establish actual capabilities. An admin may administer only lower-level admins. Only level 99+ may set levels, still subject to hierarchy. Level 100 is LEAD ADMIN and normally only one is active, though temporary transition overlap is possible. A Level 100 may voluntarily lower their own level.</p>
+<p>Admins level 75–99 may file one pending Level-100 succession petition. It grants no immediate authority and waits 30 days. The process is loudly and permanently audited. Any existing Level 100 may veto it. Any existing Level-100 login during the waiting period automatically cancels it with prejudice. No scheduler is needed; resolution occurs lazily on the next relevant interaction after 30 days. A successful petitioner becomes active Level 100. The previous Level-100 account remains historically Level 100 but is locked against modification by others. Identity recovery/SMS are deferred.</p>
+
+<h3>Physical Boards &amp; Vboards</h3>
+<p>Ordinary boards are physical world objects and geographically constrained; a room object such as “a group of gossiping patrons” may expose a board. Normally the character must be physically present to read or post. Multiple physical objects may share one message pool, while each object exposes exactly one pool. Clan restrictions support multiple clans with independent minimum READ and POST ranks.</p>
+<div class="mono">NOTES commoners
+READ commoners 2322
+POST commoners &lt;title&gt;
+
+NOTES VBOARD building
+READ VBOARD building 22
+POST VBOARD building &lt;title&gt;</div>
+<p>Admin status alone grants no board access. Positive permissions are READ, POST, MODERATE and CONFIGURE; none implies another, though templates may bundle them. Physical presence remains relevant unless a future explicit remote capability is added. Deletion is soft deletion. Original post, author, timestamps, deleting/restoring actor and times are retained. MODERATE admins may restore posts. Players may soft-delete their own posts. Posts are immutable after submission; corrections require new posts. There are no threads. Messages persist until soft-deleted. Message numbers are permanent, never reused, unique only within the board pool, and each board starts at 1. Deleted numbers remain gaps.</p>
+<p>VBOARD is an explicit namespace independent of physical room objects. Vboards are individually permission-controlled; inaccessible vboards do not appear in listings/help. READ and POST remain separate permissions.</p>
+
+<h3>Pager, Settings &amp; Aliases</h3>
+<p>CCMud uses one standard pager for lengthy output. Default page length is 20 lines. Enter advances; Q quits; there is no backward paging. The prompt is <code>[Enter to continue, Q to quit]</code>. Page length is an account-level preference with sensible bounds to be determined later.</p>
+<p>SETTINGS displays only player-adjustable settings and current values. Changes such as <code>SETTINGS PAGELENGTH 30</code> apply immediately and auto-save; there is no SAVE command. Setting names are strict/canonical. Commands may have explicit shortcuts but never arbitrary prefix matching. L=LOOK, I=INVENTORY, and explicit movement aliases N/S/E/W/NE/NW/SE/SW/U/D are reserved; full direction words also work.</p>
+
+<h3>Coordinate Travel</h3>
+<p>GO is the general travel command. GO NORTH, GO N, NORTH and N are equivalent forms. GO CABIN travels toward a visible object's actual coordinates/bearing rather than rounding to a compass point. GO 135 travels an exact numeric heading. The world supports headings 0–359°. General descriptive navigation may use the 16-point compass: N, NNE, NE, ENE, E, ESE, SE, SSE, S, SSW, SW, WSW, W, WNW, NW, NNW. Numeric-heading travel requires an accessible compass; ordinary compass-point travel does not.</p>
+<p>GO &lt;numeric&gt; holds the absolute heading until stopped, obstructed or changed. Travel is continuous coordinate movement, not room jumping. Normal commands do not halt travel. A moving character can DROP COIN at the coordinates occupied at that moment and continue traveling.</p>
+
+<h3>Travel Observation</h3>
+<p>While traveling, the server performs a small/local meaningful-visibility-change check every 5 seconds, not a full LOOK. Nothing prints when nothing meaningful changes. Fixed sampling naturally makes faster travel less observant because more ground is crossed between samples; no arbitrary perception roll is needed merely to recreate that effect. If no meaningful observation occurs for 30 seconds, print a heartbeat such as “You continue traveling north.” or “You continue traveling at 037° (NE).” Meaningful observations and player LOOK/SCAN reset the heartbeat, while five-second local checks continue normally.</p>
+<p>Other characters/creatures are meaningful observations except entities already traveling with the character, such as followers, the followed character, or group members. Once a meaningful entity catches attention, relevant changes involving it may continue to be reported while pertinent; it is not instantly forgotten after the first appearance.</p>
+
+<h3>Maps, Bookmarks &amp; Compass</h3>
+<p>All maps use one universal world coordinate/map system; bookmarks may refer anywhere, including other continents. A physical map is limited by marks, not geographic coverage, and holds at most 200 bookmarks. More marks require another map. Bookmark names are unique within a map and may be deleted. Raw X/Y coordinates remain internal. Bookmarks belong to the physical map, not abstract account knowledge.</p>
+<p>Both maps must be physically accessible to copy a bookmark. Copying is perfectly accurate by default and does not introduce CAP/skill error. Exact coordinates copy while the receiving bookmark may be renamed. This supports military maps, treasure maps, quest maps and courier/carrier-pigeon delivery. A character may mark the current location or an estimated remote location using bearing plus distance, conceptually <code>BOOKMARK OrcCamp 037 3.5</code>. Prefer player estimation error to arbitrary system-generated cartographic error.</p>
+<p>A compass reading to a visible target reports exact numeric bearing plus nearest 16-point direction, e.g. 037° (NE). COMPASS &lt;bookmark&gt; calculates bearing from current position to an accessible bookmark; compass alone does not provide distance. A map itself can calculate both current distance and heading for one explicitly examined bookmark, e.g. <code>EXAMINE MAP ORCCAMP</code> → “OrcCamp lies 3.6 miles away at 214° (SW).” Do not calculate all 200 marks on ordinary map look. There is no magical GO HOME/autopilot; players navigate manually and re-check after obstacles/course changes.</p>
+
+<h3>WATCH</h3>
+<p>WATCH &lt;target&gt; supports one active target; a new WATCH replaces the old one. WATCH ends immediately when sight is lost and never auto-reacquires. It works while stationary or traveling and uses the same five-second cadence. Its purpose is to expose movement information useful for estimating destination/interception. Maintaining WATCH longer does not artificially improve accuracy.</p>
+<p>Every five seconds while visible, WATCH reports the target's current movement direction and actual selected movement speed even if unchanged. Direction is intentionally only the 8-point compass (N, NE, E, SE, S, SW, W, NW): no numeric heading and no 16-point precision. Speed is the target's actual movement setting, e.g. WALK, JOG, RUN or SPRINT, not an observer estimate. WATCH reports movement data only. Speech/hearing remains entirely in the speech/hearing system; emotes/actions remain entirely in normal visibility. WATCH neither adds nor suppresses them.</p>
+
+<h3>Movement Speed &amp; Stamina</h3>
+<p>Heading and speed are independent persistent travel states. Example: SPEED JOG followed by GO NE continues northeast at JOG until direction changes, speed changes, STOP is issued, an obstacle/stopping event occurs, or stamina is exhausted. On stamina exhaustion the character comes to a complete stop and the active movement command is canceled. There is no automatic SPRINT → RUN → JOG → WALK downgrade; the player must deliberately begin traveling again.</p>
+<div class="mono">Movement speed order:
+
+TRUDGE
+WALK
+JOG
+RUN
+SPRINT</div>
+<p>TRUDGE and WALK normally consume no stamina and are indefinitely sustainable. Severe overloading may make even these low-speed modes consume stamina. Faster movement modes consume stamina according to the stamina system; exact rates remain to be defined.</p>
+
+<h3>Recovered Design Character</h3>
+<p>Across these decisions: prefer simple deterministic systems over unnecessary calculations; prefer timestamp/lazy evaluation over background scheduler jobs; use indexed database queries/views rather than duplicate derived files; make physical geography and coordinate position matter; let physical objects such as maps carry knowledge; let continuous movement create emergent gameplay; execute travel-time actions at the character's actual current coordinates; allow fixed observation sampling to create the natural speed-versus-awareness tradeoff; avoid artificial mechanics when physical simulation already creates the desired effect; and keep systems decoupled so WATCH handles movement observation, speech handles hearing, and emote/action visibility handles visible actions.</p>
+</section>
+
 <p class="foot">Crown &amp; Call — Persistent World Design Reference<br>Copyright &copy; 2026 Thomas Paige. All rights reserved.<br>Version 20260921</p>
 </main>
 </body>
