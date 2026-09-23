@@ -1,0 +1,797 @@
+CCMUD DESIGN INTERVIEW — CONTINUATION DOCUMENT
+================================================
+
+CONTINUATION PROMPT FOR A NEW CHAT
+----------------------------------
+
+Read this entire file and then read CCMud.html in the same repository. CCMud.html is the main design document and authoritative ledger of previously locked CCMud decisions. This file records the current structured design interview and identifies where it should resume.
+
+Goal:
+Work through the remaining design questions one at a time with Thomas so CCMud has enough concrete design decisions to become a playable persistent coordinate-world MUD.
+
+Process:
+1. Begin at the BOOKMARK below unless Thomas directs otherwise.
+2. Ask one numbered question at a time.
+3. Discuss the answer with Thomas rather than merely collecting yes/no responses.
+4. When Thomas answers, restate the decision clearly as a concise locked design entry.
+5. Identify important consequences or ambiguities, but do not reopen decisions already settled unless Thomas wants to.
+6. Then ask the next applicable numbered question.
+7. Skip questions made irrelevant by earlier answers and record why they were skipped.
+8. Do not implement code merely because a design answer was given. This interview is for design decisions.
+9. When Thomas pauses the interview, update this file with the new answers, clean rewordings, and the next-question bookmark.
+10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
+
+Current status:
+Questions 1–14 have been discussed. Lore surrounding the ultimate nature of the world was deliberately deferred. Resume with Question 15.
+
+
+PROJECT REFERENCES
+------------------
+
+Main design document:
+CCMud.html
+
+This interview document:
+CCMudDesign.txt
+
+Repository:
+twpaige/ForgottenWords
+
+
+LOCKED INTERVIEW DECISIONS
+==========================
+
+QUESTION 1 — EXPERIENCE THE FIRST PLAYABLE RELEASE MUST PROVE
+-------------------------------------------------------------
+
+The first playable release must demonstrate coordinate travel, exploration, gathering, construction, roleplay, combat/hunting, light crafting, and persistence through a compact frontier-survival experience.
+
+A player must be able to:
+
+- Create a character and begin in the starting town.
+- Travel continuously through the coordinate world.
+- Explore and perceive generated terrain.
+- Gather basic natural materials.
+- Perform light crafting.
+- Obtain or improvise a hunting weapon.
+- Throw a rock as a rudimentary weapon.
+- Carve a rudimentary bow and arrows.
+- Locate and hunt a rabbit.
+- Recover and skin the rabbit.
+- Butcher, cook, and eat the rabbit.
+- Gather fuel and light a fire.
+- Construct and set up a simple shelter or tent.
+- Use the rabbit hide to make a waterskin.
+- Abstract the initial tanning process as part of the Craft. Descriptive text may say, “With the materials at hand, you tan and prepare the hide,” without initially simulating brains, tanning chemistry, or detailed hide preparation.
+- Return to town.
+- Sell appropriate hunted goods.
+- Purchase and drink a beer.
+- Log out and later find relevant character and world state preserved.
+
+This vertical slice is intended to exercise the defining CCMud architecture: coordinate movement, generated terrain, physical objects, perception, wildlife, ranged attacks, carcass processing, deterministic crafting, fire, cooking, consumption, NPC commerce, and persistence.
+
+
+QUESTION 2 — FIRST-HOUR EXPERIENCE
+-----------------------------------
+
+New characters begin in town with a small amount of coin. They are offered a choice of very simple introductory jobs instead of being forced through one scripted tutorial.
+
+Possible first jobs include:
+
+- Delivering a message or parcel to an NPC across the street.
+- Hunting and returning with a rabbit.
+- Gathering a small amount of basic material.
+- Performing another short, easily understood task.
+
+The delivery job teaches movement, targeting, NPC interaction, inventory, and payment with minimal danger. The rabbit job introduces wilderness travel, perception, hunting, carcass processing, and potentially cooking.
+
+During the first hour, a new player should be able to complete at least one job, earn a few coins, understand the basic interface, and possibly purchase a first beer.
+
+
+QUESTION 3 — REASONS TO RETURN
+-------------------------------
+
+Early jobs gradually lead characters away from dependence upon the starting town and toward finding their own place in the world.
+
+Return hooks may include:
+
+- Learning Fishing or another useful Craft.
+- An NPC offering a follow-up task.
+- Follow-up work that sends the character progressively farther beyond town.
+- Hunting animals and selling meat, hides, or other useful materials.
+- Learning that land outside town may eventually be claimed.
+- Prospecting and striking a resource claim.
+- Establishing a campsite and later building a cabin.
+- Developing a ranch, farm, workshop, wilderness homestead, or place within town.
+- Discovering more of the world and deciding where the character belongs.
+
+NPC follow-up appointments use relaxed in-world timing. An NPC might say:
+
+“Come back in a day or three, when you’ve got time. I’ll be here waiting.”
+
+The player may return four real hours later, the following real-world day, or later still. These invitations are not precise real-world appointments:
+
+- There is no penalty for returning late.
+- Ordinary absence does not fail the job.
+- The NPC remains available until the player chooses to continue.
+- The language remains compatible with CCMud’s 6× world-time clock.
+
+The town gives a character somewhere to begin. The wider world gives the character somewhere to belong.
+
+
+QUESTION 4 — SMALLEST SATISFYING CORE LOOP
+-------------------------------------------
+
+Claiming land is not part of the smallest core loop.
+
+The smallest complete gameplay loop is:
+
+1. Obtain or improvise a weapon by picking up and throwing a rock or by crafting a rudimentary bow and arrows.
+2. Travel into the wilderness.
+3. Locate and hunt a rabbit.
+4. Recover the rabbit’s carcass.
+5. Skin and butcher it.
+6. Gather fuel and light a fire.
+7. Roast the rabbit.
+8. Eat it.
+
+Claiming land, building a more permanent shelter, making a waterskin, selling the hide, and returning to town expand the experience but are not required to prove the smallest core loop.
+
+
+QUESTION 5 — ABSOLUTE MINIMUM PRIVATE-ALPHA SYSTEMS
+----------------------------------------------------
+
+The following package is the absolute minimum. Nothing in this list should be removed from the private-alpha vertical slice:
+
+- Account login and basic character creation.
+- Coordinate movement and generated terrain.
+- LOOK and basic perception.
+- Inventory, holding, dropping, and object targeting.
+- Gathering rocks, sticks, wood, and other basic materials.
+- Throwing rocks.
+- Crafting a rudimentary bow and arrows.
+- Rabbits that can be found, move, be attacked, and die.
+- Carcasses with skinning and butchering transformations.
+- Fire building and lighting.
+- Cooking raw rabbit into roasted rabbit.
+- Eating food.
+- Persistent character position, inventory, objects, fires, and world changes.
+- A small starting town.
+- Simple NPC interaction.
+- Introductory jobs.
+- Coins.
+- Selling hunted goods.
+- Purchasing and drinking a beer.
+- Physical maps.
+- Map bookmarks.
+- Compasses and bearings.
+- Simple tent construction.
+- Deploying and packing a tent.
+- Persistent tent location.
+- A combined tent, map, and compass tutorial.
+
+Maps, compasses, and tents belong in the private-alpha minimum because they demonstrate the coordinate world too strongly to postpone.
+
+
+QUESTION 6 — SYSTEMS DELIBERATELY EXCLUDED FROM THE PRIVATE ALPHA
+-----------------------------------------------------------------
+
+The following systems may be postponed until the minimum core works:
+
+- Formal land claims and ownership.
+- Cabins and advanced permanent construction.
+- Farming and ranching.
+- Mining and geological claims.
+- Horses, wagons, boats, and offline passengers.
+- Complex weather and seasons.
+- Full survival needs beyond demonstrating eating.
+- Advanced crafting trees and long learning timers.
+- Player-versus-player combat.
+- Large battles and causal travel envelopes.
+- Full wound treatment and FAITH healing.
+- Complex NPC economies.
+- Player shops and settlements.
+- Clans, governments, and territorial law.
+- Advanced tracking and concealment.
+- World reclamation across years.
+- Administrative succession and the complete moderation suite.
+
+These are postponed, not abandoned. Land claims, cabin construction, fishing, ranches, farms, and deeper settlement play remain important planned directions.
+
+
+QUESTION 7 — CLOSED PRIVATE ALPHA AND ACCOUNT CREATION
+------------------------------------------------------
+
+The game remains closed to Thomas and specifically invited testers until Thomas explicitly changes the policy.
+
+- Public account creation is disabled.
+- Only an authorized administrator may create a tester account.
+- The administrator assigns a temporary password and securely gives it to the tester.
+- The tester authenticates using the temporary password.
+- The tester must choose a new private password before creating a character or entering the game.
+- The temporary password becomes invalid immediately after the password change.
+- Until the password is changed, the account cannot create characters or enter the world.
+- Public registration may be enabled later only through an explicit administrative decision.
+
+
+QUESTION 8 — INITIAL PLAYER CAPACITY
+-------------------------------------
+
+The private-alpha system should be designed and tested for approximately 10–20 simultaneous players.
+
+A huge population is not expected. A small, committed community may nevertheless contain daily players. Architecture and data modeling should avoid assumptions that permanently limit expansion. Later support for hundreds of simultaneous players should be possible through optimization and scaling rather than fundamental redesign.
+
+
+QUESTION 9 — MEANING OF “UP AND RUNNING”
+-----------------------------------------
+
+The private alpha progresses through three stages:
+
+1. Development validation
+   The minimum package works on the development server, survives restart and reconnect testing, and supports the complete rabbit-survival and tent/map/compass loops without administrator intervention.
+
+2. Thomas-only production play
+   The tested build is deployed to production, but no outside testers are invited. Thomas plays normally for an open-ended period to evaluate persistence, usability, pacing, reliability, and whether the game is genuinely enjoyable.
+
+3. Invitation-only private alpha
+   Once Thomas is satisfied with private production play, he may create accounts for selected testers.
+
+There is no predetermined duration for Thomas-only production testing. Inviting testers requires Thomas’s explicit decision.
+
+
+QUESTION 10 — UNRESTRICTED TRAVEL AND GRADUATED DANGER
+------------------------------------------------------
+
+Travel is unrestricted from the beginning. Testers may travel anywhere the generated world permits.
+
+Early testers may establish permanent homesteads and retain them through private alpha, final release, and beyond. Test play is intended to become part of the world’s real history rather than disposable pre-release data.
+
+Danger increases gradually with distance from the origin and starting town:
+
+- Town to one mile: Extremely safe. Numerous guards patrol and respond to threats. Safety comes from an actual in-world presence rather than an invisible protected-zone rule.
+- One to five miles: Generally safe countryside without constant guard coverage.
+- Five to twenty-five miles: Wilderness danger increases gradually with distance.
+- Beyond twenty-five miles: Fully wild and potentially dangerous territory.
+
+Hostile wildlife, creature strength, encounter frequency, and environmental hazards may increase as civilization recedes. There is no invisible wall. A determined new character may travel directly into serious danger.
+
+
+QUESTION 11 — RESTRICTED-REGION EXPLANATION
+-------------------------------------------
+
+Skipped as inapplicable.
+
+The original Question 11 asked what in-world explanation should prevent travel beyond an early restricted region. Question 10 established that travel is unrestricted, so no such explanation or restriction is needed.
+
+
+QUESTION 12 — DEFINING NON-ROOM-BASED DEMONSTRATION
+----------------------------------------------------
+
+The introductory tent, map, and compass assignment should demonstrate that CCMud is fundamentally different from a traditional room-based MUD.
+
+The new character will:
+
+1. Obtain a physical map, compass, and basic tent-building instructions.
+2. Leave town through continuous coordinate travel.
+3. Travel at least two miles from town.
+4. Select any physically suitable location rather than being sent to a predetermined campsite.
+5. Build and pitch a tent.
+6. Mark the tent’s real location on the physical map.
+7. Travel far enough away to lose sight of it.
+8. Use the map and compass to navigate back.
+9. Find the same persistent tent waiting at its exact location.
+
+Two miles is the recommended distance for a new player because it moves the character beyond the heavily patrolled one-mile zone while keeping the character within the generally safe five-mile region.
+
+The two-mile requirement belongs to the introductory assignment, not to a universal camping rule. Characters may ordinarily camp wherever physical and ownership rules permit.
+
+A tent does not require a formal land claim. Before property systems exist, remoteness and concealment provide its protection.
+
+
+QUESTION 13 — TECHNOLOGICAL ERA
+--------------------------------
+
+CCMud uses an early-to-mid-19th-century frontier technology level, but it is not an American Old West setting.
+
+The world supports:
+
+- Pistols, rifles, and shotguns.
+- Bows and traditional melee weapons.
+- Knights and mounted warriors alongside gunfighters.
+- Horses and wagons.
+- Ranches, farms, homesteads, and prospecting.
+- Hand tools, blacksmithing, woodworking, and small workshops.
+- Sailing and other modest transportation where appropriate.
+
+The initial world does not contain:
+
+- Railroads.
+- Huge industrial machinery.
+- Major factories.
+- Enormous established cities.
+- A densely populated or fully developed civilization.
+
+The frontier-homesteading experience is central. The world is sparsely populated and largely a blank slate. Players determine where civilization spreads, what communities arise, and what those communities become. Administrators may add flavor, characters, events, mysteries, and roleplay without predetermining the world’s full development.
+
+“Knights on horseback brandishing revolvers” captures the desired setting character. The world is original and does not need to follow Earth’s exact firearm patents or historical dates.
+
+
+QUESTION 14 — NATURE AND LORE OF THE WORLD
+-------------------------------------------
+
+DEFERRED BY THOMAS. Do not attempt to settle this before continuing the mechanical design interview unless Thomas chooses to return to it.
+
+Ideas discussed but not locked include:
+
+- A Westworld-like setting in which people from a hectic advanced reality pay for access to a simpler frontier world.
+- Players inhabiting extremely lifelike synthetic bodies.
+- A dead synthetic character being physically recovered, returned to an administrative office, repaired, and placed back into the world.
+- Synthetic bodies still eating, drinking, sleeping, bleeding, healing, and experiencing the frontier life.
+- The truth being public character knowledge, concealed lore, or merely creative inspiration rather than literal reality.
+
+None of those lore possibilities is currently canonical.
+
+The only locked portion is the technological and social direction recorded under Question 13. Mechanical design may continue without determining the ultimate metaphysics, outside world, synthetic-body premise, resurrection explanation, or hidden lore.
+
+
+BOOKMARK — RESUME HERE
+======================
+
+NEXT QUESTION: QUESTION 15 — DO FIREARMS EXIST?
+
+Important context:
+Question 13 already establishes that pistols, rifles, and shotguns exist at the setting level. Question 15 should therefore refine the firearm decision rather than ask whether firearms exist at all. Discuss which firearm technologies are available, how common they are, whether weapons are muzzle-loading or cartridge-based, what kinds of revolvers exist, and how firearms coexist with bows, melee weapons, armor, and Crown & Call combat.
+
+Stop after discussing and recording Question 15, then proceed one numbered question at a time.
+
+
+REMAINING ORIGINAL DISCUSSION QUEUE
+===================================
+
+15. Do firearms exist?
+
+16. What kinds of transportation exist initially: walking, horses, wagons, boats?
+
+17. What is magic in the setting, and how common is it?
+
+18. Are Callings the game’s magic system, divine action, both, or something else?
+
+19. What intelligent playable peoples exist at launch?
+
+20. Are all player characters human initially?
+
+21. Where does the first character enter the world?
+
+22. Is there one starting settlement or several?
+
+23. Is the starting settlement generated, hand-authored, or generated and then permanently edited?
+
+24. Why are new characters arriving there in the fiction?
+
+25. What starting information should every character know about the world?
+
+26. Should players begin with a local map?
+
+27. Which essential services must exist in the starting settlement?
+
+28. Who maintains civilization before the player population becomes large enough to do so?
+
+
+PHASE III — ACCOUNTS AND CHARACTER CREATION
+--------------------------------------------
+
+29. How many characters may one account possess?
+
+30. May characters belonging to the same account interact indirectly through stored property, maps, messages, or inheritance?
+
+31. Can more than one character per account be logged in simultaneously?
+
+32. What prevents one player from using alternate characters to bypass geography, scouting, specialization, or communication restrictions?
+
+33. What choices are made during character creation?
+
+34. How are the initial 15 CAP points allocated?
+
+35. Must every CAP remain at zero unless the player assigns points to it?
+
+36. Are there minimum or maximum starting values for one CAP?
+
+37. Does character creation offer suggested CAP packages without creating actual classes?
+
+38. Which Crafts does a new character know automatically?
+
+39. Does background selection grant Crafts, possessions, languages, or only descriptive history?
+
+40. Can a player make an ineffective character accidentally?
+
+41. Can a newly created character be deleted and remade?
+
+42. Are names unique per character, per account, or not mechanically important because descriptions identify characters?
+
+43. When does one character learn another character’s name?
+
+44. Can characters disguise themselves or give false names?
+
+45. What sex, age, physical-description, and body-size choices affect mechanics?
+
+
+PHASE IV — PRESENCE, LOGOUT, SLEEP, AND SAFETY
+-----------------------------------------------
+
+46. What physically happens to a character when the player logs out?
+
+47. Does the character remain in the world, disappear, or enter a protected sleeping state?
+
+48. Must a character be in a safe location to log out cleanly?
+
+49. What happens during an unexpected disconnect?
+
+50. Can an offline character be attacked, robbed, moved, imprisoned, or rescued?
+
+51. Does logging out while traveling stop movement immediately?
+
+52. Besides consented wagon travel, are there other situations in which an offline character may be transported?
+
+53. What happens when a player logs back in and the surrounding world has changed?
+
+54. Are there inns, beds, camps, or shelters that provide logout benefits?
+
+55. Can a character starve, freeze, drown, or otherwise die while the player is offline?
+
+56. How do we prevent “log out to escape danger” without punishing innocent disconnects?
+
+
+PHASE V — MOVEMENT AND PHYSICAL SURVIVAL
+----------------------------------------
+
+57. What are the actual speeds of TRUDGE, WALK, JOG, RUN, and SPRINT?
+
+58. What is the stamina pool based on?
+
+59. How quickly does stamina recover?
+
+60. What do encumbrance, wounds, terrain, weather, and elevation do to movement and stamina?
+
+61. What is the maximum carrying capacity, and which CAP controls it?
+
+62. Should carried bulk matter separately from weight?
+
+63. What terrain is passable on foot, horseback, or by wagon?
+
+64. What happens when continuous travel reaches a river, cliff, wall, dense forest, or other obstruction?
+
+65. Does travel automatically follow passable ground around small obstacles, or always stop?
+
+66. What activities may a player perform while traveling?
+
+67. How precisely may a player position a character around another character or object?
+
+68. Do posture and stance exist—standing, sitting, kneeling, lying down, mounted?
+
+69. Do characters need food, water, sleep, and shelter?
+
+70. If survival needs exist, how severe should they be before they become chores?
+
+71. Can characters swim, climb, jump, crawl, and fall?
+
+72. What happens when a character crosses a coastline without a boat?
+
+
+PHASE VI — PERCEPTION, TARGETING, AND DISCOVERY
+-----------------------------------------------
+
+73. What determines passive perception: fixed rules, CAPs, conditions, or some combination?
+
+74. Which CAP governs searching and tracking?
+
+75. Is there any hidden contest when one character hides from another?
+
+76. Can characters deliberately hide themselves, objects, tracks, camps, or smoke?
+
+77. What causes recognition to change from “a figure” to a physical description and then to a known identity?
+
+78. Does a player retain recognition of someone after learning them?
+
+79. How should darkness work for the first implementation?
+
+80. Which light sources exist initially, and what are their effective ranges?
+
+81. What is the practical difference among LOOK, SCAN, SEARCH, and TRACK?
+
+82. Does SEARCH examine the current position while TRACK also moves?
+
+83. What happens when several objects have identical descriptions at nearly identical positions?
+
+84. How should the player select one object without exposing internal IDs?
+
+85. Should generated LOOK descriptions use fixed templates initially, or attempt more natural prose assembly?
+
+
+PHASE VII — INVENTORY, CONTAINERS, PROPERTY, AND OWNERSHIP
+----------------------------------------------------------
+
+86. Where does an object physically exist when described as “carried”—at the character’s exact coordinate or in an abstract inventory container?
+
+87. Which objects must be explicitly held, worn, wielded, packed, or dragged?
+
+88. How many hands does a character have available, and how strictly are they modeled?
+
+89. Can containers contain other containers?
+
+90. What prevents unreasonable container nesting?
+
+91. When does a pile of materials become a protected property rather than a wilderness cache?
+
+92. How does a player establish a legal property claim?
+
+93. What geographic area may one claim cover?
+
+94. What prevents enormous or abusive claims?
+
+95. Can claims overlap?
+
+96. Can ownership be shared with named characters, accounts, families, clans, or settlements?
+
+97. Can owners grant separate permissions to enter, use, store, build, repair, or manage?
+
+98. What happens to property if the owner stops playing permanently?
+
+99. Can property be transferred, gifted, sold, or inherited?
+
+100. Can a player voluntarily abandon a claim?
+
+101. How can a protected property ever be attacked or destroyed during legitimate warfare or administrator-run events?
+
+
+PHASE VIII — RESOURCES, GATHERING, AND CRAFTING
+-----------------------------------------------
+
+102. Which resource-gathering actions must exist in the first playable version?
+
+103. Are gathering actions Crafts, ordinary commands, or a mixture?
+
+104. Does gathering from procedural wilderness create an exact resource object immediately?
+
+105. How much can be gathered from one coordinate before a broader landscape modifier is created?
+
+106. How quickly do renewable resources recover?
+
+107. Which resources are needed for the first complete crafting chain?
+
+108. What is the first construction project players should be able to complete?
+
+109. Should we adopt the proposed Craft → recipe/plan distinction?
+
+110. If so, are recipes learned separately, discovered physically, taught by others, or included automatically with the Craft?
+
+111. Can one character teach another a Craft?
+
+112. Where does learning come from if a character chooses a Craft while alone thousands of miles from civilization?
+
+113. Does learning represent private study, experimentation, memory, divine insight, or an abstraction we simply accept?
+
+114. What happens if a Craft’s prerequisites change after a character has learned it?
+
+115. How are tools damaged or consumed?
+
+116. Can tools be repaired?
+
+117. What controls product quality, since known Crafts do not fail?
+
+118. Are all products of a Craft mechanically identical when material and keyed properties match?
+
+119. Can characters customize descriptions without creating deceptive mechanical information?
+
+120. Which actions add Work Timer debt, and which ordinary physical actions remain unrestricted?
+
+121. Does the Work Timer threshold apply during emergencies, combat, or survival situations?
+
+
+PHASE IX — CAP ADVANCEMENT
+--------------------------
+
+122. What is the initial CAP Boost Token earning cadence?
+
+123. What exact activity qualifies as meaningful play?
+
+124. How do we measure activity without rewarding command spam?
+
+125. Should roleplay, exploration, crafting, combat, construction, and administration-assisted events all qualify equally?
+
+126. Does an account earn progression separately for each character?
+
+127. Can a player rotate through many characters to accumulate tokens on all of them?
+
+128. Is there a minimum active period before a new character begins earning tokens?
+
+129. How will the player see current token progress?
+
+130. Should token-earning criteria be transparent, approximate, or deliberately undisclosed to prevent gaming?
+
+
+PHASE X — CONFLICT, WOUNDS, DEATH, AND COMBAT
+---------------------------------------------
+
+131. Is player-versus-player combat permitted everywhere?
+
+132. Can a player attack without consent?
+
+133. Are there protected starting areas or protected new characters?
+
+134. What exact action begins an Engagement?
+
+135. How long is the declaration window for each round?
+
+136. What happens when a participant does not submit an action?
+
+137. May players revise declarations before the round closes?
+
+138. Are declarations revealed immediately or simultaneously at resolution?
+
+139. How is initiative or action ordering resolved within a simultaneous round?
+
+140. How is movement handled during a combat round?
+
+141. How far can each movement mode carry someone during seven seconds?
+
+142. Can an attacker chase a fleeing target automatically?
+
+143. When does an Engagement end?
+
+144. Can a character surrender?
+
+145. Can characters restrain, carry, imprison, or release one another?
+
+146. What happens at a Mortal wound?
+
+147. When exactly does a character die?
+
+148. Is death permanent?
+
+149. If death is permanent, what happens to property, possessions, maps, and learned history?
+
+150. Can characters be rendered unconscious without dying?
+
+151. How does healing work over real and world time?
+
+152. What can FAITH healing accomplish?
+
+153. How are NPCs or creatures given combat CAPs and wounds?
+
+154. What is the minimum combat prototype: two characters, melee weapons, movement, wounds, and flee?
+
+
+PHASE XI — NPCS, ANIMALS, AND A LIVING WORLD
+--------------------------------------------
+
+155. Are NPCs required for the first playable release?
+
+156. Which NPC roles are indispensable at the beginning?
+
+157. Are NPCs persistent individuals or generated representatives of a population?
+
+158. Do NPCs continue traveling and working while no players are nearby?
+
+159. How are sleeping NPC activities reconstructed when an area wakes?
+
+160. Can NPCs own property, name geography, craft, trade, fight, migrate, and die?
+
+161. Will wildlife be instantiated only when interaction becomes possible?
+
+162. How are animal populations represented without storing every animal?
+
+163. What causes encounters during travel?
+
+164. Are encounters deterministic from geography and world state, random, or both?
+
+165. Can animals be hunted to local depletion?
+
+166. Can players tame, breed, ride, or own animals?
+
+167. How intelligent must NPC conversation be in the initial release?
+
+
+PHASE XII — ECONOMY, SETTLEMENTS, AND SOCIAL ORGANIZATION
+---------------------------------------------------------
+
+168. Is there money?
+
+169. Who issues it, and what denominations exist?
+
+170. Are barter and player-crafted goods expected to dominate?
+
+171. Do NPC merchants have finite inventory and money?
+
+172. How are prices determined?
+
+173. Can players establish shops that operate while they are offline?
+
+174. What mechanically constitutes a settlement?
+
+175. Can players create clans, households, companies, churches, or governments?
+
+176. Who controls shared property?
+
+177. Can settlements establish laws or territorial authority beyond ordinary ownership protection?
+
+178. How are contracts, sales, gifts, and permissions recorded?
+
+179. What stops established players from exhausting nearby resources or monopolizing the starting region?
+
+
+PHASE XIII — WORLD SYSTEMS STILL NEEDED
+---------------------------------------
+
+180. What is the world’s circumference or playable geographic extent?
+
+181. Is the world flat for coordinate calculations, wrapped east-west, or treated as a globe?
+
+182. How will polar regions or map edges behave?
+
+183. What calendar does the world use?
+
+184. What season and year does the game begin in?
+
+185. Does weather exist in the first release?
+
+186. If so, is weather regional, deterministic, and reconstructable from timestamps?
+
+187. Can weather create floods, snow cover, fires, drought, or crop failures?
+
+188. How quickly do tracks and other temporary traces fade under normal conditions?
+
+189. What constitutes enough repeated traffic to create a persistent trail?
+
+190. What is required to improve a trail into a road?
+
+191. How are caves and underground spaces generated and represented?
+
+192. Can players excavate arbitrary underground geometry?
+
+193. What prevents impossible unsupported mines and tunnels?
+
+194. Can fire spread and destroy property, or is fire initially constrained?
+
+
+PHASE XIV — ADMINISTRATION AND OPERATIONS
+-----------------------------------------
+
+195. Should admins be able to revert an individual geography edit from its audit history? This is the unanswered Question 219 already identified by the document.
+
+196. What administrative tools are essential before outside testing begins?
+
+197. Should every world-changing admin command require a recorded reason?
+
+198. How are abusive character descriptions, landmark names, board posts, and emotes reported?
+
+199. Can admins inspect private communications, containers, and buildings—and under what policy?
+
+200. What information belongs in the permanent audit log?
+
+201. What is the backup and restoration objective: how much gameplay could acceptably be lost?
+
+202. How often should production state be backed up?
+
+203. Should the game support rolling server restarts without losing active travel or combat state?
+
+204. What happens to characters during a server crash?
+
+205. How should deployment affect connected players?
+
+206. What statistics and diagnostics should be visible to the lead admin?
+
+207. What is the procedure if procedural generation changes after players have already altered the world?
+
+208. Must the world seed and every generation algorithm version be permanently recorded?
+
+
+THE BEST PLACE TO BEGIN
+-----------------------
+
+When we begin, I recommend we start with Question 1 and proceed as an interview, but not blindly through all 208. The first twelve questions define the playable target. Once those are settled, we can identify the shortest development path and postpone whole categories that do not belong in the initial release.
+
+My provisional recommendation is that the first real milestone prove this loop:
+
+Create a character → enter the starting region → travel continuously → perceive generated terrain → find and gather a resource → leave persistent evidence → craft or build one useful object → log out → return and find the world correctly preserved.
+
+If that works, CCMud’s distinctive foundation works. Combat, economies, governments, advanced construction, and large-scale civilization can then grow upon something real rather than delaying the first playable game.
