@@ -962,6 +962,402 @@ SPRINT</div>
 <p>Across these decisions: prefer simple deterministic systems over unnecessary calculations; prefer timestamp/lazy evaluation over background scheduler jobs; use indexed database queries/views rather than duplicate derived files; make physical geography and coordinate position matter; let physical objects such as maps carry knowledge; let continuous movement create emergent gameplay; execute travel-time actions at the character's actual current coordinates; allow fixed observation sampling to create the natural speed-versus-awareness tradeoff; avoid artificial mechanics when physical simulation already creates the desired effect; and keep systems decoupled so WATCH handles movement observation, speech handles hearing, and emote/action visibility handles visible actions.</p>
 </section>
 
+<section class="card" id="world-generation-interview-122-218">
+<h2><span class="lantern-mark"></span>World Generation Requirements Interview — Questions 122–218</h2>
+<p class="small"><strong>Status:</strong> Locked decisions from the world-generation design interview. The entries preserve the substance of the questions, Thomas's answers, follow-up clarification, and the design reasoning developed in the conversation. Where a later answer revised an earlier one, the later decision controls.</p>
+<div class="callout"><strong>Recurring design rule:</strong> Generate causes and derive consequences. Keep systems physically grounded, but abstract detail that does not earn its gameplay complexity. Skill and knowledge improve what a character can notice or understand; they should not become magical radar.</div>
+
+<h3>Question 122 — Surface clues for buried mineral deposits</h3>
+<p><strong>Question:</strong> Should buried mineral deposits sometimes produce subtle surface clues—unusual rock fragments, coloration, mineralized outcrops, and similar evidence—that a skilled prospector could recognize?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Buried deposits can create subtle, physically plausible surface clues. Prospecting remains a physical search: skill improves what a character notices and understands rather than acting as hidden-resource radar.</p>
+
+<h3>Question 123 — Mineral resource quality</h3>
+<p><strong>Question:</strong> Should a mineral vein have a simple quality/richness property as well as physical size?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes, keep it simple. Deposits use broad richness classifications such as poor, ordinary, rich, and exceptional rather than ore-concentration percentages.</p>
+
+<h3>Question 124 — Gemstone distribution</h3>
+<p><strong>Question:</strong> Should gemstones be tied to larger ore deposits or occur separately?</p>
+<p><strong>Answer &amp; locked decision:</strong> Scattered. Gemstones are rare scattered resources. Geology can influence where a gem is plausible, but gems may occur as isolated pockets or individual discoveries rather than always belonging to an ore vein.</p>
+
+<h3>Question 125 — Gemstone richness</h3>
+<p><strong>Question:</strong> Should gemstone occurrences use detailed carats, purity, and crystal-density geology?</p>
+<p><strong>Answer &amp; locked decision:</strong> No; keep it simple. Generated gemstone occurrences use a simple size/richness classification. Individual recovered gems can later be handled by the item/crafting system.</p>
+
+<h3>Question 126 — Resource catalog</h3>
+<p><strong>Question:</strong> Should natural resources come from a fixed catalog or be procedurally invented?</p>
+<p><strong>Answer &amp; locked decision:</strong> Fixed catalog. The generator controls location, distribution, abundance, richness, and exposure, but never invents new woods, ores, stones, gems, or other resource types.</p>
+
+<h3>Question 127 — Base resource rarity</h3>
+<p><strong>Question:</strong> Should each catalog resource have a predefined base rarity that geography modifies?</p>
+<p><strong>Answer &amp; locked decision:</strong> Correct. Each resource has a base rarity. Local geology, terrain, climate where relevant, and regional modifiers such as the Origin resource band modify actual occurrence without making rare materials casually common.</p>
+
+<h3>Question 128 — Resource identification</h3>
+<p><strong>Question:</strong> Does physical discovery automatically identify an unfamiliar ore, stone, mineral, or gem?</p>
+<p><strong>Answer &amp; locked decision:</strong> Knowledge required. A character without appropriate knowledge receives a physical description; knowledgeable characters can identify the material. Perception does not automatically equal knowledge.</p>
+
+<h3>Question 129 — Depletion feedback</h3>
+<p><strong>Question:</strong> Should players receive physical indications that a deposit is thinning rather than mechanical percentages?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Depletion is communicated descriptively: veins narrow, ore becomes sparse, ordinary rock increasingly replaces valuable material, and similar observable signs. The engine may know exact quantities; the character does not.</p>
+
+<h3>Question 130 — Ordinary surface stone</h3>
+<p><strong>Question:</strong> Should loose stone and fieldstone be generally available wherever local geology supports it without individual deposits?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Ordinary stone can be gathered from suitable terrain. Serious quarrying, specialized stone, and valuable geological materials require exposed bedrock or actual deposits.</p>
+
+<h3>Question 131 — Clay and sand</h3>
+<p><strong>Question:</strong> Should clay and sand be derived from suitable terrain rather than generated as thousands of individual deposits?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Clay and sand are derived resources available from appropriate riverbanks, soils, beaches, bars, sedimentary areas, and similar geography.</p>
+
+<h3>Question 132 — Salt scarcity</h3>
+<p><strong>Question:</strong> Should salt be a geographically constrained and potentially valuable resource?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Mineable salt deposits and rare salt springs can occur where appropriate, allowing inland salt sources to become economically important.</p>
+
+<h3>Question 133 — Salt from seawater</h3>
+<p><strong>Question:</strong> Can players produce salt from seawater by evaporation?</p>
+<p><strong>Answer &amp; locked decision:</strong> Sure. Seawater evaporation can produce salt, but it requires meaningful time, labor, suitable conditions, and infrastructure, so inland natural sources retain substantial value.</p>
+
+<h3>Question 134 — Fertile farmland scarcity</h3>
+<p><strong>Question:</strong> Should especially fertile farmland be deliberately rare enough to drive economic competition?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Soil quality may vary naturally, but the generator should not manufacture agricultural scarcity merely to force competition over prime farmland.</p>
+
+<h3>Question 135 — Freshwater abundance</h3>
+<p><strong>Question:</strong> Should freshwater generally be plentiful in habitable regions?</p>
+<p><strong>Answer &amp; locked decision:</strong> Make it plentiful. Rivers, streams, lakes, springs, and other freshwater should be reasonably obtainable in habitable country; genuinely arid regions remain the natural exception.</p>
+
+<h3>Question 136 — Wild edible plants</h3>
+<p><strong>Question:</strong> Should berries, nuts, roots, fruits, mushrooms, and other edible wild plants be plentiful in suitable habitat?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Wild edible plants are fairly plentiful where habitat supports them, with availability and type influenced by vegetation, climate, terrain, and season.</p>
+
+<h3>Question 137 — Poisonous plants and mushrooms</h3>
+<p><strong>Question:</strong> Should harmful plants and mushrooms exist and make identification knowledge useful?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes, but don't kill anyone with it. Mistakes can cause illness, impairment, vomiting, temporary conditions, and similar consequences, but an innocent foraging error should not produce character death.</p>
+
+<h3>Question 138 — Medicinal plants</h3>
+<p><strong>Question:</strong> Should wild medicinal plants exist, and how should their properties be recognized?</p>
+<p><strong>Answer &amp; locked decision:</strong> Knowledge. Medicinal plants exist, but appropriate knowledge is required to identify useful properties and understand preparation or use.</p>
+
+<h3>Question 139 — Seasonal vegetation</h3>
+<p><strong>Question:</strong> Should seasons meaningfully change what wild foods and plants can be harvested?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Fruits, berries, nuts, herbs, mushrooms, and similar resources have meaningful seasonal availability without simulating individual plant life cycles.</p>
+
+<h3>Question 140 — Winter forage</h3>
+<p><strong>Question:</strong> Should temperate winter substantially reduce wild plant-food availability?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Winter makes stored food, hunting, fishing, trade, or movement toward warmer country more important.</p>
+
+<h3>Question 141 — Growing season complexity</h3>
+<p><strong>Question:</strong> Should agriculture use a simple regional growing season instead of detailed crop simulation?</p>
+<p><strong>Answer &amp; locked decision:</strong> Simple. Climate, season, and basic land suitability determine whether agriculture can proceed, without detailed rainfall, temperature, soil chemistry, or growth simulation.</p>
+
+<h3>Question 142 — Crop-specific climate geography</h3>
+<p><strong>Question:</strong> Should different crops have distinct broad climate preferences?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Crops do not receive separate regional climate-preference systems. Agriculture stays deliberately simple: suitable growing season plus suitable land.</p>
+
+<h3>Question 143 — Generated agriculture</h3>
+<p><strong>Question:</strong> Should natural world generation stop at farmable land, leaving fields and cultivation to inhabitants?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Crops, fields, orchards, fences, irrigation, cleared acreage, and other agriculture exist only when created by players or later NPC civilizations.</p>
+
+<h3>Question 144 — Wild fruit and nut trees</h3>
+<p><strong>Question:</strong> Can fruit and nut trees occur naturally even though orchards are constructed?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Wild fruit and nut trees can occur naturally; organized orchards are cultivated features.</p>
+
+<h3>Question 145 — Regional plant distribution</h3>
+<p><strong>Question:</strong> Should wild plant species vary by habitat and region so distant travel can reveal unfamiliar plants?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Plant distribution is regional as well as habitat-based, giving exploration botanical value while retaining the fixed resource/species catalog.</p>
+
+<h3>Question 146 — Wood species mechanics</h3>
+<p><strong>Question:</strong> Should different tree species produce mechanically different wood?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Wood is wood. Tree species can provide environmental flavor and regional identity, but harvested wood is one basic mechanical resource.</p>
+
+<h3>Question 147 — Stone type mechanics</h3>
+<p><strong>Question:</strong> Should granite, limestone, sandstone, and similar building stones have distinct crafting mechanics?</p>
+<p><strong>Answer &amp; locked decision:</strong> Stone is stone. Rock types still matter to geology, caves, cliffs, mineral occurrence, appearance, and erosion, but harvested ordinary building stone is one mechanical resource.</p>
+
+<h3>Question 148 — Distinct metals</h3>
+<p><strong>Question:</strong> Should metals remain mechanically distinct?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Iron, copper, tin, gold, silver, and other metals remain distinct because their differences matter to mining, refining, smithing, crafting, and trade.</p>
+
+<h3>Question 149 — Ore processing scope</h3>
+<p><strong>Question:</strong> Should world generation model smelting, refining, alloying, and metal yields?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. World generation handles where ore exists, its physical extent, and simple richness. Processing belongs to the later crafting system.</p>
+
+<h3>Question 150 — Coal</h3>
+<p><strong>Question:</strong> Should coal remain a distinct mineable resource rather than generic fuel?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Coal is a distinct geological resource and can later matter to smithing, crafting, and industry; wood and charcoal remain separate possible fuels.</p>
+
+<h3>Question 151 — Compact resource categories</h3>
+<p><strong>Question:</strong> Should the resource system abstract distinctions that do not create meaningful gameplay?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Differentiate resources only when the distinction earns its complexity. Metals, gems, coal, salt, and special resources can remain distinct while ordinary wood, stone, sand, clay, and similar materials stay broad where practical.</p>
+
+<h3>Question 152 — Rare special materials</h3>
+<p><strong>Question:</strong> May the fixed catalog include a small number of exceptionally rare natural materials for high-end crafting or magic?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Such materials are deliberately authored, never procedurally invented, and still obey physical geography and normal discovery.</p>
+
+<h3>Question 153 — World-unique deposits</h3>
+<p><strong>Question:</strong> Should rare special materials be so scarce that only one or a handful of deposits exist worldwide?</p>
+<p><strong>Answer &amp; locked decision:</strong> Not that unique. They may be very uncommon, but the enormous world should retain a reasonable possibility of another source being discovered.</p>
+
+<h3>Question 154 — Regional resource concentrations</h3>
+<p><strong>Question:</strong> Can particular geological regions or continents be unusually rich in certain resources?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Strong regional concentrations can create natural trade geography, but resources are not exclusively confined to a single continent or region.</p>
+
+<h3>Question 155 — Additional fossil fuels</h3>
+<p><strong>Question:</strong> Should peat, petroleum, natural gas, or similar fuels be modeled?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Coal is the only geological fuel resource that needs to be modeled.</p>
+
+<h3>Question 156 — Depleted mines</h3>
+<p><strong>Question:</strong> Should the excavation remain after a mineral deposit is exhausted?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Empty mines persist as world history and can later be discovered, explored, occupied, modified, reused, or built within.</p>
+
+<h3>Question 157 — Mine reclamation</h3>
+<p><strong>Question:</strong> Should nature reclaim surface evidence of abandoned mines while underground excavations persist?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Entrances, spoil piles, cleared work areas, and similar surface traces can become overgrown, while underground geometry remains essentially intact unless modified.</p>
+
+<h3>Question 158 — Forgotten mine entrances</h3>
+<p><strong>Question:</strong> Can reclamation make old mine entrances nearly invisible?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Casual travelers may miss them; deliberate searching or appropriate knowledge can reveal subtle signs of old excavation.</p>
+
+<h3>Question 159 — General reclamation of construction</h3>
+<p><strong>Question:</strong> Should reclamation apply to abandoned cabins, roads, fields, quarries, camps, and settlements?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Human-made features become increasingly overgrown and harder to recognize while durable physical remains persist. Reclamation is not deletion.</p>
+
+<h3>Question 160 — Structural decay</h3>
+<p><strong>Question:</strong> Should abandoned wooden construction decay and stonework generally last longer?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Wooden structures deteriorate and can collapse or disappear without maintenance; stone construction usually survives much longer.</p>
+
+<h3>Question 161 — Metal decay</h3>
+<p><strong>Question:</strong> Should ordinary iron and steel rust while precious metals persist much longer?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Material type affects long-term survival without requiring detailed corrosion simulation.</p>
+
+<h3>Question 162 — Use equals maintenance</h3>
+<p><strong>Question:</strong> Should active use prevent routine decay without repair micromanagement?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Use = maintenance. Regularly used structures and objects are assumed to receive ordinary upkeep automatically; significant neglect is what permits decay.</p>
+
+<h3>Question 163 — What counts as use</h3>
+<p><strong>Question:</strong> Should maintenance be judged at a sensible property/structure level rather than object by object?</p>
+<p><strong>Answer &amp; locked decision:</strong> Correct. Meaningful ongoing occupancy or activity maintains the place as a whole; players do not need to touch every door, bed, wall, or fence.</p>
+
+<h3>Question 164 — Abandonment grace period</h3>
+<p><strong>Question:</strong> Should decay wait through a generous period of non-use?</p>
+<p><strong>Answer &amp; locked decision:</strong> Correct. Visible abandonment and decay operate on the scale of world months or years, not days, with material and environment affecting eventual rate.</p>
+
+<h3>Question 165 — Decay stages</h3>
+<p><strong>Question:</strong> Should structures pass through recognizable stages rather than instantly switching from building to gone?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Use simple stages such as maintained → neglected → deteriorating → ruined → remnants, with visible consequences derived from materials and construction.</p>
+
+<h3>Question 166 — Restoring ruins</h3>
+<p><strong>Question:</strong> Can players restore old ruins rather than demolishing and rebuilding?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Surviving foundations, walls, structural elements, and usable material can reduce labor and resources compared with starting from nothing.</p>
+
+<h3>Question 167 — Salvage</h3>
+<p><strong>Question:</strong> Can abandoned or ruined structures be salvaged for materials?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Recoverable material generally declines as decay advances, while durable materials may remain useful much longer.</p>
+
+<h3>Question 168 — Abandonment versus ownership</h3>
+<p><strong>Question:</strong> Does physical abandonment or ruin automatically erase legal ownership?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. They may squat, but it is not theirs. Occupancy and physical condition are separate from legal/claim ownership.</p>
+
+<h3>Question 169 — Squatter interaction</h3>
+<p><strong>Question:</strong> Can squatters use and work on abandoned property they do not own?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes, subject to ownership protections clarified immediately afterward. Squatters may occupy and use abandoned property, and may maintain or repair it, but ownership does not transfer.</p>
+
+<h3>Question 170 — Destruction of owned property</h3>
+<p><strong>Question:</strong> Can players damage or destroy another player's protected property simply because the world is physically simulated?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Ownership creates protection against destructive actions; the game does not permit ordinary players to damage, dismantle, salvage, or destroy another player's protected property.</p>
+
+<h3>Question 171 — Helpful squatter repairs</h3>
+<p><strong>Question:</strong> May squatters repair or maintain someone else's abandoned property?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Helpful maintenance and repair are allowed, but they grant no ownership rights and do not permit destructive or fundamental alteration.</p>
+
+<h3>Question 172 — Theft from protected property</h3>
+<p><strong>Question:</strong> Can players steal stored movable items from protected property?</p>
+<p><strong>Answer &amp; locked decision:</strong> No theft. Ownership protection covers properly stored possessions as well as the structure itself.</p>
+
+<h3>Question 173 — Dropped wilderness items</h3>
+<p><strong>Question:</strong> Does ownership protection apply to things simply dropped or abandoned in unprotected wilderness?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Correct: protection applies to properly stored or placed items within protected property. Wilderness drops can be discovered and taken.</p>
+
+<h3>Question 174 — Wilderness caches</h3>
+<p><strong>Question:</strong> Can players hide or bury goods in the wilderness and receive ownership protection?</p>
+<p><strong>Answer &amp; locked decision:</strong> They may cache, but it is fair game for thieves. Concealment is the defense; a discovered wilderness cache is not ownership-protected.</p>
+
+<h3>Question 175 — Discovering caches</h3>
+<p><strong>Question:</strong> Should hidden caches be found through physical searching rather than a detection radius?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Physical clues, deliberate searching, and appropriate skill/knowledge govern discovery; there is no generic hidden-object radar.</p>
+
+<h3>Question 176 — Cache clues fading</h3>
+<p><strong>Question:</strong> Should evidence of a buried cache fade with world time?</p>
+<p><strong>Answer &amp; locked decision:</strong> Correct. Soil settles, vegetation returns, tracks vanish, and an old cache can eventually become extremely difficult to notice.</p>
+
+<h3>Question 177 — Cached-item decay</h3>
+<p><strong>Question:</strong> Should cached items age according to storage quality and environment?</p>
+<p><strong>Answer &amp; locked decision:</strong> Correct. Dry, sealed, sheltered storage protects better than wet soil or exposure; this can remain a simple environmental modifier.</p>
+
+<h3>Question 178 — Container protection classes</h3>
+<p><strong>Question:</strong> Should containers use a few simple protection classes rather than detailed preservation physics?</p>
+<p><strong>Answer &amp; locked decision:</strong> Simple classes. Broad states such as open, covered, or sealed can determine how well contents resist environmental decay.</p>
+
+<h3>Question 179 — Food spoilage</h3>
+<p><strong>Question:</strong> Should perishable food spoil?</p>
+<p><strong>Answer &amp; locked decision:</strong> No spoilage if properly stored. Proper storage removes routine spoilage bookkeeping; exposed or abandoned food may still deteriorate.</p>
+
+<h3>Question 180 — Proper food storage</h3>
+<p><strong>Question:</strong> Should any normal food-storage container in a maintained property count as proper storage?</p>
+<p><strong>Answer &amp; locked decision:</strong> Correct. No micromanagement of salting, drying, smoking, refrigeration, humidity, or preservation timers is required.</p>
+
+<h3>Question 181 — Food while traveling</h3>
+<p><strong>Question:</strong> Is food in ordinary carried inventory automatically protected from spoilage?</p>
+<p><strong>Answer &amp; locked decision:</strong> No, not if it is not in a storage container. Appropriate containers protect traveling provisions; loose food can deteriorate.</p>
+
+<h3>Question 182 — Spoilage states</h3>
+<p><strong>Question:</strong> How detailed should improperly stored food spoilage be?</p>
+<p><strong>Answer &amp; locked decision:</strong> Simple states, then purge. Use broad freshness states and automatically remove fully spoiled food rather than accumulating rotten objects forever.</p>
+
+<h3>Question 183 — Purging transient clutter</h3>
+<p><strong>Question:</strong> Should worthless scraps and trivial discarded debris eventually purge?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Transient clutter can decay and disappear so the persistent world does not accumulate millions of meaningless objects; meaningful objects and historical physical changes follow their own rules.</p>
+
+<h3>Question 184 — Historical significance and immortality</h3>
+<p><strong>Question:</strong> Should the engine automatically preserve an ordinary item because it became historically significant?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. History does not make an object magically immortal. Players who want an item preserved must store or maintain it appropriately.</p>
+
+<h3>Question 185 — Dropped durable valuables</h3>
+<p><strong>Question:</strong> Should valuable durable items persist longer in the wilderness than trivial clutter?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. A gold ring, sword, tool, and similar object can remain much longer according to material, while remaining unprotected and available to whoever finds it.</p>
+
+<h3>Question 186 — Long-term buried objects</h3>
+<p><strong>Question:</strong> Can deliberately buried durable objects survive for many years or decades?</p>
+<p><strong>Answer &amp; locked decision:</strong> Only if they are in an appropriate vessel. Burial by itself does not grant preservation; container and conditions matter.</p>
+
+<h3>Question 187 — Container failure</h3>
+<p><strong>Question:</strong> Should abandoned containers eventually deteriorate and expose their contents?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Containers age according to material and environment. When the vessel fails, contents lose its protection and follow the rules for their new exposure.</p>
+
+<h3>Question 188 — Maintained containers</h3>
+<p><strong>Question:</strong> Does use = maintenance also apply to barrels, chests, sacks, cupboards, and similar storage in active properties?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Actively used storage is assumed maintained; players do not replace ordinary containers merely because calendar time passed.</p>
+
+<h3>Question 189 — Wilderness shelters as property</h3>
+<p><strong>Question:</strong> Can a lean-to, hunting shack, remote cabin, or similar isolated shelter be a maintainable property?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. It need not belong to a settlement or formal homestead; periodic meaningful use can maintain it.</p>
+
+<h3>Question 190 — Temporary campsites</h3>
+<p><strong>Question:</strong> Is an ordinary campsite a maintained property?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Correct: a normal camp is temporary and can leave fading physical traces. Persistent construction is what can turn a location into maintainable property.</p>
+
+<h3>Question 191 — Repeated camping</h3>
+<p><strong>Question:</strong> Can repeated use of the same unbuilt campsite create visible persistent traces?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Worn ground, an established fire area, disturbed vegetation, and faint approach traces can emerge, while the site remains unowned absent a separate claim.</p>
+
+<h3>Question 192 — Emergent trails</h3>
+<p><strong>Question:</strong> Can repeated foot, horse, wagon, or other travel wear trails into the landscape?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Repeated travel naturally creates increasingly obvious paths; heavier and more frequent traffic produces stronger trails.</p>
+
+<h3>Question 193 — Trail reclamation</h3>
+<p><strong>Question:</strong> Do unused trails fade?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Light paths disappear relatively quickly, heavily established routes take longer, continued traffic reinforces them, and neglect lets nature reclaim them.</p>
+
+<h3>Question 194 — Constructed roads</h3>
+<p><strong>Question:</strong> Does a heavily worn trail automatically become a road?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. A true road requires deliberate construction or improvement such as clearing, grading, drainage, bridging, or surfacing.</p>
+
+<h3>Question 195 — Road/trail speed bonus</h3>
+<p><strong>Question:</strong> Should trails and roads provide an inherent mechanical movement-speed bonus?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Their value is navigation, recognizable routing, connections, and potentially choosing easier terrain—not a speed multiplier.</p>
+
+<h3>Question 196 — Navigation on routes</h3>
+<p><strong>Question:</strong> Should roads and trails be easy to follow without granting extra speed?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. A player can issue natural route-oriented travel such as “walk north road”; the route's actual geometry determines the character's path.</p>
+
+<h3>Question 197 — Following named routes</h3>
+<p><strong>Question:</strong> Can a character follow a known named road or trail continuously?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Commands such as “follow King's Road” can continue along real route geometry until stopped, obstructed, reaching a meaningful junction, or interrupted by something important.</p>
+
+<h3>Question 198 — Generated road names</h3>
+<p><strong>Question:</strong> Should roads and trails have names by default?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. They begin unnamed. Names arise only through players or NPC societies; the world generator does not label them.</p>
+
+<h3>Question 199 — Generated natural landmark names</h3>
+<p><strong>Question:</strong> Should rivers, mountains, lakes, caves, forests, islands, and other natural geography have intrinsic generated names?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Natural features simply exist until people name them.</p>
+
+<h3>Question 200 — Competing canonical names</h3>
+<p><strong>Question:</strong> Can the same feature maintain different names for different groups?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Once named, a feature has one canonical name rather than faction-specific aliases.</p>
+
+<h3>Question 201 — Who names geography</h3>
+<p><strong>Question:</strong> Who gets to establish the canonical name of an unnamed feature?</p>
+<p><strong>Answer &amp; locked decision:</strong> The first player may propose a name, but it must be approved by an admin before becoming canonical.</p>
+
+<h3>Question 202 — Pending name reservation</h3>
+<p><strong>Question:</strong> Does the first pending proposal reserve the feature?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Competing names are allowed until one is approved. Approval establishes the canonical name and closes the naming question.</p>
+
+<h3>Question 203 — Renaming approved geography</h3>
+<p><strong>Question:</strong> Can ordinary players later rename an approved feature?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Approved names are permanent for ordinary players; only an admin can rename or remove them.</p>
+
+<h3>Question 204 — Minor landmarks</h3>
+<p><strong>Question:</strong> Can small persistent features be named, or only major geography?</p>
+<p><strong>Answer &amp; locked decision:</strong> Include minor landmarks. Springs, clearings, rock formations, cave chambers, creek bends, small islands, and similar recognizable features can receive approved names.</p>
+
+<h3>Question 205 — Naming player-created landmarks</h3>
+<p><strong>Question:</strong> Can bridges, roads, mines, farms, buildings, settlements, and other constructed landmarks be named?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Player-created persistent landmarks use the same canonical naming concept.</p>
+
+<h3>Question 206 — Approval for creator names</h3>
+<p><strong>Question:</strong> Does a player automatically get to name something they personally built?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Yes to approval: names for player-created landmarks and property still require admin approval.</p>
+
+<h3>Question 207 — Name visibility — revised</h3>
+<p><strong>Question:</strong> Should players have to learn an approved name from a map, character, sign, or document before seeing it?</p>
+<p><strong>Answer &amp; locked decision:</strong> This was initially answered “Learn from map or char,” but Thomas immediately backed up and revised the rule: just always display the name. The revised decision supersedes the first answer. Once approved, a canonical name is displayed to everyone who perceives the feature.</p>
+
+<h3>Question 208 — Unnamed feature display</h3>
+<p><strong>Question:</strong> How should a feature be shown before it receives an approved canonical name?</p>
+<p><strong>Answer &amp; locked decision:</strong> Use a straightforward type label such as “Unnamed Road” rather than inventing a pseudo-name. The same pattern can apply to other namable feature types.</p>
+
+<h3>Question 209 — Duplicate names</h3>
+<p><strong>Question:</strong> Can different landmarks reuse the same approved name?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes only at sufficient separation: no duplicates within 500 miles of each other. The same name may be reused beyond that distance.</p>
+
+<h3>Question 210 — Duplicate-name normalization</h3>
+<p><strong>Question:</strong> Should capitalization and punctuation tricks bypass the 500-mile duplicate rule?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Matching is case-insensitive and punctuation-insensitive, so cosmetic variants do not evade the restriction.</p>
+
+<h3>Question 211 — Potential naming conflicts</h3>
+<p><strong>Question:</strong> Should software try to make every fuzzy duplicate-name judgment automatically?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Show names that could possibly conflict to the approving admin. The system surfaces nearby/similar candidates; the admin makes the final judgment.</p>
+
+<h3>Question 212 — Naming approval context</h3>
+<p><strong>Question:</strong> What should the admin see while approving a geographic name?</p>
+<p><strong>Answer &amp; locked decision:</strong> Show the proposed name, feature type, proposing player, location/map context, and potentially conflicting nearby names. Also provide the ability to jump directly to the feature for inspection.</p>
+
+<h3>Question 213 — Admin jump</h3>
+<p><strong>Question:</strong> May the admin jump-to-feature control use true teleportation even though player travel never does?</p>
+<p><strong>Answer &amp; locked decision:</strong> Correct. Administrative teleportation is allowed for moderation/world management; ordinary character travel remains physical.</p>
+
+<h3>Question 214 — Invisible admin observation</h3>
+<p><strong>Question:</strong> Should an admin inspecting a feature affect the world?</p>
+<p><strong>Answer &amp; locked decision:</strong> No. Correct: observer mode is completely invisible and non-interactive. It creates no tracks, triggers no wildlife/NPC response, changes no discovery state, and leaves no world evidence.</p>
+
+<h3>Question 215 — Admin perception bypass</h3>
+<p><strong>Question:</strong> Can observer mode ignore darkness, vegetation, walls, distance, rock, and similar perception barriers?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Admins may bypass normal visibility restrictions when needed for inspection.</p>
+
+<h3>Question 216 — Admin data overlays</h3>
+<p><strong>Question:</strong> Should observer mode expose hidden world-system information?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Optional overlays can show elevation/terrain, feature boundaries, caves, resources, ownership, trails, and similar normally hidden data.</p>
+
+<h3>Question 217 — Permanent admin geography edits</h3>
+<p><strong>Question:</strong> Can admins correct generated geography after world creation?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Allow permanent edits. Fixes such as malformed rivers, impossible terrain, or broken cave connections become persistent overrides to the procedural baseline.</p>
+
+<h3>Question 218 — Geography edit audit history</h3>
+<p><strong>Question:</strong> Should permanent admin geography edits be auditable?</p>
+<p><strong>Answer &amp; locked decision:</strong> Yes. Keep a simple history of who changed the geography, when, and a short reason. This provides accountability without requiring a full version-control system inside the game.</p>
+
+<div class="callout"><strong>Interview stopping point:</strong> Question 219 (“Should admins be able to revert an individual geography edit from the audit history?”) was asked but had not yet been answered when this section was compiled, so it is intentionally not recorded as a locked decision.</div>
+</section>
+
 <p class="foot">Crown &amp; Call — Persistent World Design Reference<br>Copyright &copy; 2026 Thomas Paige. All rights reserved.<br>Version 20260921</p>
 </main>
 </body>
