@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–14 have been discussed. Lore surrounding the ultimate nature of the world was deliberately deferred. Resume with Question 15.
+Questions 1–26 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Resume with Question 27.
 
 
 PROJECT REFERENCES
@@ -74,7 +74,7 @@ This vertical slice is intended to exercise the defining CCMud architecture: coo
 QUESTION 2 — FIRST-HOUR EXPERIENCE
 -----------------------------------
 
-New characters begin in town with a small amount of coin. They are offered a choice of very simple introductory jobs instead of being forced through one scripted tutorial.
+Characters choosing the standard Normal start begin in Origin's tavern with Normal outfitting and a minimal amount of coin. They may be offered a choice of very simple introductory jobs instead of being forced through one scripted tutorial. Characters choosing a remote start under Question 21 do not begin in town.
 
 Possible first jobs include:
 
@@ -321,7 +321,7 @@ QUESTION 14 — NATURE AND LORE OF THE WORLD
 
 DEFERRED BY THOMAS. Do not attempt to settle this before continuing the mechanical design interview unless Thomas chooses to return to it.
 
-Ideas discussed but not locked include:
+The earlier Westworld/synthetic-body ideas below were discussed but are NOT canonical and have been superseded by Questions 24–25:
 
 - A Westworld-like setting in which people from a hectic advanced reality pay for access to a simpler frontier world.
 - Players inhabiting extremely lifelike synthetic bodies.
@@ -362,16 +362,119 @@ Initial implemented transportation consists of:
 Wagons and boats fit the setting and remain planned, but they will be implemented later rather than being required for the initial playable system.
 
 
+QUESTION 17 — MAGIC IN THE SETTING
+----------------------------------
+
+Magic is extremely common and is used in everyday life. Magical workings are called Callings, not spells, matching the terminology of Crown & Call. The mere use of a Calling is not extraordinary in this world, although newly arrived player characters initially find magic surprising.
+
+
+QUESTION 18 — CALLINGS AS MAGIC
+-------------------------------
+
+Callings are magic and use the MAGIC CAP. Each Calling requires a specified minimum MAGIC level. There are no spell slots or Vancian daily allotments; a qualified character may use a Calling on a combat turn, subject to later action and effect rules. Exact balance, costs, durations, and other limitations remain to be designed. Callings themselves belong to MAGIC; FAITH remains a distinct CAP/system unless later design explicitly connects them.
+
+
+QUESTION 19 — PLAYABLE PEOPLES AT LAUNCH
+-----------------------------------------
+
+Player characters are strictly human at launch. Other playable peoples may be added in the future, but none are committed yet.
+
+
+QUESTION 20 — ARE ALL PLAYER CHARACTERS HUMAN INITIALLY?
+---------------------------------------------------------
+
+Yes. Answered by Question 19. Initial character creation permits human player characters only.
+
+
+QUESTION 21 — STARTING LOCATION AND DIFFICULTY
+-----------------------------------------------
+
+CCMud offers both a conventional town start and deliberately difficult remote starts.
+
+Standard start:
+- Choosing Normal without a distance begins the character in the local tavern at Origin.
+- The character receives Normal outfitting and minimal coin.
+
+Remote start:
+- The player chooses an outfitting level: Naked, Minimal, Normal, Extra, or Total.
+- The player also chooses any rough starting distance from 10 through 10,000 miles from Origin, e.g. Normal 2000 or Naked 10000.
+- The requested distance is approximate. The game chooses the actual direction and location and may place the character within plus or minus 50 percent of the requested distance. A request for 2,000 miles therefore means roughly 1,000–3,000 miles from Origin.
+- The player chooses the rough distance, not the exact coordinate or direction.
+- Naked means no outfitting; Minimal is minimum outfitting; Normal is modest standard outfitting; Extra and Total provide progressively greater outfitting. Exact contents remain to be designed.
+
+Thus Normal means the conventional tavern start, while Normal 2000 means Normal equipment at a randomized remote location roughly 2,000 miles from Origin.
+
+
+QUESTION 22 — INITIAL SETTLEMENTS AND FORTS
+--------------------------------------------
+
+The world begins with one primary starting settlement, Origin. A series of military forts may eventually exist within roughly 100 miles of Origin, but they will not all be created at once. Begin with Origin and one military fort, then establish additional forts gradually as appropriate during development and play.
+
+
+QUESTION 23 — CREATION OF ORIGIN
+--------------------------------
+
+Thomas will personally hand-pick Origin's location after examining the generated geography. The terrain itself remains procedurally generated, but Origin is manually designed and laid out rather than procedurally generated. Its initial population is approximately 200 NPCs.
+
+
+QUESTION 24 — WHY PLAYER CHARACTERS ARRIVE
+-------------------------------------------
+
+Player characters are suddenly and magically transported into this world from their original homes. The transportation is generally involuntary, and a newly arrived character may be just as surprised to be here as local inhabitants are to see the newcomer appear.
+
+There is no single prescribed reason. A character may have been banished, betrayed, deliberately magicked away by someone who wanted rid of them, transported accidentally, or brought here for some other known or unknown reason. The possibilities are intentionally broad so players may define their own histories.
+
+The Westworld/synthetic-body premise previously discussed under Question 14 is not canonical. Magical transportation is canonical.
+
+Once deposited here, the character must adapt and struggle to survive or die.
+
+
+QUESTION 25 — STARTING KNOWLEDGE, TIME, AGELESSNESS, AND DEATH
+--------------------------------------------------------------
+
+A newly arrived character has zero knowledge of this world's society: no politics, drama, relationships, intrigue, history, geography, settlements, or current events. MAGIC and Callings are also a surprise.
+
+The physical world is familiar. Ordinary physics and recognizable natural surroundings—earth, trees, sky, clouds, sun, moon, stars, and similar features—behave much as the character expects from home.
+
+Player characters may originate from essentially any place and any historical era. One may come from a 21st-century society while another may come from something resembling the 10th century.
+
+The world's calendar is based on the arrival of its oldest inhabitant more than 700 years ago. The game begins in approximately Year 731.
+
+Inhabitants do not age after arriving in this world and cannot die of old age. They know they are permanently bound to this world.
+
+Physical death does not necessarily end a character. At death the character is magically removed. The player may retire the character or return that character to the world while retaining all memories.
+
+Death and respawn rules established here:
+- Murder by another player NEVER qualifies for a merciful respawn. Continuing after murder automatically means Naked 10000.
+- A player/account receives exactly ONE lifetime reprieve for an accidental or environmental death, not one reprieve per character.
+- Qualifying deaths include events such as falling from a cliff, drowning, or being killed by wildlife such as a bear.
+- When the player's one-time reprieve is used, the player may respawn the affected character using any starting configuration they wish.
+- If the reprieve has already been used, later deaths of any of that player's characters lead to Naked 10000 if the character is continued.
+- If the reprieve has not been used, it remains available until a qualifying accidental/environmental death occurs.
+- Memories survive respawning. A murdered character can therefore theoretically return for revenge, but Naked 10000 makes returning to the murderer potentially extremely difficult.
+
+These decisions supersede the earlier undecided synthetic-body/resurrection possibilities under Question 14. Additional exact death mechanics may still be refined when the combat/death questions are reached later.
+
+
+QUESTION 26 — STARTING MAPS AND COMPASSES
+------------------------------------------
+
+Characters do not automatically begin with a map or compass.
+
+In Origin, maps and compasses are readily available for purchase. A wilderness character—including someone forced into Naked 10000—can eventually craft both a map and a compass. Crafting a compass requires finding specific minerals, so reliable directional navigation must be earned through exploration and resource discovery rather than being granted automatically.
+
+Exact mineral requirements and crafting procedures remain to be designed.
+
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 17 — MAGIC IN THE SETTING
+NEXT QUESTION: QUESTION 27 — ESSENTIAL SERVICES IN ORIGIN
 
 Important context:
-Questions 15 and 16 are now locked. Resume by determining what magic is in the setting and how common it should be. Question 18 will separately address how Callings relate to magic or divine action.
+Questions 17–26 are now locked. Origin is the single hand-designed starting settlement, initially about 200 NPCs, with one nearby military fort and additional forts added later. Characters may choose the conventional Normal tavern start or randomized remote starts. Magical arrival, agelessness, retained memories, and the per-player accidental-death reprieve are canonical. Maps and compasses are not automatic starting knowledge or equipment.
 
 Proceed one numbered question at a time.
-
 
 REMAINING ORIGINAL DISCUSSION QUEUE
 ===================================
