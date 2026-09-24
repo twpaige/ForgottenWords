@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–162 have been discussed. Resume at Question 163: whether owners may customize exterior property descriptions using the same moderated system. Questions 149–162 below record the finalized property-after-death decisions.
+Questions 1–180 have been discussed. Resume at Question 181: whether the copier-added visible note should be free-form text or standardized. Questions 149–162 below record the finalized property-after-death decisions; Questions 163–180 record exterior customization, signs, language/literacy, artwork moderation, and copying/provenance decisions.
 
 Historical status note (preserved from the earlier interview):
 Questions 1–85 have been discussed. Question 86 is the next unanswered design question. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with the shelter portion of Question 69.
@@ -1653,19 +1653,183 @@ The restriction ends when enough hard rejections have aged beyond one year to br
 Soft rejections never count toward the threshold. Aging out of the eligibility window does not erase the permanent moderation/vboard history. Timestamp comparisons can determine current eligibility without maintenance processing. The discussion called this a rolling year without separately defining a real-world versus in-game year.
 
 
+QUESTION 163 — EXTERIOR PROPERTY DESCRIPTIONS AND STAFF REVIEW
+-----------------------------------------------------------------
+
+Property owners may customize exterior descriptions using the same moderated creative-description system as interiors in Questions 161–162. Approval, soft rejection, hard rejection, permanent moderation/vboard history, and the four-hard-rejections-within-a-rolling-year eligibility rule all apply.
+
+At submission/review, the prose must describe the property's actual physical state, dimensions, materials, features, condition, and surroundings; it does not create nonexistent mechanical features. Questions 164–165 settle how approved prose replaces generated text and persists after later physical changes.
+
+
+QUESTION 164 — APPROVED EXTERIOR PROSE REPLACES GENERATED DESCRIPTION
+------------------------------------------------------------------------
+
+An approved custom exterior description completely replaces the procedurally generated exterior description when the property is viewed. It is not combined with the generated description. The player has control of the approved prose, subject to staff approval and the existing four-strike eligibility rule.
+
+This presentation policy may be revisited later if necessary; no further generator-imposed prose constraints were adopted here.
+
+
+QUESTION 165 — CUSTOM DESCRIPTION PERSISTENCE AND ABANDONMENT
+----------------------------------------------------------------
+
+A custom property description remains despite subsequent damage, deterioration, alterations, or other physical changes. Such changes do not automatically invalidate or revert the approved description.
+
+When the property is abandoned, its custom description is removed and it reverts to a generated description. Normal abandonment and overgrowth can then continue. This persistence rule refines Question 163's review-time consistency requirement.
+
+
+QUESTION 166 — NO PLAYER-CREATED CUSTOM PROPERTY NAMES
+---------------------------------------------------------
+
+Properties may not receive player-created custom property names. Approved interior/exterior prose remains available, but custom property naming is not part of the system. This decision concerns the property's name; Question 161's existing interior room customization remains recorded above.
+
+
+QUESTION 167 — PHYSICAL SIGNS AND THEFT
+------------------------------------------
+
+Players may create, write on, and place physical signs on their property. A sign is an ordinary world object, not protected property-name metadata.
+
+Signs may be read, moved, damaged, destroyed, or stolen under normal object and access rules. If someone can reach a sign and the ordinary rules allow taking it, they may steal it.
+
+
+QUESTION 168 — PERMANENT SIGN WRITING AND LITERACY
+-----------------------------------------------------
+
+Writing on a sign is permanent; the owner cannot simply edit its text through a command. Changing a message requires an appropriate physical alteration or replacement rather than a magical text edit. The detailed physical rewriting mechanism was not designed here.
+
+Writing a sign requires the character to be able to read and write the relevant language. Questions 169–174 define Academics as the source of these abilities, with separate per-language unlocks.
+
+
+QUESTION 169 — ACADEMICS GOVERNS LITERACY — REFINED BY Q171–Q174
+-------------------------------------------------------------------
+
+Literacy is a character capability governed by the Academics Cap (ACADX), not something every character automatically possesses and not a separate Literacy skill.
+
+The initial answer proposed one threshold for reading and another for writing, with levels deferred. That universal-threshold formulation is superseded by the later separate speaking, reading, and writing unlocks for each language in Question 174. Retain the Academics foundation, not a competing universal literacy threshold.
+
+
+QUESTION 170 — UNREADABLE TEXT STILL APPEARS AS WRITING
+----------------------------------------------------------
+
+A character unable to read a sign, letter, book, or other written object can still perceive that writing exists, but cannot see its contents. The description may indicate writing, symbols, or carving without revealing the words.
+
+Question 176 further establishes that unreadable written languages are described simply as writing in an unknown language; there is no written-language recognition mechanic.
+
+
+QUESTION 171 — AUTOMATIC LANGUAGE ABILITIES FROM ACADEMICS
+-------------------------------------------------------------
+
+Language abilities are assigned automatically by Academics level, not selected by the player. Common is available for speech at ACADX 0. Knowing how to speak a language does not automatically grant the ability to read or write it.
+
+The initial illustrative language sequence was Common at 0, English at 3, French at 5, Italian at 7, German at 9, and World Speak at 11. This was provisional, not a finalized progression. Question 174 subsequently refines the model to separate per-language speak/read/write unlocks and supplies newer provisional examples. The complete language list and thresholds remain deferred.
+
+
+QUESTION 172 — SPOKEN-LANGUAGE RECOGNITION UP TO FIVE LEVELS ABOVE
+---------------------------------------------------------------------
+
+A character may identify a spoken language whose required Academics level is up to five levels above their own ACADX without understanding its content. A language beyond that recognition range remains unidentified.
+
+For illustration, an ACADX 4 character could recognize a spoken language requiring level 9, but not one requiring level 10. These numbers illustrate the recognition rule, not a finalized language progression. Question 176 limits this recognition mechanic to speech; it does not apply to writing.
+
+
+QUESTION 173 — SPEAK SETS THE ACTIVE LANGUAGE FOR SPEECH AND WRITING
+-----------------------------------------------------------------------
+
+SPEAK <language> sets one active language used for both speech and writing. Examples include SPEAK COMMON and SPEAK ENGLISH. There is no separate writing-language state or language-selection command.
+
+A character selects a known language; actually speaking or writing still requires the corresponding per-language ability under Question 174. To write in one language while speaking in another, switch the active language as needed and switch back before continuing to write.
+
+
+QUESTION 174 — FULL PER-LANGUAGE SPEAK, READ, AND WRITE UNLOCKS
+------------------------------------------------------------------
+
+There is no partial language proficiency, simulated gibberish, or gradual comprehension mechanic. At the required Academics threshold, the character fully acquires that particular ability.
+
+Speaking, reading, and writing each language have separate automatic Academics unlocks. Acquiring one does not confer the others. This supersedes Question 169's initial universal reading/writing thresholds and refines Question 171's initial language progression.
+
+Provisional examples:
+- ACADX 0: speak Common.
+- ACADX 1: read Common.
+- ACADX 3: speak French.
+- ACADX 6: write Common.
+
+The conversation also repeated "read Common" at level 4 in its rough example. That duplicate does not establish a second Common-reading unlock or a different unconfirmed language ability. The final language list and progression remain to be designed later.
+
+The +5 spoken-language recognition rule from Question 172 remains in effect.
+
+
+QUESTION 175 — UNKNOWN SPEECH HIDES WORDS BUT PRESERVES EMOTES
+-----------------------------------------------------------------
+
+When a listener recognizes a spoken language but cannot understand it, show a message such as "Jacques says something in French." When the language is not recognized, show a message such as "Jacques says something in a language you don't recognize."
+
+Do not reveal the actual words or substitute fake foreign-language gibberish. The communication's visible emote/action still fires normally: pointing, gestures, and other observable behavior remain visible even when the spoken content is unavailable.
+
+
+QUESTION 176 — UNKNOWN WRITING, VISIBLE ART, AND ART MODERATION
+------------------------------------------------------------------
+
+If a character cannot read a written language, show writing in an unknown language without exposing its contents. There is no written-language recognition mechanic and no handwriting/calligraphy skill or special beautiful/fancy-writing ability.
+
+Written objects may include drawings or other visual material enclosed in <art>...</art> tags. Art is displayed to everyone regardless of literacy or language ability.
+
+Every use of an art tag is automatically reported to a staff news board for review. Staff may block a player's art-tag use for a specified number of days. Store an expiration timestamp and prevent new art-tag use until it passes. While restricted, tell the player when access returns and the remaining restriction information. Repeated abuse may result in a permanent art-tag restriction.
+
+This restriction targets use of the art mechanism. Questions 177–178 settle the treatment of existing art and permanent creator attribution.
+
+
+QUESTION 177 — ART RESTRICTIONS AFFECT NEW CREATION; STAFF HISTORY REVIEW
+----------------------------------------------------------------------------
+
+An art restriction prevents new art creation only. Existing artwork remains because it should already have been reviewed; blocking its creator does not automatically erase it.
+
+Staff can retrieve and review all artwork created by a particular player. Individual offending pieces may be handled separately from the restriction on future art creation.
+
+
+QUESTION 178 — PERMANENT STAFF-ONLY ART CREATOR ATTRIBUTION
+--------------------------------------------------------------
+
+Every artwork permanently records both its originating account/player and the character that created it as staff-only metadata.
+
+That attribution follows the artwork through theft, sale, transfers, changes of ownership or location, hiding, and abandonment. Ordinary players do not automatically see this metadata. Staff must remain able to trace artwork to its originating player and character.
+
+
+QUESTION 179 — ART COPYING THROUGH RESTRICTED DOCUMENT COPY COMMANDS
+-----------------------------------------------------------------------
+
+Artwork is copied only as part of the future COPY PARCHMENT / COPY BOOK system; there is no separate artwork-copying command.
+
+These commands are deliberately restricted to high-Academics, sage-like characters. Reliable duplication of persistent written material is important enough to restrict mechanically even if low-level manual copying might seem technically possible. The exact Academics requirement and copying mechanics remain deferred.
+
+Copies preserve the original author/creator metadata and add the copier and date, such as "copied by Thomas" on the recorded date. Question 180 extends this to the full provenance chain.
+
+
+QUESTION 180 — FULL COPY PROVENANCE AND A VISIBLE COPIER NOTE
+----------------------------------------------------------------
+
+Copies of copies preserve the complete relevant provenance chain in metadata: the original author/creator, each copier, copying dates, and other relevant copying information. Do not reduce the record to only the original author and most recent copier. Original artwork attribution remains preserved under Question 178.
+
+The copier may also insert a visible metadata tag/note at the beginning of the copied book or paper. This note is part of the readable document, separate from the hidden staff metadata and provenance record.
+
+Whether this visible note is free-form text or a standardized system-generated line is unanswered. Resume with Question 181; neither option has been adopted.
+
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 163
+NEXT QUESTION: QUESTION 181
 
 Important context:
 Questions 86–148 have now been discussed and locked in this interview continuation. The new material establishes the physical inventory/hand model; HOLD/WIELD/DRAW behavior; PMOTE and private-label presentation; visible system states; SCORE/LOOK ME separation; layered wear locations and strict dressing order; physical containers and transparent access; locks, keys, master-key IDs, bars, lockpicking evidence/repair; key rings; recursive intelligent inventory search; a maximum container nesting depth of four; prohibition of circular containment; and full recursive weight/capacity accounting.
 
 Questions 149–162 are now finalized in the Property After Death continuation above.
 
-Resume with Question 163 — Can owners customize exterior property descriptions using the same staff approval, soft-rejection, hard-rejection, and rolling-year eligibility system as interior descriptions?
+Questions 163–180 are now finalized above. Exterior customization uses the interior moderation system; approved prose replaces the generated exterior description and persists until abandonment. Language abilities use separate automatic per-language Academics unlocks. Artwork remains visible regardless of literacy, with staff review, restrictions, and permanent attribution. Document copies preserve the full provenance chain and may begin with a visible copier-added note.
 
-This question is unanswered. Do not treat exterior customization as approved yet. Ask one numbered question at a time and continue the same interview process.
+Resume with Question 181 — Copier's Visible Note
+
+Should the copier-added visible note at the beginning of a copied book or paper be free-form text, or should the system generate a standardized line such as "Copied by Thomas on [date]"?
+
+This question is unanswered. Do not choose either option or impose a note format yet. Ask one numbered question at a time and continue the same interview process.
 
 
 REMAINING ORIGINAL DISCUSSION QUEUE
