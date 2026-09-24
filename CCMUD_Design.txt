@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–58 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with Question 59.
+Questions 1–60 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with Question 61.
 
 
 PROJECT REFERENCES
@@ -823,7 +823,7 @@ Twenty is therefore primarily an internal mathematical maximum; the player-facin
 
 Stamina recovery is processed on a 15-real-second heartbeat/tick. Because the world clock runs at 6× real time, each recovery tick represents 90 seconds of game time.
 
-The intended recovery rate scales with ATHLX. The initial reference points discussed were approximately 1 stamina per recovery tick at ATHLX 0 and approximately 3 stamina per recovery tick at ATHLX 20. Because stamina is floating-point internally, intermediate ATHLX values may use smooth fractional recovery rates rather than integer breakpoints. The exact final formula may be tuned when stamina costs are balanced.
+The intended recovery rate scales with ATHLX. The initial reference points discussed were approximately 1 stamina per recovery tick at ATHLX 0 and approximately 3 stamina per recovery tick at ATHLX 20. Because stamina is floating-point internally, intermediate ATHLX values may use smooth fractional recovery rates rather than integer breakpoints. Question 59 locks the exact recovery formula.
 
 Passive stamina regeneration continues even while the character is moving. Movement and other strenuous activity have their own stamina expenditures. Thus:
 
@@ -836,13 +836,77 @@ Example behavior: a character may sprint for 20 real seconds, lose substantial s
 The exact stamina costs for TRUDGE, WALK, JOG, RUN, SPRINT, terrain, wounds, encumbrance, and other exertion remain to be designed in subsequent questions.
 
 
+QUESTION 59 — STAMINA RECOVERY DETAILS
+----------------------------------------
+
+The exact passive stamina recovery formula is:
+
+stamina recovered per 15-real-second tick = 1 + (ATHLX / 10)
+
+Examples:
+
+- ATHLX 0: 1.0 stamina per tick.
+- ATHLX 5: 1.5 stamina per tick.
+- ATHLX 10: 2.0 stamina per tick.
+- ATHLX 15: 2.5 stamina per tick.
+- ATHLX 20: 3.0 stamina per tick.
+
+Fractional stamina is retained internally. Passive regeneration applies whether the character is stationary or moving; activity expenditure is calculated separately.
+
+
+QUESTION 60 — MOVEMENT MODIFIERS
+--------------------------------
+
+Terrain, weather, elevation, wounds, and encumbrance modify actual travel speed rather than changing the passive stamina-recovery formula. These modifiers are multiplicative rather than additive, so several severe conditions can make travel extremely slow without producing a negative speed.
+
+Terrain:
+- The procedural terrain generator should eventually provide a deterministic Terrain Movement Factor from 1.00 down to 0.50.
+- The factor should be derived from the physical character of the ground at the character's coordinate, such as slope, ruggedness, vegetation, and ground cover, rather than from arbitrary room-like difficulty classes.
+- The exact calculation is deliberately deferred until the terrain generator is being developed/refined.
+- Elevation must not be counted twice: terrain represents how difficult the ground itself is to traverse, while the separate elevation modifier represents the effects of high altitude.
+
+Weather:
+- Weather may reduce travel speed by as much as 50% under extreme conditions.
+
+Elevation:
+- Elevation may reduce travel speed by as much as 50% under extreme high-altitude conditions.
+
+Environmental modifiers stack multiplicatively. A 3 mph WALK subjected to maximum terrain, weather, and elevation penalties becomes:
+
+3 × 0.50 × 0.50 × 0.50 = 0.375 mph.
+
+The character is still using WALK and receives/pays the normal WALK stamina behavior; environmental conditions reduce physical progress rather than changing the movement mode's stamina rate.
+
+Wounds:
+- Light: 0% speed derate.
+- Moderate: 5% speed derate.
+- Minor: 15% speed derate.
+- Major: 30% speed derate.
+- Grave: 50% speed derate.
+- Mortal: unconscious; no movement.
+
+These wound derates are the final cumulative values for each wound level, not additional percentages to be summed.
+
+Encumbrance:
+- Carrying up to and including 50% of the character's body weight causes no speed derate.
+- From 50% through 100% of body weight, the speed derate increases continuously and linearly from 0% to 50%.
+- At exactly 100% of body weight, movement speed is reduced by 50%.
+- Carrying more than 100% of body weight is beyond the character's maximum load and the character cannot move until the load is reduced.
+- Example: a 200-pound character has no speed penalty at 100 pounds carried, a 25% speed derate at 150 pounds, and a 50% speed derate at 200 pounds.
+
+The overall movement model may therefore be expressed conceptually as:
+
+actual speed = base movement speed × terrain factor × weather factor × elevation factor × wound factor × encumbrance factor
+
+Exact weather and elevation scales, and the terrain-generator formula, remain to be designed later.
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 59 — STAMINA RECOVERY DETAILS
+NEXT QUESTION: QUESTION 61 — MAXIMUM CARRYING CAPACITY AND CONTROLLING CAP
 
 Important context:
-Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–58 began Phase V and established movement speeds, travel acceleration, the six-band player-facing stamina display, floating-point internal stamina, 15-second real-time recovery ticks, ATHLX-scaled passive recovery, and simultaneous regeneration/expenditure while moving. Continue by refining stamina recovery/cost behavior before moving to broader movement modifiers.
+Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–60 began Phase V and established movement speeds, travel acceleration, stamina/recovery, and multiplicative speed derates from terrain, weather, elevation, wounds, and encumbrance. The terrain generator must eventually derive a deterministic Terrain Movement Factor from 1.00 to 0.50. Continue with maximum carrying capacity and which CAP, if any, controls it.
 
 Proceed one numbered question at a time.
 
