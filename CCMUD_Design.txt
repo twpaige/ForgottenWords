@@ -1218,15 +1218,284 @@ Exact chunk size, cache lifetimes, storage strategy, and geographic resolution a
 
 
 
+PHASE VII — INVENTORY, CONTAINERS, EQUIPMENT, AND LOCKS — QUESTIONS 86–148
+==========================================================================
+
+QUESTION 86 — CONTAINER-BASED PHYSICAL INVENTORY
+-------------------------------------------------
+Inventory is physical and container-oriented rather than an unlimited abstract list. A character may hold objects in left/right hands, wear equipment at configured wear locations, and place objects in appropriate containers such as backpacks, pouches, sheaths, and similar objects.
+
+QUESTION 87 — FULL HANDS
+------------------------
+If both hands are occupied and an action requires a free hand, the action fails and the player is told their hands are full. The game does not automatically stow, sheath, drop, or rearrange possessions.
+
+QUESTION 88 — TWO-HANDED WIELDING
+---------------------------------
+A weapon/object specifically wielded two-handed occupies both hands.
+
+QUESTION 89 — HAND SLOTS, GRIP, AND SWITCH
+-------------------------------------------
+Use three logical hand slots: LEFT-HAND, RIGHT-HAND, and BOTH-HANDS. GRIP changes an appropriate wielded weapon between one- and two-handed use when the necessary hand is available. SWITCH moves a one-handed held/wielded item from left to right or right to left. There is no dominant hand; both hands are mechanically equivalent. Weapons may have different one-hand/two-hand wielding modifiers.
+
+QUESTION 90 — INTELLIGENT RETRIEVAL; GET, DRAW, AND WIELD
+----------------------------------------------------------
+The parser intelligently locates an accessible, unambiguous requested item among possessions. GET retrieves the object and HOLDs it. DRAW retrieves it and WIELDs it, ready for combat. WIELD changes a held object to an obviously combat-ready/threatening state. UNWIELD or HOLD changes it back to ordinary held state without relocating it. Room-level character descriptions append obvious held/wielded objects.
+
+QUESTION 91 — HOLD VERSUS WIELD
+-------------------------------
+HOLD/WIELD is a state or manner distinction, not inventory movement. A held knife may be non-threatening; a wielded knife is visibly ready for use. UNWIELD and HOLD are equivalent WIELDED-to-HELD transitions.
+
+QUESTION 92 — ANY HOLDABLE OBJECT MAY BE WIELDED
+-------------------------------------------------
+Any physically holdable object may be WIELDed, even absurd or ineffective improvised weapons. Wielding expresses apparent intent; combat effectiveness comes from the object's actual mechanics.
+
+QUESTION 93 — HELD/WIELDED DISPLAY AND PMOTE
+---------------------------------------------
+The room-level character description includes held/wielded information. Players may also set a PMOTE (permanent emote), appended to the visible LDESC.
+
+QUESTION 94 — CLEARING PMOTE
+----------------------------
+Movement automatically clears PMOTE. PMOTE with no argument manually clears it.
+
+QUESTION 95 — PMOTE FORMATTING
+------------------------------
+Players are responsible for PMOTE capitalization, punctuation, grammar, and wording. The engine does not correct or reformat it.
+
+QUESTION 96 — PMOTE PREVIEW
+----------------------------
+PMOTE ? displays exactly the rendered room-level character line the player would present to others, except private viewer-specific labels that the character cannot know.
+
+QUESTION 97 — PMOTE IS NOT REALITY-CHECKED
+-------------------------------------------
+Hand, equipment, wielding, and posture changes do not clear or rewrite PMOTE. Movement clears it, and combat also clears it. Contradictory free-form PMOTE text is the player's responsibility; the engine does not semantically validate it.
+
+QUESTION 98 — CHARACTER DISPLAY COMPOSITION
+--------------------------------------------
+Conceptual display order is: LDESC -> held/wielded information -> viewer's private label -> PMOTE -> system-generated visible states.
+
+QUESTION 99 — LABELS ARE COMPLETELY PRIVATE
+--------------------------------------------
+A player cannot label themself. A character must never learn what labels other players assigned to them. No command may leak label text, existence, or creator.
+
+QUESTION 100 — PRIVATE LABELS AS PARSER IDENTIFIERS
+----------------------------------------------------
+A private label may be used by its creator as a parser identifier, e.g. LOOK BARTENDER, GIVE COIN TO BARTENDER, or WATCH TOAST LUNATIC. Use does not expose the label to its subject. Do not overengineer rare duplicate-description collisions unless play demonstrates a need.
+
+QUESTION 101 — PMOTE LENGTH
+---------------------------
+PMOTE maximum length is 60 characters for now; this may be tuned later.
+
+QUESTION 102 — PMOTE IS VISIBLE ON LOOK
+----------------------------------------
+PMOTE is persistent current visible state and appears whenever the character's room-level description is rendered, including later LOOKs.
+
+QUESTION 103 — PMOTE CHANGES ARE SILENT
+----------------------------------------
+Setting, changing, or clearing PMOTE sends no automatic message to others. Players should EMOTE a visible transition if desired. EMOTE means something happens now; PMOTE means an ongoing visible presentation.
+
+QUESTION 104 — COMBAT CLEARS PMOTE
+-----------------------------------
+Entering combat clears PMOTE and adds the authoritative system state (fighting). The old PMOTE does not return after combat.
+
+QUESTION 105 — SIMPLE FIGHTING FLAG
+------------------------------------
+Display only (fighting), not the opponent's identity, avoiding unnecessary churn in multi-character fights.
+
+QUESTION 106 — SYSTEM-GENERATED VISIBLE STATES
+-----------------------------------------------
+Characters may have multiple authoritative visible states such as (fighting), (bleeding), (injured), (unconscious), or (sitting at a blue table). At most four system-generated states are shown in the room-level description.
+
+QUESTION 107 — UNIQUE STATE PRIORITIES
+---------------------------------------
+Every visible state has a unique priority. If more than four are active, display the four highest-priority states. The actual priority table is deferred.
+
+QUESTION 108 — STATE LIMIT IS INDEPENDENT
+------------------------------------------
+The four-state maximum applies only to system-generated state flags. Held/wielded information, private labels, and PMOTE do not count toward it.
+
+QUESTION 109 — STATES ARE DISPLAY-ONLY
+---------------------------------------
+System state flags are not parser identifiers or aliases.
+
+QUESTION 110 — DO NOT OVERENGINEER STATE TEXT
+----------------------------------------------
+Do not build elaborate dynamic-reference machinery merely to eliminate rare cosmetic stale/mismatched state descriptions. Fix such edge cases later only if actual play shows they matter.
+
+QUESTION 111 — ALL ACTIVE STATES IN SCORE
+------------------------------------------
+SCORE shows all active states, including low-priority states hidden from the four-state public display. No separate STATUS command is required.
+
+QUESTION 112 — SCORE IS COMPREHENSIVE
+--------------------------------------
+SCORE is the comprehensive personal/mechanical character dashboard: descriptions, CAPs, wounds, conditions, active states, general statistics, and similar character information. It never reveals other players' private labels.
+
+QUESTION 113 — SCORE, INVENTORY, LOOK ME, AND PMOTE ?
+-----------------------------------------------------
+Inventory is not part of SCORE. INVENTORY reports possessions/carrying. LOOK ME shows the external appearance others can see, including visually apparent worn/carried equipment. PMOTE ? previews the current room-level presentation. LOOK ME cannot reveal other players' private labels.
+
+QUESTION 114 — LAYERED WEAR LOCATIONS
+--------------------------------------
+Use wear locations with ordered layers rather than pseudo-locations. A location such as TORSO may define UNDER, ON, and OVER. Higher layers can conceal lower layers. LOOK/LOOK ME show visually exposed equipment rather than every mechanically worn item.
+
+QUESTION 115 — CONFIGURABLE LAYER CAPACITY
+-------------------------------------------
+Multiple items may occupy a wear location/layer. Default capacity is three, but individual layers may be configured lower, including one for armor or other mutually exclusive equipment.
+
+QUESTION 116 — VISIBLE WORN ITEMS AND WEAR ORDER
+-------------------------------------------------
+Do not model partial occlusion among same-layer garments. Display all items considered visible, in the order they were worn.
+
+QUESTION 117 — STRICT REMOVAL ORDER (FINAL REVISION)
+-----------------------------------------------------
+Supersedes the earlier permissive idea. Higher layers must be removed before lower layers. Within one location/layer, removal is reverse wear order (last worn, first removed). A character cannot remove underwear beneath jeans/snow pants without removing the outer garments first.
+
+QUESTION 118 — WEAR REQUIRES HOLDING
+-------------------------------------
+The character must be HOLDING an item to WEAR it. WEAR does not auto-retrieve from a container.
+
+QUESTION 119 — REMOVE DELIVERS TO A HAND
+-----------------------------------------
+REMOVE places the item in a free hand. If no hand is free, removal cannot complete. Do not auto-stow or drop.
+
+QUESTION 120 — DRESSING RESPECTS OUTER LAYERS
+----------------------------------------------
+Lower layers may be empty, but existing higher layers obstruct adding garments beneath them. A character may wear snow pants with nothing underneath, but must remove them before later adding underwear.
+
+QUESTION 121 — STRICT WEAR-STACK ENFORCEMENT
+---------------------------------------------
+Layers have defined order and capacity. New same-layer items sit atop earlier ones; same-layer removal is LIFO; higher layers must clear before lower layers for WEAR/REMOVE; WEAR requires holding; REMOVE requires a free hand.
+
+QUESTION 122 — WEAR LOCATIONS ARE INDIVIDUALLY CONFIGURED
+----------------------------------------------------------
+Each wear location defines which layers exist, their physical order, and each layer's capacity. Not every location uses UNDER/ON/OVER.
+
+QUESTION 123 — ITEMS DEFINE PERMITTED WEAR LOCATION/LAYER
+---------------------------------------------------------
+Every wearable object explicitly defines where/layer it may be worn. Model the meaningful equipment location, not full garment geometry; e.g. an overcoat can simply be TORSO:OVER even if it hangs over the legs.
+
+QUESTION 124 — MULTIPLE PERMITTED WEAR LOCATIONS
+-------------------------------------------------
+An object may permit multiple location/layer combinations. If only one is valid, WEAR can resolve it automatically; if several are valid, the player may specify the location.
+
+QUESTION 125 — COVERED CONTAINERS REMAIN OWNER-ACCESSIBLE
+----------------------------------------------------------
+Outer garments may conceal a worn container and make theft harder but do not block its wearer from accessing its contents. Strict WEAR/REMOVE order still applies.
+
+QUESTION 126 — CONTAINER CLOSURE
+---------------------------------
+Containers support OPEN/CLOSED or ALWAYS OPEN behavior and configurable descriptive closure terminology such as flap, lid, top, or cover.
+
+QUESTION 127 — OPEN/CLOSE TARGET THE CONTAINER
+-----------------------------------------------
+Commands target the container (OPEN BACKPACK), not the descriptive closure part (OPEN FLAP). Closure terminology exists for prose.
+
+QUESTION 128 — CLOSED CONTAINERS CONCEAL CONTENTS
+--------------------------------------------------
+A closed container's contents cannot be seen. Examination may describe the container/closed state but not its contents. Open or always-open containers may expose contents as appropriate.
+
+QUESTION 129 — GET MAY TRANSPARENTLY OPEN AND RESTORE
+------------------------------------------------------
+If GET's accessible target is inside a closed owned/carried container, the engine may transparently open it, retrieve the object, and close it again. If found open, leave it open.
+
+QUESTION 130 — PUT USES THE SAME FOUND-STATE RULE
+--------------------------------------------------
+PUT into an accessible closed container may transparently open it, place the object, and close it again. If found open, leave it open. General rule: restore temporary container manipulation to the state in which it was found.
+
+QUESTION 131 — LOCKS ON CONTAINERS, DOORS, AND WINDOWS
+-------------------------------------------------------
+Containers/objects require an appropriate key to LOCK/UNLOCK normally. Doors/windows may normally be locked/unlocked from the INSIDE without a key unless configured KEY ONLY. KEY ONLY requires a key even inside. Automatic GET/PUT never bypasses a locked container.
+
+QUESTION 132 — LOCK IDS, MASTER KEYS, AND BARS
+-----------------------------------------------
+Each KEY has exactly one lock ID. A lockable door/chest/object may accept up to twelve lock IDs. This naturally supports room, floor-master, and building-master keys. BARRED is independent of LOCKED; a key or successful lockpick does not defeat a bar.
+
+QUESTION 133 — BAR SIDE FOLLOWS DOOR SWING
+-------------------------------------------
+A door may be barred only on the side toward which it swings. Door swing side/direction is therefore meaningful configuration and determines where BAR/UNBAR is possible.
+
+QUESTION 134 — DOORS ARE UNBREAKABLE FOR NOW
+----------------------------------------------
+Do not currently allow forcing/breaking doors. This deliberately protects persistent/offline player storage and bases. Structural damage may be revisited later.
+
+QUESTION 135 — LOCK PICKABILITY 0–20
+-------------------------------------
+Every lock has pickability 0–20. 0 is trivial/child-level; 1–19 progressively harder; 20 is absolutely unpickable under any circumstances. Exact CAP/tool/roll mechanics are deferred.
+
+QUESTION 136 — EVERY PICK ATTEMPT LEAVES EVIDENCE
+--------------------------------------------------
+Every lockpicking attempt, success or failure, leaves marks/evidence and carries a chance of breaking picks. Picking does not necessarily make the lock unusable. Exact break chance is deferred.
+
+QUESTION 137 — PICKING EVIDENCE ACCUMULATES
+--------------------------------------------
+Picking damage/evidence accumulates over repeated attempts and can be repaired. Exact scale and repair details beyond the following rule are deferred.
+
+QUESTION 138 — EXAMINING AND REPAIRING PICK DAMAGE
+---------------------------------------------------
+A picker can examine the lock afterward and see the physical evidence; no abstract numeric feedback is needed during the attempt. Repairing picking damage requires both a proper key accepted by the lock (including a valid master key) and a simple locksmith kit. A thief who merely picked the lock cannot erase evidence without legitimate key access.
+
+QUESTION 139 — PICKING CAN LOCK OR UNLOCK; REPAIR DOES NOT CHANGE STATE
+------------------------------------------------------------------------
+Repairing evidence does not change locked/unlocked state. Lockpicking can manipulate a lock in either direction, so a burglar may pick a lock open and later pick it closed again; evidence remains unless legitimately repaired.
+
+QUESTION 140 — PICK IS A TOGGLE
+--------------------------------
+PICK <target> attempts to toggle LOCKED->UNLOCKED or UNLOCKED->LOCKED. Do not warn a player that a lock is already unlocked; a thief may accidentally pick an unlocked door into the locked state. Attempts still leave evidence and may break picks.
+
+QUESTION 141 — LOOK DOES NOT ADVERTISE LOCK STATE
+-------------------------------------------------
+Ordinary LOOK does not reveal whether a closed door/window/chest is locked. State is learned through interaction.
+
+QUESTION 142 — OPEN/CLOSE REVEAL ONLY ACTION-RELEVANT INFORMATION
+-----------------------------------------------------------------
+OPEN on an open object reports already open. CLOSE on a closed object reports already closed and does not reveal lock state. OPEN on a closed locked object may report that it is locked because the lock blocks the requested action. OPEN/CLOSE are not free diagnostic lock-state probes.
+
+QUESTION 143 — AUTOMATIC KEY SELECTION
+---------------------------------------
+LOCK/UNLOCK may automatically find an appropriate key on the character's person. A free hand is required. The engine temporarily retrieves/uses the key and returns it exactly where found. It never rearranges occupied hands to make room.
+
+QUESTION 144 — TRANSPARENT KEY RETRIEVAL
+-----------------------------------------
+Matching keys may be transparently retrieved through accessible nested containers: open as necessary, retrieve key, operate lock, return key, and restore every container's found state. Locked containers stop traversal.
+
+QUESTION 145 — KEY RINGS
+-------------------------
+Key rings are ordinary physical containers specialized for keys. They are not magical key inventories. Keys on a worn/carried key ring count as physically on the character and participate in transparent key lookup.
+
+QUESTION 146 — RECURSIVE SEARCH AND MAXIMUM NESTING DEPTH
+----------------------------------------------------------
+Transparent inventory searches recursively traverse accessible nested containers, for keys and for ordinary intelligent retrieval such as GET. Container nesting is strictly limited to four container levels. Example: character -> backpack (1) -> bag (2) -> pouch (3) -> key ring (4) -> key is legal because the final key is not another container level. A fifth nested container is prohibited. Closed accessible containers may be temporarily opened/restored; locked containers stop traversal.
+
+QUESTION 147 — NO CIRCULAR CONTAINMENT
+---------------------------------------
+A container may never contain itself directly or indirectly. Before moving a container into another, the engine must reject any operation that would make the object one of its own ancestors. This prevents containment loops and, in Thomas's words, keeps the universe from imploding.
+
+QUESTION 148 — FULL RECURSIVE WEIGHT AND CAPACITY
+--------------------------------------------------
+Character encumbrance includes the full recursive weight of containers and everything within them. Container capacity likewise includes nested containers and all recursively contained contents. Nesting cannot be used to make mass disappear or bypass carrying limits.
+
+DESIGN PRINCIPLES REINFORCED BY QUESTIONS 86–148
+--------------------------------------------------
+- Model a physical world without turning routine, unambiguous handling into pointless busywork.
+- Hands and meaningful physical placement matter; the engine does not silently rearrange possessions for the player.
+- Transparent convenience is acceptable for mundane operations such as temporarily opening a carried container or retrieving the correct key, provided found state is restored.
+- Player-authored prose is the player's responsibility. The engine supplies authoritative mechanical state but does not attempt semantic policing of PMOTE.
+- Prefer simple deterministic rules over elaborate handling of rare cosmetic edge cases.
+- System-generated state is authoritative; PMOTE may be wrong because it is free-form player roleplay.
+- Protect persistent player investment: for now doors cannot be smashed through, and bars remain independent of locks/picking.
+- Inventory recursion is bounded and safe: maximum four nested container levels, no circular containment, and full recursive weight.
+
+
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 86 — INVENTORY MODEL
+NEXT QUESTION: QUESTION 149
 
 Important context:
-Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–72 completed Phase V. Questions 73–85 completed Phase VI. SENSE has replaced RIDNG as one of the eight CAPs. Perception, hiding, continuous illumination, active SEARCH/TRACK behavior, ordinal n.keyword targeting, and substantial generated LOOK prose with an optional BRIEF presentation mode are now established. During Q85 we also established the intended deterministic chunk-generation/cache architecture at a design level. Resume with Question 86 about the physical inventory model.
+Questions 86–148 have now been discussed and locked in this interview continuation. The new material establishes the physical inventory/hand model; HOLD/WIELD/DRAW behavior; PMOTE and private-label presentation; visible system states; SCORE/LOOK ME separation; layered wear locations and strict dressing order; physical containers and transparent access; locks, keys, master-key IDs, bars, lockpicking evidence/repair; key rings; recursive intelligent inventory search; a maximum container nesting depth of four; prohibition of circular containment; and full recursive weight/capacity accounting.
 
-Proceed one numbered question at a time.
+Resume with Question 149. Ask one numbered question at a time and continue the same interview process.
+
 
 REMAINING ORIGINAL DISCUSSION QUEUE
 ===================================
