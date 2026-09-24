@@ -22,6 +22,9 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
+Questions 1–162 have been discussed. Resume at Question 163: whether owners may customize exterior property descriptions using the same moderated system. Questions 149–162 below record the finalized property-after-death decisions.
+
+Historical status note (preserved from the earlier interview):
 Questions 1–85 have been discussed. Question 86 is the next unanswered design question. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with the shelter portion of Question 69.
 
 
@@ -1486,15 +1489,183 @@ DESIGN PRINCIPLES REINFORCED BY QUESTIONS 86–148
 
 
 
+PROPERTY AFTER DEATH, SUCCESSION, AND DESCRIPTIONS — QUESTIONS 149–162
+======================================================================
+
+These entries record the finalized decisions from the Property After Death interview. Later revisions below govern over superseded proposals. The original discussion queue is preserved for reference; its historical numbering is not the active interview numbering.
+
+QUESTION 149 — PROPERTY AND POSSESSIONS AFTER PC DEATH
+------------------------------------------------------
+
+At death, everything physically carried by the PC drops immediately at the exact death coordinates. The character's body immediately disappears from the playable world and transfers to an admin-only death area. No PC corpse remains in the playable world.
+
+From the death area, the player may remain dead, re-enter naked with the established -10,000 consequence (the Naked 10000 return described earlier), or petition for administrative review. If review finds the character blameless in the death, an administrator may permit a return at Origin. This records the current death-area choices without inventing a new numerical penalty.
+
+Non-carried possessions remain physically where they were. Death does not teleport or erase stored property.
+- Registered property follows the inheritance, eviction, and eventual sale rules finalized in Questions 154–159. The early suggestion of a Land Office sale was refined to a sale directly at the property's front door.
+- A rented apartment eventually reverts to its landlord, along with everything left inside. No exact apartment-reversion interval was settled here.
+- An unregistered cabin or other structure remains in the world and may become part of the landscape. After 90 in-game days without the owner entering, another character may lay claim to it.
+- The original owner may contest the claim. If it goes unanswered/uncontested, the claimant retrieves the claim paperwork from the structure, gains entry/access, and becomes its owner. No additional contest-response duration was fixed in this discussion.
+- The 90-day absence rule can apply to a living absent owner as well as a dead one; it is an abandonment rule.
+
+
+QUESTION 150 — IMMEDIATE LOOTING; NO PC CORPSES
+-----------------------------------------------
+
+All dropped death gear immediately becomes ordinary lootable property: finder's keepers. There is no protection timer, corpse ownership, special recovery period, or reserved right for the returning character. Anyone who finds it may take it.
+
+PC corpses never exist in the playable world. The items remain at the death coordinates; the character does not.
+
+
+QUESTION 151 — CARRIED MONEY, DOCUMENTS, AND BANK INHERITANCE
+-------------------------------------------------------------
+
+Everything physically carried drops, including money, bank notes, deeds, documents, maps, worn equipment, held equipment, and carried containers and their contents. Financial or legal importance grants no special protection.
+
+Deposited bank funds are separate from carried cash and bank notes. After 90 in-game days, deposits transfer to the named surviving heir's account. If there is no valid surviving heir, including when both account holder and heir are dead, the funds revert to the bank.
+
+A broader heir system for homes, barns, cabins, land, and other property was flagged for further design here. Questions 154–156 subsequently settle the registered-property door/succession mechanism; this does not replace the bank's separate 90-day rule.
+
+
+QUESTION 152 — DEEDS CONFER OWNERSHIP; SECURE DOCUMENT STORAGE
+--------------------------------------------------------------
+
+Possession of the property deed confers ownership of the property it represents. A person who acquires the deed by finding, looting, stealing, buying, or otherwise obtaining it acquires the property; the former holder is not protected merely by an older ownership record.
+
+Owners should secure deeds rather than routinely carry them into danger. A safe at home is an option. Banks offer purchasable lockboxes for storing deeds and other valuables.
+
+
+QUESTION 153 — REMOTE OWNERSHIP AND DOOR CONTROL — REVISED BY Q154
+------------------------------------------------------------------
+
+Remote property control must be possible at the property itself, without requiring a trip of potentially thousands of miles to the Land Office. A magical mechanism at the door is accepted for this purpose.
+
+The initial proposal was to present a deed/claim to the locked door and pay a fee to receive an owner's key. That physical owner's-key proposal was superseded during Question 154 by identity-based magical doors. It is retained here only as interview history, not as a parallel key system. No key-issuance fee was finalized for the replacement system.
+
+
+QUESTION 154 — KEYLESS MAGICAL DOORS, ACCESS, AND SUCCESSION
+------------------------------------------------------------
+
+Each constructed property door is registered to its property and numbered within it, such as Door 1 for the primary entrance and Doors 2–5 for other doors. The property owner controls all its registered doors.
+
+There are no physical keys in this door/access system. Magical door permissions recognize named characters and ownership. This supersedes the earlier physical door-key, master-key, key-retrieval, and owner's-key proposals wherever they conflict with this system; the earlier interview record remains preserved as history. This discussion does not separately settle how every earlier container/window lock or lockpicking detail maps to magical access.
+
+The owner may configure each door as lockable or not and grant or revoke named users' access to individual doors. Authorized users may open, close, lock, and unlock that door. They can admit other people by opening/unlocking it; admission alone does not grant permanent named access. Door-specific ban lists may prevent named individuals from entering, with bans managed at the relevant door.
+
+The primary entrance may hold an ordered list of potential heirs. After the owner's death, an eligible heir using that entrance is offered the option to claim ownership. Acceptance registers the property to that heir and transfers control of all its doors. Existing access lists remain intact until the new owner changes them. The new owner may reconfigure doors and grant or revoke permissions individually.
+
+
+QUESTION 155 — SUCCESSION ELIGIBILITY WIDENS BY TIMESTAMP
+---------------------------------------------------------
+
+Succession is passive and based on elapsed in-game time since the owner's death. The first heir is eligible first; each additional heir joins the eligible pool after another 30 in-game days.
+
+For four heirs:
+- Heir 1 is eligible initially.
+- At 30 days, heir 2 also becomes eligible.
+- At 60 days, heir 3 also becomes eligible.
+- At 90 days, heir 4 also becomes eligible.
+
+Earlier eligible heirs remain eligible as later heirs join. There is no formal refusal or permanent surrender of priority: an heir may simply leave the offer unaccepted and claim later while inheritance remains available and nobody else has claimed. Priority provides an initial exclusive opportunity, not an indefinite veto over later heirs. Question 156 governs eventual eviction and sale if inheritance remains unclaimed.
+
+Each time a listed user uses the door/lock while ownership is unresolved, the door notifies them that the owner is dead and ownership is being resolved. An eligible heir is told they may claim now; a not-yet-eligible heir is told how many in-game days remain. Access alone does not make a person an heir.
+
+Calculate eligibility and remaining time from stored timestamps when needed; do not require daily maintenance processing or a sequential accept/refuse workflow.
+
+
+QUESTION 156 — UNCLAIMED INHERITANCE, EVICTION, AND FRONT-DOOR SALE
+-------------------------------------------------------------------
+
+After the final named heir has had 30 in-game days to claim and the property remains unclaimed, begin a 30-in-game-day eviction notice for those with access. This gives them time to remove their belongings.
+
+When the eviction notice expires:
+- Remove the old access permissions.
+- Move the stored login/logout location of anyone logged out inside to immediately outside the main entrance. They cannot regain entry through the removed permissions.
+- Anything left inside is forfeited and remains with the property.
+- Put the property up for sale directly at its front door.
+
+A buyer who has the cash may pay the asking price there and immediately become the registered owner, with authority over the property's doors. No Land Office trip is required.
+
+The lifecycle is: owner dies -> heir eligibility widens -> final heir receives 30 days -> 30-day eviction notice -> access removal and forfeiture -> sale at the front door. The discussion did not separately specify the timing for an empty heir list.
+
+
+QUESTION 157 — REGISTERED STRUCTURE BASE VALUE AND INITIAL SALE PRICE
+---------------------------------------------------------------------
+
+Each registered structure receives a base value by type when created. Illustrative values discussed were cabin 1,000, house 10,000, and barn 7,000; these examples establish the valuation approach rather than an exhaustive price table.
+
+When abandoned registered property enters sale, its initial asking price is 200% of its base value. A house with a base value of 10,000 therefore starts at 20,000.
+
+Store the sale-start timestamp so the current asking price can be calculated when someone examines or purchases the property. Question 158 finalizes the depreciation method and floor.
+
+
+QUESTION 158 — COMPOUNDED PRICE DECLINE AND PERMANENT FLOOR
+-----------------------------------------------------------
+
+The asking price decreases by 1% of its CURRENT asking price per elapsed in-game day, compounded. It is not a fixed daily subtraction based on the original amount.
+
+Initial asking price = 2 × base value.
+Current asking price = max(initial asking price × 0.10, initial asking price × 0.99^(elapsed in-game days for sale)).
+
+The floor is 10% of the INITIAL ASKING PRICE, not 10% of the structure's base value. A base-10,000 house begins at 20,000, is approximately 7,321 after 100 in-game days, and eventually reaches a floor of 2,000. It stays at that floor forever until purchased.
+
+Compute the compounded price from the sale-start timestamp on demand. No daily price-update job is required. Currency rounding was not specified here.
+
+
+QUESTION 159 — FORFEITED CONTENTS CONVEY AS-IS; VIRTUAL TOUR
+------------------------------------------------------------
+
+Everything physically remaining after eviction conveys with the property as-is. This includes furniture, containers, stored goods, equipment, valuables, junk, and other possessions left on the premises. Contents are not generated or guaranteed for a purchaser; the buyer receives whatever actually remains.
+
+Prospective purchasers may take a virtual tour before buying. The initial suggestion of temporarily moving a buyer inside as a non-interacting ghost was superseded by Question 160's remote room-echo design.
+
+
+QUESTION 160 — VIRTUAL TOUR AS READ-ONLY REMOTE ROOM ECHOES
+-----------------------------------------------------------
+
+The buyer remains physically outside the main entrance throughout the tour. The tour is a read-only remote LOOK/echo of rooms, not character movement and not a temporary ghost state.
+
+Show the room itself: structural description, dimensions where available, layout, exits, doors, windows, and other permanent structural features. Do not show occupants, animals, loose objects, containers, stored goods, nonstructural furniture, or other room contents. No container inspection or contents preview is provided, even though forfeited contents will convey with the sale.
+
+The buyer may traverse the property's room layout through those echoes without entering, touching, moving, taking, depositing, or otherwise interacting with anything inside. The property must identify its constituent rooms and their connections so the tour can traverse the correct spaces.
+
+
+QUESTION 161 — OWNER-WRITTEN ROOM DESCRIPTIONS AND STAFF REVIEW
+---------------------------------------------------------------
+
+Owners may freely customize interior room names/descriptions, subject to staff review. Creative prose changes presentation only; it cannot create exits, stronger doors, materials, dimensions, or other mechanical features that do not actually exist.
+
+A submission does not become the approved/current room description before approval. Staff review has three outcomes:
+- Approval makes the submitted description current immediately.
+- Soft rejection notifies the player of the problem and the need to correct it, and reverts the submission one level/to its previous state. It carries no disciplinary strike. Typos and honest errors are representative reasons.
+- Hard rejection reverts to the previous description and records a hard rejection on the player's moderation history. Deliberate abuse or misrepresentation may justify this outcome.
+
+Submissions and moderation actions are written to a permanent vboard record, preserving the submission, decision, and staff context. The initial suggestion of a ban at three hard rejections was corrected by Question 162; use the finalized rolling-year threshold below.
+
+
+QUESTION 162 — CREATIVE-DESCRIPTION ELIGIBILITY: FOUR HARD REJECTIONS
+---------------------------------------------------------------------
+
+Count hard rejections during the rolling previous year. A player with zero, one, two, or three hard rejections in that window may still submit creative description changes. Reaching four blocks further creative-description submissions.
+
+The restriction ends when enough hard rejections have aged beyond one year to bring the rolling count back to three or fewer. For a player with exactly four, the oldest relevant rejection aging out restores eligibility. This is not a fixed one-year ban starting with the fourth rejection and is not a lifetime ban.
+
+Soft rejections never count toward the threshold. Aging out of the eligibility window does not erase the permanent moderation/vboard history. Timestamp comparisons can determine current eligibility without maintenance processing. The discussion called this a rolling year without separately defining a real-world versus in-game year.
+
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 149
+NEXT QUESTION: QUESTION 163
 
 Important context:
 Questions 86–148 have now been discussed and locked in this interview continuation. The new material establishes the physical inventory/hand model; HOLD/WIELD/DRAW behavior; PMOTE and private-label presentation; visible system states; SCORE/LOOK ME separation; layered wear locations and strict dressing order; physical containers and transparent access; locks, keys, master-key IDs, bars, lockpicking evidence/repair; key rings; recursive intelligent inventory search; a maximum container nesting depth of four; prohibition of circular containment; and full recursive weight/capacity accounting.
 
-Resume with Question 149. Ask one numbered question at a time and continue the same interview process.
+Questions 149–162 are now finalized in the Property After Death continuation above.
+
+Resume with Question 163 — Can owners customize exterior property descriptions using the same staff approval, soft-rejection, hard-rejection, and rolling-year eligibility system as interior descriptions?
+
+This question is unanswered. Do not treat exterior customization as approved yet. Ask one numbered question at a time and continue the same interview process.
 
 
 REMAINING ORIGINAL DISCUSSION QUEUE
