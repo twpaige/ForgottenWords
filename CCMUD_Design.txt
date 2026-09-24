@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–30 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Resume with Question 31.
+Questions 1–58 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with Question 59.
 
 
 PROJECT REFERENCES
@@ -522,13 +522,327 @@ Skipped as inapplicable for ordinary players.
 Question 29 establishes one character per ordinary account and one account per real person. Ordinary players therefore cannot use same-account alternate characters to share property, maps, messages, inheritance, or other resources. Staff-only exceptions exist for legitimate staff functions and must not provide ordinary gameplay advantages.
 
 
+QUESTION 31 — SIMULTANEOUS CHARACTERS AND STAFF PERMISSIONS
+------------------------------------------------------------
+
+Ordinary players cannot have multiple simultaneous characters because they are limited to one account and one character.
+
+Staff may be allowed to control multiple characters simultaneously, but this is not automatic for all staff. All staff capabilities are managed through granular permission-based staff management controlled by senior staff. Permissions are assigned individually: for example, Sam may be granted permission to multi while Jerry is not. Staff titles alone do not confer every staff power.
+
+Staff exceptions exist for administration, testing, events, NPC portrayal, and similar legitimate duties and must not provide an ordinary gameplay advantage.
+
+
+QUESTION 32 — ALT ABUSE
+-----------------------
+
+Skipped as inapplicable to ordinary players.
+
+Ordinary players have one account and one character, so they cannot use alts to bypass geography, scouting, specialization, communication, progression, or other restrictions. Any staff exceptions are permission-controlled and are not ordinary gameplay privileges.
+
+
+QUESTION 33 — CHARACTER CREATION CHOICES
+----------------------------------------
+
+Character creation includes:
+
+- Name.
+- Short description, for example: "a gray-haired man".
+- Long description (ldesc), for example: "A gray-haired man with a bushy beard stands here."
+- Full description: a few sentences describing the character in a neutral tone without actions.
+- Age.
+- CAP allocation.
+
+Height, weight, and build are not separately tracked fields; Question 45 later established that these have zero mechanical effect and may simply be described in the full description if the player considers them important.
+
+Starting outfitting and location choices under Question 21 are part of entering the world but are conceptually separate from the descriptive character fields above.
+
+
+QUESTION 34 — INITIAL CAP ALLOCATION AND RETURNING CHARACTERS
+-------------------------------------------------------------
+
+A brand-new character receives 15 CAP points distributed among exactly five CAPs. Each of those five selected CAPs must receive at least 1 point and no more than 5 points. The other CAPs begin at 0.
+
+Death may lead to different return paths:
+
+- Naked 10000: the returning character retains ALL CAP levels held at the time of death. The penalty is geographic and material rather than loss of advancement.
+- Reduced-CAP return: each individual CAP is transferred at 50% of its value at the time of death, always rounded down. This is not a pooled total that may be redistributed. MAGIC 12 becomes 6; MAGIC 13 also becomes 6; WEAPN 18 becomes 9.
+- Newbie restart: the player may instead restart under the normal newbie rules and receive newbie benefits, but CAPs reset to the normal 15-point, exactly-five-CAP allocation.
+
+Question 25 previously established that murder by another player never qualifies for the one-time accidental/environmental reprieve and that continuing after murder uses Naked 10000. The exact eligibility among the other return routes for non-murder deaths should be reconciled when the full death system is designed; do not silently treat murder as eligible for a more favorable route.
+
+
+QUESTION 35 — UNSELECTED CAPS
+-----------------------------
+
+Yes. Any CAP not selected during newbie allocation begins at 0. Exactly five CAPs receive the initial 15 points.
+
+
+QUESTION 36 — STARTING CAP MINIMUMS AND MAXIMUMS
+------------------------------------------------
+
+A newbie must distribute exactly 15 CAP points among exactly five CAPs. Each selected CAP has a minimum starting value of 1 and a maximum starting value of 5. All unselected CAPs begin at 0.
+
+
+QUESTION 37 — SUGGESTED CAP PACKAGES
+------------------------------------
+
+Character creation offers optional suggested CAP packages/templates. These are not classes. A package is simply a legal prefilled 15-point distribution across exactly five CAPs.
+
+New players should be strongly encouraged to choose a package, but manual allocation remains available.
+
+
+QUESTION 38 — AUTOMATIC OPENING CRAFTS
+--------------------------------------
+
+New characters do not choose starting Crafts directly.
+
+Certain Crafts will be designated as opening Crafts for particular CAPs. A character who has the qualifying CAP, typically at 1 or greater, automatically receives that CAP's designated opener Craft. For example, ATHLX may eventually grant an opener such as Gather Firewood.
+
+The exact opener Crafts and any thresholds beyond the basic CAP qualification will be determined later. A CAP at 0 does not grant its opener.
+
+This fits the broader Craft model already discussed elsewhere: CAPs are numeric capabilities, while Crafts represent learned practical knowledge and transformations.
+
+
+QUESTION 39 — BACKGROUND AND MECHANICS
+--------------------------------------
+
+Character background is descriptive and roleplay-only. Claiming to have been a surgeon, blacksmith, soldier, or any other profession in the character's prior life grants no CAP points, Crafts, equipment, abilities, or other mechanical bonuses. Actual game mechanics determine what the character can do.
+
+
+QUESTION 40 — INEFFECTIVE CHARACTER BUILDS
+-------------------------------------------
+
+A player may make a poor but legal CAP allocation. The system does not automatically correct or protect the player from an ineffective manual build.
+
+New players should be strongly encouraged to use one of the suggested CAP packages, but a player who chooses manual allocation accepts the consequences of that choice.
+
+
+QUESTION 41 — RETIREMENT, REMAKING, AND DELIBERATE CYCLING
+----------------------------------------------------------
+
+Characters may be retired.
+
+- Every previous character remains permanently visible in the player's pfile/history and is marked with its final status, such as DIED or RETIRED.
+- Retirement generates an admin-news notice.
+- Multiple retirements within a short period may attract administrator review.
+- Obvious deliberate suicides used to cycle characters may receive the same scrutiny.
+- Senior staff may impose a temporary advancement freeze when they determine character cycling is being abused.
+- The duration/status of such a freeze is shown on the player's pfile.
+
+This is staff judgment rather than an automatic declaration that every suicide or retirement is abuse.
+
+
+QUESTION 42 — CHARACTER NAME UNIQUENESS
+---------------------------------------
+
+Official character names are globally unique forever. Once an official name has been used, it may never be reused, even after that character dies or retires.
+
+This permanent canonical name is primarily important for administration and historical identification. Players may use similar-looking names or claim other names in roleplay, but the underlying official name remains unique.
+
+
+QUESTION 43 — LEARNING NAMES, PRIVATE LABELS, AND TARGETING
+-----------------------------------------------------------
+
+A character's actual character-file/canonical name is never automatically revealed through ordinary gameplay. A character whose official name is Adolph may tell everyone that his name is Gray; the game does not automatically expose the truth.
+
+Characters may normally be targeted through suitable descriptive keywords, such as "gray" for a gray-haired man.
+
+If reasonably practical to implement, a player may also attach an arbitrary private label to another character, such as Gray, cheater, bigfatpig, or pushover.
+
+- The label is the observing player's private note and is not guaranteed to be true.
+- Only the label maker sees/uses that label.
+- The private label becomes a valid targeting keyword for the label maker only. If one player labels Adolph "Gray", that player can use commands such as LOOK GRAY; other players gain no such keyword or knowledge from the label.
+
+Exact validation and edge cases for arbitrary labels may be addressed during implementation.
+
+
+QUESTION 44 — HOODS AND DISGUISE
+---------------------------------
+
+An appropriate hood may physically conceal a character's face so that the visible identity becomes generic, such as "a hooded figure."
+
+More elaborate disguise systems—hair dye, false beards, makeup, impersonation, disguise contests, and similar mechanics—are deferred.
+
+How private labels interact with active concealment may be settled later with the perception/disguise rules.
+
+
+QUESTION 45 — BODY SIZE AND MECHANICS
+-------------------------------------
+
+Height, weight, and build have zero mechanical effect and are not tracked as separate character fields. If a player considers such details important, they may include them in the full description.
+
+Descriptive claims do not establish mechanical superlatives such as being the world's tallest, biggest, or strongest character. Capability comes from the game's actual mechanics and CAPs.
+
+
+QUESTION 46 — DELIBERATE LOGOUT AND CAMPING
+--------------------------------------------
+
+Characters may safely log out from appropriate locations such as a tavern, inn, apartment, or similar safe place.
+
+In the wilderness, a character may use CAMP in an appropriate location. CAMP is a delayed action requiring the character to remain still for a set period; the exact duration will be determined later. When CAMP completes, the character curls up/goes to sleep and safely logs out.
+
+Logging out safely does not guarantee that the surrounding world will still be safe when the player returns.
+
+
+QUESTION 47 — FULL LOGOUT AND AGGRESSION TIMER
+-----------------------------------------------
+
+Once a character is completely logged off, the character leaves the active world and cannot be seen, targeted, robbed, moved, attacked, or killed through ordinary gameplay. The game stores the character's return position/state.
+
+A five-minute aggression/combat timer prevents logout entirely. A character who has been in combat/aggression during the preceding five minutes cannot complete a normal logout or CAMP logout. Exact actions that reset the aggression timer will be defined with combat.
+
+
+QUESTION 48 — WHERE CAMPING IS ALLOWED
+---------------------------------------
+
+A deliberate logout requires either an appropriate safe-logout location or a successful CAMP.
+
+CAMP is contextually restricted. A character cannot CAMP in physically inappropriate locations such as the middle of a lake or in the street outside the tavern. The character must first be in an appropriate place and satisfy the CAMP delay. The aggression timer overrides otherwise valid logout conditions.
+
+
+QUESTION 49 — UNEXPECTED DISCONNECT
+------------------------------------
+
+An unexpected disconnect does not immediately remove the character from the active world.
+
+- With no active aggression, the disconnected character remains physically present for one real-world minute and then safely leaves the active world.
+- If an aggression timer is active, the character remains physically present until the five-minute aggression timer expires, plus one additional real-world minute.
+- New qualifying aggression during the grace period may reset/extend the aggression timing as appropriate.
+
+This prevents disconnecting from functioning as an instant escape while giving ordinary connection failures a short, finite exposure period.
+
+
+QUESTION 50 — INTERACTION DURING DISCONNECT GRACE
+-------------------------------------------------
+
+During the disconnect/grace period, the character remains physically present and may be attacked, robbed, moved, rescued, or otherwise interacted with normally.
+
+Once the character becomes fully logged off, the character leaves the active world and ordinary players can no longer interact with the character.
+
+
+QUESTION 51 — DISCONNECTION WHILE TRAVELING
+--------------------------------------------
+
+There is no ordinary travel while disconnected. An unexpected disconnect immediately stops the character's active movement at the current coordinate, after which the normal disconnect/grace rules apply.
+
+A character deliberately using CAMP must stop traveling before camping.
+
+
+QUESTION 52 — OFFLINE PASSENGERS ON CONVEYANCES
+------------------------------------------------
+
+No separate consent is required for movement caused by a conveyance. If a character safely logs out while aboard a wagon, boat, ship, or similar conveyance, the stored character position remains attached to that conveyance.
+
+If the conveyance moves while the player is offline, the character's return position moves with it automatically: if you are on the wagon, you go where the wagon goes. The fully logged-off character remains non-targetable and cannot be killed through ordinary gameplay while absent.
+
+
+QUESTION 53 — CONSTRUCTION NEAR A LOGGED-OFF CHARACTER
+-------------------------------------------------------
+
+Logged-off characters have a 500-foot construction buffer around their stored position.
+
+If someone builds anything or pitches a tent within 500 feet of a logged-off character, the logged-off character's stored position is automatically pushed directly away from the new construction in a straight line until the stored position is 500 feet from it.
+
+The character remains fully offline and uninvolved; only the stored return coordinate changes. This resolves the spatial conflict when construction occurs rather than waiting until the absent player returns.
+
+Rare geometric/terrain edge cases, such as multiple structures or displacement toward impassable terrain, may be handled when the implementation is designed.
+
+
+QUESTION 54 — SLEEPING BENEFITS
+-------------------------------
+
+Sleeping provides no routine mechanical bonus. Better sleeping accommodations do not automatically grant faster healing, extra stamina recovery, advancement bonuses, or similar buffs.
+
+Sleep may occasionally produce a dream or vision. Dreams and visions may later be used for narrative, atmosphere, mysteries, Callings, clues, or administrator-run content without turning sleep into a mandatory optimization mechanic.
+
+
+QUESTION 55 — OFFLINE ENVIRONMENTAL DANGER
+-------------------------------------------
+
+A fully logged-off character is ordinarily immune to environmental damage and death.
+
+CCMud does not autonomously simulate destructive natural disasters as lethal random systems. Major natural disasters are administrator-run roleplay events.
+
+An administrator deliberately running such an event may explicitly determine that offline characters are affected—for example, ruling that everyone inside a particular house died in a fire. Such outcomes are exceptional staff adjudications rather than routine offline simulation.
+
+
+QUESTION 56 — LOGOUT AND NON-COMBAT DANGER
+-------------------------------------------
+
+There is no broad "danger nearby" flag that prevents camping merely because a potential threat exists.
+
+CAMP is prevented by physical impossibility, inappropriate circumstances, and actual aggression. A drowning character cannot CAMP because the character is not in a valid camping situation. A character who can see a bear a mile away going about its business may still CAMP normally.
+
+Once actual combat/aggression occurs, the five-minute aggression timer governs logout.
+
+
+QUESTION 57 — MOVEMENT SPEEDS
+-----------------------------
+
+Base movement speeds in game-world terms are:
+
+- TRUDGE: 1 mph.
+- WALK: 3 mph.
+- JOG: 5 mph.
+- RUN: 8 mph.
+- SPRINT: 11 mph.
+
+The normal world clock runs at 6× real time. Travel receives an additional 4× acceleration, making ideal uninterrupted travel cover 24 times the listed game-world miles per real-world hour.
+
+Theoretical uninterrupted distances per real-world hour are therefore:
+
+- TRUDGE: 24 miles.
+- WALK: 72 miles.
+- JOG: 120 miles.
+- RUN: 192 miles.
+- SPRINT: 264 miles.
+
+These are theoretical movement rates, not sustainable endurance distances. JOG, RUN, and especially SPRINT are constrained by stamina and cannot ordinarily be sustained for an entire real-world hour.
+
+
+QUESTION 58 — STAMINA MODEL
+---------------------------
+
+Stamina is represented internally as a continuous numeric value with a nominal maximum of 20.0. It may use fractional values, allowing regeneration and expenditure such as 2.675 rather than forcing integer arithmetic.
+
+The player-facing prompt does not expose the precise internal stamina number. Instead it displays six stamina bands using plus signs. At full health and full stamina the prompt is:
+
+<***** / ++++++>
+
+The asterisks represent health/wound condition; stars disappear as wounds worsen. The six plus signs represent stamina condition; plus signs disappear as stamina falls. With an internal 0–20 range, each visible stamina band represents approximately 3.333 stamina:
+
+- greater than 16.667 through 20.000: ++++++
+- greater than 13.333 through 16.667: +++++
+- greater than 10.000 through 13.333: ++++
+- greater than 6.667 through 10.000: +++
+- greater than 3.333 through 6.667: ++
+- greater than 0 through 3.333: +
+- 0: no plus signs
+
+Twenty is therefore primarily an internal mathematical maximum; the player-facing stamina display has six coarse condition bands.
+
+Stamina recovery is processed on a 15-real-second heartbeat/tick. Because the world clock runs at 6× real time, each recovery tick represents 90 seconds of game time.
+
+The intended recovery rate scales with ATHLX. The initial reference points discussed were approximately 1 stamina per recovery tick at ATHLX 0 and approximately 3 stamina per recovery tick at ATHLX 20. Because stamina is floating-point internally, intermediate ATHLX values may use smooth fractional recovery rates rather than integer breakpoints. The exact final formula may be tuned when stamina costs are balanced.
+
+Passive stamina regeneration continues even while the character is moving. Movement and other strenuous activity have their own stamina expenditures. Thus:
+
+net stamina change = passive regeneration - activity expenditure
+
+SPRINT should consume stamina much faster than passive regeneration. RUN and JOG should also normally produce net stamina loss at rates to be determined. WALK should eventually produce a net positive stamina change, allowing a tired character to recover while continuing to travel, but more slowly than resting.
+
+Example behavior: a character may sprint for 20 real seconds, lose substantial stamina, and still receive the single passive recovery tick that occurs during those 20 seconds. The character may then slow to WALK and gradually recover from one visible stamina bar back to full stamina without stopping entirely.
+
+The exact stamina costs for TRUDGE, WALK, JOG, RUN, SPRINT, terrain, wounds, encumbrance, and other exertion remain to be designed in subsequent questions.
+
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 31 — SIMULTANEOUS CHARACTERS PER ACCOUNT
+NEXT QUESTION: QUESTION 59 — STAMINA RECOVERY DETAILS
 
 Important context:
-Questions 27–30 are now locked. Origin's initial service mix is intentionally non-exhaustive. NPCs operate its businesses, storefronts may be player-owned while their NPC operators remain, and ordinary players are limited to one account per real person and one character per account. Staff may receive tightly scoped exceptions.
+Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–58 began Phase V and established movement speeds, travel acceleration, the six-band player-facing stamina display, floating-point internal stamina, 15-second real-time recovery ticks, ATHLX-scaled passive recovery, and simultaneous regeneration/expenditure while moving. Continue by refining stamina recovery/cost behavior before moving to broader movement modifiers.
 
 Proceed one numbered question at a time.
 
