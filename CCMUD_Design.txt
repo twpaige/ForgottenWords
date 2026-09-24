@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–67 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with Question 68.
+Questions 1–68 have been discussed; Question 69 is in progress. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with the shelter portion of Question 69.
 
 
 PROJECT REFERENCES
@@ -751,9 +751,11 @@ Rare geometric/terrain edge cases, such as multiple structures or displacement t
 QUESTION 54 — SLEEPING BENEFITS
 -------------------------------
 
-Sleeping provides no routine mechanical bonus. Better sleeping accommodations do not automatically grant faster healing, extra stamina recovery, advancement bonuses, or similar buffs.
+Sleep is not a survival requirement and there is no fatigue or sleep-deprivation meter. A character does not suffer merely for remaining awake.
 
-Sleep may occasionally produce a dream or vision. Dreams and visions may later be used for narrative, atmosphere, mysteries, Callings, clues, or administrator-run content without turning sleep into a mandatory optimization mechanic.
+Sleep has one routine mechanical benefit: it increases natural wound-healing rate compared with being awake. It does not automatically grant extra stamina recovery, advancement bonuses, or other general buffs.
+
+Sleep may also produce a dream or vision. Administrators may use dreams and visions for narrative, atmosphere, mysteries, Callings, clues, or administrator-run content.
 
 
 QUESTION 55 — OFFLINE ENVIRONMENTAL DANGER
@@ -1001,13 +1003,60 @@ All relative-movement commands remain subject to actual world geometry and physi
 These ideas are deliberately recorded as provisional. Thomas expects they may be heavily changed or discarded when the full turn-based combat system is designed, but they are worth preserving for later experimentation.
 
 
+QUESTION 68 — NON-COMBAT POSTURE
+--------------------------------
+
+Non-combat posture tracks four basic states:
+
+- STANDING: the normal default posture.
+- SITTING: either on the ground or on an appropriate object such as a chair, bench, or log.
+- LYING: voluntarily lying down.
+- MOUNTED: aboard a horse or other rideable mount.
+
+Kneeling is not separately tracked unless a later mechanical need emerges; it may be represented through emotes. SITTING and MOUNTED may retain a reference to the object or mount involved.
+
+PRONE remains a formal combat condition and is distinct from voluntarily choosing the LYING posture.
+
+
+QUESTION 69 — PHYSICAL SURVIVAL NEEDS (IN PROGRESS)
+----------------------------------------------------
+
+Food/calories and water are genuine physiological requirements. They should matter to wilderness survival without becoming repetitive maintenance chores.
+
+Hunger is represented to the player through descriptive stages rather than a visible numerical meter. The intended progression includes:
+
+- You are feeling peckish.
+- You are feeling hungry.
+- You are feeling famished.
+- You are starving.
+- You are dying of hunger.
+
+Thirst uses an equivalent escalating descriptive progression ending in "You are dying of thirst."
+
+When a character is in a dying-of-hunger or dying-of-thirst state:
+
+- Normal wound healing stops.
+- Stamina recovery becomes substantially slower; the exact reduction remains to be balanced.
+- For every full game-world day spent in the dying state while subject to the active survival process, one flesh wound becomes due.
+- The intended terminal progression is that approximately 32 continuous game-world days in the dying state would ultimately kill the character through accumulated flesh wounds.
+
+Fully logged-off characters do not receive starvation/dehydration wounds. The underlying hunger/thirst state may continue advancing while offline, but ordinary offline immunity remains intact.
+
+Upon login, the game checks whether a starvation/dehydration wound is currently due. If so, it applies the appropriate wound and clearly warns the player about the condition and approximately how many more days at the current rate are likely to be fatal. Logging in after a long absence should not instantly dump a large backlog of accumulated offline wounds onto the character.
+
+Food and water depletion must be deliberately slow. If a character eats and drinks to full, it should take at least about one real-world week before ordinary hunger becomes noteworthy. Exact calorie consumption, hydration rates, thresholds, activity modifiers, and messages remain to be designed. Food and water are required, but servicing them must not become a job.
+
+Sleep is NOT a survival requirement. There is no fatigue/sleep-deprivation meter and no penalty simply for remaining awake. Sleep increases natural wound-healing rate and may provide an opportunity for administrator-delivered dreams or visions. This supersedes the earlier portion of Question 54 that said sleep did not increase healing.
+
+The role of shelter within the survival system remains the unanswered portion of Question 69.
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 68 — POSTURE AND STANCE
+NEXT QUESTION: QUESTION 69 — SHELTER AS A SURVIVAL NEED
 
 Important context:
-Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–67 are now complete in Phase V. Movement uses continuous coordinates, deterministic terrain factors, mode-specific terrain passability, explicit stopping at obstructions, compatible actions during travel, and provisional relative tactical movement intents (CLOSE, KITE, ORBIT, RETREAT). Browser audio is also pinned as a future optional client capability with restrained cooldowns and separate UI/atmospheric controls. Resume with posture and stance.
+Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–68 are complete in Phase V. Question 69 is in progress. Food and water are real but deliberately slow survival needs; fully logged-off characters do not take starvation/dehydration wounds. Sleep is not required but increases natural wound healing and permits admin-delivered dreams. Resume by deciding whether shelter itself is a need or instead protects against environmental exposure.
 
 Proceed one numbered question at a time.
 
