@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–60 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with Question 61.
+Questions 1–67 have been discussed. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with Question 68.
 
 
 PROJECT REFERENCES
@@ -900,13 +900,114 @@ actual speed = base movement speed × terrain factor × weather factor × elevat
 
 Exact weather and elevation scales, and the terrain-generator formula, remain to be designed later.
 
+QUESTION 61 — MAXIMUM CARRYING CAPACITY
+---------------------------------------
+
+ATHLX substantially increases maximum carrying capacity.
+
+Maximum carrying capacity = body weight × (1 + 0.05 × ATHLX).
+
+Examples:
+- ATHLX 0: 100% of body weight.
+- ATHLX 5: 125%.
+- ATHLX 10: 150%.
+- ATHLX 15: 175%.
+- ATHLX 20: 200%.
+
+Encumbrance speed penalties scale against the character's actual maximum carrying capacity, not against raw body weight. A character suffers no encumbrance speed derate through 50% of maximum carrying capacity. From 50% to 100% of maximum capacity, the speed derate rises continuously and linearly from 0% to 50%. At full carrying capacity, speed is reduced by 50%. Above maximum carrying capacity, the character cannot move.
+
+
+QUESTION 62 — BULK
+------------------
+
+Bulk is not separately modeled at this time. Carrying capacity is primarily weight-based. The design deliberately accepts some abstraction rather than adding a general volume/bulk simulation. Particularly impossible objects may still be handled by their specific physical rules if necessary.
+
+
+QUESTION 63 — TERRAIN PASSABILITY BY TRAVEL MODE
+-------------------------------------------------
+
+The deterministic Terrain Movement Factor (TMF) established in Question 60 also governs whether terrain can be traversed by different travel methods. Initial thresholds are intentionally tunable during terrain testing:
+
+- TMF 0.80–1.00: passable on foot, horseback, and wagon.
+- TMF 0.70–<0.80: passable on foot and horseback; wagon passable but difficult.
+- TMF 0.60–<0.70: passable on foot; horseback passable but difficult; wagon impassable.
+- TMF 0.50–<0.60: passable on foot under extreme difficulty; horseback and wagon impassable.
+- Below 0.50: impassable terrain for ordinary travel.
+
+Categorical physical barriers such as deep water or a sheer cliff are not merely low-TMF ground; they require an appropriate crossing method.
+
+Roads may later provide an improved effective travel surface without changing the underlying terrain, potentially allowing wagons through naturally wagon-impassable country.
+
+
+QUESTION 64 — IMPASSABLE OBSTRUCTIONS
+-------------------------------------
+
+When continuous travel encounters an impassable obstruction, movement stops at the obstruction and the player is told why. The game does not silently pass through or automatically bypass the obstruction.
+
+Examples include rivers, sheer cliffs, walls, buildings, dense physical barriers, and terrain below the current travel method's passability threshold.
+
+The browser client should eventually support optional audio. UI notification sounds may include a one-time beep/chime when travel transitions from moving to stopped. Atmospheric world sounds may include events such as wolf howls, bear roars, weather, running water, campfires, crowds, horses, or smithing.
+
+Sound supplements rather than replaces textual information. UI and atmospheric audio should have separate mute/volume controls. Repeated sounds require cooldowns/limits so they do not play continuously or become audio clutter. Ambient audio should be restrained, and a travel-stop notification fires once on the transition to stopped rather than repeating while the character remains stopped.
+
+
+QUESTION 65 — AUTOMATIC OBSTACLE ROUTING
+----------------------------------------
+
+Continuous travel does not automatically steer around obstacles. If the selected course becomes impassable, movement stops and the player chooses how to proceed.
+
+
+QUESTION 66 — ACTIONS WHILE TRAVELING
+-------------------------------------
+
+Travel is a continuing state and does not prevent ordinary compatible interaction. Characters may perform reasonable actions while moving, including LOOK, WATCH, conversation, checking inventory, maps, and compasses, eating/drinking, and manipulating reasonable carried items.
+
+Actions inherently requiring a stationary character—such as gathering, crafting, construction, butchering, or making a fire—require the character to stop first.
+
+
+QUESTION 67 — RELATIVE POSITIONING AND MOVEMENT INTENTS
+-------------------------------------------------------
+
+CCMud should support convenient relative-movement controllers operating on the same continuous coordinates used by ordinary travel. These are tactical movement intents, not teleportation or guaranteed outcomes. Exact syntax and combat integration are provisional and may be substantially revised during combat design.
+
+CLOSE ON <target> <distance>
+Approach the target directly and stop upon reaching the requested distance. CLOSE never moves the character away merely to create the specified separation. If already within the requested distance, the character does not move.
+
+Example:
+CLOSE ON JENNY 10
+
+KITE <target> <distance> <preferred direction>
+Attempt to maintain the specified separation from the target. KITE may require no movement if the desired distance is already maintained and the target is stationary. If the target closes, the character retreats, favoring the specified direction, and automatically increases movement speed as necessary and physically possible to preserve the requested gap. If the target is too far away, the character may close toward the requested distance.
+
+Example:
+KITE JENNY 10 SE
+
+KITE is not immunity from melee. Terrain, obstacles, stamina, wounds, encumbrance, relative speeds, and the target's actions may make the desired separation impossible to maintain.
+
+ORBIT <target> <distance> <CW/CCW>
+Continuously move around the target at approximately the requested radius in the player-selected clockwise or counterclockwise direction. Unlike KITE, ORBIT deliberately keeps the character moving even when the target is stationary. The controller adjusts inward/outward and changes speed as necessary and physically possible to maintain the requested radius. ORBIT is defensive positioning rather than substantial travel away from the encounter area.
+
+Example:
+ORBIT JENNY 10 CW
+
+RETREAT <target> <preferred direction>
+Continuously attempt to increase separation from the target while favoring the specified direction. There is no desired stopping distance. The controller uses the minimum practical movement speed needed to increase/preserve increasing separation and escalates automatically when pursuit requires it, up to what the character can physically sustain.
+
+Example:
+RETREAT JENNY SE
+
+All relative-movement commands remain subject to actual world geometry and physics. They optimize only for the explicitly named target; for example, successfully kiting Jenny may inadvertently move the character into Bob's melee reach. This is intentional. In multi-character combat, positioning, terrain, obstacles, headings, speeds, and chosen movement intents may make the battlefield tactically significant.
+
+These ideas are deliberately recorded as provisional. Thomas expects they may be heavily changed or discarded when the full turn-based combat system is designed, but they are worth preserving for later experimentation.
+
+
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 61 — MAXIMUM CARRYING CAPACITY AND CONTROLLING CAP
+NEXT QUESTION: QUESTION 68 — POSTURE AND STANCE
 
 Important context:
-Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–60 began Phase V and established movement speeds, travel acceleration, stamina/recovery, and multiplicative speed derates from terrain, weather, elevation, wounds, and encumbrance. The terrain generator must eventually derive a deterministic Terrain Movement Factor from 1.00 to 0.50. Continue with maximum carrying capacity and which CAP, if any, controls it.
+Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–67 are now complete in Phase V. Movement uses continuous coordinates, deterministic terrain factors, mode-specific terrain passability, explicit stopping at obstructions, compatible actions during travel, and provisional relative tactical movement intents (CLOSE, KITE, ORBIT, RETREAT). Browser audio is also pinned as a future optional client capability with restrained cooldowns and separate UI/atmospheric controls. Resume with posture and stance.
 
 Proceed one numbered question at a time.
 
