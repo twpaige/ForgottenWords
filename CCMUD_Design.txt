@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–68 have been discussed; Question 69 is in progress. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with the shelter portion of Question 69.
+Questions 1–85 have been discussed. Question 86 is the next unanswered design question. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with the shelter portion of Question 69.
 
 
 PROJECT REFERENCES
@@ -1018,45 +1018,213 @@ Kneeling is not separately tracked unless a later mechanical need emerges; it ma
 PRONE remains a formal combat condition and is distinct from voluntarily choosing the LYING posture.
 
 
-QUESTION 69 — PHYSICAL SURVIVAL NEEDS (IN PROGRESS)
+QUESTION 69 — PHYSICAL SURVIVAL NEEDS (COMPLETED)
 ----------------------------------------------------
 
-Food/calories and water are genuine physiological requirements. They should matter to wilderness survival without becoming repetitive maintenance chores.
+Food/calories and water are genuine physiological requirements, deliberately paced so they matter without becoming maintenance chores.
 
-Hunger is represented to the player through descriptive stages rather than a visible numerical meter. The intended progression includes:
+Hunger is communicated descriptively rather than primarily as a visible numeric meter. Intended progression includes:
+- peckish
+- hungry
+- famished
+- starving
+- dying of hunger
 
-- You are feeling peckish.
-- You are feeling hungry.
-- You are feeling famished.
-- You are starving.
-- You are dying of hunger.
+Thirst follows an equivalent escalating progression ending in dying of thirst.
 
-Thirst uses an equivalent escalating descriptive progression ending in "You are dying of thirst."
+While dying of hunger or thirst:
+- normal wound healing stops;
+- stamina recovery becomes substantially slower;
+- one flesh wound becomes due for every full game-world day spent in the dying state while the character is subject to the active survival process;
+- approximately 32 continuous game-world days in that state would ultimately be fatal through accumulated flesh wounds.
 
-When a character is in a dying-of-hunger or dying-of-thirst state:
+Fully logged-off characters never receive starvation/dehydration wounds. Hunger/thirst state may advance offline, but wounds are not applied offline. On login the game checks whether a wound is due; if so it applies the appropriate current wound and warns the player approximately how many additional days at the present rate are likely to be fatal. A long absence must not dump a large backlog of offline wounds onto the character.
 
-- Normal wound healing stops.
-- Stamina recovery becomes substantially slower; the exact reduction remains to be balanced.
-- For every full game-world day spent in the dying state while subject to the active survival process, one flesh wound becomes due.
-- The intended terminal progression is that approximately 32 continuous game-world days in the dying state would ultimately kill the character through accumulated flesh wounds.
+Food and water depletion is intentionally slow. After eating and drinking to full, it should be at least about one real-world week before ordinary hunger becomes noteworthy. Exact calories, hydration, activity modifiers, thresholds, and stamina-recovery reduction remain for later balancing.
 
-Fully logged-off characters do not receive starvation/dehydration wounds. The underlying hunger/thirst state may continue advancing while offline, but ordinary offline immunity remains intact.
+Sleep is NOT a survival requirement and has no fatigue/deprivation meter. Sleep does increase natural wound-healing rate and may permit administrator-delivered dreams or visions. This supersedes the earlier Q54 statement that sleep provided no routine healing benefit.
 
-Upon login, the game checks whether a starvation/dehydration wound is currently due. If so, it applies the appropriate wound and clearly warns the player about the condition and approximately how many more days at the current rate are likely to be fatal. Logging in after a long absence should not instantly dump a large backlog of accumulated offline wounds onto the character.
+Shelter is NOT a physiological requirement and lack of shelter causes no damage merely because the character is unsheltered. Shelter is valuable as a physical place: safe/useful storage, hanging or keeping a deer carcass, cooking stew, warming coffee, sleeping, working, getting out of weather, and establishing a useful wilderness home. Weather may affect other systems such as movement, but there is no hidden shelter/exposure-damage meter.
 
-Food and water depletion must be deliberately slow. If a character eats and drinks to full, it should take at least about one real-world week before ordinary hunger becomes noteworthy. Exact calorie consumption, hydration rates, thresholds, activity modifiers, and messages remain to be designed. Food and water are required, but servicing them must not become a job.
 
-Sleep is NOT a survival requirement. There is no fatigue/sleep-deprivation meter and no penalty simply for remaining awake. Sleep increases natural wound-healing rate and may provide an opportunity for administrator-delivered dreams or visions. This supersedes the earlier portion of Question 54 that said sleep did not increase healing.
+QUESTION 70 — SURVIVAL PRESSURE
+-------------------------------
 
-The role of shelter within the survival system remains the unanswered portion of Question 69.
+Answered by Q69. Survival needs are real and potentially lethal, but intentionally slow and forgiving enough that eating and drinking do not become routine busywork.
+
+
+QUESTION 71 — PHYSICAL MOVEMENT ABILITIES
+-----------------------------------------
+
+SWIM, CLIMB, JUMP, CRAWL, and FALL are genuine physical mechanics, not merely emotes. ATHLX is the primary CAP for these actions, with physical circumstances modifying difficulty.
+
+An obstacle that blocks ordinary travel may still be attempted by another physical method. A steep cliff may stop WALK but permit a deliberate CLIMB attempt. Failure can cause a real fall and real wounds based on the circumstances.
+
+Water can be deliberately entered and swum. Swimming is genuinely dangerous. Equipment and carried weight matter physically; entering deep water in chainmail or plate is allowed but may be a very poor decision. Exact checks, stamina costs, drowning rules, fall severity, and equipment effects are deferred to detailed implementation.
+
+
+QUESTION 72 — COASTLINES AND DELIBERATE WATER ENTRY
+----------------------------------------------------
+
+Automatic/continuous land travel stops at the water's edge. It never casually walks a character into deep water.
+
+A player may deliberately enter and SWIM into a river, lake, or ocean. Water is not an artificial world boundary. Swimming into open ocean is allowed; the consequences depend on actual physical circumstances, equipment, carried weight, stamina, weather, currents/waves, and swimming ability.
+
+Design principle: prevent accidental stupidity, but permit deliberate stupidity.
+
+
+QUESTION 73 — PASSIVE PERCEPTION AND THE SENSE CAP
+--------------------------------------------------
+
+Passive perception exists and is governed by SENSE.
+
+SENSE replaces RIDNG entirely; this is not a ninth CAP. The eight CAPs are now:
+WEAPN, RANGE, ATHLX, THIEV, SENSE, MAGIC, ACADX, FAITH.
+
+Character creation remains 15 points distributed among exactly five CAPs, with the previously established starting limits. Any older RIDNG references in this document should be understood as superseded and should be migrated to SENSE where appropriate rather than implying a current RIDNG CAP.
+
+
+QUESTION 74 — ACTIVE SEARCHING AND TRACKING
+-------------------------------------------
+
+SEARCH is fundamentally a SENSE action.
+
+TRACK is also primarily based on SENSE, but relevant secondary expertise may improve tracking. A representative combined-CAP idea is SENSE + (THIEV / 10). The exact formula is not yet frozen; the locked principle is that SENSE determines perception while another relevant CAP may contribute specialized expertise in interpreting what was perceived.
+
+
+QUESTION 75 — HIDING VS. PERCEPTION
+-----------------------------------
+
+Deliberate hiding is an opposed THIEV-versus-SENSE system, heavily modified by actual physical circumstances such as distance, lighting, vegetation, cover, movement, and similar factors.
+
+Passive perception and active searching are meaningfully different. Merely being nearby gives the observer passive SENSE opportunities; deliberately SEARCHing provides a substantial advantage. Exact modifiers are deferred.
+
+
+QUESTION 76 — WHAT MAY BE HIDDEN
+--------------------------------
+
+Players may attempt to HIDE anything they reasonably can: themselves, objects, caches, carcasses, camps, tracks, supplies, and other concealable things.
+
+The character who hid something always sees/recognizes their own hidden thing and does not need to rediscover it with SEARCH. Other characters must defeat its concealment through the normal perception/search mechanics.
+
+
+QUESTION 77 — RECOGNITION
+-------------------------
+
+There is no automatic recognition progression from repeated exposure. Repeatedly encountering an unknown character does not make the game automatically identify or remember that person.
+
+Recognition is controlled through the player's private labeling system established earlier. If the player wants to remember an unknown person, the player creates a private label.
+
+
+QUESTION 78 — PERSISTENCE AND LIMITS OF PRIVATE LABELS
+------------------------------------------------------
+
+Private player labels persist indefinitely until the player changes or removes them. A label remains associated with the underlying identified character even years later and despite changes of clothing.
+
+A player cannot create a new identifying label for someone whose identity is currently concealed by a cloak, disguise, or similar identity-obscuring mechanism. The label system must not become a backdoor for defeating disguise.
+
+
+QUESTION 79 — CONTINUOUS DARKNESS AND NATURAL LIGHT
+---------------------------------------------------
+
+Darkness is modeled as a continuous environmental illumination value, not a binary LIGHT/DARK flag. Available natural light directly affects visibility distance and perception/SENSE effectiveness.
+
+Natural illumination should derive from real conditions such as time of day, sun position, twilight, moon phase and position, cloud cover, weather, and related factors. A clear full-moon prairie night may provide substantial usable visibility; a moonless overcast night may be extremely dark. Enclosed underground spaces without light may approach genuine pitch black.
+
+Exact illumination mathematics are deferred, but the world should ultimately calculate a meaningful ambient illumination value consumed by perception.
+
+
+QUESTION 80 — ARTIFICIAL LIGHT AND FALLOFF
+------------------------------------------
+
+Artificial light sources have physical illumination with distance falloff rather than a binary illuminated radius. Torches, lanterns, candles, campfires, and similar sources provide strong useful light nearby, progressively less useful illumination farther away, and eventually negligible contribution.
+
+Seeing BY a light source is distinct from seeing THE light source. A campfire may illuminate useful detail only relatively nearby while its glow can itself be visible from vastly farther away across open terrain at night.
+
+Natural ambient illumination and artificial illumination combine into the effective visibility/perception environment.
+
+
+QUESTION 81 — LOOK, SCAN, SEARCH, AND TRACK
+-------------------------------------------
+
+These are meaningfully distinct perception actions:
+- LOOK: ordinary observation of the immediate surroundings.
+- SCAN: deliberate examination of the broader or more distant environment.
+- SEARCH: careful examination of a localized area for concealed or subtle things.
+- TRACK: identifying and following physical signs left by people, animals, or other moving things.
+
+SENSE underlies these actions, but the action determines what the character is attempting to perceive and how. TRACK may additionally benefit from relevant secondary CAP expertise.
+
+
+QUESTION 82 — SEARCHING AND TRACKING WHILE MOVING
+-------------------------------------------------
+
+SEARCH requires the character to stop moving because it represents careful examination of a localized area.
+
+TRACK may become a continuous movement state. Once a trail has been successfully acquired, a command such as TRACK DEER can physically lead the character through the continuous coordinate world along that trail until the trail is lost, the player stops, an obstruction/interruption occurs, or another condition prevents continuing.
+
+
+QUESTION 83 — IDENTICAL OBJECT TARGETING
+----------------------------------------
+
+Use classic MUD ordinal targeting syntax. When multiple entities match the same keyword:
+- GET ROCK selects the first matching rock.
+- GET 2.ROCK selects the second matching rock.
+- GET 5.ROCK selects the fifth matching rock.
+
+The ordinal is contextual among current matches and does not expose a database ID.
+
+
+QUESTION 84 — UNIVERSAL ORDINAL TARGETING
+-----------------------------------------
+
+The n.keyword convention applies universally wherever multiple valid targets match, including objects, characters, animals, containers, doors, and similar entities.
+
+Examples include LOOK 2.DEER, ATTACK 3.BANDIT, OPEN 2.CHEST, and GET 2.ROCK. Players do not need to see internal IDs.
+
+
+QUESTION 85 — GENERATED LOOK PROSE AND BRIEF MODE
+-------------------------------------------------
+
+Standard LOOK descriptions use a substantial natural-language prose generator rather than presenting a disguised list of world facts.
+
+The architecture is:
+physical simulation/world data -> perception filtering -> prose composition.
+
+The world simulation supplies factual information about terrain, slope, vegetation, hydrology, roads, structures, distant geography, weather, illumination, entities, and other physical features. Perception filters those facts according to SENSE, distance, lighting, weather, concealment, and related conditions. The prose generator then composes the perceived facts into a coherent, substantial description of the place.
+
+The prose should understand relationships among facts. A forest following a riverbank, a road descending toward water, mountains dominating a horizon, or prairie opening into long sightlines should be described as related scenery rather than as independent database fields converted into sentences.
+
+Variation in prose must not create factual variation. Repeated LOOKs should not make the player wonder whether the physical scene changed merely because wording changed.
+
+A player preference, BRIEF, provides a concise factual presentation for players who do not want substantial/flowery prose. BRIEF changes presentation only; it does not alter perception or give/remove information the character is entitled to perceive.
+
+WORLD-GENERATION/CACHING ARCHITECTURE DISCUSSED DURING Q85:
+
+LOOK does not generate the world itself. The deterministic world generator defines physical facts; both the graphical map viewer and the MUD's LOOK system are different consumers of that same underlying world.
+
+The intended architecture is hybrid and chunk-based:
+- seed + deterministic generation algorithms define the reproducible base world;
+- geographic chunks are generated/evaluated on demand and cached rather than regenerating the same area for every LOOK or every passing player;
+- active chunks may remain hot in RAM while players are nearby;
+- unused cached procedural data may eventually be evicted from RAM and may also expire from longer-lived caches because it can be deterministically reconstructed;
+- persistent world changes never expire merely because a procedural cache does.
+
+Thus fifty players passing the same generated tree should consume the same cached world information rather than independently regenerating that tree fifty times. If a player cuts the tree down, that modification is persistent authoritative state. If the disposable base cache later expires, the server can reconstruct the deterministic base chunk and then apply persistent modifications and current conditions.
+
+Persistent changes include player construction, roads, names where appropriate, stored/cached possessions, harvested or removed features where persistence is required, and other player/world history that cannot be recreated solely from the original seed. Resource depletion/regrowth and similar long-term simulation require their own later persistence rules.
+
+Exact chunk size, cache lifetimes, storage strategy, and geographic resolution are implementation decisions to benchmark after the physical world generator is substantially complete; they are not locked here.
+
+
 
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 69 — SHELTER AS A SURVIVAL NEED
+NEXT QUESTION: QUESTION 86 — INVENTORY MODEL
 
 Important context:
-Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–68 are complete in Phase V. Question 69 is in progress. Food and water are real but deliberately slow survival needs; fully logged-off characters do not take starvation/dehydration wounds. Sleep is not required but increases natural wound healing and permits admin-delivered dreams. Resume by deciding whether shelter itself is a need or instead protects against environmental exposure.
+Questions 31–45 completed Phase III. Questions 46–56 completed Phase IV. Questions 57–72 completed Phase V. Questions 73–85 completed Phase VI. SENSE has replaced RIDNG as one of the eight CAPs. Perception, hiding, continuous illumination, active SEARCH/TRACK behavior, ordinal n.keyword targeting, and substantial generated LOOK prose with an optional BRIEF presentation mode are now established. During Q85 we also established the intended deterministic chunk-generation/cache architecture at a design level. Resume with Question 86 about the physical inventory model.
 
 Proceed one numbered question at a time.
 
