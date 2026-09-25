@@ -1,0 +1,561 @@
+CCMUD DESIGN HOLES AND READINESS AUDIT
+======================================
+
+Repository: twpaige/ForgottenWords
+Branch reviewed: main
+Review date: 2026-09-24
+Primary source: CCMUD_Design.txt, through Question 247
+Cross-check: CCMud.html
+Additional cross-check: CC_Ruleset.html, relevant combat, movement, magic,
+wound, and recovery rules
+
+Source blob versions:
+CCMUD_Design.txt: c3531c837b4f9f5517a758878c9abc5ae2edc470
+CCMud.html: 7fda61120dca9390c1e73906ae7dfe3e24b8ea53
+CC_Ruleset.html: f4b546097037968fd90a4596b192a2b47d6e0895
+
+This is an audit, not a new set of locked decisions. Suggested closure
+criteria describe the work needed to complete a design, not approved rules.
+No game code or existing design documents are changed by this report.
+
+Reference convention:
+D Qn = numbered interview entry in CCMUD_Design.txt.
+W = section or named ledger entry in CCMud.html.
+R = rule ID in CC_Ruleset.html.
+The historical discussion queue in D is not the active interview, and W's
+question numbers belong to a different interview. An unanswered-looking
+queue item is not evidence that its subject is still undecided.
+
+
+ASSESSMENT
+==========
+
+CCMUD has a substantial design foundation. The major missing work is not
+another long interview about small object interactions. It is completing
+a few playable system contracts and reconciling incompatible records.
+
+This audit groups the meaningful remaining work into TEN areas:
+H01 Combat and rule integration
+H02 Movement, stamina, and carrying capacity
+H03 The complete starter crafting and survival chain
+H04 Wildlife and renewable-resource persistence
+H05 Perception, illumination, and information boundaries
+H06 Origin's NPC interactions and basic economy
+H07 Persistent-world recovery and safe updates
+H08 Return-from-death eligibility and state
+H09 Property ownership and access lifecycle
+H10 Advancement and capability content
+
+H01-H08 affect the promised first playable experience or preservation of its
+history. They can be closed with deliberately small initial specifications;
+they do not require every future feature. H09 is needed before full property
+systems launch. H10 is needed before meaningful long-term progression.
+
+This is a bounded list of work areas, NOT ten mandatory interview questions
+and NOT a claim that every unspecified value requires Thomas's decision.
+Many remaining values are content authoring or playtest configuration.
+
+
+H01 — COMBAT AND RULE INTEGRATION
+================================
+Priority: Before the hunting/combat prototype.
+Type: Missing integration decisions; conflicting source procedures.
+
+Already settled:
+Combat is turn-based and spatial. Engagements are open rather than private
+instances. Forced attacks and ranged participation are allowed. The ruleset
+already supplies opposed rolls, weapon ceilings, armor, wound combination,
+defenses, conditions, and much of magic. Do not reinvent that foundation.
+
+The hole:
+W section 13 proposes declarations followed by server resolution; R T5-T7
+uses side-based initiative, ordered Turns, HOLD, and reactive PROTECT. A
+server cannot apply both procedures without an explicit translation.
+
+R T3 uses five-foot squares, adjacency, and Base Speed + ATHLETICS. D Q57
+uses continuous travel modes and two time/speed multipliers; D Q60 applies
+wound speed penalties, while R C5 says wounds do not reduce Speed. The
+documents do not establish the combat/world boundary for these rules.
+
+The clock contract is also incomplete. Human declaration time, represented
+seven-second rounds, the 6x world clock, and real-time stamina regeneration
+coexist. Without a rule, waiting to submit an action could change stamina,
+illumination, healing, or positions while very little combat time passes.
+Deferring the large reinforcement envelope does not remove this local issue.
+
+Minimum closure:
+- Choose the initial declaration/order procedure, deadline, default action
+  when a player is silent/disconnected, and when declarations become final.
+- Define coordinate melee reach, movement allowance, collision/cover, and
+  the point at which attack range and defenses are evaluated.
+- Define combat entry/exit and which actions reset the existing aggression
+  timer. Distinguish that logout timer from the ruleset's Aggression value.
+- State which clocks drive combat stamina, bleeding, healing, and effects.
+- Record which tabletop procedures are adopted, adapted, or staff-only.
+  Include the wound-name mapping: D Q60's Light/Moderate/Minor/Major/Grave/
+  Mortal is not the same vocabulary as R's FLSH/LITE/DEEP/SEVR/GRAV/MORT.
+
+Completion example:
+A player throws a rock at a moving rabbit, receives no further input for a
+round, reconnects, and finishes or leaves the engagement with one unambiguous
+position, wound state, ammunition outcome, and aggression expiry.
+
+References: D Q15, Q47-Q50, Q57-Q60, Q67; W section 13;
+R C5, W1-W11, T1-T8, O1.
+The causal travel envelope and full PvP balancing remain later work.
+
+
+H02 — MOVEMENT, STAMINA, AND CARRYING CAPACITY
+============================================
+Priority: Before general travel and inventory are considered playable.
+Type: Direct contradiction plus explicitly unfinished balance specification.
+
+Already settled:
+Movement speeds, multiplicative modifiers, stop-on-obstruction behavior,
+no automatic routing, and stamina regeneration are specified. Carrying
+weight is recursive. Bulk is deliberately not a general simulation.
+
+The hole:
+D Q45 says height, weight, and build have zero mechanical effect and weight
+is not tracked as a separate field. D Q61 nevertheless calculates capacity
+from body weight. There is no stated reference weight that resolves this.
+Using prose weight would allow descriptive choices to change capability.
+
+Stamina expenditure for each movement mode is still missing. Knowing the
+recovery formula alone cannot determine sprint duration, pursuit, or whether
+JOG remains sustainable at a particular ATHLX. W's older "no stamina cost"
+for WALK and D Q58's slower recovery while walking also need a single
+current interpretation.
+
+Minimum closure:
+Resolve the weight contradiction explicitly, then author one small movement
+cost table with units and reference endurance cases. Retain the settled
+recovery formula and speed hierarchy. Define only the initial physical
+crossings actually offered; D Q71 explicitly leaves swimming, falling, and
+related costs/severity to implementation. If enabled, those actions need
+outcomes before they can cause persistent deaths.
+
+Completion example:
+At ATHLX 0 and 20, a known load gives a predictable capacity, WALK speed,
+sprint duration, exhaustion stop, and recovery time.
+
+References: D Q45, Q57-Q63, Q71-Q72, Q148; W "Movement Speed & Stamina".
+Exact terrain, weather, and altitude curves are tunable implementation work,
+not reasons to reopen the accepted movement model.
+
+
+H03 — THE COMPLETE STARTER CRAFTING AND SURVIVAL CHAIN
+====================================================
+Priority: Before the minimum private-alpha loop can be completed.
+Type: Missing content specification, not a missing crafting architecture.
+
+Already settled:
+Known Crafts succeed deterministically. Execution validates and commits
+atomically, produces the result immediately, and adds Work Timer debt.
+Learning takes real time, one Craft at a time. Materials must be physically
+available. Hunger/thirst are slow; shelter and sleep are not survival meters.
+
+The hole:
+There is no complete dependency list connecting starting equipment and
+opening Crafts to a rock, bow, arrows, rabbit processing, fire, cooked food,
+tent, map, and compass. D Q38 explicitly leaves the openers unspecified;
+D Q21 and Q26 leave outfitting and compass ingredients unspecified.
+
+The chain must work without a circular prerequisite such as needing a
+manufactured tool to obtain the only material used to manufacture that tool.
+Normal town starts and deliberately difficult Naked remote starts need
+separate checks. Remote does not mean easy, but its route to progress must
+exist if it is offered.
+
+Minimum closure:
+Author a compact table for the required starter actions: prerequisites,
+tools, input quantities, output objects/quantities, Work Time, and Learning
+Time where relevant. Include full hands, physical worksite access, tent
+deployment/packing, and the means to obtain initial tools and navigation.
+Specify the first food/water replenishment values and fire fuel/extinction
+behavior. Detailed nutrition and fire-spread simulation are unnecessary.
+
+Completion example:
+Trace Normal and Naked starts to their first edible meal and usable shelter,
+then trace the map/compass/tent tutorial without an unexplained item grant or
+staff intervention. Show where the Work Timer can interrupt the chain.
+
+References: D Q1-Q6, Q12, Q21, Q26, Q38, Q66, Q69; W sections 4 and 12.
+A broad Craft-versus-recipe system need not be settled to author this chain.
+
+
+H04 — WILDLIFE AND RENEWABLE-RESOURCE PERSISTENCE
+===============================================
+Priority: Before repeatable hunting and gathering.
+Type: Missing state/lifecycle contract.
+
+Already settled:
+Geography is deterministic, nature need not be instantiated object by object,
+and meaningful changes persist. Resource types are authored rather than
+invented by the generator. Hunting rabbits is mandatory for the first loop.
+
+The hole:
+Those principles do not yet define when a rabbit becomes an individual,
+how it moves/flees and reacts to attacks, what survives when an area sleeps,
+or how local hunting/gathering changes later availability.
+
+D Q85 explicitly leaves depletion/regrowth persistence for later. W explains
+how chopping creates logs and a stump but not the amount that can be removed
+from a locality before availability changes. A player revisiting or waking
+an area must not accidentally get a fresh resource supply solely because
+a cache was discarded.
+
+Minimum closure:
+Define a small rabbit behavior/stat profile and carcass transformation,
+plus local renewable-resource availability, consumption, and replenishment.
+State which animal state is retained after interaction and which untouched
+population detail can be reconstructed. Specify only the resources used by
+the initial chain; a continent-wide ecological simulation is not required.
+
+Completion example:
+Two players hunt/gather in the same location; the area sleeps and wakes.
+Existing animals, carcasses, harvested supplies, and local availability have
+consistent results rather than duplicated or reset outcomes.
+
+References: D Q1, Q4-Q5, Q10, Q85; W sections 2-3 and 6-7;
+W world-generation Q126-Q151.
+
+
+H05 — PERCEPTION, ILLUMINATION, AND INFORMATION BOUNDARIES
+========================================================
+Priority: Before reliable exploration and hunting.
+Type: Partly specified system needing a minimum executable policy.
+
+Already settled:
+SENSE, opposed concealment, separate LOOK/SCAN/SEARCH/TRACK, physical search,
+continuous illumination/falloff, fixed observation cadence, private labels,
+and BRIEF's presentation-only behavior are established. Numeric perception
+bands in W are explicitly illustrative.
+
+The hole:
+There is no compact mapping from object size/light/cover/distance and SENSE
+to what is visible, targetable, or readable in the initial world. The five-
+second observation cadence does not itself supply that rule. Day/night
+lighting also needs a usable initial calendar/solar model, even if advanced
+weather is deferred.
+
+D Q78 prevents NEW labels on concealed identities, but does not explicitly
+say whether an existing label remains displayed/targetable while that
+identity is concealed. This is an information-boundary ambiguity, not a
+request for an elaborate disguise system.
+
+Minimum closure:
+Author a small initial perception/light/sound configuration and clear
+eligibility rules for target resolution. Preserve the distinction between
+seeing a light and seeing by it, and between hearing speech and seeing its
+accompanying emote. Resolve existing-label behavior under concealment.
+Ensure movement collision/attack validation is not limited to the slower
+player-facing observation cadence.
+
+Completion example:
+A rabbit in daylight, a lantern at night, an object behind a closed door,
+and a previously labeled hooded character produce consistent LOOK, targeting,
+and communication results. BRIEF must reveal the same permitted facts.
+
+References: D Q43-Q44, Q73-Q85, Q99-Q100, Q170-Q176, Q219-Q222;
+W sections 8-10 and 14; W "Travel Observation" and "WATCH".
+Exact light equations and every possible sound range can be tuned later.
+
+
+H06 — ORIGIN'S NPC INTERACTIONS AND BASIC ECONOMY
+===============================================
+Priority: Before the promised town jobs/sell-game/buy-beer loop.
+Type: Missing initial gameplay/content contract.
+
+Already settled:
+Origin is hand placed, has about 200 NPCs and named service categories, and
+NPCs keep businesses functioning. Coins and commerce are required. Introductory
+jobs are optional and late returns are not penalized.
+
+The hole:
+The documents describe the experience without specifying the first job's
+acceptance/completion state, rewards, trade interface, prices, currency units,
+or how a merchant remains stocked and able to buy hunted goods. "NPCs run
+shops" does not decide whether stock and money are finite, replenished, or
+abstracted.
+
+Minimum closure:
+Define the initial currency unit/rounding and a small purchase/sale table;
+state merchant stock/cash behavior; author one delivery and one hunting or
+gathering job with persistent progress and payout rules. Specify the small
+interaction vocabulary or dialogue approach needed to obtain these services.
+A complete economic simulation or individually simulated daily schedule
+for all 200 NPCs is not necessary.
+
+Completion example:
+An ordinary new character accepts work, disconnects, returns late, delivers
+the goods once, sells a carcass/product, and buys a beer without losing or
+duplicating the reward.
+
+References: D Q1-Q5, Q9, Q23, Q27-Q28.
+Player-owned shop profits, business resale, and settlement economies are
+later features rather than blockers for this initial contract.
+
+
+H07 — PERSISTENT-WORLD RECOVERY AND SAFE UPDATES
+==============================================
+Priority: Before persistent production play.
+Type: Missing operational/game-state contract.
+
+Already settled:
+Persistent changes are authoritative; caches are disposable; crafting is
+atomic; timestamps support offline progress; initial player history should
+survive into later releases. The server, not the browser, owns game state.
+
+The hole:
+Atomic crafting does not specify crash behavior for movement, combat, money,
+inventory transfers, or whole-world recovery. The docs do not set acceptable
+data loss, backup/restore expectations, or whether server downtime advances
+world-dependent conditions. Ordinary disconnect rules cannot automatically
+be assumed to describe a dead server.
+
+Changes to a generation algorithm are another risk: reconstructing the same
+coordinates with different geography could move a river through a persisted
+cabin or detach a bookmarked feature from what the player recorded.
+
+Minimum closure:
+Define restart outcomes for position, engagement, wounds, timers, inventory,
+and in-flight purchases/transfers. State the backup/restore objective and
+what players are told if a rollback occurs. Specify how the seed and relevant
+generation/content versions are retained and how persistent areas survive
+generator changes. Choose a simple transaction/retry policy consistent with
+"one action, one result."
+
+Completion example:
+A controlled server interruption during the core loop recovers to a coherent
+state; a cache eviction and a generator update do not erase the tent, reset
+harvesting history, or silently relocate known geography.
+
+References: D Q5, Q9-Q10, Q47-Q53, Q85; W sections 3, 6-7, 12 and 15.
+Database schema, chunk size, cache expiry, and deployment tooling are
+engineering choices. The player-visible recovery promises are the design gap.
+W world-generation Q219 also explicitly leaves individual geography-edit
+reversion unanswered; this can remain deferred if a minimal recovery policy
+does not depend on that feature.
+
+
+H08 — RETURN-FROM-DEATH ELIGIBILITY AND STATE
+============================================
+Priority: Before player death can occur in persistent play.
+Type: Explicit unresolved eligibility and related lifecycle ambiguity.
+
+Already settled — DO NOT REOPEN:
+No playable PC corpse remains. Carried/worn possessions drop immediately at
+the death coordinates and are immediately lootable. Stored possessions stay
+where they are. D Q247 was withdrawn because these facts were already covered.
+
+The hole:
+D Q25 defines one lifetime accidental/environmental reprieve and mandatory
+Naked 10000 after murder. D Q34 introduces a reduced-CAP return and explicitly
+says eligibility needs reconciliation. D Q149 adds death-area administrative
+review and possible return at Origin without explaining the complete relation
+to the earlier routes.
+
+The record also does not give a consolidated rule for whether a returning
+same character retains learned Crafts, an active learning commitment, banked
+tokens, work debt, and the automatic-progression cutoff. Inheritance is
+triggered by death, so the effect of returning on an already-started succession
+also needs to be stated, not inferred.
+
+Minimum closure:
+Write ONE eligibility/state table for the existing return routes. Preserve
+the murder restriction unless Thomas explicitly changes it. State how return
+interacts with the lifetime reprieve and pending inheritance; do not assume
+return automatically reverses completed transfers. Treat R F6's tabletop
+Petition for the Dead as an integration question, not an automatic extra
+CCMUD respawn path.
+
+Completion example:
+An accidental death before and after the lifetime reprieve, and a murdered
+character's return, each have one allowed set of choices and clear retained
+state without changing the settled corpse/loot rules.
+
+References: D Q25, Q34, Q41, Q149-Q156; R F6.
+This is a narrow reconciliation task, not a new death-and-corpses interview.
+
+
+H09 — PROPERTY OWNERSHIP AND ACCESS LIFECYCLE
+============================================
+Priority: Before registered property, succession, or player banking launches.
+Type: Incomplete integration with several directly stated open cases.
+
+Already settled:
+Deeds convey ownership. Registered doors use character-recognizing magical
+permissions. Heir eligibility widens on a specified schedule; eviction,
+front-door sale, depreciation, and forfeited contents are substantially
+defined. Protected property and unprotected wilderness caches are distinct.
+
+The hole:
+D Q152 makes deed possession sufficient for ownership, while D Q154-Q156
+uses registered owners, door permissions, heirs, and subsequent sale. The
+documents do not explain when these representations synchronize or what
+happens to the former deed when an heir or buyer acquires the property.
+Storage in a bank lockbox further means "possession" must be defined beyond
+simply holding the deed.
+
+The initial creation/registration of a claim, its protected boundary, and
+permitted use of stored goods are not fully specified. Opening a door is not
+necessarily permission to take everything inside under W's no-theft rule.
+D Q154 expressly leaves the relationship to older container/window locks
+and lockpicking unsettled.
+
+Minimum closure:
+Define one ownership authority and the deed/door transfer process; distinguish
+door entry, use of goods, removal, and ownership. Specify claim registration
+and scope before enabling claims. Complete the lifecycle cases already named
+as unresolved: no-heir timing, unregistered-claim contest response, and rental
+reversion. State how authorized inheritance/sale replaces prior ownership
+rather than leaving competing owners.
+
+Completion example:
+A deed stored in a lockbox, an eligible heir at a door, and a later purchaser
+cannot produce contradictory owners or stale access authority.
+
+References: D Q131-Q154, Q156-Q160, Q167; W world-generation Q168-Q174.
+Do not reopen the settled 30-day heir expansion, 30-day eviction notice, or
+compounded sale formula. Currency rounding belongs with H06.
+
+
+H10 — ADVANCEMENT AND CAPABILITY CONTENT
+=======================================
+Priority: Before long-term advancement is enabled; starter subset earlier.
+Type: Deliberately unfinished tuning/content plus ruleset integration.
+
+Already settled:
+CAP token costs, banking, individual caps, the normal total-cap cutoff,
+exceptional admin awards, independent learning/work timers, and committed
+Craft learning are defined. Meaningful play must matter; raw command spam
+must not be advancement currency.
+
+The hole:
+The initial earning cadence and qualifying activity policy are still
+provisional. The actual opening Crafts, prerequisite data, and language
+unlock table are unfinished. D Q174 explicitly identifies an inconsistent
+example rather than a final language progression.
+
+R already contains an authored Calling list and FAITH mechanics. Therefore,
+the gap is identifying the adopted CCMUD subset, its access rules, and which
+GM-dependent decisions require staff versus automatic handling. It is not
+evidence that no magic or healing design exists.
+
+Minimum closure:
+Publish a provisional, testable advancement policy and the capability/content
+tables needed for the enabled features. Cross-reference the existing ruleset
+and record CCMUD-specific exceptions, especially time units and recovery.
+Restrict initial content deliberately instead of blocking the first playable
+loop on a complete future Craft tree.
+
+Completion example:
+A player can understand the next available advancement, the next learnable
+Craft, and their actual language/Calling access from the same rules the server
+uses. Passive account age alone does not guarantee normal advancement.
+
+References: D Q18, Q34-Q40, Q54, Q69, Q169-Q174; W section 12;
+R M1-M11, F1-F6, O1, O5-O6.
+Writing/publishing-specific expansion is paused and is not requested here.
+
+
+DOCUMENT RECONCILIATION — NOT NEW DESIGN QUESTIONS
+==================================================
+
+These discrepancies should be resolved or annotated when the relevant system
+is implemented. An obvious later decision should not be re-interviewed.
+
+1. Walking speed:
+   W section 13 still illustrates 4 mph baseline / 96 miles per real hour.
+   D Q57 locks 3 mph WALK / 72 miles per real hour. Use the later D value.
+
+2. Offline conveyance consent:
+   W's "Group Migration & Offline Passengers" requires prior consent.
+   D Q52 explicitly removes separate consent. Preserve the later decision.
+
+3. Physical versus magical door keys:
+   D Q154 supersedes earlier physical door-key proposals. Do not implement
+   both as competing defaults. Container/window/picking integration remains
+   an actual open issue under H09.
+
+4. Geographic names versus property names:
+   W world-generation Q205-Q206 permits proposed names for constructed
+   landmarks, including buildings/property. D Q166 later prohibits player-
+   created custom property names. Treat the latter as the property exception,
+   retaining other geographic naming decisions.
+
+5. Written-language recognition:
+   D Q170/Q172/Q176 still contain speech-only/no-writing-recognition wording.
+   D Q219-Q220 explicitly supersedes it by reusing recognition rules for writing.
+   This is already resolved, not a fresh hole.
+
+6. Sleep commentary:
+   D Q69 says it supersedes Q54's lack of a healing benefit, but current Q54
+   already includes the benefit. This is stale historical wording, not a
+   disagreement about whether sleep helps. The rates and clock integration
+   with R O1 are separate work under H01/H10.
+
+7. Roads and immutable documents:
+   W's no inherent road-speed bonus does not prevent D Q63's improved travel
+   surface. W's ordinary historical objects are not immortal; D Q204/Q209
+   establishes a later explicit exception for published works. These are
+   compatible scoped rules, not contradictions needing new interviews.
+
+8. Stale navigation:
+   D calls its own file CCMudDesign.txt under PROJECT REFERENCES, while the
+   actual file is CCMUD_Design.txt. Historical bookmarks and the original
+   discussion queue must never override the current audit-first bookmark.
+
+9. Ruleset authority:
+   D points to W as authoritative, while W says to use Crown & Call directly.
+   R contains tabletop procedures and has its own evolution. Record an explicit
+   source/version and exception list for implementation. Neither importing
+   every tabletop rule nor silently ignoring later CCMUD decisions is adequate.
+   H01 and H08 identify the consequences that need actual decisions.
+
+
+INTENTIONALLY DEFERRED — NOT RECOMMENDED FOR THE NEXT INTERVIEW
+==============================================================
+
+- Writing/publishing mechanics: D Q246 remains deferred. Provenance visibility
+  and remaining details are unresolved; Thomas may drastically simplify the
+  book rules. Preserve D Q181-Q245, including Q197's recorded deferral and the
+  later nested-provenance decisions. Do not add book edge-case questions.
+- Death/corpses: D Q247 is withdrawn/duplicate. H08 addresses eligibility and
+  cross-system state only.
+- World metaphysics: D Q14's optional lore is deferred; magical arrival and
+  agelessness already have decisions.
+- Full PvP, causal reinforcement envelopes, advanced disguise/tracking,
+  farming/ranching, mining/excavation, complex weather, advanced construction,
+  wagons/boats, player shops, clans/governments, and full staff succession:
+  their detailed implementation is outside the minimum under D Q6.
+  Several have substantial existing rules; postponement is not absence.
+- Future world generation: the reviewed files do not supply a complete
+  generator specification for topology, hydrology, or underground geometry.
+  Before treating these as new design holes, retrieve any earlier generator
+  decisions. W's detailed generation interview begins at Q122; its numbering
+  alone is not evidence that Q1-Q121 were never answered. The immediate need
+  here is an initial terrain/lighting/resource contract and version stability.
+- Cosmetic state priorities, exact ink palette, every tool statistic, pager
+  bounds, detailed environmental curves, and cache/chunk tuning are content
+  or implementation work, not separate major design interviews.
+
+
+RECOMMENDED NEXT STEP
+=====================
+
+Complete a short "first playable contract" covering H01-H08. Start with the
+starter chain and rabbit encounter so missing dependencies become visible,
+and resolve the weight and return-route contradictions alongside it.
+
+Use content tables and a few end-to-end examples wherever possible. Ask
+Thomas only for choices that change gameplay or resolve incompatible locked
+decisions. Do not ask again whether maps are physical, Crafts fail randomly,
+characters leave corpses, or the world uses rooms.
+
+Then address H09-H10 when property and progression are scheduled. Keep later
+systems parked until their implementation requires them.
+
+This audit is a worklist, not an expansion of the numbered interview. If
+Thomas elects to resume that interview, its next new number remains 248.
