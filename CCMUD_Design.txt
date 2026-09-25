@@ -46,11 +46,22 @@ not vegetation. The samples are tens of miles apart: local plant species,
 individual trees, narrow riverbank vegetation, and small wetlands remain
 unresolved and should not be invented from this coarse preview.
 
+Close-up Step 6 requests a bounded 4-to-64-mile vegetation raster when staff
+zoom into the admin map. A deterministic patch field refines regional tree
+cover within the existing climate, relief, coastline, and lake constraints;
+overlapping requests return the same geography at shared coordinates. The
+viewer reuses recent regional generation results so panning does not regenerate
+the continent. This is still potential cover at subregional scale, not local
+species, individual plants, walkable forest edges, or detailed streambanks.
+The coastline, elevation, climate, and hydrology generators are unchanged.
+
 The admin viewer lets staff choose elevation-contour intervals from 2,000 feet
 down to 10 feet. Fine contours interpolate the same regional elevation grid;
 they do not add local survey detail and display only at suitable zoom. The
 approved coast, landforms, drainage, and climate are not changed by Step 6.
-A prior coastline issue remains for review: seeds 13 and 89 place (0,0) outside\nthe mainland polygon; the regional vegetation layer cannot assign land there.\n
+A prior coastline issue remains for review: seeds 13 and 89 place (0,0) outside
+the mainland polygon; the regional vegetation layer cannot assign land there.
+
 Large ocean/water buffers separate zones. Geography does not need to join
 across their boundaries: no requirement to align terrain, mountain ranges,
 rivers, watersheds, climate, coastlines, or other generated features between
