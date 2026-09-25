@@ -1,48 +1,835 @@
-CCMUD DESIGN INTERVIEW — CONTINUATION DOCUMENT
+CCMUD DESIGN — AUTHORITATIVE CONTINUATION RECORD
 ================================================
 
-CONTINUATION PROMPT FOR A NEW CHAT
-----------------------------------
+CURRENT STATUS AND HOW TO USE THIS FILE
+--------------------------------------
+Updated from the complete "Review Game Design Gaps" conversation on
+2026-09-24 (America/Chicago). Conversation ID:
+6ab5d435-d89c-83ea-86d7-657fa426a00b.
 
-Read this entire file and then read CCMud.html in the same repository. CCMud.html is the main design document and authoritative ledger of previously locked CCMud decisions. This file records the current structured design interview and identifies where it should resume.
+Read this current consolidation, then the preserved numbered decisions.
+This file is the authoritative CCMUD continuation record. It preserves the
+existing interview rather than replacing established decisions with a new
+game. The original question queue is historical, not an instruction to ask
+those questions again. The review conversation is complete; do not resume
+interviewing merely because an old question looks unanswered.
 
-Goal:
-Work through the remaining design questions one at a time with Thomas so CCMud has enough concrete design decisions to become a playable persistent coordinate-world MUD.
+Authority:
+1. Explicit accepted CCMUD decisions, including this review's later
+   corrections, govern CCMUD-specific behavior.
+2. Crown & Call's CC_Ruleset.html governs combat mechanics except for
+   explicitly identified CCMUD adaptations below. Do not invent replacement
+   engagement, withdrawal, wound, defense, or turn rules.
+3. Numbered decisions below retain their authority outside an explicitly
+   superseded portion. Later accepted decisions govern earlier proposals.
+4. CCMud.html remains a source for established world/architecture decisions,
+   but its conflicting older combat procedure is OBSOLETE.
+5. CCMUD_Holes.txt is an audit/worklist, not a source of approved mechanics.
+   Assistant suggestions and questions are not decisions unless accepted.
 
-Process:
-1. Begin at the BOOKMARK below unless Thomas directs otherwise.
-2. Ask one numbered question at a time.
-3. Discuss the answer with Thomas rather than merely collecting yes/no responses.
-4. When Thomas answers, restate the decision clearly as a concise locked design entry.
-5. Identify important consequences or ambiguities, but do not reopen decisions already settled unless Thomas wants to.
-6. Then ask the next applicable numbered question.
-7. Skip questions made irrelevant by earlier answers and record why they were skipped.
-8. Do not implement code merely because a design answer was given. This interview is for design decisions.
-9. When Thomas pauses the interview, update this file with the new answers, clean rewordings, and the next-question bookmark.
-10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
+Sources inspected before this update:
+- Repository: twpaige/ForgottenWords, main.
+- Original CCMUD_Design.txt blob:
+  c3531c837b4f9f5517a758878c9abc5ae2edc470.
+- CCMud.html blob: 7fda61120dca9390c1e73906ae7dfe3e24b8ea53.
+- CC_Ruleset.html blob: f4b546097037968fd90a4596b192a2b47d6e0895.
+- Rules page: https://crownandcall.com/CC_Ruleset.html.
+  HTTPS retrieval failed; the same host/path was successfully retrieved via
+  HTTP and matched the repository content, ignoring the local terminal
+  newline. HTML version 202609202145; source rules version 202609190716,
+  dated 19 September 2026. Rule IDs below refer to that version.
+- The full referenced conversation was read through its oldest turn.
+- The repository's CCMUD_Holes.txt was cross-checked.
 
-Current status:
-Questions 1–245 have been discussed and their recorded decisions are preserved below, including the explicit deferral of Question 197. Questions 181–245 extend the writing, copying, translation, authorship, publication, and provenance interview. Question 246 is deferred; Question 247 is withdrawn as a duplicate. Writing/publishing mechanics are paused, and Thomas may drastically simplify the writing/book rules later. The next session must audit CCMUD_Design.txt and CCMud.html for genuinely uncovered major design areas before asking further questions.
+The review's H01-H08 topics are resolved at the level actually discussed,
+including confirmations of already-designed death and inheritance. This
+does not mean every implementation constant or every original audit item
+has acquired an answer. The topic crosswalk and remaining explicit
+deferrals below prevent that misleading interpretation. No further
+interview is requested by this update. Writing/publishing remains paused.
+If Thomas later chooses to resume the numbered interview, use 248.
 
-Historical status note (preserved from the earlier interview):
-Questions 1–85 have been discussed. Question 86 is the next unanswered design question. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with the shelter portion of Question 69.
+CURRENT CONSOLIDATION — REVIEW DECISIONS
+=======================================
 
+C01 — STARTER INVENTORY AND SURVIVAL / CRAFTING CHAIN
+---------------------------------------------------
+Review topic H03. Refines Q1-Q5, Q21, Q26, Q38, Q66 and Q69.
 
-PROJECT REFERENCES
-------------------
+Normal Origin start:
+- Appropriate clothing and a small amount of coin; nothing else.
+- No free knife, weapon, food, waterskin, fire-making gear, map, or compass.
+- The character starts in Origin's tavern under the existing Normal rules.
+Naked remote start:
+- Literally no clothes, money, tools, equipment, food, or navigation aids.
+- Placement must offer a difficult but viable survival route without staff
+  intervention, with accessible natural drinking water within survivable
+  reach. No fixed distance or automatic portable water container was set.
+- Other outfitting tiers retain Q21; this review did not define their lists.
 
-Main design document:
-CCMud.html
+Bootstrap cutting tools:
+Suitable terrain supplies a sharp stone/flint-like material. A sharp stone
+can cut crudely; suitable natural materials can be fashioned into a crude
+stone knife without first needing a manufactured tool. The crude knife
+supports skinning, cutting fiber, sharpening wood, food preparation and
+primitive crafting. A manufactured knife is a later improvement. Do not
+create a circular requirement to possess a knife before making any knife.
 
-This interview document:
-CCMudDesign.txt
+Primitive materials and weapons:
+- Local wood, shoots and suitable growths support a primitive spear, bow
+  and arrows. Purchased parts are not inherently necessary.
+- Suitable vegetation yields plant fiber, which becomes basic cordage.
+  This is universal survival knowledge, with no special CAP or learned
+  recipe prerequisite; biome-specific plants may supply the same material.
+- A suitable rock can be thrown or wielded: WIELD ROCK; HIT RABBIT.
+  A thrown rock may stun a rabbit, allowing the hunter to close and finish
+  it with hands, a knife, a rock or a spear using normal combat timing.
+  Stun is a possible result, not an automatic success or an authored chance.
+- A bow or spear is useful but is not mandatory for the first meal.
+- Primitive arrows progress from sharpened wooden shafts to stone points
+  and then properly fletched arrows. Feathers/stone heads are not required
+  before the crudest bow-and-arrow path can work.
+- A primitive bow may be improved by replacing its string. Plant fiber
+  can be replaced by improved leather cordage. Eventually a better carved
+  NEW bow and deer innards for a good string are needed; restringing alone
+  does not make an unlimited-quality weapon. Exact bonuses are not set.
 
-Repository:
-twpaige/ForgottenWords
+Fire:
+Gather suitable tinder and fuel. LIGHT FIRE can use available proper
+equipment, primitive equipment, or an abstract bare-material friction
+method. Suitable combustible material and sufficient effort/time must
+eventually produce fire: do not make survival depend on repeated random
+craft failures. Tools, skill, dryness and weather principally affect time
+and difficulty. Do not invent a six-part friction-fire assembly.
+Craft-time language describes labor represented by Work Timer debt; it
+does not supersede the existing immediate atomic Craft architecture.
+If a later implementation introduces a separately timed non-Craft fire
+action, its timing must be specified explicitly, not inferred here.
 
+Rabbit processing and first food:
+1. Obtain a rock and/or make a primitive hunting weapon; obtain a cutting
+   edge for skinning. Travel to suitable habitat and FLUSH RABBIT.
+2. Hunt the ordinary animal through the current turn-based combat rules.
+   Recover its CORPSE after actual death.
+3. SKIN RABBIT removes its hide AND guts it. Outputs are hide, gut pile and
+   cleaned whole CARCASS. A small rabbit requires no separate BUTCHER step.
+   The gut pile may supply a small amount of cordage material.
+4. Gather a few sticks and make a simple spit. This trivial survival work
+   requires no special skill or elaborate components. Place the cleaned
+   rabbit on the spit and roast over an open fire.
+5. The cooked rabbit is one physical object with remaining edible quantity.
+   EAT RABBIT progressively consumes it; multiple people can share it.
+   Exhaustion leaves appropriate remains, not artificial serving objects.
 
-LOCKED INTERVIEW DECISIONS
-==========================
+OBSOLETE: requiring BUTCHER RABBIT between skinning and cooking; calling
+the dead unskinned animal a carcass; requiring a bow before the first hunt.
+Detailed larger-game butchering remains later work. Proposed burn timers,
+knife-free destructive butchering, and exact stun odds were not accepted
+mechanics in this conversation.
+
+Hide and leather:
+TAN HIDE abstracts the entire tanning process. An animal provides enough
+brain/material to tan its own hide; do not simulate scraping, soaking,
+brain preparation, stretching, smoking or drying as separate requirements.
+The result is a tanned hide available for use under normal Craft execution.
+Tanned hides yield standardized leather squares, principally by hide size.
+A rabbit-sized hide can supply a small square; exact yield tables are
+balance data. Squares can become improved bowstring/cordage or a belt;
+several squares can make crude leather leggings, shirt and moccasins.
+Leather recipes consume squares, not bespoke dimensions for every hide.
+
+The first rabbit is not forced into a one-hide waterskin recipe. The new
+chain explicitly supplies food and usable leather; waterskins remain a
+later option using appropriate materials. The earlier waterskin objective
+must not make the first meal depend on an unsupported rabbit-hide recipe.
+
+Water, shelter and navigation:
+DRINK WATER works at physically accessible natural water without a vessel.
+A vessel is needed to carry water. Locally appropriate gourds, bark vessels
+and similar primitive containers are alternatives to leather waterskins.
+Retain Q69: shelter is useful physical space, not a separate exposure or
+shelter-deprivation damage meter; sleep is not a survival requirement.
+Retain the Q5/Q12 tent/map/compass alpha milestone: acquire instructions and
+physical navigation items, travel at least two miles for the introductory
+assignment, build/pitch a tent at a suitable chosen place, mark it, leave
+sight of it, navigate back, and find the same persistent tent.
+Origin sells maps/compasses; remote crafting of a compass requires minerals
+(Q26). This review did not supply exact compass minerals, tent bill of
+materials, food portions, ignition costs or opening-Craft tables. Do not
+claim these content tables were finalized or grant the missing items free.
+
+C02 — CRAFT TIMER AND FLUSH WILDLIFE
+-----------------------------------
+Review topic H05 (wildlife); original audit H04. Refines Q85's deferral for
+FLUSH animals without inventing a general ecological depletion system.
+
+Work Timer and "craft timer" are the SAME single per-character labor debt:
+- Craft results happen immediately after all requirements validate.
+- Consume inputs, create/transform results and add debt atomically.
+  Validation failure changes nothing. There are no exposed halfway stages.
+- A Craft may start only when current remaining debt is strictly BELOW
+  48 real-world hours. This is an entry threshold, not a debt cap.
+- Add its cost to the later of now and the existing work-until timestamp:
+  work_until = max(now, work_until) + craft_duration.
+- Debt falls with real elapsed time, online or offline; it does not use
+  the accelerated 6x world clock. Sixteen hours at logout becomes six after
+  ten real hours away.
+- A Craft started below 48 hours may take debt above 48. Existing ledger
+  example: 47 hours + 48 hours of work = 95 hours, result already finished.
+- This is NOT a per-recipe cooldown or a wait for the product to finish.
+  A session of repeated crafting is intentional, not an exploit to prevent.
+
+FLUSH <animal> is a wilderness/hunting Craft:
+- It creates a new encounter animal within a specified nearby distance.
+  It does not need a previously persistent individual or a simulated local
+  population. Exact spawn distance remains configuration.
+- Terrain/biome must support the species. No deer at sea or arbitrary
+  species in unsuitable terrain. Suitable habitat plus available craft
+  capacity is sufficient; no extra depletion/population-density limiter.
+- Initial illustrative costs: rabbit about 2 real hours of Work Timer,
+  deer about 12. Other species receive appropriate later content values.
+- From zero debt, 24 successive two-hour rabbit Crafts are intentional.
+  The 24th starts at 46 and ends at 48; another must wait until below 48.
+- A flushed living animal has a hidden temporary lifetime of roughly
+  1-3 real hours. It behaves as an ordinary NPC animal after creation.
+  Cleanup of a still-temporary animal is quiet, when it is not actively
+  being observed/interacted with; loss of LOS itself is not despawning.
+- FLUSH is finished once the animal exists. It does not reacquire an
+  already-flushed animal: use LOOK, SEARCH and TRACK for that individual.
+- No global permanent wildlife population or anti-farming cooldown is
+  required by this design.
+
+Rabbit behavior:
+A flushed rabbit hops a few feet and attempts to hide. If concealment does
+not defeat perception it remains visible and can be attacked again legally.
+When shot at it may bolt 1-25 yards in a random direction. If it hides
+successfully, track/reacquire it. These are behavior choices within normal
+movement/combat rules, not free out-of-turn movement or a stationary target.
+
+Wild-animal bleeding and persistence:
+- Animals with wound level 3 or greater bleed. In current rules vocabulary,
+  level 3 is DEEP (C5), not the old Q60 "Minor" label.
+- A moving bleeding animal always produces blood-trail data. Greater
+  bleeding produces a heavier/easier trail and faster progression to death.
+- Untreated level-3-or-greater bleeding eventually kills wild animals that
+  cannot self-staunch. Rabbits, deer and waterfowl cannot self-staunch.
+- Some species may have explicit AI/template ability to staunch bleeding
+  by licking or rolling/rubbing. Do not give all animals this ability.
+- Remove the temporary despawn timer AS SOON AS bleeding is severe enough
+  to cause eventual death without intervention, not merely upon death.
+  The animal must remain to let the hunt resolve naturally.
+- Actual death produces an animal CORPSE governed by ordinary persistence/
+  decay; SKIN produces hide + gut pile + CARCASS.
+- Do not silently restore the removed FLUSH expiry on treatment; that
+  restoration was not specified. Corpse decay intervals also were not set.
+- This wild-animal rule does not replace W6's exact Scale-1 MORT rule.
+  The assistant's tentative extension of level-3 fatal bleeding to people
+  was never accepted as a new universal PC rule; do not import it.
+- Trail/state history must not be recreated as a fresh animal merely
+  because a procedural cache is evicted. Preserve meaningful interactions
+  under the existing persistence-by-exception architecture.
+
+C03 — LOS, RECOGNITION, WATCH AND TRAILS
+--------------------------------------
+Review H04; original audit H05. Completes the discussed Q73-Q85 behavior.
+
+LOS is physical, not a fixed MUD-room radius. Terrain, vegetation, elevation,
+lighting, weather and obstructions determine visibility. Distance and
+conditions determine resolvable detail: movement -> animal/person/figure ->
+equipment/detail -> normal short-description or observer's private label.
+Favorable long Origin sightlines are a design goal, not guaranteed
+recognition of a person at ten miles. Existing illustrative perception
+bands are not hard maximum visibility distances.
+
+Recognition never reveals the canonical character-file name. Show the
+normal short-desc, or that observer's existing label when recognition is
+adequate. Labels attach to remembered identity, survive ordinary clothing/
+appearance changes, and remain private. They are not magical tracking
+handles through darkness, distance or concealment. Preserve Q44/Q78's
+concealment restrictions; elaborate disguise behavior is still deferred.
+
+WATCH <target>:
+- Uses the established approximately five-second observation cadence.
+- Reports an eight-point heading and actual movement state, e.g. walking,
+  jogging, running or sprinting, subject to what the observer can perceive.
+- Ends when LOS is lost, with a useful final observed direction/disappearance
+  if known. It does not continue through the obstruction, predict unseen
+  movement, or silently become TRACK.
+
+Trail representation:
+Ordinary tracks and blood use lightweight trail segments recording actual
+path/location, age and intensity, rather than thousands of blood-drop or
+footprint inventory objects. Terrain/surface, size/weight, speed and
+conditions govern ordinary signs. Mud, snow, sand, soil and disturbed
+vegetation may preserve tracks; rock or hard dry surfaces may not.
+Time and weather degrade signs. Carried weight AND movement speed increase
+trail strength. Blood is deposited even where useful footprints do not
+form, and heavier bleeding makes the trail easier to follow.
+Evidence existing does not mean every observer automatically detects it.
+
+TRACK with no target:
+Find detectable nearby trails and list the nearest first, then other
+significant detectable trails. Supply usable local references such as
+RABBIT TRAIL #1, DEER TRAIL #2 or HUMAN TRAIL #1. This is the discovery/
+reacquisition command; no separate SEARCH TRAIL command is required.
+
+TRACK <trail>, e.g. TRACK RABBIT TRAIL #1:
+Physically retrace recorded signs through world coordinates at TRUDGE.
+Continue only while successive segments are resolvable. Stop at the last
+known sign if the trail becomes unreadable; do not bridge a rock gap by
+knowing the target's hidden location. Tell the player the trail is lost.
+The player can reposition and use TRACK to reacquire detectable evidence.
+Reaching the animal/corpse or trail end, stopping/changing movement, or an
+actual obstruction/interruption ends automatic following as applicable.
+Blood can bridge surfaces that do not preserve ordinary tracks.
+
+Tracks may reveal species/type when evidence and ability support it;
+human footprints do not reveal a name. Connecting a trail to a particular
+person requires independent knowledge/evidence, such as seeing it made or
+following it to the person. Keep unknown human trails anonymous.
+TRACK is primarily SENSE; the earlier illustrative secondary-CAP formula
+is not finalized. Existing ordinal targeting remains; descriptive trail
+numbers are local usable references, not leaked database IDs.
+
+Command-context clarification: STOP during an encounter invokes C06's
+anonymous encounter proposal. A movement stop is not consent to surrender
+and must not silently remove encounter membership. Outside an encounter,
+the established travel/tracking stop meaning remains. Do not use old
+movement-stop prose to bypass encounter timing.
+
+C04 — MOVEMENT, REFERENCE WEIGHT AND ENCUMBRANCE
+-----------------------------------------------
+Review H02. Preserves Q45 and Q57-Q63 with the accepted reconciliation.
+
+Descriptive height, weight and build remain cosmetic. All ordinary humans
+use ONE standard mechanical reference weight R for carrying calculations,
+independent of descriptive prose. The review did not select a number:
+the assistant's 180-pound example is NOT an adopted constant.
+
+Maximum carrying capacity C = R * (1 + 0.05 * ATHLX).
+ATHLX 0/5/10/15/20 gives 100/125/150/175/200 percent of R.
+Use the established effective capability/condition rules where applicable;
+do not introduce a new Strength stat or a second wound deduction.
+Every carried container and every recursively contained item contributes
+weight. Nesting never removes mass. General bulk/volume remains unmodeled.
+
+With load L and load fraction f = L/C:
+- f <= 0.5: encumbrance speed factor 1.
+- 0.5 < f <= 1: factor 1.5 - f (linear).
+- f = 1: factor 0.5.
+- f > 1: cannot move until load is reduced.
+This is a movement limit, not the rejected proposal that one simply cannot
+pick up anything beyond capacity. No new higher lift/drag formula or
+named run/jog lockout thresholds were settled.
+
+World travel retains TRUDGE/WALK/JOG/RUN/SPRINT = 1/3/5/8/11 mph, Q57's
+6x world clock and additional 4x travel acceleration, and the existing
+multiplicative environmental/load modifiers. Uninterrupted ideal WALK is
+72 miles per real hour; CCMud.html's older 4-mph/96-mile example is obsolete.
+The stamina recovery formula remains 1 + ATHLX/10 per 15 real seconds;
+debit exertion separately. Exact movement cost/endurance values remain
+tuning work. Do not infer a new stamina-cost table from this review.
+
+Combat/world scope:
+Use CC T3/C5 for tactical combat Speed: species Base Speed + FULL ATHLETICS,
+rounded up to 5 feet; typical human Base Speed 30 feet. Wound penalties
+reduce affected CAP rolls, not combat Speed. Q57's travel multipliers and
+Q60's wound travel derates are not extra tactical movement allowances or
+combat Speed penalties. Q60's old labels remain historical travel entries,
+not alternative combat wound ranks.
+CC T3 has no tabletop encumbrance math; the accepted CCMUD carrying system
+above is an explicit world-system adaptation. Its exact interaction with
+tactical movement rounding/Speed still needs implementation reconciliation;
+do not quietly invent a new combat stacking/rounding rule. The accepted
+above-capacity inability to move remains a CCMUD carrying constraint.
+Continuous world coordinates remain authoritative; T3's grid/diagonal rules
+are reproduced below as the combat source, not silently replaced by a
+new continuous-distance metric.
+
+C05 — CURRENT CROWN & CALL COMBAT FOUNDATION
+--------------------------------------------
+Review H01. Combat is fully TURN-BASED.
+
+OBSOLETE — DO NOT IMPLEMENT:
+CCMud.html section 13's simultaneous declarations followed by server
+resolution, declaration windows/revision/reveal procedure, and waiting for
+a round boundary before a legally arriving attacker participates.
+An automatic repeat-attack MUD loop was expressly rejected. A server still
+validates/resolves each legal action, but does not batch declarations into
+a competing combat model.
+
+Turns and initiative (T1-T7):
+- A round represents up to seven seconds of activity and ends after every
+  character and relevant NPC completes a turn. Human decision time may be
+  several real minutes; it is not extra fictional travel/activity time.
+- Initial initiative: 1d20, 11-20 PCs first, 1-10 NPCs first. Each side
+  chooses internal order. Do not invent a new initiative stat.
+- MOVE up to Speed; PREP is a brief activity of at most about one second;
+  ACT is the main undertaking. They may interweave, with legal movement
+  before/during/after ACT. Related actions, such as two weapon attacks,
+  can share ACT when reasonably possible.
+- HOLD delays a turn. Re-enter at a chosen position; that initiative
+  position persists until someone HOLDs again. NPCs use the same rules.
+- Forgo ACT for a second MOVE (T4); this does not bypass ENGAGED/WITHDRAW.
+- T3 source: five-foot squares; adjacency includes the eight neighboring
+  squares including diagonals. Speed/5 is the square allowance; at most
+  half those squares, rounded down, can be diagonal; diagonals cost one
+  square. Ordinary melee reach is adjacent unless the weapon says otherwise.
+  Implementation of this on the continuous world must preserve its intent;
+  no alternative diagonal/measurement rule was selected by the review.
+- PROTECT is declared during PREP on one's turn, either for a named person
+  generally or against a named enemy. Reserve leftover Speed. It lasts
+  until the hit is taken or the next turn begins, whichever is first.
+  Interpose against the first qualifying melee attack that can be reached;
+  open protection is mandatory when possible, named-enemy protection
+  triggers only on that enemy. Reserved movement must reach a square
+  adjacent to both protected person and attacker, through a legal path,
+  where the protector can legally be that attack's target. Resolve normal
+  defense. At most once per turn; multiple protectors use declaration order.
+  Remain where interposition ended, successfully or not. Being adjacent to
+  a willing enemy there means ENGAGED; no free departure afterward.
+
+Aggression and engagement (W1, W1a, W1b):
+- Aggression ranges -10 to +10; 0 is neutral. It adds to melee offense
+  and subtracts from melee defense, including unarmed/dodging defense.
+- Nonzero Aggression requires adjacency within five feet to an enemy in
+  the fight. Otherwise it is 0. Set freely at turn start if already adjacent,
+  or in PREP upon becoming adjacent before striking.
+- Ranged offense and defense never use Aggression. Ranged attacks require
+  at least ten feet; inside ten feet use melee or legally withdraw.
+- ENGAGED means adjacent to an enemy in the fight willing to oppose you.
+  Encounter membership alone is not ENGAGED.
+- WITHDRAW consumes the entire ACT to break that adjacency. No strike that
+  turn; MOVE out only on success. Roll separately against every adjacent
+  enemy opposing withdrawal: d20 + WEAPONS or ATHLETICS, opposed. An enemy
+  may allow departure without rolling. Win EVERY contested roll to take a
+  legal path out; losing any leaves you in place. No free/opportunity hit.
+- Choosing Aggression -10 before withdrawing is optional, not the cost.
+- Q67's provisional KITE/ORBIT/RETREAT controllers cannot bypass the turn,
+  Speed budget, engagement or withdrawal rules.
+
+Attacks, defenses and wounds (R1-R4, C5, W2-W10):
+Opposed resolution uses die + appropriate CAP + applicable modifiers on
+each side; higher total wins, difference is Margin of Victory (MoV).
+Defense is an appropriate weapon/shield/ATHLETICS dodge or other plausible
+defense, not static armor class. C07's unconscious Defense 0 is an explicit
+CCMUD exception. No extra numerical multiple-opponent/flanking penalty:
+each attack is a separate opposed resolution, and multiple attacks are
+the disadvantage. Bare hands/feet are innate weapons using normal WEAPN
+resolution with a low ceiling; no separate unarmed subsystem or invented
+numeric ceiling was finalized. CAPTURE is a distinct desired mechanic,
+not a new generic GRAPPLE subsystem with invented throws/chokes/escapes.
+
+Raw wound: MoV 1-4 FLSH; 5-8 LITE; 9-12 DEEP; 13-16 SEVR;
+17-20 GRAV; 21+ MORT. Apply the weapon ceiling and armor as defined by
+W4/W5. Armor changes severity, not the chance to hit: none +1, leather 0,
+chainmail -1, plate -2. No tier exists above MORT.
+Two equal wounds combine into one next tier through GRAV -> MORT;
+MORT boxes do not combine into a higher rank. W8 value in FLSH units:
+1, 2, 4, 8, 16, 32. Healing subtracts stated value and rewrites the remainder
+as the fewest wounds (e.g. SEVR minus LITE = DEEP + LITE).
+C5 penalty uses worst wound LEVEL, not the binary wound value:
+FLSH 1, LITE 2, DEEP 3, SEVR 4, GRAV 5, MORT 6. Reduce WEAPONS,
+RANGED, ATHLETICS, THIEVERY and SENSE; not MAGIC, ACADEMICS or FAITH.
+Speed uses full ATHLETICS. For a creature able to remain standing with
+multiple MORTs, each MORT after the first adds one to wound level.
+Scale is how many MORTs defeat a creature; it is not bonus CAP or added
+wound steps. Scale 1 people drop at one MORT, with W6's subsequent-wound
+death rule. Larger creatures follow W7/W9, not automatic human collapse.
+
+Ranged equipment (W11):
+Thrown attacks use RANGED, the thrown item's modifier/ceiling, and -1 per
+ten feet to target. Launched attacks use projectile modifier/ceiling and
+launcher effective range, range penalty, allowed ammunition and hand rule.
+A bow used as a club uses its melee line, not its arrow's statistics.
+Loading sling, shortbow, longbow, light crossbow and blowgun is PREP;
+firing is ACT. Heavy crossbow spanning is ACT and firing takes a later turn.
+W11's launcher table lists Sling fire = 1 hand, bows/light crossbow/blowgun
+= 2, and heavy crossbow = 2 to span / 1 if spanned. Its prose says one-hand
+firing is illegal except a spanned heavy crossbow. That source discrepancy
+for the sling is not resolved by this conversation; do not silently choose
+an invented replacement rule.
+
+Relevant source examples (do not treat primitive-crafted upgrades as these
+finished items without authoring their content):
+- Stone: +0 one/two-hand modifier, LITE ceiling; W11 marks it "Thrown only."
+  CCMUD's expressly accepted WIELD ROCK / HIT RABBIT is an exception to
+  that restriction. Melee improvised-rock statistics are not newly fixed.
+- Hunting Knife: +2/+3, LITE ceiling, throwable.
+- Spear: +1/+2, SEVR ceiling, throwable; Short Spear +1/+2, DEEP.
+- Shortbow: 100-foot effective range, -1 per 20 feet beyond; Short Arrow.
+- Longbow: 200-foot effective range, -1 per 20 feet beyond; Short or War Arrow.
+- Short Arrow: +0, DEEP; War Arrow: +0, SEVR.
+- A ground Stone (thrown, LITE) is not Sling Stone ammo (launched, DEEP).
+Use the full W11 tables for other weapons; this review adds no firearm
+statistics, projectile recovery, new stun chance, or invented weapon list.
+
+Conditions, healing and dice:
+Ordinary CC O4 ENTANGLED prevents MOVE but allows PREP/ACT and an opposed
+ATHLETICS/THIEVERY escape ACT. C07's surrender/SUBDUE prisoner state is an
+explicit exception, NOT that escapable generic condition. Ordinary PRONE:
+standing costs MOVE, WEAPONS/RANGED/ATHLETICS -2, incoming melee attacks +2.
+C07's prisoners cannot use ordinary standing to escape their restrictions.
+Other O4 conditions: BLIND fails sight-based SENSE and gives -4 to attacks/
+defenses needing sight; DEAF prevents hearing/spoken information; MUTE
+prevents audible speech; AFFLICTED gives -2 ATHLETICS/THIEVERY/SENSE for the
+source-defined duration; IMPEDED halves Speed rounded down to five feet
+and makes jump/climb/similar ATHLETICS tests one difficulty step harder.
+One condition has one effect; distinct conditions may stack when applicable.
+T8 cover/concealment modifiers are situational and use an appropriate CAP
+(often RANGED or SENSE), not a permanent blanket cover bonus.
+
+O1 recovery pauses in combat and resumes afterward. Its source rates are
+one FLSH per hour Active, 30 minutes Resting, 15 minutes Meditating (O6),
+one applicable rate only. Resting means lying still, not eating/talking/
+watching; sleep is not required. Tending requires SENSE or ACADEMICS >=1
+and a full hour of work, giving the patient the Resting rate for that hour
+even while Active; it does not stack with Meditation. Retain M8/O5's actual
+converted-healing and wound-transfer rules rather than invent instant cures.
+M8 converted healing: announce a single-target damaging Call converted to
+healing and name the willing ally/self before rolling MAGIC opposed by an
+actual enemy still able to defend in the fight. Neither a willing friend
+nor a helpless/bound prisoner can be the opposing dummy. On a win, virtual
+wound uses MoV and M6 ceiling before enemy armor; enemy takes no wound and
+the ally loses one wound step lower (virtual FLSH heals nothing, LITE heals
+one FLSH, through MORT healing one GRAV). Losing heals/wounds nobody.
+Area Calls cannot convert. Use W8 for the remaining value; reducing MORT
+to GRAV or less removes Mortal status.
+O5 Bearing the Burden is a noncombat MAGIC >=5 Calling taking one minute
+with both hands on the patient throughout. Transfer chosen wound value
+to the Caller without erasing it; recombine both with W8. A Caller left
+MORT falls unconscious/dying under W6.
+CCMUD Q54/Q69's sleep benefit and hunger limits remain recorded; exact
+noncombat clock conversion/integration is not silently invented here.
+
+O3 default dice mode is Lethal 1d20; alternatives are Risky 3d6 and Stable
+4d6 drop lowest. They replace the dice, not CAPs or modifiers. W6 uses the
+dice currently in play for its secret bleed-out duration. No new dice mode
+or automatic admin/GM decision algorithm was selected in the review.
+For Callings, Gathering, Faith, criticals and other special effects use
+the published M/F rules; this consolidation does not redesign them.
+
+C06 — ENCOUNTER SERVER BEHAVIOR, ENTRY, MERGING, STOP/DENY
+---------------------------------------------------------
+Review H01. These are CCMUD additions to the combat foundation.
+
+Turn timeout / link-dead:
+A player has only the normal response time. Expiry forfeits that turn:
+no MOVE, PREP or ACT, and initiative advances. No invented automatic attack
+or defensive ACT substitutes for it. The exact duration was not selected.
+A connection failure never pauses the fight or grants a reconnect window.
+On link-death the server may immediately lower Aggression to -10; this is
+the accepted timing exception to ordinary turn-time setting. W1's adjacency
+and melee-only restrictions still apply; it grants no ranged-defense bonus.
+Otherwise normal combat continues. If the character dies, they die.
+This policy is intentional for now and may be made more forgiving later.
+Preserve the separate Q47-Q51 aggression/logout timer; that timer is NOT
+the -10..+10 combat Aggression setting. Do not invent a reset-action list
+or claim all logout/encounter-clock edge cases were specified.
+
+Late joining and zones:
+Encounters are spatial and open; targets cannot refuse an otherwise legal
+attack because they did not volunteer to join. A legally arriving character
+may enter immediately when a valid melee or ranged attack is in range.
+The entry attack establishes their initiative position and subsequent turn
+timing; no waiting until the next round. "Legally" includes actual position,
+range, LOS and the established approach/time-dilation constraints. It does
+not authorize impossible travel during other players' decision time.
+Nearby participants can be watching, fleeing, maneuvering or waiting; being
+in an encounter never requires attacking.
+The established pseudo-time-dilation/combat-zone approach system also
+applies while leaving. There is no newly invented instant LEAVE COMBAT
+command, distance cutoff, or unrestricted travel switch after WITHDRAW.
+Causal travel constraints cannot simply vanish at encounter end to allow
+distant reinforcements to arrive early. The detailed envelope algorithm
+remains later work as in Q6/CCMud.html, not a new required alpha simulator.
+
+Overlapping combat AREAS merge into one encounter with one turn/time
+structure. They NEVER automatically split afterward, even if people
+separate. The encounter ends by all-party agreement under STOP/DENY.
+Thomas explicitly called this a sticky issue subject to later reconsideration;
+retain it as current authority, not as an invitation to implement splitting.
+Do not silently add geographic auto-removal as another termination route.
+
+STOP/DENY, the final accepted procedure:
+- Any participant may propose STOP at any time, not only on their turn.
+- The whole encounter is prompted to STOP or DENY. The proposal and all
+  responses are anonymous; reveal neither proposer nor dissenter.
+- Everyone participates, including the proposer, who may also DENY.
+- One explicit DENY immediately fails the proposal; combat continues.
+- Unanimous STOP ends it. The normal response period also bounds waiting:
+  nonresponse defaults to STOP; without DENY the encounter ends at expiry.
+- At most ONE proposal per encounter per combat round. A denied proposal
+  cannot be repeated that round. A round may take several real minutes.
+- NPCs vote too, using personality/AI settings. Rabbits always favor STOP;
+  a killer NPC or configured grizzly may DENY and fight to the death.
+  NPC votes are equally anonymous.
+- Roleplaying negotiation is encouraged but is not required to use STOP.
+- STOP is a proposal, not a persistent personal consent flag or a surrender.
+  It does not bind, disarm, capture, release, or make anyone invulnerable.
+- An encounter ended by consent may be followed by a new legal engagement.
+  No response default of DENY, named notifications, automatic revocation
+  of a persistent STOP flag, or auto-splitting survives the final correction.
+
+C07 — SURRENDER, SUBDUE, PRISONERS, MORTAL AND UNCONSCIOUS
+--------------------------------------------------------
+Review H01/H06. Keep death, incapacitation and surrender distinct.
+
+SURRENDER <target>, e.g. SURRENDER TIMOTHY:
+- Target must be adjacent. Voluntary surrender is immediate and cannot be
+  refused. It costs/interferes with none of the recipient's MOVE/PREP/ACT.
+- Drop everything currently held/in hand, not all worn/carried inventory.
+- Surrenderer is controlled, taken prone and bound automatically without
+  an opposed CAPTURE roll. Cordage is abstractly supplied; no inventory
+  requirement. Do not impose an equipment prerequisite.
+- Prisoner is helpless and a NONCOMBATANT encounter participant, not gone
+  from the encounter. They may see and speak: no automatic gag/blindfold.
+- They can still be attacked/killed; there is no protective immunity.
+- Binding is indefinite until ANOTHER character releases them. No self-
+  escape roll, cutting loose, wriggling out or expiry. Generic O4 ENTANGLED
+  escape does not apply to this special state.
+- No release while the encounter remains active. After it ends, ANYONE
+  may release them; it need not be the original surrender recipient.
+- SURRENDER does not itself end the encounter or trigger a STOP proposal.
+
+After the encounter:
+Anyone may assist a captured party to their feet. Captors may force bound
+prisoners to follow physically, including multiple prisoners at once (six
+PCs following one captor was the accepted example). No one-prisoner limit
+was adopted. Standing/walking under forced-follow does not release bindings.
+Prisoners remain bound until released; subsequent treatment is ordinary
+world interaction, not a new special combat subsystem. Do not invent
+commands, consent checks, escape timers or new custody transfer restrictions.
+
+MORT is not immediate death (W6; ordinary Scale 1):
+Immediately fall unconscious and prone, drop held items, stop voluntary
+combat actions and begin bleeding out. Worn/carried inventory is not all
+dropped until actual PC death. The body remains physically present while
+alive; "no PC corpse" does not remove an unconscious living person.
+Secretly roll the dice currently in play (O3); their total is the number
+of seconds until bleed-out. Keep the number hidden. Do not replace it with
+a fixed number of rounds, a generic animal bleed curve, or the player turn
+response timer. CC allows GM fiction-based adjudication instead of a secret
+roll when appropriate; automatic server criteria for that are not invented.
+Combat represents fictional seconds; human decision time is not extra
+fictional time. Exact within-round scheduling of that second-based deadline
+must preserve W6 and T1; no new rounding or minimum survival grace is set.
+
+Anyone at the body may spend the ENTIRE ACT with TWO FREE HANDS to stem
+the bleed; no CAP check or special skill is required. In time, this stops
+bleed-out but leaves the victim unconscious and MORT, not healed. Any later
+wound while MORT kills them. Untreated expiry kills them.
+"Binding the wound" here is medical stabilization, distinct from prisoner
+bindings. Neither SURRENDER nor SUBDUE automatically stabilizes MORT;
+medical stabilization does not automatically capture or revive.
+
+General UNCONSCIOUS:
+It is a game-wide condition, not exclusive to Mortal wounds: exhaustion,
+poison, environmental or other effects may cause it. The character is prone
+and cannot voluntarily act while unconscious. They may be attacked with
+Defense automatically 0. They are not automatically captured.
+There is no universal duration. The cause supplies an appropriate recovery
+window with randomness in the actual wake-up time; do not expose the exact
+wake time to the player. This does not override MORT's continuing state.
+Do not add a sleep-deprivation meter; Q54/Q69's no-required-sleep rule stands.
+
+REVIVE <target>:
+Wake an adjacent unconscious character with no supplies, skill or CAP roll
+provided the target does NOT have a MORT wound. It bypasses natural waking
+delay, allowing drinking/aid/ordinary action subject to remaining injuries
+and conditions. It is not wound healing or blanket removal of the cause.
+A stabilized but still-MORT patient is still ineligible. Do not mistake
+absence of active bleeding for absence of MORT.
+
+SUBDUE <target>:
+Automatically succeeds on an adjacent unconscious character, with no roll
+or equipment, and creates exactly the same indefinite bound-prisoner state
+as SURRENDER. It does not wake, heal or stop bleeding; waking later does not
+release bindings. SURRENDER is voluntary conscious capture; SUBDUE captures
+someone already unconscious. The earlier broad question about carrying,
+searching and taking all possessions without opposed rolls was not itself
+a separately accepted universal rule; apply actual existing object rules.
+Adversarial CAPTURE remains desired, but no new comprehensive opposed
+capture/escape subsystem was supplied by this review.
+
+C08 — PC DEATH AFTERMATH: CONFIRMED, NOT REDESIGNED
+-------------------------------------------------
+Review H07. Q149-Q151 already settle this; Q247 remains withdrawn.
+
+Actual PC death:
+- Everything physically worn/carried/held drops at the death coordinates,
+  including money, notes, deeds, documents and containers with contents.
+- Drops are immediately lootable, finder's keepers. No corpse ownership,
+  reserved recovery period or protection timer.
+- NO PC corpse remains in the playable world. The body/character transfers
+  immediately to the admin-only death area.
+- Stored possessions stay where they were; death does not teleport them.
+- Death-area choices remain dead, return naked under the established
+  Naked 10000 consequence, or petition for administrative review. A death
+  judged blameless may permit an admin-authorized return at Origin.
+- "-10,000 penalty" in the conversation refers to the established Naked
+  10000 return, not a newly invented deduction of XP, money or CAPs.
+- Banked funds are not carried death loot. After 90 IN-GAME days they pass
+  to the named surviving heir; with no valid surviving heir, to the bank.
+  The bank schedule is separate from registered-property succession.
+
+Preserve Q25's once-per-account accidental/environmental reprieve and
+murder restriction, Q34's recorded CAP consequences, and Q149's admin
+petition process. The review reaffirmed death aftermath; it did NOT provide
+a new eligibility table reconciling every return route or settle retained
+learning/tokens/debt and reversal of inheritance. Do not silently repeal
+the murder rule, give unlimited blameless automatic returns, or import
+tabletop F6 as a new automatic CCMUD respawn mechanism.
+
+C09 — REGISTERED PROPERTY INHERITANCE: CONFIRMED
+------------------------------------------------
+Review H08. Q154-Q160 already settle the core mechanism.
+
+Registered property has numbered doors controlled by the owner. The
+property/door identity-permission system replaces physical door keys.
+Owners can grant/revoke named access per door and apply door-specific bans.
+Ownership transfer does not depend on handing over physical keys.
+The conversation describes abandoning keys broadly; the detailed existing
+Q154 expressly left container/window/picking integration unresolved.
+Do not revive physical PROPERTY-DOOR keys or silently invent replacement
+mechanics for every non-door lock.
+
+An owner may designate multiple heirs in an ordered list. At death the first
+is eligible; every 30 IN-GAME days the next joins the eligible pool. Earlier
+heirs remain eligible. There is no formal refusal: doing nothing lets time
+widen eligibility. A valid claim transfers registered ownership and all
+door control, retaining existing access until the new owner changes it.
+After the final heir has had 30 in-game days with no claim, begin a further
+30-day eviction notice. At expiry remove old access, relocate stored offline
+login positions immediately outside the main entrance, and forfeit contents
+left inside. Offer the property for sale at its front door; the first buyer
+who pays the required price becomes owner. No remote Land Office trip.
+
+Retain Q157-Q159: initial price 2 * structure base value; daily in-game
+decline compounded at 1% of current price; floor 10% of INITIAL ASKING PRICE,
+not base value. Compute from sale-start timestamp. Contents convey as-is.
+The virtual tour is Q160's read-only structural room echoes while remaining
+outside, not a ghost walking through possessions.
+
+This confirms rather than redesigns inheritance. Empty-heir-list timing,
+rental-reversion timing, unregistered-claim contest deadlines and deed/
+registered-owner synchronization remain only as specified in the existing
+record; this review did not invent missing values.
+
+C10 — PRESERVED FOUNDATION NEEDED TO CONTINUE WITHOUT THE OLD CHAT
+----------------------------------------------------------------
+These are established CCMud.html decisions, not new review inventions.
+
+World and persistence:
+Use signed 64-bit integer X/Y/Z coordinates at one inch per unit; +X east,
++Y north, Z elevation. Spaces and physical boundaries control perception
+and traversal; buildings occupy real geometry and entering is not teleporting
+to an unrelated room. Seed/coordinates define reproducible base geography.
+Instantiate meaningful changes/history rather than every untouched tree.
+Caches are disposable; persistent changes are not. Wake what can interact;
+query distant perceptible landmarks without waking all distant simulation.
+Calculate long-term changes from elapsed timestamps when needed.
+
+Perception and communication:
+Generate prose from world facts after perception filtering; BRIEF changes
+presentation only. Seeing a light is distinct from seeing by its illumination.
+Movement updates and five-second observation notices are separate concepts.
+Speech, whispers, shouts and visible emotes obey distance/boundaries and
+perceptibility; labels are always observer-private.
+
+Craft/learning:
+Tools/materials must be held/carried or physically within the defined work
+area; distant ownership/visibility is insufficient. Known Crafts succeed
+deterministically. General Crafts and a prerequisite knowledge graph avoid
+one "skill" per trivial variation. A Craft may key one variation from inputs.
+Learning is a separate real-time timer, online or offline, one Craft at a
+time, committed until completion; no pause/swap/banked partial progress.
+Display prerequisites, duration and completion time before commitment.
+Learning and Work Timer can run independently. The optional recipe/plan
+layer beneath broader Crafts remains unfinalized.
+
+Advancement:
+Eight CAPs; current names WEAPN/RANGE/ATHLX/THIEV/SENSE/MAGIC/ACADX/FAITH.
+Newbie allocation is Q34-Q36: 15 points across exactly five CAPs, 1-5 each.
+Individual maximum 20. CAP Boost Tokens use real time plus meaningful play;
+idle connection and raw command spam are not advancement currency.
+Tokens can be banked; an increase costs its new level. At total CAP 100
+(provisional normal ceiling), remaining tokens become zero and automatic
+earning permanently ends for that character. Warn before that purchase.
+Exceptional logged admin awards (typically 1-3 tokens) may continue and
+allow total CAP above 100, but never an individual CAP above 20. Exact
+earning cadence/content tables remain tuning. Crafts do not directly raise
+CAPs. Retain the numbered account and anti-cycling rules.
+
+C11 — RECONCILIATION, AUDIT CROSSWALK AND UNSET VALUES
+-----------------------------------------------------
+Conversation numbering versus the actual repository audit:
+- Conversation H01 combat -> audit H01; turn model and listed server policies
+  resolved, exact scheduling/geometry integration not fully specified.
+- Conversation H02 movement -> audit H02; reference weight contradiction
+  resolved, numeric reference weight and stamina expenditure remain unset.
+- Conversation H03 starter chain -> audit H03; governing bootstrap resolved,
+  full recipe/quantity/time and tent/compass content tables not supplied.
+- Conversation H04 perception -> audit H05; LOS/WATCH/trails resolved.
+- Conversation H05 wildlife -> audit H04; FLUSH/temp-animal lifecycle resolved,
+  not a full depletion/regrowth system for all natural resources.
+- Conversation H06 unconsciousness -> new cross-system clarification, NOT
+  audit H06 (Origin NPC economy).
+- Conversation H07 death aftermath -> confirmed Q149-Q151, related to audit
+  H08; NOT audit H07 (server recovery).
+- Conversation H08 property inheritance -> confirmed Q154-Q160, related to
+  audit H09; NOT a new answer to all audit H08 return-eligibility questions.
+
+Accordingly preserve the conversation's H01-H08 closure for its actual
+topics. Its final "no holes left" statement must not be read as decisions
+about unasked economy, crash recovery or progression topics. The original
+audit remains a historical readiness worklist; no replacement mechanics
+are invented to satisfy its suggested completion examples.
+
+Explicitly superseded material:
+- Declaration/batch-resolution combat, automatic repeated attacks and
+  round-boundary-only late entry -> C05/C06 turn-based MPA.
+- Proposed reconnect pause -> no extra time; timeout forfeits turn.
+- Proposed numerical multi-attacker penalty -> none.
+- Automatic encounter splitting/geographic termination -> no splitting;
+  anonymous unanimous STOP/DENY governs.
+- Named STOP notifications, persistent consent flags and nonresponse DENY
+  -> anonymous bounded proposal, nonresponse STOP, one per round.
+- Supply-dependent surrender, escapeable surrender bindings, in-combat
+  prisoner release -> C07 automatic indefinite binding and post-encounter
+  release by another character.
+- MORT as immediate PC death/corpse cleanup -> W6 unconscious dying state;
+  actual PC death invokes Q149-Q151.
+- Population-search FLUSH, per-animal cooldown, hard 48-hour debt cap and
+  despawn removal only on death -> C02.
+- Nonmoving informational TRACK, SEARCH TRAIL requirement, magical identity
+  from footprints and canonical-name recognition -> C03.
+- Descriptive body weight as capacity -> C04 standard mechanical reference.
+- Rabbit separate butchering, pre-skinning "carcass", mandatory single-rabbit
+  waterskin dependency -> C01.
+- CCMud.html's earlier WALK 4 mph and offline-passenger consent -> Q57's
+  WALK 3 mph and Q52's conveyance attachment without separate consent.
+- Physical property-door keys -> Q154. Earlier key examples are historical
+  wherever they conflict; non-door mapping remains explicitly unresolved.
+- Q170/Q172/Q176 no-written-language-recognition wording -> Q219-Q220.
+  Written comprehension still requires READ, not merely speaking.
+- Old property-name proposals -> Q166; interior room prose remains allowed.
+
+Do not fill in unsaid numbers or policies:
+Turn-response seconds; combat-zone shape and merge-order bookkeeping;
+within-round bleed scheduling; combat stamina clock; continuous-coordinate
+implementation of T3; noncombat healing clock integration; exact reference
+weight; stamina costs; unarmed/primitive weapon stats; opposed CAPTURE;
+animal below-MORT bleed durations and corpse decay; spawn distance; yields/
+recipes/prices/merchant economy; general renewable-resource persistence;
+crash/rollback/generator-version contracts; unresolved death-return and
+deed/claim edge cases; detailed disguise; writing provenance visibility.
+These are retained limitations, content/tuning or deferred integration,
+not a new interview queue. Check existing sources before raising any of
+them, and ask further design questions only when Thomas requests that work.
+
+PRESERVED NUMBERED DECISIONS
+===========================
 
 QUESTION 1 — EXPERIENCE THE FIRST PLAYABLE RELEASE MUST PROVE
 -------------------------------------------------------------
@@ -61,11 +848,11 @@ A player must be able to:
 - Carve a rudimentary bow and arrows.
 - Locate and hunt a rabbit.
 - Recover and skin the rabbit.
-- Butcher, cook, and eat the rabbit.
+- Skin/gut, spit-roast, and progressively eat the rabbit (C01); no separate rabbit BUTCHER step.
 - Gather fuel and light a fire.
 - Construct and set up a simple shelter or tent.
-- Use the rabbit hide to make a waterskin.
-- Abstract the initial tanning process as part of the Craft. Descriptive text may say, “With the materials at hand, you tan and prepare the hide,” without initially simulating brains, tanning chemistry, or detailed hide preparation.
+- Tan the rabbit hide into usable leather/squares; retain waterskins as a later option using appropriate materials (C01).
+- TAN HIDE abstracts the complete tanning process using the animal's sufficient own materials; no separate tanning chemistry or preparation simulation (C01).
 - Return to town.
 - Sell appropriate hunted goods.
 - Purchase and drink a beer.
@@ -132,10 +919,10 @@ The smallest complete gameplay loop is:
 1. Obtain or improvise a weapon by picking up and throwing a rock or by crafting a rudimentary bow and arrows.
 2. Travel into the wilderness.
 3. Locate and hunt a rabbit.
-4. Recover the rabbit’s carcass.
-5. Skin and butcher it.
-6. Gather fuel and light a fire.
-7. Roast the rabbit.
+4. Recover the rabbit's corpse.
+5. SKIN it, which also guts it, producing hide, gut pile and cleaned carcass.
+6. Gather fuel, light a fire, and make a simple spit from sticks.
+7. Roast the cleaned rabbit on the spit (C01).
 8. Eat it.
 
 Claiming land, building a more permanent shelter, making a waterskin, selling the hide, and returning to town expand the experience but are not required to prove the smallest core loop.
@@ -154,7 +941,7 @@ The following package is the absolute minimum. Nothing in this list should be re
 - Throwing rocks.
 - Crafting a rudimentary bow and arrows.
 - Rabbits that can be found, move, be attacked, and die.
-- Carcasses with skinning and butchering transformations.
+- Animal corpses with SKIN/gut transformation into hide, gut pile and cleaned carcass; small rabbits need no separate BUTCHER step (C01).
 - Fire building and lighting.
 - Cooking raw rabbit into roasted rabbit.
 - Eating food.
@@ -396,14 +1183,14 @@ CCMud offers both a conventional town start and deliberately difficult remote st
 
 Standard start:
 - Choosing Normal without a distance begins the character in the local tavern at Origin.
-- The character receives Normal outfitting and minimal coin.
+- The character receives appropriate clothing and minimal coin ONLY (C01); no free tools, food, weapons, navigation or water/fire gear.
 
 Remote start:
 - The player chooses an outfitting level: Naked, Minimal, Normal, Extra, or Total.
 - The player also chooses any rough starting distance from 10 through 10,000 miles from Origin, e.g. Normal 2000 or Naked 10000.
 - The requested distance is approximate. The game chooses the actual direction and location and may place the character within plus or minus 50 percent of the requested distance. A request for 2,000 miles therefore means roughly 1,000–3,000 miles from Origin.
 - The player chooses the rough distance, not the exact coordinate or direction.
-- Naked means no outfitting; Minimal is minimum outfitting; Normal is modest standard outfitting; Extra and Total provide progressively greater outfitting. Exact contents remain to be designed.
+- Naked means literally no possessions; the remote start must nevertheless be survivable, including reachable natural drinking water (C01). Normal Origin outfitting is now clothing plus small coin only. Minimal remains minimum outfitting; Extra and Total remain progressively greater outfitting. Their exact lists remain to be designed.
 
 Thus Normal means the conventional tavern start, while Normal 2000 means Normal equipment at a randomized remote location roughly 2,000 miles from Origin.
 
@@ -601,7 +1388,7 @@ New characters do not choose starting Crafts directly.
 
 Certain Crafts will be designated as opening Crafts for particular CAPs. A character who has the qualifying CAP, typically at 1 or greater, automatically receives that CAP's designated opener Craft. For example, ATHLX may eventually grant an opener such as Gather Firewood.
 
-The exact opener Crafts and any thresholds beyond the basic CAP qualification will be determined later. A CAP at 0 does not grant its opener.
+The exact opener Crafts and any thresholds beyond the basic CAP qualification will be determined later. A CAP at 0 does not grant its opener. C01's universal basic cordage and accepted primitive bootstrap must remain possible; do not turn an optional opener example into a new prerequisite that blocks Naked survival.
 
 This fits the broader Craft model already discussed elsewhere: CAPs are numeric capabilities, while Crafts represent learned practical knowledge and transformations.
 
@@ -666,7 +1453,7 @@ An appropriate hood may physically conceal a character's face so that the visibl
 
 More elaborate disguise systems—hair dye, false beards, makeup, impersonation, disguise contests, and similar mechanics—are deferred.
 
-How private labels interact with active concealment may be settled later with the perception/disguise rules.
+C03 now confirms that adequate recognition displays the observer's label despite ordinary clothing changes. Concealed identity does not gain magical recognition from a label; detailed exceptional disguise handling remains deferred.
 
 
 QUESTION 45 — BODY SIZE AND MECHANICS
@@ -674,7 +1461,7 @@ QUESTION 45 — BODY SIZE AND MECHANICS
 
 Height, weight, and build have zero mechanical effect and are not tracked as separate character fields. If a player considers such details important, they may include them in the full description.
 
-Descriptive claims do not establish mechanical superlatives such as being the world's tallest, biggest, or strongest character. Capability comes from the game's actual mechanics and CAPs.
+Descriptive claims do not establish mechanical superlatives such as being the world's tallest, biggest, or strongest character. Capability comes from the game's actual mechanics and CAPs. C04 resolves Q61: ordinary humans share a standard mechanical reference weight, independent of descriptive weight/build.
 
 
 QUESTION 46 — DELIBERATE LOGOUT AND CAMPING
@@ -713,6 +1500,8 @@ An unexpected disconnect does not immediately remove the character from the acti
 - New qualifying aggression during the grace period may reset/extend the aggression timing as appropriate.
 
 This prevents disconnecting from functioning as an instant escape while giving ordinary connection failures a short, finite exposure period.
+
+ACTIVE COMBAT CLARIFICATION (C06): no pause or extra reconnect window; only the normal turn-response period. Timeout forfeits MOVE/PREP/ACT. Link-death may immediately lower Aggression to -10 subject to W1's scope. Normal injuries/death apply. The exact logout/ongoing-encounter boundary must not be inferred as an extra combat escape mechanic.
 
 
 QUESTION 50 — INTERACTION DURING DISCONNECT GRACE
@@ -882,7 +1671,8 @@ Environmental modifiers stack multiplicatively. A 3 mph WALK subjected to maximu
 
 The character is still using WALK and receives/pays the normal WALK stamina behavior; environmental conditions reduce physical progress rather than changing the movement mode's stamina rate.
 
-Wounds:
+Wounds — WORLD-TRAVEL HISTORY, NOT COMBAT SPEED:
+The following old names/derates are retained for the travel record only. C04/C05 and CC C5/T3 govern combat: wounds never reduce tactical Speed, and current wound names are FLSH/LITE/DEEP/SEVR/GRAV/MORT. Do not treat the old names as a second combat wound ladder.
 - Light: 0% speed derate.
 - Moderate: 5% speed derate.
 - Minor: 15% speed derate.
@@ -892,12 +1682,8 @@ Wounds:
 
 These wound derates are the final cumulative values for each wound level, not additional percentages to be summed.
 
-Encumbrance:
-- Carrying up to and including 50% of the character's body weight causes no speed derate.
-- From 50% through 100% of body weight, the speed derate increases continuously and linearly from 0% to 50%.
-- At exactly 100% of body weight, movement speed is reduced by 50%.
-- Carrying more than 100% of body weight is beyond the character's maximum load and the character cannot move until the load is reduced.
-- Example: a 200-pound character has no speed penalty at 100 pounds carried, a 25% speed derate at 150 pounds, and a 50% speed derate at 200 pounds.
+Encumbrance — RECONCILED by Q61 and C04:
+The old thresholds against descriptive body weight are OBSOLETE. Let C be maximum capacity derived from the shared mechanical reference weight and ATHLX. Through 50% of C there is no derate; from 50% to 100% the derate rises linearly to 50%; above C the character cannot move until load is reduced. All recursive carried mass counts. No numeric reference weight was selected.
 
 The overall movement model may therefore be expressed conceptually as:
 
@@ -910,16 +1696,18 @@ QUESTION 61 — MAXIMUM CARRYING CAPACITY
 
 ATHLX substantially increases maximum carrying capacity.
 
-Maximum carrying capacity = body weight × (1 + 0.05 × ATHLX).
+Maximum carrying capacity = standard mechanical reference weight × (1 + 0.05 × ATHLX).
+
+RECONCILED (C04): "body weight" as descriptive/player-selected weight is OBSOLETE for this calculation. All ordinary humans share the same mechanical reference constant; its numerical value remains unset.
 
 Examples:
-- ATHLX 0: 100% of body weight.
+- ATHLX 0: 100% of standard mechanical reference weight.
 - ATHLX 5: 125%.
 - ATHLX 10: 150%.
 - ATHLX 15: 175%.
 - ATHLX 20: 200%.
 
-Encumbrance speed penalties scale against the character's actual maximum carrying capacity, not against raw body weight. A character suffers no encumbrance speed derate through 50% of maximum carrying capacity. From 50% to 100% of maximum capacity, the speed derate rises continuously and linearly from 0% to 50%. At full carrying capacity, speed is reduced by 50%. Above maximum carrying capacity, the character cannot move.
+Encumbrance speed penalties scale against the character's actual maximum carrying capacity, not against descriptive weight or the unmodified reference constant. A character suffers no encumbrance speed derate through 50% of maximum carrying capacity. From 50% to 100% of maximum capacity, the speed derate rises continuously and linearly from 0% to 50%. At full carrying capacity, speed is reduced by 50%. Above maximum carrying capacity, the character cannot move.
 
 
 QUESTION 62 — BULK
@@ -1003,7 +1791,7 @@ RETREAT JENNY SE
 
 All relative-movement commands remain subject to actual world geometry and physics. They optimize only for the explicitly named target; for example, successfully kiting Jenny may inadvertently move the character into Bob's melee reach. This is intentional. In multi-character combat, positioning, terrain, obstacles, headings, speeds, and chosen movement intents may make the battlefield tactically significant.
 
-These ideas are deliberately recorded as provisional. Thomas expects they may be heavily changed or discarded when the full turn-based combat system is designed, but they are worth preserving for later experimentation.
+These ideas remain provisional for experimentation. C05's fully turn-based combat is now authoritative. No continuous controller may generate free out-of-turn movement, evade Speed budgets, or bypass ENGAGED/WITHDRAW. Continuous combat automation implied by this older proposal is OBSOLETE.
 
 
 QUESTION 68 — NON-COMBAT POSTURE
@@ -1045,7 +1833,7 @@ Fully logged-off characters never receive starvation/dehydration wounds. Hunger/
 
 Food and water depletion is intentionally slow. After eating and drinking to full, it should be at least about one real-world week before ordinary hunger becomes noteworthy. Exact calories, hydration, activity modifiers, thresholds, and stamina-recovery reduction remain for later balancing.
 
-Sleep is NOT a survival requirement and has no fatigue/deprivation meter. Sleep does increase natural wound-healing rate and may permit administrator-delivered dreams or visions. This supersedes the earlier Q54 statement that sleep provided no routine healing benefit.
+Sleep is NOT a survival requirement and has no fatigue/deprivation meter. Sleep does increase natural wound-healing rate and may permit administrator-delivered dreams or visions. This agrees with the current Q54 record. CC O1 supplies the recovery rules and pauses recovery during combat; exact world-clock integration remains as noted in C05.
 
 Shelter is NOT a physiological requirement and lack of shelter causes no damage merely because the character is unsheltered. Shelter is valuable as a physical place: safe/useful storage, hanging or keeping a deer carcass, cooking stew, warming coffee, sleeping, working, getting out of weather, and establishing a useful wilderness home. Weather may affect other systems such as movement, but there is no hidden shelter/exposure-damage meter.
 
@@ -1164,7 +1952,7 @@ QUESTION 82 — SEARCHING AND TRACKING WHILE MOVING
 
 SEARCH requires the character to stop moving because it represents careful examination of a localized area.
 
-TRACK may become a continuous movement state. Once a trail has been successfully acquired, a command such as TRACK DEER can physically lead the character through the continuous coordinate world along that trail until the trail is lost, the player stops, an obstruction/interruption occurs, or another condition prevents continuing.
+CURRENT / RESOLVED by C03: TRACK without a target discovers nearby detectable trails, nearest first. TRACK <trail>, e.g. TRACK RABBIT TRAIL #1, physically follows recorded signs at TRUDGE. Lost sign stops movement at the last resolvable segment; reposition and TRACK to reacquire. No hidden-location shortcut or mandatory SEARCH TRAIL command.
 
 
 QUESTION 83 — IDENTICAL OBJECT TARGETING
@@ -1215,7 +2003,7 @@ The intended architecture is hybrid and chunk-based:
 
 Thus fifty players passing the same generated tree should consume the same cached world information rather than independently regenerating that tree fifty times. If a player cuts the tree down, that modification is persistent authoritative state. If the disposable base cache later expires, the server can reconstruct the deterministic base chunk and then apply persistent modifications and current conditions.
 
-Persistent changes include player construction, roads, names where appropriate, stored/cached possessions, harvested or removed features where persistence is required, and other player/world history that cannot be recreated solely from the original seed. Resource depletion/regrowth and similar long-term simulation require their own later persistence rules.
+Persistent changes include player construction, roads, names where appropriate, stored/cached possessions, harvested or removed features where persistence is required, and other player/world history that cannot be recreated solely from the original seed. C02 now settles FLUSH animals: habitat-eligible temporary creation regulated by per-character Work Timer, without simulated population depletion, with removal of expiry when bleeding will be fatal and ordinary corpse persistence on death. Other resource depletion/regrowth and long-term simulation retain their later-design status.
 
 Exact chunk size, cache lifetimes, storage strategy, and geographic resolution are implementation decisions to benchmark after the physical world generator is substantially complete; they are not locked here.
 
@@ -1406,6 +2194,7 @@ PUT into an accessible closed container may transparently open it, place the obj
 
 QUESTION 131 — LOCKS ON CONTAINERS, DOORS, AND WINDOWS
 -------------------------------------------------------
+STATUS NOTE FOR Q131-Q145: physical property-door keys, master keys, key retrieval and picking proposals are OBSOLETE wherever they conflict with Q154/C09's identity-based doors. Keep the older record below as history; do not implement a parallel property-door key system. Mapping the earlier container/window/picking details to keyless access was not separately resolved. General containment and physical-access rules remain valid.
 Containers/objects require an appropriate key to LOCK/UNLOCK normally. Doors/windows may normally be locked/unlocked from the INSIDE without a key unless configured KEY ONLY. KEY ONLY requires a key even inside. Automatic GET/PUT never bypasses a locked container.
 
 QUESTION 132 — LOCK IDS, MASTER KEYS, AND BARS
@@ -1712,7 +2501,7 @@ QUESTION 170 — UNREADABLE TEXT STILL APPEARS AS WRITING
 
 A character unable to read a sign, letter, book, or other written object can still perceive that writing exists, but cannot see its contents. The description may indicate writing, symbols, or carving without revealing the words.
 
-Question 176 further establishes that unreadable written languages are described simply as writing in an unknown language; there is no written-language recognition mechanic.
+OBSOLETE: Q176's original denial of written-language recognition. Q219-Q220 supersede it: the language may be recognizable without its contents being readable. READ remains necessary for comprehension.
 
 
 QUESTION 171 — AUTOMATIC LANGUAGE ABILITIES FROM ACADEMICS
@@ -1728,7 +2517,7 @@ QUESTION 172 — SPOKEN-LANGUAGE RECOGNITION UP TO FIVE LEVELS ABOVE
 
 A character may identify a spoken language whose required Academics level is up to five levels above their own ACADX without understanding its content. A language beyond that recognition range remains unidentified.
 
-For illustration, an ACADX 4 character could recognize a spoken language requiring level 9, but not one requiring level 10. These numbers illustrate the recognition rule, not a finalized language progression. Question 176 limits this recognition mechanic to speech; it does not apply to writing.
+For illustration, an ACADX 4 character could recognize a spoken language requiring level 9, but not one requiring level 10. These numbers illustrate the recognition rule, not a finalized language progression. OBSOLETE scope limitation: Q176 formerly limited recognition to speech. Q219-Q220 now reuse the same recognition rules for writing, without granting comprehension.
 
 
 QUESTION 173 — SPEAK SETS THE ACTIVE LANGUAGE FOR SPEECH AND WRITING
@@ -1768,7 +2557,7 @@ Do not reveal the actual words or substitute fake foreign-language gibberish. Th
 QUESTION 176 — UNKNOWN WRITING, VISIBLE ART, AND ART MODERATION
 ------------------------------------------------------------------
 
-If a character cannot read a written language, show writing in an unknown language without exposing its contents. There is no written-language recognition mechanic and no handwriting/calligraphy skill or special beautiful/fancy-writing ability.
+If a character cannot read a written language, never expose its contents. The earlier "unknown language only / no written-language recognition" rule is OBSOLETE under Q219-Q220: use established recognition rules to identify a recognizable language without translating it. No handwriting/calligraphy skill or special beautiful/fancy-writing ability was introduced.
 
 Written objects may include drawings or other visual material enclosed in <art>...</art> tags. Art is displayed to everyone regardless of literacy or language ability.
 
@@ -2277,23 +3066,27 @@ WITHDRAWN / DUPLICATE — NOT A NEW DESIGN DECISION.
 The proposed question about character death, corpses, and carried possessions repeated an already-covered system. Thomas identified the duplication. No new death/corpse rule was adopted, and the existing decisions remain in force. Audit the documents before asking further questions.
 
 
-BOOKMARK — RESUME HERE
-======================
+BOOKMARK — CURRENT CONTINUATION
+===============================
+The Review Game Design Gaps conversation is incorporated in C01-C11.
+Its discussed H01-H08 topics are closed/confirmed as mapped in C11. Do not
+restart the old audit or invent more questions on the strength of historical
+queue wording. Preserve all accepted decisions and explicit deferrals.
 
-NEXT ACTION: AUDIT MAJOR DESIGN COVERAGE BEFORE ASKING MORE QUESTIONS
+Writing/publishing remains paused (Q246); Q197's historical deferral is
+qualified by Q243-Q245's later provenance decisions. Q247 remains withdrawn.
+If Thomas asks to resume the numbered interview, the next new number is 248.
+Check this consolidation and the existing record before asking any question.
+No implementation work is requested by a design decision alone.
 
-Read all of CCMUD_Design.txt and CCMud.html. Compare the established decisions against the major systems needed before implementation. Identify only genuinely uncovered major design areas and report a bounded list of meaningful remaining gaps before resuming the interview. Do not automatically continue microscopic edge cases or treat the original discussion queue as unanswered without checking both documents.
+Historical source links:
+https://github.com/twpaige/ForgottenWords/blob/main/CCMud.html
+https://crownandcall.com/CC_Ruleset.html
 
-Questions 181–245 are recorded above. Preserve later clarifications where they refine earlier wording: permanent ink still permits appending (194/200); TITLE establishes book authorship despite guest writing (200); publication freezes composition (202–203); the explicit publishing-ban schedule is 3 months, 5 months, 1 year, 2, 4, 8, 16 years (206); written-language recognition reuses existing rules (219–220); and copy fidelity concerns content rather than source ink colors (229–230).
-
-Question 197 was deferred at the time; Questions 243–245 later establish component and nested provenance retention. Question 246 remains deferred: provenance visibility/details are unresolved, further writing/publishing mechanics are intentionally paused, and Thomas may drastically simplify the writing/book rules later. Do not resume that line of questioning unless Thomas chooses to.
-
-Question 247 is withdrawn/duplicate because character death and corpses were already covered. It is not a new decision and must not reopen that system.
-
-After the coverage audit, ask one numbered question at a time only about a verified meaningful gap. If the interview resumes, the next new number is 248; do not reuse 246 or 247 or interpret numbering as a requirement to invent another question. Do not implement game code from this interview.
-
-The historical discussion queue below is preserved as reference material, not an automatic continuation plan.
-
+HISTORICAL QUEUE — NOT CURRENT REQUIREMENTS
+The following original discussion queue is retained only as history.
+In particular, declaration-window/revision/reveal questions are OBSOLETE
+under C05; they must not resurrect declaration/batch-resolution combat.
 
 REMAINING ORIGINAL DISCUSSION QUEUE
 ===================================
@@ -2570,13 +3363,13 @@ PHASE X — CONFLICT, WOUNDS, DEATH, AND COMBAT
 
 134. What exact action begins an Engagement?
 
-135. How long is the declaration window for each round?
+135. OBSOLETE — declaration-window question; use fully turn-based C05/C06.
 
 136. What happens when a participant does not submit an action?
 
-137. May players revise declarations before the round closes?
+137. OBSOLETE — declaration-revision question; no batch declaration model.
 
-138. Are declarations revealed immediately or simultaneously at resolution?
+138. OBSOLETE — declaration-reveal question; use turn-by-turn resolution.
 
 139. How is initiative or action ordering resolved within a simultaneous round?
 
