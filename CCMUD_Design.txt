@@ -37,6 +37,20 @@ centered on Origin, and offers Fit Zone + Continent to show the full boundary.
 It reports any coastline beyond the zone for deliberate future review. These
 world-level dimensions do not silently reshape the approved coastline.
 
+H.O.G. DEVELOPMENT STATUS — SEPTEMBER 2026
+
+Step 5 regional climate has been reviewed in the DEV viewer. Step 6 adds
+Center-zone previews of potential regional biomes and tree cover from the
+existing elevation and climate grids. Lakes from the drainage layer are water,
+not vegetation. The samples are tens of miles apart: local plant species,
+individual trees, narrow riverbank vegetation, and small wetlands remain
+unresolved and should not be invented from this coarse preview.
+
+The admin viewer lets staff choose elevation-contour intervals from 2,000 feet
+down to 10 feet. Fine contours interpolate the same regional elevation grid;
+they do not add local survey detail and display only at suitable zoom. The
+approved coast, landforms, drainage, and climate are not changed by Step 6.
+A prior coastline issue remains for review: seeds 13 and 89 place (0,0) outside\nthe mainland polygon; the regional vegetation layer cannot assign land there.\n
 Large ocean/water buffers separate zones. Geography does not need to join
 across their boundaries: no requirement to align terrain, mountain ranges,
 rivers, watersheds, climate, coastlines, or other generated features between
