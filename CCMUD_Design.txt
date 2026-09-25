@@ -25,17 +25,20 @@ The world is organized as a 3×3 arrangement of nine enormous zones:
     SW | S | SE
 
 Each zone uses the same deterministic Heart of Gold (H.O.G.) generator with
-its own seed and configuration. The Center zone contains Origin (0,0) and is
+its own seed and configuration. The Center zone contains coordinate origin (0,0) and is
 the only zone currently being developed and visually reviewed. The other
 eight zones may be generated later with distinct seeds/configurations.
 
 Each zone is a square 10,000 × 10,000 miles. The 3×3 world spans approximately
 −15,000 to +15,000 miles on each axis, with Center occupying −5,000 to +5,000
-miles on both axes and Origin (0,0) at the square's center. The viewer draws
+miles on both axes and coordinate (0,0) at the square's center. The viewer draws
 the Center-zone boundary, opens new previews at 1,000 miles per screen inch
-centered on Origin, and offers Fit Zone + Continent to show the full boundary.
+centered on coordinate (0,0), and offers Fit Zone + Continent to show the full boundary.
 It reports any coastline beyond the zone for deliberate future review. These
 world-level dimensions do not silently reshape the approved coastline.
+CCMUD stores world coordinates in inches. For example, (22,000, 42,000)
+inches is about 0.35 miles east and 0.66 miles north of (0,0); land is selected
+from the chosen zone's geography.
 
 H.O.G. DEVELOPMENT STATUS — SEPTEMBER 2026
 
@@ -59,8 +62,21 @@ The admin viewer lets staff choose elevation-contour intervals from 2,000 feet
 down to 10 feet. Fine contours interpolate the same regional elevation grid;
 they do not add local survey detail and display only at suitable zoom. The
 approved coast, landforms, drainage, and climate are not changed by Step 6.
-A prior coastline issue remains for review: seeds 13 and 89 place (0,0) outside
-the mainland polygon; the regional vegetation layer cannot assign land there.
+Seeds 13 and 89 place coordinate (0,0) in water. This is acceptable; the
+coordinate is a reference point, not the starting settlement. The settlement
+called Origin is hand-placed on suitable land after the seed is chosen, as
+specified in Question 23. Its safety gradient and remote-start distances are
+measured from the settlement, not from (0,0). No coastline change is needed.
+
+Step 7 adds a first deterministic Center-zone regional geology preview, using
+shared elevation and hydrology without changing the reviewed geography.
+Bedrock families and broad surface materials are inferred from relief, basin
+candidates, and contiguous rock provinces. Building stone, limestone, clay,
+coal, iron, copper, gold-bearing rock, and downstream river-sediment gold are
+shown as relative prospectivity (0–3), not confirmed deposits or quantities.
+The regional map cannot resolve individual outcrops, veins, or walkable mine
+sites. Staff review Regional bedrock, Surface materials, and Resource potential
+in the admin viewer before refining this Step 7 model further.
 
 Large ocean/water buffers separate zones. Geography does not need to join
 across their boundaries: no requirement to align terrain, mountain ranges,
@@ -1103,7 +1119,7 @@ Travel is unrestricted from the beginning. Testers may travel anywhere the gener
 
 Early testers may establish permanent homesteads and retain them through private alpha, final release, and beyond. Test play is intended to become part of the world’s real history rather than disposable pre-release data.
 
-Danger increases gradually with distance from the origin and starting town:
+Danger increases gradually with distance from the starting settlement named Origin:
 
 - Town to one mile: Extremely safe. Numerous guards patrol and respond to threats. Safety comes from an actual in-world presence rather than an invisible protected-zone rule.
 - One to five miles: Generally safe countryside without constant guard coverage.
