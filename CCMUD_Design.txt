@@ -14,6 +14,46 @@ game. The original question queue is historical, not an instruction to ask
 those questions again. The review conversation is complete; do not resume
 interviewing merely because an old question looks unanswered.
 
+HOG WORLD ARCHITECTURE — NINE INDEPENDENT ZONES (2026-09-25)
+---------------------------------------------------------------
+The world is organized as a 3×3 arrangement of nine enormous zones:
+
+    NW | N | NE
+    ---+---+---
+     W | C | E
+    ---+---+---
+    SW | S | SE
+
+Each zone uses the same deterministic Heart of Gold (H.O.G.) generator with
+its own seed and configuration. The Center zone contains Origin (0,0) and is
+the only zone currently being developed and visually reviewed. The other
+eight zones may be generated later with distinct seeds/configurations.
+
+The discussed scale is approximately 1,000,000 × 1,000,000 miles per zone,
+with global coordinates roughly −1,500,000 to +1,500,000 miles on both axes
+and Center occupying approximately −500,000 to +500,000. These are
+world-level design dimensions, not a directive to stretch the current
+continental preview or change its approved coastline.
+
+Large ocean/water buffers separate zones. Geography does not need to join
+across their boundaries: no requirement to align terrain, mountain ranges,
+rivers, watersheds, climate, coastlines, or other generated features between
+independently seeded zones. H.O.G. should concentrate on making one zone
+excellent, especially Center, without solving global geological continuity.
+
+A zone can generate in zone-local coordinates; CCMUD exposes continuous
+world coordinates by applying the appropriate zone offset. Once a live zone
+is established, persist its seed, configuration, and H.O.G. generator version
+so later code changes do not silently alter its geography. Persistent local
+overrides may eventually handle corrections, and large generator migrations
+must be deliberate. Pre-alpha/alpha terrain may be reset or regenerated
+while the generator remains under development.
+
+Continue the existing ten-step H.O.G. roadmap for Center only. The
+nine-zone architecture and ocean buffers remove any need to solve
+cross-zone continuity now. Do not implement the other eight zones or change
+the approved Center continent merely to prepare for distant boundaries.
+
 Authority:
 1. Explicit accepted CCMUD decisions, including this review's later
    corrections, govern CCMUD-specific behavior.
