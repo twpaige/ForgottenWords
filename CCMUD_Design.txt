@@ -29,11 +29,12 @@ its own seed and configuration. The Center zone contains Origin (0,0) and is
 the only zone currently being developed and visually reviewed. The other
 eight zones may be generated later with distinct seeds/configurations.
 
-The discussed scale is approximately 1,000,000 × 1,000,000 miles per zone,
-with global coordinates roughly −1,500,000 to +1,500,000 miles on both axes
-and Center occupying approximately −500,000 to +500,000. These are
-world-level design dimensions, not a directive to stretch the current
-continental preview or change its approved coastline.
+Each zone is a square 5,000 × 5,000 miles. The 3×3 world spans approximately
+−7,500 to +7,500 miles on each axis, with Center occupying −2,500 to +2,500
+miles on both axes and Origin (0,0) at the square's center. The viewer draws
+the Center-zone boundary and fits both it and the current continent; it shows
+any coastline beyond the zone boundary for deliberate future review. These
+world-level dimensions do not silently reshape the approved coastline.
 
 Large ocean/water buffers separate zones. Geography does not need to join
 across their boundaries: no requirement to align terrain, mountain ranges,
