@@ -22,7 +22,7 @@ Process:
 10. Preserve the character of CCMud: physical geography matters, travel is continuous rather than teleportation, player actions create persistent history, and simple deterministic systems are preferred over unnecessary simulation.
 
 Current status:
-Questions 1–180 have been discussed. Resume at Question 181: whether the copier-added visible note should be free-form text or standardized. Questions 149–162 below record the finalized property-after-death decisions; Questions 163–180 record exterior customization, signs, language/literacy, artwork moderation, and copying/provenance decisions.
+Questions 1–245 have been discussed and their recorded decisions are preserved below, including the explicit deferral of Question 197. Questions 181–245 extend the writing, copying, translation, authorship, publication, and provenance interview. Question 246 is deferred; Question 247 is withdrawn as a duplicate. Writing/publishing mechanics are paused, and Thomas may drastically simplify the writing/book rules later. The next session must audit CCMUD_Design.txt and CCMud.html for genuinely uncovered major design areas before asking further questions.
 
 Historical status note (preserved from the earlier interview):
 Questions 1–85 have been discussed. Question 86 is the next unanswered design question. Question 14's speculative Westworld premise was superseded by the later magical-arrival, agelessness, and respawn decisions. Phase III (accounts and character creation) and Phase IV (presence, logout, sleep, and safety) are complete. Phase V is in progress. Resume with the shelter portion of Question 69.
@@ -1810,26 +1810,489 @@ Copies of copies preserve the complete relevant provenance chain in metadata: th
 
 The copier may also insert a visible metadata tag/note at the beginning of the copied book or paper. This note is part of the readable document, separate from the hidden staff metadata and provenance record.
 
-Whether this visible note is free-form text or a standardized system-generated line is unanswered. Resume with Question 181; neither option has been adopted.
+At the end of Question 180, whether this visible note would be free-form or standardized remained unanswered. Question 181 below now resolves it.
+
+
+QUESTION 181 — COPIER’S VISIBLE NOTE
+------------------------------------
+
+A copy made by anyone other than the original author must contain a standardized, unavoidable visible notation at the beginning indicating that the document is a copy, not an original. That mandatory notation does not display the copier’s identity. The copier may additionally add an optional free-form introductory note. If the original author produces another copy of their own work, it may be treated as another original and requires no visible copy notation. There is no limit imposed here on how many originals an author may produce.
+
+
+QUESTION 182 — WHAT COUNTS AS THE “ORIGINAL AUTHOR”?
+----------------------------------------------------
+
+The no-copy-notation privilege applies only to a single-author work reproduced by that same original author. If a book or document has multiple authors, any reproduction of it is considered a copy, even if one of the original co-authors performs the copying. It receives the mandatory visible copy notation. The metadata still preserves the complete authorship and copying provenance.
+
+
+QUESTION 183 — COPY OF A COPY
+-----------------------------
+
+A copy is made from the actual source document in the copier's possession, not from some abstract pristine master. Copy #2 therefore reproduces Copy #1 exactly, including its mandatory copy notation and any free-form notes previously added by earlier copiers. The current copier may then add their own optional free-form comment. Nothing inherited from the source is silently stripped out.
+
+
+QUESTION 184 — WHERE DOES EACH NEW COPIER NOTE GO?
+--------------------------------------------------
+
+New copier comments are prepended. The newest copier’s optional free-form note appears first, followed by the previously inherited copier notes. Thus, readers see the most recent annotation immediately, while the complete visible history remains intact underneath it.
+
+
+QUESTION 185 — CAN A COPIER DECLINE TO ADD A PERSONAL NOTE?
+-----------------------------------------------------------
+
+The copier’s free-form comment is entirely optional. A copier may add nothing. The mandatory copy indication and all inherited content remain unchanged.
+
+
+QUESTION 186 — CAN THE COPIER EDIT THE BODY WHILE COPYING?
+----------------------------------------------------------
+
+COPY BOOK and COPY PARCHMENT produce an exact copy of the source. The copier cannot alter, correct, delete, rearrange, or add anything within the copied body through the COPY command. The only permitted addition is the optional copier note already established.
+
+If someone wants to create an altered version, they must do so separately—effectively copying/pasting the text into a newly authored document and editing it normally. That new document is not treated as a faithful COPY and does not inherit the COPY command's provenance status.
+
+
+QUESTION 187 — COPYING <ART> CONTENT
+------------------------------------
+
+Authorized COPY BOOK and COPY PARCHMENT reproduce <art>...</art> content exactly, just like ordinary text. No separate artistic skill or capability is required. The copier's high-level copying ability represents sufficient competence to reproduce the entire document faithfully.
+
+
+QUESTION 188 — CAN AN EXACT COPY FAIL?
+--------------------------------------
+
+Once a character has the required copying capability and possesses the necessary book/parchment, ink, and pen, the COPY action does not fail. There is no random copying roll.
+
+A qualified character can also translate while copying. For example, if the source is English and the character is capable of the necessary French language use, they may copy it as a French-language document. The underlying player-visible stored prose may still literally be the English text—the game treats it as French through the document's language metadata. This is a translation, rather than an exact same-language transcription.
+
+
+QUESTION 189 — TRANSLATION AND COPY STATUS
+------------------------------------------
+
+A translated reproduction is visibly distinguished from an ordinary copy. Its mandatory notation will indicate that it was “copied and translated from” the source language/document rather than merely saying it is a copy. The provenance metadata continues to preserve the relevant source and copying/translation history.
+
+
+QUESTION 190 — TRANSLATOR IDENTIFICATION
+----------------------------------------
+
+Translated copies follow the same identity rules as ordinary copies. The mandatory visible notation indicates that the document was copied and translated from another language/source, but does not identify the translator. Full translator identity, date, source, language transition, and other relevant provenance remain in metadata. The translator may add an optional free-form note under the same rules already established.
+
+
+QUESTION 191 — TRANSLATING THROUGH INTERMEDIATE LANGUAGES
+---------------------------------------------------------
+
+Translation never cleans up or collapses the document's visible history. A translation made from a previous translation preserves all inherited historical information, including mandatory copy/translation notices and every copier's optional note. The new translation information is prepended, following the newest-first rule. Full provenance also remains in metadata.
+
+So a document could acquire a long and interesting lineage over generations of scribes and translators.
+
+
+QUESTION 192 — TRANSLATION REQUIREMENTS
+---------------------------------------
+
+Translation requires the character to read the source language and write the destination language. Speaking does not require a separate translation check because the established language progression ensures speaking ability comes before writing ability in that language.
+
+So English → French requires Read English + Write French. This respects the previously established separate per-language Academics unlocks rather than introducing a new translation skill.
+
+
+QUESTION 193 — TRANSLATING YOUR OWN WORK
+----------------------------------------
+
+A sole original author may translate their own work into another language and the resulting document is still considered an original. It receives no mandatory copy or translation notation. As with same-language originals, the author may produce as many original versions as desired.
+
+The metadata should still retain the useful facts about the document and its language, but visibly it is the author's own original work—not a copy.
+
+
+QUESTION 194 — AUTHOR REVISING THEIR OWN WORK
+---------------------------------------------
+
+There is no editing or revising an existing physical document. Written ink cannot be erased, overwritten through an edit command, or retroactively corrected. If an author makes a mistake or wants a changed version, they must begin again using fresh parchment/book materials and create a new document. The existing document remains exactly as written.
+
+That also means “editing” mentioned back in Question 186 should be understood as creating a new document manually from copied/pasted text, not modifying the existing physical object.
+
+
+QUESTION 195 — ABANDONING A MISTAKE MID-DOCUMENT
+------------------------------------------------
+
+Books consist of individual parchment pages. A page may be physically torn out from the beginning, middle, or end. The book's displayed page numbers automatically renumber to remain continuous; removing page 7 from a 21-page book leaves a 20-page book numbered 1–20.
+
+Existing parchments can also be assembled into books with ADD PAGE while the character holds both the book and parchment. ADD PAGE with no position appends the parchment to the end. ADD PAGE 3 inserts it as the new page 3 when that position is valid, shifting subsequent pages forward. The parchment becomes a page of that book rather than having its text recreated.
+
+
+QUESTION 196 — REMOVING A PAGE INTACT
+-------------------------------------
+
+A removed book page remains an intact parchment object, preserving everything written or drawn on it. It can be read independently, carried, transferred, or inserted into another book. Both removing a page and adding a parchment/page to a book require a higher Academics capability. This restriction is deliberately intended to reduce casual vandalism and abuse.
+
+Protection for institutional/library books is explicitly deferred for later design rather than decided now.
+
+
+QUESTION 197 — PROVENANCE WHEN PAGES MOVE BETWEEN BOOKS
+-------------------------------------------------------
+
+DEFERRED in this interview.
+
+Page-level provenance when parchments move between books is deliberately left unresolved for later. We won't let it drag us into designing the document data model right now.
+
+Later Questions 243–245 establish preservation of component-parchment provenance and nested history through publication and whole-book copying. Preserve those later decisions without inventing additional page-movement metadata rules here; remaining provenance visibility/details are deferred under Question 246.
+
+
+QUESTION 198 — BOOK CAPACITY
+----------------------------
+
+Every book has a hard maximum capacity of 100 parchment pages. There are no different book capacities to manage. This is intentionally generous for unusual cases such as long-running journals, collected notes, or player histories.
+
+
+QUESTION 199 — BLANK PAGES
+--------------------------
+
+Books may contain blank parchment pages, so players can assemble journals, ledgers, notebooks, etc. in advance and fill them over time. WRITE BOOK 42 opens the writing editor for page 42 of the held/targeted book. The normal permanent-ink rules apply once writing is committed to that page.
+
+
+QUESTION 200 — WRITING ON A PARTIALLY USED PAGE
+-----------------------------------------------
+
+Existing writing can be appended to, but never altered or erased. Each parchment has a hard limit of 75 characters per line and 25 lines total, and parchment is one-sided only—nothing may be written on the back.
+
+For books, authorship is established by TITLE, not by who physically writes each page. The character who first titles the book becomes its original author, period. Other characters may subsequently write on pages without becoming co-authors. Only that original author may change the book's title.
+
+This also substantially narrows our earlier multiple-author discussion: ordinary collaborative writing inside one book does not create multiple authors merely because several people contributed text.
+
+
+QUESTION 201 — CHANGING A TITLE
+-------------------------------
+
+A book's original author may change its title while the work remains unpublished. An unpublished work cannot be copied. Only the original author may PUBLISH it. Publication permanently fixes the work for purposes such as copying; title changes are no longer allowed afterward.
+
+If the original author dies before publishing the manuscript, nobody else can publish it. The unfinished/unpublished manuscript remains exactly what it was—a potentially unique and genuinely rare physical artifact.
+
+
+QUESTION 202 — WRITING AFTER PUBLICATION
+----------------------------------------
+
+PUBLISH permanently freezes the physical book. Once published, its title, text, artwork, pages, page order, and composition cannot be modified. Nothing may be appended, no pages may be added, and no pages may be removed. It becomes an immutable finished work suitable for copying.
+
+
+QUESTION 203 — WHAT ABOUT PUBLISHED COPIES?
+-------------------------------------------
+
+Every legitimate COPY BOOK of a published work automatically inherits published/immutable status. Once the copy is created, its text, artwork, title, pages, page order, inherited historical notes, and copy/translation notation cannot be altered; pages cannot be added or removed. The copier's optional note is added during the copying process, before the resulting copy is finalized.
+
+This preserves the integrity of every work circulating through the formal copying system.
+
+
+QUESTION 204 — PHYSICALLY DESTROYING PUBLISHED BOOKS
+----------------------------------------------------
+
+A published book—original or legitimate copy—is permanent and indestructible. Fire, water, weather, decay, burial, ordinary damage systems, and similar effects cannot damage or destroy it. It cannot be removed through an OOC JUNK-style command or equivalent disposal mechanism. Burial does not cause decomposition. Administrators below level 100 cannot destroy it either. Only the exceptional authority of a level-100 administrator remains capable of removing a published book.
+
+A book is forever.
+
+
+QUESTION 205 — PUBLISHING EMPTY OR TRIVIAL BOOKS
+------------------------------------------------
+
+There is no minimum-content requirement established for PUBLISH. Every publication generates an automatic entry on the staff news board, allowing staff to review publishing activity. If staff determine that a player is abusing PUBLISH, the player loses publishing privileges for 3 months. Each subsequent publishing-abuse offense doubles the previous ban duration: 3 months → 6 months → 12 months → 24 months, and so forth.
+
+The books already published remain permanent; the punishment restricts the player's ability to create additional published works.
+
+Continuation clarification: the illustrative doubling sequence above was superseded by Thomas's explicit schedule in Question 206: 3 months, 5 months, 1 year, 2 years, 4 years, 8 years, 16 years. Use that later schedule.
+
+
+QUESTION 206 — WHAT HAPPENS TO THE ESCALATION OVER TIME?
+--------------------------------------------------------
+
+Publishing-abuse offenses never decay or reset. The escalating ban schedule is 3 months, 5 months, 1 year, 2 years, 4 years, 8 years, 16 years, continuing on that severe escalation principle if somehow necessary. Long periods of good behavior do not erase prior publishing-abuse offenses.
+
+
+QUESTION 207 — PUBLISHING WHILE BANNED
+--------------------------------------
+
+A PUBLISH-abuse ban applies to the player/account, not merely the offending character. While banned, none of that player's characters may publish a book, including manuscripts created before the ban. Existing published books remain unaffected.
+
+
+QUESTION 208 — PUBLISHING THROUGH ANOTHER PLAYER
+------------------------------------------------
+
+No special automated proxy-detection system is needed. If another player publishes abusive material, that publisher assumes the normal PUBLISH-abuse risk and enters the established escalating ban sequence if warranted. If staff discover that the publisher knowingly acted as a proxy specifically to circumvent another player's publishing ban, staff may address that deliberate rule evasion separately. Innocent collaboration isn't automatically treated as ban evasion.
+
+
+QUESTION 209 — PUBLISHED PARCHMENTS
+-----------------------------------
+
+Individual parchments may also be PUBLISHED. Published parchments receive the same essential protections as published books: they become immutable and indestructible and may participate in the formal copying system. Publishing a parchment also generates staff-news oversight, and frivolous/abusive parchment publishing subjects the player to the same escalating account-level PUBLISH discipline established for books.
+
+
+QUESTION 210 — AUTHORSHIP OF A STANDALONE PARCHMENT
+---------------------------------------------------
+
+A standalone parchment may be TITLED, just like a book, and follows the same authorship/provenance metadata model. The character who titles it establishes its original authorship under the same rules already established for books. Publication, copying, translation, provenance, and related metadata principles therefore apply consistently to both books and standalone parchments where applicable.
+
+
+QUESTION 211 — UNTITLED PARCHMENTS
+----------------------------------
+
+A parchment does not need to be titled before it can be written on. Players may freely use untitled parchment for notes, letters, directions, drafts, and similar informal writing. TITLE remains the action that establishes formal authorship metadata when the player chooses to title the parchment.
+
+
+QUESTION 212 — WHO MAY TITLE AN ALREADY-WRITTEN PARCHMENT?
+----------------------------------------------------------
+
+Any character holding an untitled parchment may TITLE it and thereby become its recognized original author. The game does not protect the first writer's claim to authorship. Metadata still records who actually wrote the existing material, so staff/history can establish what happened, but the system does not undo the consequences of handing an untitled work to someone else.
+
+
+QUESTION 213 — UNTITLED BOOKS
+-----------------------------
+
+The same rule applies to untitled books. A book may contain any amount of writing while remaining untitled. Whoever possesses it and successfully uses TITLE first becomes its recognized original author, regardless of who actually wrote the existing pages. Metadata still preserves the actual writing history.
+
+
+QUESTION 214 — REMOVING A TITLE BEFORE PUBLICATION
+--------------------------------------------------
+
+Once a book or parchment has been titled, it can never return to an untitled state. Before publication, the original author may change the title, but every replacement title must contain at least 3 letters. Once published, the title is permanently frozen along with the rest of the work.
+
+
+QUESTION 215 — TITLE LENGTH
+---------------------------
+
+Book and parchment titles have a maximum length of 75 characters, while still requiring at least 3 letters. This permits deliberately long titles without allowing unbounded title strings.
+
+
+QUESTION 216 — DUPLICATE TITLES
+-------------------------------
+
+Titles do not need to be unique. Multiple books or parchments may have exactly the same title. The game won't automatically append author names or otherwise disambiguate them. Players who care about distinction can include identifying information themselves—for example, *My Travels West, by Thomas Paige*.
+
+
+QUESTION 217 — TITLE LANGUAGE
+-----------------------------
+
+A title has its own language, determined by the language the author was using when they issued TITLE. It is not a universally readable OOC label. The language system governs whether another character can understand that title.
+
+That also means a book's title language doesn't necessarily have to match every page inside it.
+
+
+QUESTION 218 — UNREADABLE TITLES IN INVENTORY
+---------------------------------------------
+
+Written foreign-language titles behave the same way as hearing a foreign language under the established language system. A character who lacks the necessary language comprehension does not get the literal title leaked through the interface; they receive the same sort of incomprehensible-language representation the game uses for speech they cannot understand.
+
+
+QUESTION 219 — READING VERSUS SPEAKING FOR TITLES
+-------------------------------------------------
+
+Understanding a written title requires READ capability in that language. Merely being able to speak the language is insufficient.
+
+However, as with the previously established spoken-language recognition rules, a character may be able to recognize the language itself without understanding it. Thus someone might determine, *“This appears to be written in French,”* while remaining unable to read what the French title actually says.
+
+
+QUESTION 220 — TITLE RECOGNITION CHECK
+--------------------------------------
+
+Written-language identification uses the same established language-recognition rules as identifying an unfamiliar spoken language. We will not create a separate recognition subsystem just for writing. Reading capability determines comprehension; existing language familiarity/recognition determines whether an unreadable language can nevertheless be identified.
+
+Continuation clarification: this later decision supersedes Question 176's earlier statement that there is no written-language recognition mechanic. Reuse the established language-recognition rules; do not introduce a separate writing subsystem.
+
+
+QUESTION 221 — MIXED LANGUAGES WITHIN ONE BOOK
+----------------------------------------------
+
+A book or parchment may contain multiple languages. Different pages may use different languages, and separate passages appended to the same parchment may also be written in different languages. Language therefore cannot be treated merely as a single property of the entire book; the system must preserve enough information about each written section to apply the proper reading and language-recognition rules.
+
+
+QUESTION 222 — SWITCHING LANGUAGES MID-WRITING
+----------------------------------------------
+
+The writing language is fixed for each editor session based on the character's currently selected language when the editor is opened. The writer cannot switch languages from inside the editor. To change languages on the same parchment/page, they must finish/close the current editor session, change their active language, then reopen that page and append the new passage. Each appended section retains its appropriate language metadata.
+
+
+QUESTION 223 — PARTIAL EDITOR SESSIONS
+--------------------------------------
+
+The writing editor is a temporary drafting buffer. Nothing becomes physical writing, consumes ink, or changes the parchment until the player commits/saves the editor session. Cancelling or abandoning the editor discards the entire uncommitted session with no effect on the document or supplies.
+
+Once committed, however, the resulting ink is permanent under the rules we've established.
+
+
+QUESTION 224 — RUNNING OUT OF INK
+---------------------------------
+
+The ink check happens before the writing editor opens. A character must possess enough ink to write a full parchment page—up to the established 25 lines × 75 characters—even if they intend to write only a short passage. If they lack that reserve, WRITE is refused with an appropriate message such as “You need more ink.”
+
+
+QUESTION 225 — HOW MUCH INK IS ACTUALLY CONSUMED?
+-------------------------------------------------
+
+Ink is consumed in discrete samples/uses, not character-by-character or line-by-line. When a writing session is successfully committed, one sampling of ink is consumed regardless of how much text was added during that session.
+
+So the resource cost encourages filling a writing session efficiently, but we don't need to simulate ink down to individual letters.
+
+
+QUESTION 226 — APPENDING AND INK
+--------------------------------
+
+Every successfully committed writing session consumes one ink sampling. Reopening an existing parchment or book page later to append additional writing consumes another sampling when that new writing is committed, regardless of how little text is added.
+
+
+QUESTION 227 — INK COLORS
+-------------------------
+
+Ink may have different colors, and the color used for each committed writing section is preserved. Because writing can be appended later, a single parchment may contain passages written in different ink colors.
+
+
+QUESTION 228 — CUSTOM INK COLORS
+--------------------------------
+
+Ink colors come from a fixed, game-defined palette. Players cannot create arbitrary color descriptions. This keeps crafting, display, copying, and metadata consistent.
+
+We can decide the actual palette later when we're designing crafting/materials.
+
+
+QUESTION 229 — COPYING INK COLORS
+---------------------------------
+
+COPY reproduces the written content, not the source's ink colors. The copier chooses/uses their own available ink, and the resulting copy records that ink color. Source ink color is therefore not part of the requirement for textual fidelity.
+
+This slightly refines our earlier use of “exact copy”: exact means the words/content—including inherited copy notes and <art> content—not the physical ink characteristics.
+
+
+QUESTION 230 — MULTIPLE INK COLORS DURING ONE COPY
+--------------------------------------------------
+
+To copy an entire book in one operation, the selected ink bottle must contain at least as many ink samplings as there are pages being copied. The completed book uses that single ink color throughout, regardless of the source's colors, consuming the required samplings.
+
+A scribe who wants to preserve different colors must copy pages individually using the desired inks. COPY BOOK 23, for example, copies page 23 of the book onto the parchment the character is holding, using the pen and ink on the desk. The resulting parchment can then participate in the page-assembly system we've already established.
+
+
+QUESTION 231 — BLANK PAGES DURING WHOLE-BOOK COPYING
+----------------------------------------------------
+
+Whole-book copying requires and consumes one ink sampling for every physical page in the source book, including completely blank pages. A 50-page book therefore costs 50 ink samplings, period.
+
+
+QUESTION 232 — BLANK PARCHMENT REQUIREMENT FOR WHOLE-BOOK COPYING
+-----------------------------------------------------------------
+
+Whole-book COPY BOOK requires the copier to have a book containing exactly the same number of blank pages as the source book. A 50-page original requires a 50-page blank destination book. Loose parchments are not automatically assembled or bound by the copying command.
+
+Combined with our ink rule, copying that 50-page book requires the 50-page blank book plus at least 50 samplings of a single ink, along with the required pen and copying capability.
+
+
+QUESTION 233 — DESTINATION BOOK MUST BE COMPLETELY VIRGIN?
+----------------------------------------------------------
+
+A destination book used for whole-book copying must be untitled and never previously written in, in addition to containing exactly the required number of blank pages. A previously titled blank book is not eligible, because TITLE has already established its authorship/history.
+
+
+QUESTION 234 — DESTINATION BOOK AFTER COPYING
+---------------------------------------------
+
+A successful whole-book COPY BOOK automatically reproduces the source book's title on the destination book. The copier does not become the author merely by creating the copy. The copied work retains its established authorship and provenance, while the copy metadata records the copying event and the mandatory visible copy notation applies.
+
+
+QUESTION 235 — COPYING A SINGLE PAGE
+------------------------------------
+
+COPY BOOK 23 produces a parchment that automatically carries the source book's title and source page number. The player does not need to title it manually, and the copied page remains associated with where it came from rather than becoming an anonymous loose parchment.
+
+
+QUESTION 236 — REASSEMBLING INDIVIDUALLY COPIED PAGES
+-----------------------------------------------------
+
+Only the one-step whole-book COPY BOOK operation can create an official, published/immutable copy of an existing published book. Individually copying pages and later assembling them with ADD PAGE does not recreate an official copy, even if every page is present, correctly ordered, and textually identical.
+
+So preserving the original's varied ink colors comes with a tradeoff: the reconstructed volume is a player-assembled artifact, not a formally certified copy.
+
+
+QUESTION 237 — PUBLISHING THE RECONSTRUCTED BOOK AS A NEW WORK
+--------------------------------------------------------------
+
+Yes. A player who individually copies pages and assembles them into a new book may TITLE and PUBLISH that assembled volume as a new work under the normal rules. The game does not enforce intellectual-property ownership or prevent someone from claiming authorship this way. The underlying metadata still preserves the actual history of the pages, so the provenance can reveal what happened.
+
+
+QUESTION 238 — COPYING AN INDIVIDUALLY COPIED PAGE
+--------------------------------------------------
+
+A loose page produced by COPY BOOK 23 may itself be copied using COPY PARCHMENT. Each subsequent copy follows the established rules: content is reproduced faithfully, mandatory copy notation accumulates appropriately, optional copier notes are preserved and may be added, and the complete provenance chain remains in metadata.
+
+
+QUESTION 239 — COPYING UNPUBLISHED LOOSE PAGES
+----------------------------------------------
+
+COPY PARCHMENT requires the specific parchment being copied to have published status. Having content derived from some other published source does not bypass that requirement. Unpublished parchments cannot be formally copied.
+
+
+QUESTION 240 — PUBLISHING INDIVIDUAL PAGES FROM AN UNPUBLISHED BOOK
+-------------------------------------------------------------------
+
+A parchment removed intact from an unpublished book may become an independent work and be TITLED and PUBLISHED under the normal parchment rules. Its former membership in an unpublished book does not prevent publication. Once published, that parchment gains the same permanence, immutability, copyability, and anti-abuse oversight as any other published parchment.
+
+
+QUESTION 241 — ADDING A PUBLISHED PARCHMENT TO AN UNPUBLISHED BOOK
+------------------------------------------------------------------
+
+A published parchment may be inserted into an unpublished book with ADD PAGE. The parchment retains its own published/immutable status; putting it into an unpublished volume does not make it editable. The surrounding book remains unpublished and may otherwise continue to be assembled or written under the normal rules.
+
+
+QUESTION 242 — REMOVING THAT PUBLISHED PAGE AGAIN
+-------------------------------------------------
+
+A published parchment inserted into an unpublished book may later be removed intact. Adding or removing it changes the unpublished book's composition, not the published parchment itself. The parchment retains its title, content, provenance, publication status, and indestructibility throughout.
+
+
+QUESTION 243 — PUBLISHING A BOOK CONTAINING ALREADY-PUBLISHED PARCHMENTS
+------------------------------------------------------------------------
+
+An unpublished book may contain already-published parchments and may itself subsequently be PUBLISHED. Publication of the containing book is allowed because each parchment retains its own provenance metadata—where it came from, its history, and, where known, who actually wrote it. The resulting book becomes a permanent published work without erasing the independent history of its component parchments.
+
+This also reinforces that provenance belongs deeply enough in the document/page structure to survive assembly into other works.
+
+
+QUESTION 244 — REMOVING INDEPENDENTLY PUBLISHED PAGES AFTER THE BOOK IS PUBLISHED
+---------------------------------------------------------------------------------
+
+Once the containing book is PUBLISHED, its composition is permanently frozen. Even an independently published parchment that was previously removable becomes permanently bound into that published book and cannot thereafter be removed. Its own provenance remains intact, but its physical membership in the book is now permanent.
+
+
+QUESTION 245 — COPIES OF BOOKS CONTAINING INDEPENDENTLY PUBLISHED PAGES
+-----------------------------------------------------------------------
+
+Whole-book copying preserves the full nested provenance of component parchments. If a page originated as an independently published work, that history remains traceable through subsequent books and generations of copies. Copying a containing book never flattens or erases the histories of the parchments within it.
+
+
+QUESTION 246 — VIEWING PROVENANCE
+---------------------------------
+
+DEFERRED — NOT ANSWERED.
+
+Provenance visibility and remaining details are unresolved, including what ordinary players can inspect and what remains staff-only. Do not infer a player command, Academics requirement, or disclosure policy from the proposed alternatives.
+
+Further writing/publishing mechanics are intentionally paused. Thomas may drastically simplify the writing/book rules later. Preserve the decisions above as the current design record, while recognizing that this detailed system may be reduced; do not treat possible simplification as an already-adopted replacement ruleset.
+
+
+QUESTION 247 — CHARACTER DEATH AND CORPSES
+------------------------------------------
+
+WITHDRAWN / DUPLICATE — NOT A NEW DESIGN DECISION.
+
+The proposed question about character death, corpses, and carried possessions repeated an already-covered system. Thomas identified the duplication. No new death/corpse rule was adopted, and the existing decisions remain in force. Audit the documents before asking further questions.
 
 
 BOOKMARK — RESUME HERE
 ======================
 
-NEXT QUESTION: QUESTION 181
+NEXT ACTION: AUDIT MAJOR DESIGN COVERAGE BEFORE ASKING MORE QUESTIONS
 
-Important context:
-Questions 86–148 have now been discussed and locked in this interview continuation. The new material establishes the physical inventory/hand model; HOLD/WIELD/DRAW behavior; PMOTE and private-label presentation; visible system states; SCORE/LOOK ME separation; layered wear locations and strict dressing order; physical containers and transparent access; locks, keys, master-key IDs, bars, lockpicking evidence/repair; key rings; recursive intelligent inventory search; a maximum container nesting depth of four; prohibition of circular containment; and full recursive weight/capacity accounting.
+Read all of CCMUD_Design.txt and CCMud.html. Compare the established decisions against the major systems needed before implementation. Identify only genuinely uncovered major design areas and report a bounded list of meaningful remaining gaps before resuming the interview. Do not automatically continue microscopic edge cases or treat the original discussion queue as unanswered without checking both documents.
 
-Questions 149–162 are now finalized in the Property After Death continuation above.
+Questions 181–245 are recorded above. Preserve later clarifications where they refine earlier wording: permanent ink still permits appending (194/200); TITLE establishes book authorship despite guest writing (200); publication freezes composition (202–203); the explicit publishing-ban schedule is 3 months, 5 months, 1 year, 2, 4, 8, 16 years (206); written-language recognition reuses existing rules (219–220); and copy fidelity concerns content rather than source ink colors (229–230).
 
-Questions 163–180 are now finalized above. Exterior customization uses the interior moderation system; approved prose replaces the generated exterior description and persists until abandonment. Language abilities use separate automatic per-language Academics unlocks. Artwork remains visible regardless of literacy, with staff review, restrictions, and permanent attribution. Document copies preserve the full provenance chain and may begin with a visible copier-added note.
+Question 197 was deferred at the time; Questions 243–245 later establish component and nested provenance retention. Question 246 remains deferred: provenance visibility/details are unresolved, further writing/publishing mechanics are intentionally paused, and Thomas may drastically simplify the writing/book rules later. Do not resume that line of questioning unless Thomas chooses to.
 
-Resume with Question 181 — Copier's Visible Note
+Question 247 is withdrawn/duplicate because character death and corpses were already covered. It is not a new decision and must not reopen that system.
 
-Should the copier-added visible note at the beginning of a copied book or paper be free-form text, or should the system generate a standardized line such as "Copied by Thomas on [date]"?
+After the coverage audit, ask one numbered question at a time only about a verified meaningful gap. If the interview resumes, the next new number is 248; do not reuse 246 or 247 or interpret numbering as a requirement to invent another question. Do not implement game code from this interview.
 
-This question is unanswered. Do not choose either option or impose a note format yet. Ask one numbered question at a time and continue the same interview process.
+The historical discussion queue below is preserved as reference material, not an automatic continuation plan.
 
 
 REMAINING ORIGINAL DISCUSSION QUEUE
