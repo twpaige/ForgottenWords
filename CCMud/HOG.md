@@ -13,6 +13,84 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 
 ## Generator overview
 
+### Current Step 10 DEV exploration contract (2026-09-26)
+
+This section supersedes the activation limits in the historical implementation
+phases below. Crown-Call `280aea0` enabled actual HOG ground walking at seed
+`867359018957601`, `(0,0,GROUND)`. The exploration continuation retains that
+continuous elevation formula and its dry/gentle certification restrictions.
+It does not turn the coarse regional sampling adapter into certified terrain.
+
+Startup still checks 64 chunks around the origin. The runtime now certifies
+additional 500-foot chunks on its bounded background worker ahead of travel,
+using existing neighbor prewarming, 25-foot samples and precise inch positions.
+The old 2,000-foot administrative stop is removed from runtime chunks. Admission
+requires dry ground, no intersecting unresolved coast/lake/channel/natural feature,
+no unresolved vegetation transition, grades no greater than 5%, and patch-center
+error no greater than 0.25 inch against the continuous field. Springs/wetlands in
+the two-mile guard survey conservatively deny certification. These are certificate
+restrictions, not newly invented global hazard thresholds. Unknown, late or failed
+chunks stop travel; `direction!` cannot bypass unavailable geography. Expanded
+chunks are disposable in the existing bounded cache; all Zone C is never materialized.
+Generation failures have a bounded five-second retry cooldown. Initial startup
+products remain bounded at 64; runtime cache capacity remains 64.
+
+The local walking policy is version 2. The exact prior version-1 identity remains
+accepted for existing DEV test characters because the physical generator and
+ground formula are unchanged; current local certification is revalidated on entry.
+No character or persistent structure is relocated. A cold resumed location may
+require retrying entry after background certification. Other identities stay blocked.
+
+`hogdisplay raw|prose` is an admin-only, session-scoped diagnostic preference,
+independent of BRIEF. Current account role is checked before returning RAW data.
+Disconnect clears it. PROSE retains the simple underfoot description; no prose
+generator is implemented. RAW LOOK and the independent 15-second travel observations
+include precise position/elevation, surface/biome, directional grades, regional
+tree-cover estimate, dry-ground state, certificate, chunk/generation and cache data.
+The browser echoes each submitted command before its response using plain text.
+
+**Thomas explicitly chose to keep distant features as RAW diagnostics for this
+milestone.** Regional channels, lakes, coastline and natural-feature catalogs are
+queried without walking-resolution materialization. A bounded background catalog
+feeds internal bands starting at 10 feet and doubling to the existing 50-mile
+search ceiling. Empty bands are omitted. Up to two significant candidates per
+occupied band, twelve total, retain actual bearing and estimated distance to their
+regional anchor/centerline/shoreline. Natural prominence and visibility metadata
+are retained; class/range and local cover limits are applied. Results are explicitly
+`OUTSIDE VISIBILITY` or `VISIBILITY UNAVAILABLE`, with `perceived=false`.
+The ceiling is not a claim that the effective horizon or LOS is known. Unknown LOS
+is not relabeled as clear or occluded. Certified distant LOS, physical cover blocking,
+and player-visible distant discovery remain a separate milestone. These diagnostics
+never enter player natural/persistent layers, and no feature is invented to fill a band.
+
+Coordinates are inches: east +X, west −X, north +Y, south −Y, Z height. Bearings
+are clockwise from north. All eight directions and their short aliases are supported
+in continuous HOG travel. Diagonal inch steps account for their sqrt(2) distance,
+preserving physical pace, normalized directional grade and unchanged stamina rules.
+Cardinal east/west leaves Y unchanged. The reported `(23998,-23998)` followed by
+`(-23998,-23998)` is consistent with an earlier southward leg to the old certificate
+edge followed by east/west travel; coordinates alone do not prove that history.
+No cardinal-vector defect was found. Command echo makes future path reports easier
+to verify; it is not a reconstruction of earlier live commands.
+
+The north-origin blocker is the seeded **Pioneer Cabin**, `pioneer_cabin`, from
+migration `20260922_05`: footprint X −90..90, Y 1230..1410 inches, absolute floor Z=0.
+Its `pioneer_cabin_door` has exterior `(0,1200,0)` and interior `(0,1260,0)`.
+It is persistent legacy test content, not generated HOG geography. HOG's ground near
+the origin is about 17,156 inches, and the cabin has no reviewed ground/footprint/
+portal-height adaptation. The walking adapter therefore blocks its full XY footprint.
+RAW identifies nearby structures diagnostically without claiming they are visible.
+No automatic deletion, grounding, relocation or approval is appropriate. Any such
+adaptation requires Thomas's separate decision and a footprint/interior/portal audit.
+These coordinates identify the migration record; the live database was not inspected
+in this continuation because the available SSH connection timed out.
+
+Existing continuous travel, selected pace, stamina, elapsed offline recovery,
+significant-boundary checks and scoped hazard confirmations remain in force.
+Fall/swim consequences, outdoor object interactions and unresolved terrain remain gated.
+DEV activation still requires `ENVIRONMENT=development`, `HOG_DEV_WALKING=true`
+and the exact seed above. PROD remains unauthorized.
+
 H.O.G. is CCMUD's deterministic physical-world generator. The admin viewer at
 `/admin/world` previews its outputs; it is not the player's map or LOOK text.
 

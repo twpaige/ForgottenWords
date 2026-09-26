@@ -50,8 +50,11 @@ When adopting a tabletop rule, record the source section/revision, the MUD behav
 Thomas's 2026-09-26 Step 10 decisions are recorded in [HOG](hog.html#step-10-mud-integration-and-persistence).
 Current generated geography supersedes stale cached geography while persistent
 objects survive. This supersedes any older implication that exploration freezes
-terrain. Walking geometry and hazard consequence consumers are explicitly gated
-future milestones; runtime contracts do not constitute playable HOG terrain.
+terrain. DEV now supports certified dry/gentle HOG walking with bounded ahead-of-travel
+materialization. Hazard consequences and unresolved terrain remain gated. Thomas
+chose admin-only RAW diagnostics for distant geography in the current milestone;
+certified distant LOS/player discovery remains separate. See the current Step 10
+exploration contract at the beginning of HOG for the accepted scope and limitations.
 
 Use [HOG](hog.html) for detailed generator architecture and [Status](status.html) for current progress. Historical progress notes in the design text do not establish the current implementation or live environment state.
 

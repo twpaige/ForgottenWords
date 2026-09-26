@@ -6,161 +6,84 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
-This is a current snapshot. Code and executed checks establish implementation state.
+## Current milestone
 
-## Current phase
+HOG Step 10 DEV exploration now has admin RAW facts, bounded regional diagnostics,
+continuous eight-direction travel and lazy dry/gentle terrain certification beyond
+the initial 2,000-foot administrative boundary. Final prose is not implemented.
+Thomas explicitly chose to keep distant geography as admin diagnostics in this
+milestone; certified distant LOS and player-visible discovery remain separate.
 
-**HOG Step 10: terrain policy, precise transitions and offline recovery implemented;
-actual HOG walking gameplay remains gated.**
-Thomas authorized Step 10 on 2026-09-26, then explicitly chose to keep movement gated
-pending a separate walking-geometry milestone and confirmed hazards gated pending
-consequence handlers. Step 10 as a whole is not complete. Step 9 previews are unchanged.
+The starting implementation was private Crown-Call `280aea0e021ba03c0f314698b5efe8e41e69afb5`,
+which already enabled real HOG walking. Older status references describing all
+walking as disabled were stale. Seed remains `867359018957601`, start `(0,0,GROUND)`,
+continuous ground 17156.440005848694 inches and persisted Z=17156. Generator geography
+and settled pace, stamina, terrain factors, precise hazards and offline rest are retained.
 
-Thomas then resolved the pace/stamina rules in the 2026-09-26 design addendum.
-Continuous-travel integration now exists through the existing world service and
-WebSocket loop, with persistent pace/stamina, independent observation/safety timers,
-scoped game-side consequence handoff and elapsed-time motion. Previously there was
-only fixed-distance command movement. The application factory still leaves the new
-controller disabled pending certified geometry and supplied game-rule/perception inputs.
+## Implemented and constrained
 
-The next bounded continuation now implements the configurable terrain/uphill tables,
-no downhill bonuses, safe significant boundary reclassification, and timestamp-based
-offline resting recovery. Selected pace and stamina rules remain intact. The old
-on-foot factor-below-0.5 impassability cutoff is superseded. No local geometry model
-or dangerous-slope/drop/water classification thresholds were invented.
+- Admin command `hogdisplay raw|prose`, independent of BRIEF, defaults to PROSE on
+  reconnect. Authorization is checked before diagnostics are returned. PROSE keeps
+  the existing simple underfoot presentation. Browser commands echo before output.
+- RAW LOOK/travel report precise ground position, grade magnitude/uphill bearing,
+  biome/surface, regional cover, dry-ground/certificate state and cache information.
+- Regional discovery searches internal doubling bands from 10 feet to the 50-mile
+  search ceiling; at most twelve selected diagnostics show feature class, bearing,
+  estimated distance and source prominence where available. No empty bands or
+  fabricated landmarks. Unknown visibility stays unknown; player facts exclude it.
+- Existing bounded background chunk cache/prewarming now admits additional dry,
+  gentle chunks. Unknown/unresolved terrain stops travel. No continent-wide walking
+  raster, persistent terrain cache, auto-relocation or consequence-free hazards.
+- East/west travel crosses the former edge. Actual north/south candidate chunks
+  containing unresolved water/feature data are rejected. The footprint of the
+  preserved Pioneer Cabin also blocks the direct north-origin route.
+- Eight compass directions use east +X and north +Y, with normalized diagonal
+  physical speed and directional grade. No cardinal-axis defect was found. The
+  reported corner coordinates could include a prior southward leg; live command
+  history was unavailable, so that explanation is not asserted as proven.
+- Walking-policy version 2 accepts the exact prior compatible DEV identity after
+  current local certification. No database migration or character relocation is added.
 
-The private Crown-Call implementation baseline inspected was `25fd3c2` on `main`.
-The initial contract revision was `2fa0a6b1924490b0fedc8048306056360ba632e8`.
-The implemented/tested/pushed continuous-travel continuation is
-`d04a7321ebcf42da10caa8b28835be49a47565c0`. Application package version remains 0.6.0.
-The terrain/offline continuation implementation is
-`d1911ee78455b6086da026bd569e73e405600925`; deterministic fixture correction and
-final verification revision: `f938385cfd3cc4090bc78d762d94068adce999ac`.
+## Persistent north-origin structure
 
-## Implemented contract phase
+The migration-seeded `pioneer_cabin` occupies X=-90..90, Y=1230..1410 inches at
+absolute floor Z=0. Its door exterior is `(0,1200,0)`, interior `(0,1260,0)`.
+It is legacy persistent test content, not a generated HOG feature. No reviewed
+GROUND/footprint/interior/portal adaptation exists, so HOG blocks its XY footprint.
+Do not delete, relocate or approve it without Thomas's separate decision. The
+migration and implementation establish this diagnosis; live DB rows were not read.
 
-- Generation identity includes seed, zone, configuration and generator dependencies.
-- Configurable full sample chunks, bounded background single-flight generation,
-  nonblocking queries, idle/LRU eviction, neighbor prewarm and timing/cache counters.
-- Exact segment/boundary tests, crossed-chunk checks, safe failure on missing or
-  uncertified terrain, and scoped/revalidated one-transition hazard confirmation.
-- Outward regional-query and visibility callback contracts, structured fact layers,
-  unknown-LOS exclusion and six-item live people/object summary thresholds.
-- Optional WorldService geography seam, gated outdoor LOOK/interactions and movement,
-  including exterior exits. Confirmed crossings remain blocked without consequences.
-- Additive persistent ground attachments for objects/Spaces, ground-relative resolver,
-  database adapter and read-only compatibility reports; no automatic relocation.
-- Reproducible candidate-resolution benchmark and regression coverage.
-
-Existing signed inch coordinates, object/Space ownership, independent database
-spatial-index chunks and HOG regional generation are reused. No reviewed generator
-output changed. See [HOG](hog.html#step-10-mud-integration-and-persistence) for all
-accepted requirements, implementation limits, measurements and next phases.
-
-## Known limits
-
-The regional sampler always marks chunks incomplete for walking. Fine sampling of
-35–65-mile input grids cannot establish cliff lips, carved channels or water depths.
-The application does not enable the new optional geography seam automatically;
-legacy gameplay remains the default and is not HOG-backed gameplay. Injected HOG
-mode exposes no outdoor facts without certified perception and blocks unknown travel.
-
-GROUND attachments are opt-in. The migration does not reinterpret any existing z
-coordinate. Gameplay get/drop/interior/portal height adoption remains future work.
-Unknown placement rules or geometry require review; non-point footprint evaluation
-also remains review-required. The current audit does not approve a cabin by sampling
-only its center/corners.
-
-Runtime sampling trial defaults are 500-foot chunks, 25-foot samples, 64 cached chunks,
-300 idle seconds and 16 pending requests. These are configurable development values;
-**no final gameplay-resolution or production cache-lifetime default is selected**.
-No disk/database derived geography cache is enabled.
-
-## Next bounded milestones
-
-The smallest next phase is **one certified HOG-derived DEV walking area**, not
-activation of the existing regional sampler. Before Thomas can log in and walk:
-
-1. Review/build deterministic local geometry for a bounded area, with effective
-   terrain classes, directional grades, exact significant boundaries and ground
-   heights. Agree physical hazard thresholds; certify seamless neighboring chunks.
-2. Wire real character/rule inputs, safe spawn, ground height and basic structured
-   LOOK/travel facts into the existing controller and browser. Gate it with explicit
-   DEV configuration. Keep unknown areas and unhandled dangerous crossings blocked.
-3. Apply additive migrations and verify login, continuous movement, terrain changes,
-   seams, stamina, hazards and offline recovery on DEV using PostgreSQL/browser;
-   measure real latency/cache pressure. Full falling/swimming consequences, final
-   prose and continent-wide perception are not prerequisites for safe-land walking.
-4. Deploy/verify the contract revision on DEV when an authenticated server connection
-   is available. No browser server session or local SSH configuration was available
-   in this task; no live migration or game deployment was performed.
-
-Broader milestones remain regional perception/LOS indexes, object-specific ground
-placement/footprint audits, consequence consumers, and final seed/Origin review.
-
-Additional zones, cave connectivity, civilization/transportation, discovery/naming,
-weather, final prose and complete skills/perception remain outside this phase.
-PROD always requires separate explicit release authorization.
+Implementation committed and pushed to private main as `4215ba4785437caafef20da737bb780f1b86e5ea`.
 
 ## Verification
 
-- Terrain/offline phase at `f938385`: **173 passed**, 13 upstream deprecation
-  warnings, 167.45 seconds. Changed-file lint passes; the eight pre-existing
-  repository-wide lint findings remain in untouched generator modules/tests.
-  Implementation and fixture correction are committed and pushed to private main.
-- New coverage verifies every configured surface and uphill band, unchanged pace/
-  stamina, directional downhill behavior, exact and tick-endpoint transitions,
-  neighboring hazards and chunk seams. Recovery coverage exercises rapid repeated
-  reconnects, persisted elapsed time, caps, backwards clocks, legacy timestamps,
-  online WALK accounting, independent rest inputs and additive SQLite migration.
-- New warm benchmark medians: ordinary controller step 15.7 microseconds, precise
-  safe-edge step 37.3 microseconds, terrain/grade calculation 0.8 microseconds,
-  offline calculation 1.5 microseconds. Database/network and real geometry excluded.
-- Previous continuous-travel continuation: **138 passed**, 13 upstream deprecation warnings,
-  158.90 seconds. Its 21 added tests include persistence, SQLite migration, exact
-  endurance, segment hazards, confirmations, cabin walls and automatic WebSocket
-  observations/disconnect. Changed-file lint passes.
-- Synthetic warm query benchmark: safe segment 5.3 microseconds median, hazard
-  segment 6.6 microseconds, 100-ms controller integration 13.3 microseconds.
-  This excludes database/network costs and complete natural geometry generation.
-- No live DEV migration/deployment or PROD change was performed. The selected-pace
-  migration was tested on isolated SQLite; existing coordinates are preserved.
-- Terrain-factor and offline-recovery policy are resolved. The remaining consequential
-  design boundary is precise deterministic local geometry and physical hazard
-  classification; do not reopen the settled movement rules.
+Initial expanded full suite: 193 passed, 13 upstream warnings, 263.48 seconds.
+Final full suite: 197 passed, 13 upstream warnings, 261.91 seconds; eight additional real-seed/admin-RAW compass tests passed in 30.57 seconds. Changed-file lint passes;
+full lint retains the same eight pre-existing findings in untouched generator/tests.
+The browser script parses, and a Node check confirms command echo occurs before send.
+Benchmarks use real HOG and isolated SQLite, excluding live PostgreSQL/network/player
+concurrency. New chunk certification/materialization median is 435 ms (p95 483 ms); warm regional diagnostics 21.2 ms (p95 22.9 ms); SQLite movement tick 1.62 ms (p95 2.41 ms). Cold origin setup took 23.1 seconds; regional catalog preparation took 1.56 seconds. Measurements and exact commands are maintained in private Crown-Call's
+`docs/hog-exploration-benchmark.json` and `scripts/benchmark_hog_exploration.py`.
 
-- Existing world/terrain baseline: 20 passed.
-- Final full contract regression: **117 passed**, 13 upstream deprecation warnings,
-  162.98 seconds, on the implementation working state committed as `2fa0a6b`.
-- Expanded focused runtime/world coverage: 31 passed, including isolated SQLite
-  attachment upgrade/downgrade preserving owner records and scoped command hazards.
-- Changed-file lint passed. Full lint now reports eight existing findings in untouched
-  biomes/elevation/worldgen modules and biome/elevation tests; main's import order
-  was corrected while integrating the scheduler.
-- Benchmark: Windows 11, Python 3.12.14, seed 103, existing context setup 5.89 seconds.
-  500-foot chunks at 5/10/25-foot spacing materialize in median 39.84/10.11/1.71 ms;
-  warm cache plus interpolation is about 7 microseconds. Full measurements and
-  qualifications are in HOG and Crown-Call's `docs/hog-runtime-benchmark.json`.
-- These are local development results. No PostgreSQL migration or live DEV test
-  of the new contract revision has been claimed.
+## Environment and next action
 
-## Environment evidence
+Thomas reports successful live DEV HOG walking. This continuation could not connect
+to server SSH (port 22 timed out); no DEV migration/deployment or PROD operation was
+performed. Use the canonical development guide's `sudo cc-update dev`, compare the
+active release to the mirrored revision, check the service and local port-8001
+health. Expected exploration health field: `hog_exploration=dry_gentle_chunks_v2`.
 
-| Environment | Last verified state |
-| --- | --- |
-| Documentation | ForgottenWords Markdown is authoritative; Pages publication and private reference synchronization are completed separately |
-| DEV game | Prior revision `e85313185372`, deployed/verified 2026-09-26: 101 tests, migrations, active service and ready health endpoint; not redeployed in this phase |
-| PROD game | Prior recorded revision `96ce97abe6f1`; not changed or revalidated; no release authorized |
+Enter DEV using an admin account and a HOG test character. Use `hogdisplay raw`,
+`look`, `walk`, `east`; use `stop` to halt. Repeat LOOK if the regional catalog is
+still preparing. RAW observations arrive at the existing 15-second cadence while
+hazard checks remain continuous. A cold resumed chunk may require retrying entry.
+Start a new HOG test character with explicit ATHLX for an origin-based test; existing
+characters retain their current positions. Use `hogdisplay prose` to return to the
+simple normal presentation.
 
-The previous DEV deployment used the tracked `ops/cc-update`; installed/tracked SHA-256
-was `6d6ea347199d5df97604f15a75c1bdaa256970c63be5fad93c539381cb1f03f1`.
-`WorldFramework` still carries a historical Step 3 label; actual modules/tests establish
-preview scope. Tabletop crossover cleanup/adoption is a separate task.
+Next work is certified distant perception/LOS, broader precise terrain geometry,
+and a deliberate cabin placement decision if desired. Outdoor object interactions,
+swimming/falling consequences, final prose, other zones and unrelated systems remain
+outside this milestone. Source publication, pinned-reference synchronization and game
+deployment are separate completion states; PROD requires explicit authorization.
 
-## Continuation
-
-Publish the canonical ForgottenWords documentation, then refresh Crown-Call references
-at that exact committed revision using `scripts/sync_knowledge_base.py`. Preserve the
-full source manifest. Commits, pushes, Pages publication and DEV/PROD deployment are
-separate evidence states. The next implementation task is walking geometry, not
-turning on the regional sampler as playable terrain.
