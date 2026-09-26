@@ -23,9 +23,10 @@ It does not turn the coarse regional sampling adapter into certified terrain.
 
 Startup still checks 64 chunks around the origin. The runtime now certifies
 additional 500-foot chunks on its bounded background worker ahead of travel,
-using existing neighbor prewarming, 25-foot samples and precise inch positions.
+using directional prewarming, 25-foot samples and precise inch positions.
 The old 2,000-foot administrative stop is removed from runtime chunks. Admission
-requires dry ground, no intersecting unresolved coast/lake/channel/natural feature,
+requires dry ground outside represented water exclusions, no unresolved coast or
+regional macro-lake/natural-feature extent,
 no unresolved vegetation transition, grades no greater than 5%, and patch-center
 error no greater than 0.25 inch against the continuous field. Springs/wetlands in
 the two-mile guard survey conservatively deny certification. These are certificate
@@ -35,11 +36,68 @@ chunks are disposable in the existing bounded cache; all Zone C is never materia
 Generation failures have a bounded five-second retry cooldown. Initial startup
 products remain bounded at 64; runtime cache capacity remains 64.
 
-The local walking policy is version 2. The exact prior version-1 identity remains
+The local walking policy is version 3. The exact prior version-1 and version-2 identities remain
 accepted for existing DEV test characters because the physical generator and
 ground formula are unchanged; current local certification is revalidated on entry.
 No character or persistent structure is relocated. A cold resumed location may
 require retrying entry after background certification. Other identities stay blocked.
+
+#### Local water exclusions and responsiveness
+
+Existing local hydrology supplies inferred centerlines, estimated widths and lake
+footprint polygons. Walking now retains these as precise exclusion boundaries,
+independent of the 25-foot elevation grid. Each channel segment becomes an oriented
+rectangle, expanded by half its estimated width on both sides and at both ends.
+The conservative square caps overlap at joins. Lake exclusions use the existing
+polygon. Actual polygon/chunk intersection replaces whole-channel bounding-box
+refusal. These boundaries are precise intersections with an inferred model, not
+surveyed banks or inch-accurate claims about real terrain.
+
+Only the dry exterior receives the gentle-ground certificate. Water interiors have
+no certified standing surface, including intermittent/dry beds. This phase does not
+derive a bed elevation, bank cross-section, bank slope, shore profile, depth or
+current velocity. Existing data does not support those claims. Starting inside an
+exclusion is refused; ordinary travel stops at the last safe integer coordinate
+before its boundary. A water warning uses the existing scoped hazard contract, but
+`direction!` remains blocked without an approved consequence consumer. Regional
+macro-lakes, coasts, springs, wetlands and unresolved natural-feature extents retain
+their previous conservative refusal. No swimming/drowning/current rule is invented.
+
+Nearby ready chunks contribute at most eight admin RAW water diagnostics: stable
+feature/boundary ID, type, distance, bearing, exclusion polygon/closest boundary,
+estimated width, flow bearing along the generated segment, modeled discharge and
+seasons where available, and certification/hazard state. Unknown depth and velocity
+are null. Flow bearing is not a measured current. Diagnostics explicitly identify
+their inferred basis and `perceived=false`; neither local nor distant diagnostic
+water is promoted into player-visible perception without the required contracts.
+
+For seed `867359018957601`, strict east travel at Y=0 reproduced the old first refusal
+at chunk (16,0), X=96,000 inches (1.51515 miles). Stream
+`867359018957601:waterway:7346:617`, estimated width 17.8886874 feet, had a bounding
+rectangle overlapping that chunk even though its represented corridor did not.
+The old check therefore rejected unrelated dry ground. Thomas reported about 1.27
+miles; the exact live stop cannot be reconstructed without its saved coordinates or
+command history, and this discrepancy remains explicit. With precise exclusions,
+the first represented eastward crossing is stream `867359018957601:waterway:7346:593`
+at X=197,096.3648707 inches, Y=0 (3.1107381 miles), width 15.1888570 feet.
+The regression stops at (197096,0); its depth and crossing safety remain unknown.
+
+Synchronous game/ORM work now runs off the WebSocket event loop and is serialized
+per character, including reconnect cleanup. Ready commands are delivered before the
+next travel tick; safety integration still follows each command. A bounded travel
+update loads character/load/structure facts once, while terrain and precise hazard
+checks still run on every substep. STOP accounts for elapsed movement but suppresses
+an obsolete optional observation. Background sampling yields briefly between rows
+to reduce Python GIL contention. Aggregate operation/queue timings contain no player
+text. This is not a hard latency guarantee; the benchmark distinguishes commands
+issued during generation and retains cold outliers.
+
+Prewarming prioritizes the current chunk and two chunks along the direction of
+travel before the eight neighbors. `TravelConfig.prewarm_ahead_chunks` permits 1–3;
+direction changes reset the prewarm marker. Existing bounds remain 16 pending jobs,
+64 runtime chunks and one generation worker. Late or failed preparation still stops
+movement. Automatic travel-stop reasons and hazard warnings explicitly end with
+`You stop.` in the browser, including certification failures.
 
 `hogdisplay raw|prose` is an admin-only, session-scoped diagnostic preference,
 independent of BRIEF. Current account role is checked before returning RAW data.

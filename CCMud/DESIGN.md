@@ -53,7 +53,11 @@ objects survive. This supersedes any older implication that exploration freezes
 terrain. DEV now supports certified dry/gentle HOG walking with bounded ahead-of-travel
 materialization. Hazard consequences and unresolved terrain remain gated. Thomas
 chose admin-only RAW diagnostics for distant geography in the current milestone;
-certified distant LOS/player discovery remains separate. See the current Step 10
+certified distant LOS/player discovery remains separate. Inferred local channel and
+lake footprints may bound certified dry exterior ground, but unknown water depth,
+bed/bank geometry and crossing consequences remain blocked. No complete swimming or
+drowning design is inferred from discharge/width. Automatic safety stops explicitly
+say `You stop.` See the current Step 10
 exploration contract at the beginning of HOG for the accepted scope and limitations.
 
 Use [HOG](hog.html) for detailed generator architecture and [Status](status.html) for current progress. Historical progress notes in the design text do not establish the current implementation or live environment state.
