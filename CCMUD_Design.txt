@@ -14,6 +14,58 @@ game. The original question queue is historical, not an instruction to ask
 those questions again. The review conversation is complete; do not resume
 interviewing merely because an old question looks unanswered.
 
+TERRAIN MOVEMENT AND OFFLINE REST — THOMAS'S 2026-09-26 DECISIONS
+--------------------------------------------------------------
+This continuation preserves the continuous-travel rules below. For on-foot
+travel it supersedes Q60's unresolved terrain formula and Q63's old rule that
+every factor below 0.50 is impassable. Horse/wagon rules are not redesigned.
+
+Selected pace never changes automatically. Actual ground distance uses selected
+pace times one effective terrain factor times one meaningful directional slope
+factor, alongside the already established character/condition inputs. Do not
+multiply overlapping surface classifications (a maintained road through brush
+uses the road factor). Terrain and slope affect distance, not stamina rates.
+
+Initial CONFIGURABLE terrain factors:
+- Road / maintained trail: 1.00.
+- Open grassland / ordinary firm ground: 1.00.
+- Light woodland / brush: 0.85.
+- Heavy woodland: 0.65.
+- Rocky / rough terrain: 0.70.
+- Marsh / shallow water: 0.50.
+- Very difficult but traversable terrain: 0.35.
+
+Initial CONFIGURABLE uphill factors, with grade measured as rise/run percent:
+- 0 through 5%: 1.00.
+- Greater than 5 through 10%: 0.90.
+- Greater than 10 through 20%: 0.75.
+- Greater than 20 through 30%: 0.55.
+- Greater than 30%: 0.35, subject to hazard classification.
+Ordinary downhill uses 1.00, never progressively larger speed bonuses. Steep
+downhill must be represented as difficult or hazardous geometry as appropriate;
+this phase does not invent the physical thresholds for those classifications.
+Traversability is explicit and is not inferred from a factor cutoff. Shallow-water
+speed does not authorize entry into dangerous water. Existing hazard gates apply.
+Minor variation stays unobtrusive; safe transitions do not stop or change pace.
+
+The provisional 25-foot sample interval is not boundary position precision.
+Significant cliff lips, shores, river/creek banks, roads/trails, vegetation edges
+and other movement transitions retain sufficiently precise independent geometry.
+Every traversed segment is checked so a boundary between samples cannot be skipped.
+Fuzzy gradual natural transitions may remain approximate. Exact physical geometry
+must come from the local-geometry milestone, not invented precision in regional
+interpolation. Persistent constructed roads remain game-owned overlays.
+
+Stamina recovers offline at the normal standing/resting rate, capped at maximum.
+Store an accounting timestamp and enough state to apply actual offline elapsed
+time on reconnect; do not tick disconnected characters. Consuming recovery and
+advancing the timestamp must be atomic so rapid reconnects cannot replay time or
+instantly refill stamina. Reconnect never moves the character or resumes travel.
+Future conditions may modify/prevent recovery; do not invent those systems now.
+The implementation snapshots the normal resting rate at the last accounting point,
+uses that rate for the offline interval, then refreshes it from current game rules.
+Old rows without a timestamp establish a baseline without guessing elapsed time.
+
 CONTINUOUS TRAVEL AND STAMINA — THOMAS'S 2026-09-26 DECISIONS
 ----------------------------------------------------------
 This section supersedes conflicting earlier movement/stamina wording, including

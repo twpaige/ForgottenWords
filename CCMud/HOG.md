@@ -524,11 +524,11 @@ interior travel and consequence consumers remain for geometry/gameplay integrati
 The supplied controller is tested using certified synthetic fixtures and isolated
 databases, not passed off as completed natural walking terrain.
 
-Offline stamina recovery was not decided. This gated adapter accounts connected
-time only and invents no offline recovery grant; resolve that policy before live
-activation. The immediate next geometry decisions are Q60's Terrain Movement Factor
-calculation and exact cliff/channel/shore geometry. Settled pace, stamina and
-encumbrance rules should not be reopened to address these independent gaps.
+Terrain movement factors and offline recovery are now settled and implemented in
+the continuation below. The remaining design boundary is the deterministic local
+geometry model, including how real drops, water and steep slopes are classified.
+Settled pace, stamina, terrain-factor and encumbrance rules should not be reopened
+to address those independent geometry gaps.
 
 ### Verification and measurements
 
@@ -550,5 +550,96 @@ These measure a synthetic flat prewarmed provider with an exact boundary, exclud
 database transactions/network costs. They do not establish real geometry fidelity or
 supported player count. Run `python scripts/benchmark_travel.py --output work/travel-benchmark.json`;
 raw results live in `docs/travel-contract-benchmark.json`. Prior sampling benchmarks
-remain unchanged. The complete regression suite is 138 passed with 13 upstream
+remain unchanged. The continuous-travel baseline suite was 138 passed with 13 upstream
 deprecation warnings (158.90 seconds); changed-file lint passes.
+
+## Step 10 continuation: terrain policy, precise transitions and offline rest
+
+Thomas's terrain/grade tables and offline policy are authoritative in the leading
+**2026-09-26 terrain movement and offline rest** section of the
+[design record](/CCMUD_Design.txt). The new implementation preserves the runtime,
+controller, observations, consequence contracts and existing benchmarks above.
+
+`TerrainMovementPolicy` centralizes configurable defaults. The game-rule adapter
+selects one effective surface class and supplies signed east/north rise/run grades;
+the controller resolves uphill grade against travel direction. Downhill has no
+speed bonus. The separate altitude-condition input must not duplicate the slope
+factor. A factor below 0.5 is now valid for on-foot travel; explicit passability
+and hazard classification govern obstruction. Pace and stamina rates are unchanged.
+Steep downhill still requires difficult/hazard classification by certified geometry;
+the speed policy alone does not establish safety or invent a numerical threshold.
+
+Precise `Boundary` segments remain independent of samples, now including safe
+movement transitions as well as hazards. Safe significant transitions silently
+split integration and refresh rules at the first integer-inch position across the
+edge; their speed-change position error is at most one inch, not 25 feet. Hazards
+are tested with the original precise geometry throughout, including a hazard in
+that final inch or across a chunk seam. Safe boundaries never require confirmation
+or generate routine travel-stop messages. Providers must publish every relevant
+boundary into crossed chunks with stable identities. Approximate fuzzy transitions
+need no artificial exact edge. No regional generator output changed in this phase.
+
+Migration `20260926_03` adds nullable UTC accounting time and normal resting-rate
+snapshot to characters. A reconnect applies real elapsed offline recovery, caps it
+at 20, and advances the checkpoint in the same row-locked PostgreSQL transaction.
+Clean disconnect checkpoints without catch-up movement; repeated reconnects cannot
+reuse elapsed time. A backwards wall-clock change preserves the timestamp high-water
+mark. Legacy rows with no timestamp receive no invented elapsed recovery. Connected
+states checkpoint at least every configurable second under normal scheduler service,
+even when stamina is unchanged; a crash recovers from the last committed checkpoint.
+Offline characters have no recovery ticks. A geometry-independent athletics callback
+supplies the normal resting rate, so unloaded terrain need not block resting recovery.
+Future recovery-prevention conditions remain outside this phase.
+
+### What remains before Thomas can walk in DEV
+
+**HOG-backed movement cannot safely be activated yet.** The regional sampler still
+returns `complete=False`; the application factory still uses legacy movement.
+The current work resolves policy and accounting, not physical world generation.
+
+The smallest next bounded phase is **one certified HOG-derived DEV walking area**:
+
+1. Review the deterministic local-geometry model for that area: ground profile,
+   effective surface classes/directional grades, exact banks/shores/cliff lips and
+   hazard classification. Physical drop, water-depth and steep-slope thresholds
+   are consequential design choices; do not silently select them. Preserve HOG
+   regional geography rather than substituting a synthetic flat fixture.
+2. Generate/certify a bounded group of seamless chunks and prewarm nearby travel.
+   Keep uncertified territory and hazardous crossings without consequence handlers
+   blocked. Full swimming/falling systems are not prerequisites to walking safe land.
+3. Connect actual character athletics/load and applicable condition inputs, ground
+   height, safe DEV spawn, and basic structured travel/LOOK facts. Enable through
+   an explicit DEV configuration and render actionable movement/hazard messages in
+   the existing client. Preserve legacy object/Space placement until audited.
+4. Apply the additive migrations on DEV and verify real login, movement, terrain
+   transitions, chunk seams, exhaustion, hazards, disconnect/reconnect and latency
+   with PostgreSQL and the browser. This task had no authenticated server connection;
+   no live DEV migration/deployment or PROD operation occurred.
+
+Final prose, all nine zones, complete regional perception, vehicles and dangerous
+crossing consequences are not required to prove this bounded safe-land milestone.
+
+### Terrain/recovery measurements
+
+Warm synthetic benchmark, Windows 11/Python 3.12.14, 5,000 repeats per path:
+
+| Operation | Median | p95 |
+| --- | ---: | ---: |
+| Safe segment query | 5.3 microseconds | 5.6 microseconds |
+| Hazard segment query | 6.7 microseconds | 7.8 microseconds |
+| Ordinary 100-ms controller step | 15.7 microseconds | 23.4 microseconds |
+| Terrain/grade speed calculation | 0.8 microseconds | 1.0 microseconds |
+| 100-ms step crossing a safe precise edge | 37.3 microseconds | 39.5 microseconds |
+| Offline recovery calculation | 1.5 microseconds | 1.8 microseconds |
+
+Run `python scripts/benchmark_terrain_movement.py --output work/terrain-benchmark.json`.
+Raw evidence is in `docs/terrain-movement-benchmark.json`. These are CPU contract
+measurements excluding database, network and real geometry generation; they do not
+certify player capacity or live latency. Existing benchmark files remain preserved.
+
+Final full suite at implementation/test revision `f938385`: **173 passed**, 13
+upstream deprecation warnings, 167.45 seconds. Changed-file lint passes. The eight
+pre-existing full-repository lint findings remain in untouched generator code/tests.
+Coverage includes all factors and grade bands, unchanged pace/stamina, precise safe
+and hazardous transitions (including exact tick endpoints), chunk seams, persisted
+offline elapsed time, rapid reconnects, caps, clock correction and SQLite migration.

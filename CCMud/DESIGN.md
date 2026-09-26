@@ -16,8 +16,12 @@ The record begins with consolidated decisions C01–C11, followed by preserved n
 
 ## Finding a decision
 
-The design text now begins its decisions with Thomas's **2026-09-26 continuous
-travel and stamina addendum**: 150-pound reference weight, persistent selected
+The design text begins with Thomas's **2026-09-26 terrain movement and offline
+rest decisions**: configurable surface/grade factors, independent precise
+boundaries and elapsed-time offline stamina recovery. These supersede the old
+on-foot factor-below-0.50 impassability rule, without redesigning horse/wagon rules.
+The following **2026-09-26 continuous
+travel and stamina addendum** supplies the 150-pound reference weight, persistent selected
 pace, continuous recovery/drain, endurance targets and the 20% start threshold.
 This supersedes the older deferred values and recovery heartbeat; consult it
 before reopening a movement question.
