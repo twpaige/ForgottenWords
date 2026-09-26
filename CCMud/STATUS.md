@@ -13,7 +13,7 @@ This is a current snapshot, not a session log. Replace stale entries as work pro
 | Item | Evidence |
 | --- | --- |
 | Code repository | Private `twpaige/Crown-Call`, branch `main` |
-| Inspected code revision | `a6b2fc76dfa27f38eaf623034c98dd6f67c3975e` |
+| Inspected and DEV-deployed code revision | `e853131853720b8a2a9f9e81b8ead6f1a1676afb` |
 | Latest implementation | PR #54: Step 9 deterministic natural features, implementation commit `548e092` |
 | Application package | Version `0.6.0` in `pyproject.toml` |
 | Documentation baseline | ForgottenWords `06e825c2c286a0cb4a405da552d284576588ddb5` plus this continuity installation |
@@ -28,6 +28,7 @@ This is a current snapshot, not a session log. Replace stale entries as work pro
 - Step 4B local hydrology includes selective terrain-following channels and wet-region pond/headwater density tuning.
 - Step 9 provides bounded, lazy natural-feature catalogs, admin queries, viewer overlays, and regression coverage.
 - This documentation system establishes public Markdown sources, automatic styled HTML, operating rules, and pinned local references for Crown-Call.
+- The working server-local `cc-update` implementation is now preserved unchanged at `ops/cc-update` in Crown-Call, with its installation, server contract, behavior, and verification procedure documented in the development guide.
 
 ## Active work and next actions
 
@@ -42,7 +43,6 @@ No MUD implementation changes are included in the continuity installation.
 - HOG previews are regional/inferred geography, not a persisted walking-scale world. The existing playable terrain service is separate from full HOG integration.
 - `WorldFramework` still reports a Step 3 name/default in `worldgen.py`; do not use that field alone to infer overall completion. The later modules and tests establish the actual preview capabilities.
 - The preserved design text contains historical progress statements. This page supersedes those statements for current status, without rewriting durable design decisions.
-- No versioned deployment procedure or `cc-update` implementation was found in the inspected checkout. The reported command `sudo cc-update dev` requires server-side verification before use.
 - Existing TTRPG crossover text in Crown-Call needs a separate ownership/cleanup review. Nothing has been moved to public storage during this installation.
 
 ## Deferred
@@ -56,6 +56,8 @@ Upcoming tabletop combat modifications require a separate MUD adoption review. T
 Verification on 2026-09-26, using Python 3.12 in an isolated local environment:
 
 - Existing application suite at the inspected code baseline: `python -m pytest -q` — **97 passed**, 13 dependency deprecation warnings, 160.94 seconds. This is local regression evidence, not DEV/PROD verification.
+- `sudo cc-update dev` at Crown-Call `e853131853720b8a2a9f9e81b8ead6f1a1676afb` — **101 passed**, 13 dependency deprecation warnings, 535.70 seconds; forward migrations completed; the DEV service restarted and passed its readiness check.
+- Post-deployment verification: the mirrored `main` revision and active DEV release both identify `e85313185372`; `crown-call-dev` is active/running; local `/health` reports ready, database up, version `0.6.0`; and the installed and tracked updater copies share SHA-256 `6d6ea347199d5df97604f15a75c1bdaa256970c63be5fad93c539381cb1f03f1`.
 - New documentation-reference safety tests: **4 passed**. They cover modified-copy protection, failed-fetch preservation, exact-commit adoption, repeatability, and Windows newlines.
 - Lint for the new sync tool and its tests: passed. No claim is made about a fresh full-repository lint run.
 - Source checks: all six page metadata records and Markdown page links pass; the full existing HOG engineering content is preserved; original design and tabletop pages are unchanged.
@@ -69,8 +71,8 @@ Historical performance figures in HOG are attributed measurements, not fresh ben
 | Environment | Known state |
 | --- | --- |
 | Documentation | Published independently through ForgottenWords GitHub Pages; the page footer identifies its build revision |
-| DEV game | Deployed revision and live validation not checked in this documentation task |
-| PROD game | Thomas identifies `game.crownandcall.com` on DigitalOcean; deployed revision not checked and no game deployment authorized |
+| DEV game | Revision `e85313185372` deployed and verified through the tracked `sudo cc-update dev` workflow on 2026-09-26 |
+| PROD game | Remained at revision `96ce97abe6f1`; not modified or revalidated, and no production deployment was authorized |
 
 ## Temporary continuation context
 
