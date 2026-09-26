@@ -1,0 +1,17 @@
+# Existing HTML pages remain static. Only CCMud Markdown uses this layout.
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+defaults:
+  - scope:
+      path: "CCMud"
+      type: "pages"
+    values:
+      layout: ccmud
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - scripts

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title | escape }} · C&amp;C MUD</title>
+  <meta name="description" content="{{ page.description | default: 'Crown & Call MUD design and development knowledge base.' | escape }}">
+  <link rel="stylesheet" href="/CCMud/assets/docs.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="topbar">
+    <div class="bar-inner">
+      <a class="brand" href="/CCMud/">C&amp;C <span>MUD</span></a>
+      <nav aria-label="Documentation">
+        <a href="/CCMud/"{% if page.nav == 'home' %} aria-current="page"{% endif %}>Start here</a>
+        <a href="/CCMud/status.html"{% if page.nav == 'status' %} aria-current="page"{% endif %}>Status</a>
+        <a href="/CCMud/design.html"{% if page.nav == 'design' %} aria-current="page"{% endif %}>Game design</a>
+        <a href="/CCMud/hog.html"{% if page.nav == 'hog' %} aria-current="page"{% endif %}>Heart of Gold</a>
+        <a href="/CCMud/development.html"{% if page.nav == 'development' %} aria-current="page"{% endif %}>Development</a>
+        <a href="/CCMud/publishing.html"{% if page.nav == 'publishing' %} aria-current="page"{% endif %}>Publishing</a>
+      </nav>
+    </div>
+  </header>
+  <main id="content" class="wrap">
+    <div class="page-heading">
+      <p class="eyebrow">Crown &amp; Call · MUD knowledge base</p>
+      <h1>{{ page.title | escape }}</h1>
+      <p class="description">{{ page.description | escape }}</p>
+      <div class="meta"><span>Reviewed {{ page.reviewed }}</span><a href="https://github.com/twpaige/ForgottenWords/blob/main/{{ page.path }}">Markdown source</a></div>
+    </div>
+    <article class="document">{{ content }}</article>
+    <footer>
+      <p>MUD documentation. Tabletop rules are maintained separately.</p>
+      <p><a href="/">Crown &amp; Call home</a> · <a href="/CC_Ruleset.html">TTRPG rules</a> · <a href="https://game.crownandcall.com">Play the MUD</a> · <a href="#content">Back to top</a></p>
+      <p class="build">Published from <a href="https://github.com/twpaige/ForgottenWords/commit/{{ site.github.build_revision }}">{{ site.github.build_revision | slice: 0, 7 }}</a>. HTML is generated from the Markdown source.</p>
+    </footer>
+  </main>
+</body>
+</html>
