@@ -59,6 +59,8 @@ Verification on 2026-09-26, using Python 3.12 in an isolated local environment:
 - New documentation-reference safety tests: **4 passed**. They cover modified-copy protection, failed-fetch preservation, exact-commit adoption, repeatability, and Windows newlines.
 - Lint for the new sync tool and its tests: passed. No claim is made about a fresh full-repository lint run.
 - Source checks: all six page metadata records and Markdown page links pass; the full existing HOG engineering content is preserved; original design and tabletop pages are unchanged.
+- Published-site checks: all six HTTPS documentation pages, navigation, contents anchors, stylesheet, source-revision footer, and legacy reference links pass. Desktop and narrow-screen layouts were visually reviewed. Live legacy/tabletop content matches the preserved repository files.
+- Reference integration: the sync tool successfully downloaded and verified all seven pinned public references. This status update also exercises automatic republication from a Markdown-only change.
 
 Historical performance figures in HOG are attributed measurements, not fresh benchmarks. The application suite emitted upstream TestClient/httpx and cookie deprecation warnings; these did not fail tests.
 
