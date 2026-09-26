@@ -86,4 +86,3 @@ and a deliberate cabin placement decision if desired. Outdoor object interaction
 swimming/falling consequences, final prose, other zones and unrelated systems remain
 outside this milestone. Source publication, pinned-reference synchronization and game
 deployment are separate completion states; PROD requires explicit authorization.
-
