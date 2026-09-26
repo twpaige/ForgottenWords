@@ -96,7 +96,41 @@ Record these facts separately, tied to the relevant revision and environment:
 
 Use unknown/not checked where evidence is absent. Different environments may run different revisions. Passing tests, pushing code, or deploying DEV does not authorize PROD. Documentation publication is separate from game deployment.
 
-The reported DEV command is `sudo cc-update dev`. Its implementation and server configuration were not present in the inspected repository; verify them before treating the command as executable guidance. Record deployment instructions once established, without storing credentials. No production deployment is implied by ordinary development work.
+### `cc-update` authority and installation
+
+The administrator workflow remains `sudo cc-update dev`. The authoritative implementation is `ops/cc-update` in the private `twpaige/Crown-Call` repository. The installed copy lives at `/usr/local/sbin/cc-update` on the game server and must be an exact copy of that tracked file, owned by `root:root` with mode `0755`:
+
+```text
+cd /path/to/Crown-Call
+sudo install -o root -g root -m 0755 ops/cc-update /usr/local/sbin/cc-update
+sudo bash -n /usr/local/sbin/cc-update
+sha256sum ops/cc-update
+sudo sha256sum /usr/local/sbin/cc-update
+```
+
+The two hashes must match. Make updater changes in `ops/cc-update`, review and test them, commit them, and then reinstall that file; never maintain a divergent server-only copy. Secrets and environment files remain server-local and must not be copied into Git.
+
+The script expects this server contract:
+
+- Ubuntu tools including Bash, Git, Python 3.12 or newer with `venv`, `curl`, `flock`, `sudo`, `tar`, and systemd.
+- A root-owned bare clone at `/srv/crown-call/repository.git` whose `origin` can read the private Crown-Call repository. The current server mirrors remote refs, so the default `main` resolves locally after fetch.
+- Service users/groups `ccdev` and `ccprod`; release directories `/srv/crown-call/{dev,prod}/releases`; and `current` symlinks below each environment root.
+- Root-owned environment files `/etc/crown-call/{dev,prod}/{database,app}.env`, group-readable only by the corresponding service account. These files supply runtime settings and credentials and are not repository content.
+- Systemd services `crown-call-dev` and `crown-call-prod`. They run from the corresponding `current` release, listen only on `127.0.0.1:8001` and `127.0.0.1:8000`, and expose `/health`.
+
+For either environment, `cc-update` takes an optional Git ref (default `main`), fetches the mirror, resolves the commit, and constructs an immutable release named with its 12-character commit prefix. A new release is exported with `git archive`, receives its own virtual environment, and installs the application. DEV installs development dependencies and runs the complete pytest suite. PROD installs runtime dependencies and runs `pip check`. Both paths apply forward Alembic migrations, switch `current`, restart the matching service, and retry the local readiness endpoint for up to 20 seconds. If readiness fails, the script restores the previous code symlink and restarts it; database migrations are deliberately not reversed automatically. A host-wide `flock` prevents concurrent DEV/PROD deployments.
+
+After an authorized DEV update, record and compare the requested, mirrored, and active revisions and verify both service and readiness explicitly:
+
+```text
+sudo cc-update dev
+sudo git --git-dir=/srv/crown-call/repository.git rev-parse main
+sudo readlink -f /srv/crown-call/dev/current
+systemctl is-active crown-call-dev
+curl --fail --silent --show-error http://127.0.0.1:8001/health
+```
+
+The active release basename must equal the first 12 characters of the resolved revision, the service must be active, and readiness must succeed. Preserve the updater's output because it is the evidence that tests and migrations completed before activation. Do not run `sudo cc-update prod` without Thomas's explicit production-release authorization; a successful DEV deployment does not provide it.
 
 ## Chat-to-development handoff
 
