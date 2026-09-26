@@ -14,6 +14,71 @@ game. The original question queue is historical, not an instruction to ask
 those questions again. The review conversation is complete; do not resume
 interviewing merely because an old question looks unanswered.
 
+CONTINUOUS TRAVEL AND STAMINA — THOMAS'S 2026-09-26 DECISIONS
+----------------------------------------------------------
+This section supersedes conflicting earlier movement/stamina wording, including
+the unresolved reference weight, 15-second recovery heartbeat and deferred pace
+drain rates in C04 and Q57-Q61. Existing compatible movement rules remain in force.
+
+Mechanical reference weight R is 150 pounds. Capacity is
+150 * (1 + 0.05 * ATHLX) pounds. The existing encumbrance curve is unchanged:
+no speed reduction through half capacity, linear reduction to half speed at
+capacity, and no voluntary movement above capacity. Terrain and encumbrance
+affect speed, not pace-dependent stamina rates. Other established multiplicative
+speed factors remain; their unresolved physical calculations are not invented.
+
+New characters select WALK. Bare direction commands start or redirect travel
+at the previously selected pace. Pace persists across logout/reconnect. A pace
+command changes pace immediately while moving, preserving direction; while
+stopped it only selects the pace and never begins movement. Travel never changes
+pace automatically. STOP halts non-combat travel; the encounter STOP rules remain
+separate. Disconnect stops travel at the current position; reconnect never resumes.
+
+Maximum stamina remains 20. Standing recovery is continuously accrued at
+(1 + ATHLX/10) / 15 stamina per REAL second. Replace the old 15-second recovery
+heartbeat with elapsed-time accounting. Stamina rates depend on selected pace and
+real time, regardless of reduced progress through difficult terrain or encumbrance.
+
+Recovery as a fraction of the standing rate:
+SPRINT 0%; RUN 10%; JOG 30%; WALK 70%; TRUDGE 90%.
+WALK drains exactly its recovery: net stamina change zero.
+TRUDGE drains half of WALK's drain (35% of standing recovery), yielding net
+recovery of 55% of the standing rate, eventually reaching full stamina.
+
+Full-stamina endurance, INCLUDING all recovery, is:
+SPRINT: 5 + ATHLX real seconds.
+RUN: 2 * (5 + ATHLX) real seconds.
+JOG: 4 * (5 + ATHLX) real seconds.
+Thus for each of these paces, gross drain per second equals that pace's recovery
+per second plus 20 divided by its endurance. The quarter-mile and 10-second
+SPRINT proposals were replaced and are not retained rules.
+
+Starting or resuming travel requires at least 20% of full stamina (4 of 20).
+Once traveling, movement may continue below 20% until zero. Direction and pace
+changes while active are allowed below 20%; they are not restarts. At zero,
+all voluntary movement stops, including WALK and TRUDGE. Selected pace remains
+unchanged. Recovery never resumes movement automatically; a new direction command
+is required after reaching the start threshold.
+
+Supply structured travel/environment observations every configurable 15 real
+seconds of uninterrupted travel. This timer is independent of path safety checks
+and stamina accounting. Check every traversed segment against precise significant
+geometry, not just sampled endpoints. Stop immediately before unconfirmed hazards
+and report the geographic threat. Minor ordinary terrain variation does not stop
+travel. Observations need not repeat identical facts; no final prose engine yet.
+
+Direction! confirms only the currently warned transition. Revalidate origin,
+direction, generation and precise boundary. HOG describes the geographic event;
+game handlers determine falling, wounds, swimming, drowning, current/stamina
+consequences. Without a handler the crossing stays blocked. Confirmation never
+authorizes a later hazard and does not teleport the character across the boundary.
+
+The repository did not previously implement continuous travel: its legacy command
+path advances 100 feet per command. The new controller implements these established
+rules through the existing coordinate/service/connection architecture. Walking
+geometry, game-rule input adapters and consequence consumers remain activation
+gates; selecting arbitrary environmental or wound formulas is not authorized.
+
 HOG WORLD ARCHITECTURE — NINE INDEPENDENT ZONES (2026-09-25)
 ---------------------------------------------------------------
 The world is organized as a 3×3 arrangement of nine enormous zones:
@@ -386,8 +451,8 @@ Review H02. Preserves Q45 and Q57-Q63 with the accepted reconciliation.
 
 Descriptive height, weight and build remain cosmetic. All ordinary humans
 use ONE standard mechanical reference weight R for carrying calculations,
-independent of descriptive prose. The review did not select a number:
-the assistant's 180-pound example is NOT an adopted constant.
+independent of descriptive prose. Thomas selected R = 150 pounds on 2026-09-26.
+The assistant's older 180-pound example is NOT an adopted constant.
 
 Maximum carrying capacity C = R * (1 + 0.05 * ATHLX).
 ATHLX 0/5/10/15/20 gives 100/125/150/175/200 percent of R.
@@ -409,9 +474,9 @@ World travel retains TRUDGE/WALK/JOG/RUN/SPRINT = 1/3/5/8/11 mph, Q57's
 6x world clock and additional 4x travel acceleration, and the existing
 multiplicative environmental/load modifiers. Uninterrupted ideal WALK is
 72 miles per real hour; CCMud.html's older 4-mph/96-mile example is obsolete.
-The stamina recovery formula remains 1 + ATHLX/10 per 15 real seconds;
-debit exertion separately. Exact movement cost/endurance values remain
-tuning work. Do not infer a new stamina-cost table from this review.
+Standing recovery remains equivalent to 1 + ATHLX/10 per 15 real seconds,
+now accrued continuously. The 2026-09-26 section above establishes pace recovery,
+drain, endurance and start/stop thresholds and supersedes the earlier deferral.
 
 Combat/world scope:
 Use CC T3/C5 for tactical combat Speed: species Base Speed + FULL ATHLETICS,

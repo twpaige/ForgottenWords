@@ -470,3 +470,85 @@ No disk/database geography cache is enabled. Exact reproduction:
 
 No weather system, final prose generation, civilization, complete perception/skills,
 additional zones or unrelated mechanics are introduced by these contracts.
+
+## Step 10 continuation: continuous travel contracts
+
+Thomas subsequently resolved the missing pace/stamina decisions. Their authoritative
+home is the **2026-09-26 continuous travel and stamina addendum** near the beginning
+of [CCMUD_Design.txt](/CCMUD_Design.txt), including R=150 pounds, persistent selected
+pace, continuous recovery/drain, endurance targets and the 20% start threshold.
+
+The inspected application previously had fixed 100-foot command strides, not a
+continuous-travel engine. The new controller implements the documented C04/Q57
+speed architecture through existing WorldService, signed-inch coordinate persistence,
+Space restrictions and WebSocket connections. It does not replace reviewed geography.
+
+### Implemented behavior
+
+- Character selected pace and stamina persist through an additive migration.
+  Active travel never survives disconnect/reconnect. Pace commands while stopped
+  only select pace; while moving they change pace immediately, preserving direction.
+- Monotonic elapsed-time integration carries fractional distance between ticks.
+  Database position retains inch precision. Direction changes, STOP, thresholds,
+  exhaustion, standing recovery and pace-specific rates follow the design addendum.
+  Supplied environmental/wound/load factors affect speed, not stamina rate.
+- The WebSocket loop services integration independently of observations (default
+  0.1 real seconds). Each traversed segment checks certified terrain and precise
+  boundaries, including boundaries between samples. Existing Space walls remain
+  blockers. Entering a different chunk requests bounded neighbor prewarming.
+- Observations default to 15 real seconds and are configurable independently.
+  A structured perception callback supplies facts; unchanged updates carry status
+  without repeating facts. No sophisticated prose or synchronous generation is added.
+- Hazards stop at the last inch coordinate strictly before the intersection. Events
+  carry kind, threat, direction, boundary identity and location. Confirmation
+  revalidates the stopped position, direction, generation and exact boundary.
+  It authorizes one crossing, consumed by a subsequent timed integration; issuing
+  confirmation itself never teleports. Later hazards still stop movement.
+- A pure game-side consequence callback accepts/rejects a transition and returns
+  events and whether ordinary travel may continue. HOG invents no fall/swim/damage
+  rules. Absent handlers keep crossing gated. Owners commit state before applying
+  external effects. A second boundary within the short crossing is not authorized.
+
+Bounded catch-up defaults to 5 real seconds. Longer scheduler stalls stop travel
+instead of making unbounded jumps. Safety depends on the scheduler being serviced:
+the normal detection bound is the integration interval, never the observation
+interval. Exact intersection checks prevent thin hazards from being skipped.
+
+### Activation limits and next boundary
+
+The application factory still leaves continuous HOG travel disabled. Certified
+walking geometry, environmental/wound-rule adapters and perception providers remain
+activation gates. The regional sampler remains uncertified. The controller handles
+planar cardinal outdoor travel; physical ground/vertical transitions, continuous
+interior travel and consequence consumers remain for geometry/gameplay integration.
+The supplied controller is tested using certified synthetic fixtures and isolated
+databases, not passed off as completed natural walking terrain.
+
+Offline stamina recovery was not decided. This gated adapter accounts connected
+time only and invents no offline recovery grant; resolve that policy before live
+activation. The immediate next geometry decisions are Q60's Terrain Movement Factor
+calculation and exact cliff/channel/shore geometry. Settled pace, stamina and
+encumbrance rules should not be reopened to address these independent gaps.
+
+### Verification and measurements
+
+Tests cover elapsed-time position and fractional carry, chunk traversal, configurable
+observations/unchanged facts, a hazard around second 7, sub-sample boundaries, scoped
+confirmation followed by another hazard, changed geometry, absent handlers, exact
+endurance, start thresholds, terrain-only speed changes, persistent pace/reconnect,
+cabin walls, isolated migration, and WebSocket updates without new commands.
+
+Synthetic warm benchmark, Windows 11/Python 3.12.14, 5,000 repeats:
+
+| Operation | Median | p95 |
+| --- | ---: | ---: |
+| Safe segment query | 5.3 microseconds | 5.6 microseconds |
+| Hazard segment query | 6.6 microseconds | 7.1 microseconds |
+| One 100-ms controller integration | 13.3 microseconds | 14.5 microseconds |
+
+These measure a synthetic flat prewarmed provider with an exact boundary, excluding
+database transactions/network costs. They do not establish real geometry fidelity or
+supported player count. Run `python scripts/benchmark_travel.py --output work/travel-benchmark.json`;
+raw results live in `docs/travel-contract-benchmark.json`. Prior sampling benchmarks
+remain unchanged. The complete regression suite is 138 passed with 13 upstream
+deprecation warnings (158.90 seconds); changed-file lint passes.

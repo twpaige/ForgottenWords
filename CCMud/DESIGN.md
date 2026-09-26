@@ -16,6 +16,12 @@ The record begins with consolidated decisions C01–C11, followed by preserved n
 
 ## Finding a decision
 
+The design text now begins its decisions with Thomas's **2026-09-26 continuous
+travel and stamina addendum**: 150-pound reference weight, persistent selected
+pace, continuous recovery/drain, endurance targets and the 20% start threshold.
+This supersedes the older deferred values and recovery heartbeat; consult it
+before reopening a movement question.
+
 | Topic | Starting point in the design text |
 | --- | --- |
 | Starter inventory, survival, crafting | C01 and C02 |

@@ -10,14 +10,22 @@ This is a current snapshot. Code and executed checks establish implementation st
 
 ## Current phase
 
-**HOG Step 10: gated runtime contracts implemented; walking gameplay deferred.**
+**HOG Step 10: gated runtime and continuous-travel contracts implemented; walking gameplay deferred.**
 Thomas authorized Step 10 on 2026-09-26, then explicitly chose to keep movement gated
 pending a separate walking-geometry milestone and confirmed hazards gated pending
 consequence handlers. Step 10 as a whole is not complete. Step 9 previews are unchanged.
 
+Thomas then resolved the pace/stamina rules in the 2026-09-26 design addendum.
+Continuous-travel integration now exists through the existing world service and
+WebSocket loop, with persistent pace/stamina, independent observation/safety timers,
+scoped game-side consequence handoff and elapsed-time motion. Previously there was
+only fixed-distance command movement. The application factory still leaves the new
+controller disabled pending certified geometry and supplied game-rule/perception inputs.
+
 The private Crown-Call implementation baseline inspected was `25fd3c2` on `main`.
-The implemented/tested/pushed contract revision is
-`2fa0a6b1924490b0fedc8048306056360ba632e8`. Application package version remains 0.6.0.
+The initial contract revision was `2fa0a6b1924490b0fedc8048306056360ba632e8`.
+The implemented/tested/pushed continuous-travel continuation is
+`d04a7321ebcf42da10caa8b28835be49a47565c0`. Application package version remains 0.6.0.
 
 ## Implemented contract phase
 
@@ -78,13 +86,27 @@ PROD always requires separate explicit release authorization.
 
 ## Verification
 
+- Continuous-travel continuation: **138 passed**, 13 upstream deprecation warnings,
+  158.90 seconds. Its 21 added tests include persistence, SQLite migration, exact
+  endurance, segment hazards, confirmations, cabin walls and automatic WebSocket
+  observations/disconnect. Changed-file lint passes.
+- Synthetic warm query benchmark: safe segment 5.3 microseconds median, hazard
+  segment 6.6 microseconds, 100-ms controller integration 13.3 microseconds.
+  This excludes database/network costs and complete natural geometry generation.
+- No live DEV migration/deployment or PROD change was performed. The selected-pace
+  migration was tested on isolated SQLite; existing coordinates are preserved.
+- Next unresolved design boundary: precise walking geometry and Q60's physical
+  terrain-factor calculation. Offline stamina recovery also needs a decision before
+  activation; the gated adapter only accounts connected elapsed time.
+
 - Existing world/terrain baseline: 20 passed.
 - Final full contract regression: **117 passed**, 13 upstream deprecation warnings,
   162.98 seconds, on the implementation working state committed as `2fa0a6b`.
 - Expanded focused runtime/world coverage: 31 passed, including isolated SQLite
   attachment upgrade/downgrade preserving owner records and scoped command hazards.
-- Changed-file lint passed. Full lint reports nine existing findings in untouched
-  biomes/elevation/main/worldgen modules and biome/elevation tests.
+- Changed-file lint passed. Full lint now reports eight existing findings in untouched
+  biomes/elevation/worldgen modules and biome/elevation tests; main's import order
+  was corrected while integrating the scheduler.
 - Benchmark: Windows 11, Python 3.12.14, seed 103, existing context setup 5.89 seconds.
   500-foot chunks at 5/10/25-foot spacing materialize in median 39.84/10.11/1.71 ms;
   warm cache plus interpolation is about 7 microseconds. Full measurements and
