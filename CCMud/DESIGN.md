@@ -37,6 +37,12 @@ When adopting a tabletop rule, record the source section/revision, the MUD behav
 
 ## Architecture and present state
 
+Thomas's 2026-09-26 Step 10 decisions are recorded in [HOG](hog.html#step-10-mud-integration-and-persistence).
+Current generated geography supersedes stale cached geography while persistent
+objects survive. This supersedes any older implication that exploration freezes
+terrain. Walking geometry and hazard consequence consumers are explicitly gated
+future milestones; runtime contracts do not constitute playable HOG terrain.
+
 Use [HOG](hog.html) for detailed generator architecture and [Status](status.html) for current progress. Historical progress notes in the design text do not establish the current implementation or live environment state.
 
 The existing [world-design page](/CCMud.html) and [design-gap notes](/CCMUD_Holes.txt) remain available for context. Treat older gaps as historical until reconciled with accepted decisions and current code; they do not override the consolidated design record.

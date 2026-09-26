@@ -308,3 +308,165 @@ not inferred without a stronger heat/chemistry model. Review coastal character,
 waterfall density and unusual landforms before selecting a permanent world seed.
 No naming, player discovery, underground exploration, persistence, civilization,
 transportation, additional zones or zone knitting is part of this stage.
+
+## Step 10: MUD integration and persistence
+
+Thomas authorized Step 10 on 2026-09-26 with the requirements below. During
+implementation he explicitly chose **gated runtime contracts pending a separate
+walking-geometry milestone**, and **gated confirmed hazard transitions pending
+consequence handlers**. These are deliberate phase boundaries, not completed
+walking gameplay. Step 10 as a whole remains incomplete.
+
+### Ownership and regeneration
+
+HOG owns natural geography. Generated caches are disposable performance data;
+the game database owns constructed cabins, roads/bridges, possessions, permanent
+modifications and placement requirements. Live characters, creatures and transient
+objects form a separate layer. Do not convert terrain cells/chunks into MUD rooms.
+
+Current HOG generation wins after generator changes, even in explored areas.
+This supersedes older wording that could freeze explored geography. Cache identity
+includes zone, seed, relevant generator versions and configuration. Objects survive
+cache deletion and regeneration. GROUND placement resolves an offset against current
+ground; it must not retain an obsolete absolute elevation. Preserve explicitly
+absolute placements and interior context; never reinterpret legacy z values blindly.
+
+Ground-dependent placements require object-specific compatibility checks after
+relevant generation changes: water, slope, river intersection, cliff clearance and
+other placement constraints. A bridge/dock may accept water that invalidates a
+cabin. Reports count objects checked, compatible cases and review-required conflicts.
+Unknown geometry or missing requirements cannot establish compatibility. Flag
+questionable cases for administration; never automatically relocate them.
+
+### Local and regional geography
+
+Materialize complete gameplay-resolution chunks around active interaction sites.
+Do not progressively regenerate a chunk at different quality levels on approach.
+Coordinates retain inch precision independent of sample spacing. Significant
+shorelines, cliff edges, channels and paths need separate precise geometry so a
+coarse grid never erases them. Overlapping generation and chunk boundaries must
+agree; movement checks the whole segment, not just endpoints or cell centers.
+
+500-by-500-foot chunks with 5-, 10- and 25-foot sampling are benchmark candidates,
+not approved final gameplay dimensions. Measure fidelity and latency before choosing
+walking defaults. Neighbor prewarming is permitted. Distant mountains, ranges,
+valleys, lakes, forests, coasts, landmarks and broad biomes use regional summaries
+and indexes, never force walking-resolution chunk generation just for LOOK.
+
+### Structured perception contract
+
+Search outward at 10, 20, 40, 80, 160 feet and so on to the effective horizon.
+Bands are query bounds only: omit empty bands and preserve actual/estimated
+feature distance. Favor believable selection over exhaustive enumeration.
+
+| Candidate visibility class | Maximum useful range |
+| --- | --- |
+| Tiny: item, rabbit, small bush | 250 feet |
+| Small: person, horse, wagon, cabin, large tree | 1 mile |
+| Medium: grove, pond, creek corridor, large building, hill | 5 miles |
+| Large: forest, sizable lake, major valley, prominent ridge | 20 miles |
+| Landmark: mountain/range, huge lake, coastline | 100 miles |
+
+These ceilings are not guaranteed visibility. Apply terrain obstruction/LOS,
+size/prominence, local cover, observer elevation, significance and later weather
+limits. Open/light/heavy woodland candidate range multipliers are 1/.5/.25.
+Future weather ceilings: exceptionally clear 100 miles, clear 50, haze/cloud 20,
+rain/snow 5, heavy precipitation 1, fog 500 feet, dense fog 100 feet. No weather
+system is required now. Nearby/significant features outrank distant ordinary ones;
+named/unusual/prominent features may receive extra significance. Do not reveal
+hidden creek water; a visible valley/tree corridor is a distinct perceptual fact.
+
+Return natural facts first, persistent objects second, live facts third. People
+precede other live objects. Up to six visible people may be individually listed;
+more than six are summarized by count. Apply the same threshold to live objects.
+Return structured data for future normal/BRIEF descriptions, not a prose engine.
+Unknown visibility must not disclose a candidate merely because HOG knows it.
+
+### Movement and hazards
+
+Immediate terrain access must be fast. Insignificant gradients do not interrupt
+travel. Stop before an immediate dangerous drop, cliff, deep-water/river entry or
+other hazard, identifying the exact threat. `north!` confirms only the previously
+warned transition, revalidated against the current origin, destination, boundary
+and generation identity. It never disables later protection. Missing/failed/timed
+out geography stops movement safely.
+
+The game has no implemented falling, drowning or terrain-injury consumer; detailed
+rules remain deferred in design Q71–72. Thomas approved emitting a structured
+confirmed transition while keeping the crossing blocked until a consequence
+handler exists. Do not replace this with consequence-free dangerous movement.
+
+### Implemented contract phase
+
+Crown-Call reuses signed inch coordinates, the existing database object/Space
+models, independent spatial-index chunks, HOG elevation interpolation, existing
+version constants and the LocalHydrology context. No reviewed generator output
+is changed. The optional WorldService geography dependency supplies a development
+integration seam; the running application does not automatically switch to it.
+
+- Immutable generation identities and complete chunk sample products.
+- One-worker, bounded, single-flight background generation; nonblocking cache
+  queries; LRU/idle eviction; explicit nine-neighbor prewarm; hit/miss/failure,
+  generation-time and movement-query counters. A cache belongs to one identity.
+- Exact segment/boundary intersection and bounded crossed-chunk inspection;
+  missing or uncertified geometry blocks travel. Scoped warning confirmation is
+  consumed and cannot authorize another hazard. Gates also protect exterior exits.
+- Outward regional-query and LOS callback contracts, conservative unknown-LOS
+  exclusion, structured layers and six-item summary behavior. Regional candidate
+  indexing and certified LOS providers remain future work.
+- An additive ground-placement attachment table for objects/Spaces, preserving
+  all existing absolute coordinates. Ground resolver and read-only audit adapters
+  consume current terrain. Unknown rules/geometry require review; non-point
+  footprints explicitly require a future object-specific evaluator.
+
+The regional sampling adapter always marks chunks **incomplete for walking**.
+Its input spacing for seed 103 is about 64.65 by 35.79 miles. Natural-feature
+markers do not supply exact cliff lips, channel cross-sections or water depths.
+The separate geometry milestone must supply those facts before any certification.
+In injected HOG mode, outdoor LOOK returns unavailable empty layers, outdoor
+resource/object interactions are gated, and unknown movement is blocked.
+Legacy gameplay remains the default and is not HOG-backed gameplay.
+
+### Initial development measurements
+
+Windows 11, Python 3.12.14, seed 103, one deterministic inland location; existing
+regional context setup 5.89 seconds. Materialization medians use five samples;
+warm cache medians use 1,000 queries. Memory is recursive Python object size,
+not process RSS, and excludes the shared regional context.
+
+| 500-foot chunk sampling | Samples including shared edges | Materialize median | Warm cache + surface median | Estimated chunk memory | Nine chunks prewarmed |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 5 feet | 10,201 | 39.84 ms | 6.7 microseconds | 1,878,891 bytes | 369.27 ms |
+| 10 feet | 2,601 | 10.11 ms | 7.0 microseconds | 480,363 bytes | 94.79 ms |
+| 25 feet | 441 | 1.71 ms | 7.0 microseconds | 82,867 bytes | 17.83 ms |
+
+All nine accesses hit after prewarm completed. This is not a travel workload or
+proof of player-visible prewarm effectiveness. Local warm-OS-cache file read plus
+JSON decode medians were 8.60/2.22/0.44 ms respectively (20 reads); these exclude
+reconstructing typed chunks, database/network latency and truly cold disk I/O.
+They justify further investigation, not adoption of a persistent derived cache.
+
+The sampling adapter provisionally uses 500 feet/25 feet: denser interpolation
+adds cost without new physical detail. **No gameplay-resolution default is selected.**
+Runtime cache trial values are 64 chunks, 300 idle seconds and 16 pending requests;
+they are configurable test values, not measured production capacity/lifetime choices.
+No disk/database geography cache is enabled. Exact reproduction:
+`python scripts/benchmark_hog_runtime.py --seed 103 --output work/hog-baseline.json`.
+
+### Next bounded phases and acceptance
+
+1. Approve and build deterministic walking geometry consistent with regional
+   coast/water/features; establish exact boundaries and depth/ground behavior.
+   Test cross-chunk continuity, narrow features, coast/lake/river entry and cliffs.
+2. Benchmark that complete product at candidate sizes/resolutions across seeds
+   and terrain types. Measure movement/LOOK end-to-end, concurrency, shared-context
+   memory, p95 latency, travel prewarm and cache pressure before selecting defaults.
+3. Supply regional indexes and conservative LOS/cover/elevation evaluation without
+   walking materialization for distant views. Integrate database/live fact suppliers.
+4. Adopt GROUND semantics in gameplay and object-specific footprint audits,
+   including interior/portal elevations, with deliberate legacy-placement migration.
+5. Add approved consequence consumers, choose seed and hand-place Origin, then
+   enable HOG gameplay on DEV and verify it before any separately authorized PROD release.
+
+No weather system, final prose generation, civilization, complete perception/skills,
+additional zones or unrelated mechanics are introduced by these contracts.
