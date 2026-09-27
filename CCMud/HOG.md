@@ -504,7 +504,7 @@ process restart. The private evidence preserves the patch without applying it
 as part of this documentation release.
 
 Settled world-time/travel/daylight decisions are in the [design record](design.html#world-time-travel-and-seasonal-light-2026-09-27).
-The bounded release sequence is in [Status](status.html#recommended-bounded-next-work).
+The bounded release sequence is in [Status](status.html#environment-and-next-action).
 Distributed/home workers, full runtime-chunk pregeneration and speculative corridors
 remain future options, not immediate requirements. Expensive persistent source
 tiles may eventually be useful; do not represent ordinary ocean as billions of
