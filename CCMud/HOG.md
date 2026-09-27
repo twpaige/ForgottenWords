@@ -92,6 +92,31 @@ to reduce Python GIL contention. Aggregate operation/queue timings contain no pl
 text. This is not a hard latency guarantee; the benchmark distinguishes commands
 issued during generation and retains cold outliers.
 
+**Release `9e70cce` is blocked:** its DEV server-side pytest gate crashed with a
+native segmentation fault during concurrent travel-snapshot and character reads.
+The failing fixture used SQLite StaticPool, which can give separate sessions the
+same native connection. Distinct sessions alone did not isolate those transactions.
+Loaded psycopg/SQLAlchemy extensions do not establish which driver caused the fault;
+the exact Linux native crash was not reproduced locally.
+
+The correction retains worker-thread command execution and independent background
+HOG preparation. Services require fresh sessions bound to an Engine whose pool
+provides independent connection checkouts; shared Session callbacks, a pre-bound
+Connection and single-connection/thread-local pools are rejected at construction.
+Application PostgreSQL uses its normal pool. Each session is created, used and
+closed in one executing thread. Travel copies immutable scalar character/load/
+structure facts and closes its read session before the integration/observation work;
+its ContextVar contains no live ORM objects. Existing mutation commit boundaries
+remain in place, and detached response objects are not shared mutable ORM state.
+
+Concurrent tests and benchmarks use isolated file-backed SQLite WAL/QueuePool.
+Tests retain simultaneous workers, normal API requests and direct database readers;
+connection auditing checks ownership without serializing SQL. Barrier tests prove
+distinct native connections and reader completion while a writer/worker is held,
+including isolation from another session's rollback. Repeated fresh-process stress
+passes supplement the complete suite. See Status for actual results and deployment
+limits; a passing local run does not establish Linux DEV readiness.
+
 Prewarming prioritizes the current chunk and two chunks along the direction of
 travel before the eight neighbors. `TravelConfig.prewarm_ahead_chunks` permits 1–3;
 direction changes reset the prewarm marker. Existing bounds remain 16 pending jobs,
