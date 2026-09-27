@@ -11,6 +11,87 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 * Contents
 {:toc}
 
+## Bounded efficiency implementation (2026-09-27)
+
+**Implemented and locally verified; not deployed to DEV or PROD.** Private
+Crown-Call `0472cce96f168e775616ab3b39c0d121c0fa1ec6` delivers regional-product reuse and ordered prewarm plans.
+The [release report](https://github.com/twpaige/Crown-Call/blob/0472cce96f168e775616ab3b39c0d121c0fa1ec6/docs/hog-efficiency-release.md) and [before/after evidence](https://github.com/twpaige/Crown-Call/tree/0472cce96f168e775616ab3b39c0d121c0fa1ec6/docs/evidence/hog-efficiency-release) record exact changes,
+measurements and tests. This section supersedes baseline implementation descriptions
+in the preserved investigation below, not its measured findings or safety limits.
+
+Runtime chunks remain **500×500 feet**, samples **25 feet**, and generator identity,
+formulas, two-mile guard, certification thresholds, precise water geometry and
+movement/stamina rules are unchanged. No world-clock, travel multiplier, daylight,
+LOS/prose, speculative corridor or distributed worker was implemented.
+
+### Immutable products and shorter critical sections
+
+LocalHydrology retains one immutable regional network per fixed source context,
+avoiding repeated edge reconstruction and river-mouth clipping. Bounded catchment
+and natural-feature catalogs are immutable; natural queries filter before copying
+returned records. Public query/cell results receive shape-preserving isolated
+mutable copies, including nested geometry and hydraulic metadata. Refined edge
+halves are per-query overlays; they never mutate the retained base. Replace the
+context for changed seed/source layers/versions; no cross-identity global cache is
+used, and in-place mutation of source inputs is not an invalidation API.
+
+Cold products build outside short synchronized LRU/publication sections. Concurrent
+cold misses can duplicate deterministic work, but cannot corrupt shared products.
+RegionalDiscovery no longer holds the provider-wide movement lock across its
+catalog queries. Movement retains its certificate lock; cache publication remains
+synchronized. No database/session or worker ownership checks were weakened and
+no generation workers were added. CPU/GIL contention remains; this is not a
+preemptive scheduler or a guaranteed latency ceiling.
+
+### Ordered plans with cache-owned reconciliation
+
+Every travel substep projects the existing physical footprint into an ordered,
+deduplicated current/ahead/neighborhood plan. Equality includes generation/policy
+and ordered chunk coordinates, not floating-point steering or only set membership.
+Movement inside the current chunk can change its ahead plan. APPROACH steering and
+ray accounting still update continuously.
+
+A receipt on active TravelState records cache-instance token, plan, state epoch
+and maintenance deadline. Completion, failure, future consumption, eviction/expiry
+and closure invalidate cached satisfaction. Active reconciliation checks at most
+250 ms later, or earlier for known retry/expiry deadlines; queue-rejected obligations
+remain required. Only absent eligible chunks call request. The equality fast path
+does not scan the cache or refresh idle times. Existing get/request maintenance
+remains. STOP, arrival, target replacement and disconnect discard the receipt;
+there is no retained subscription registry. Cache replacement invalidates old
+receipts, including a replacement with the same generation identity.
+
+The default footprint retains the same dominant-axis offsets at 500 and 1,000
+feet plus eight ±500-foot neighbors, mapped to chunks; diagonal physical distances
+are unchanged. The general forward/lateral/behind-feet and ready-seconds policy
+remains future work. Already-admitted jobs retain ordinary single-flight/FIFO
+behavior; this release does not reprioritize or preempt a running job.
+
+### Measured results and boundaries
+
+Same 26 dry / 28 water jobs and physical union: wall time **16.994 → 10.428 s**
+and **18.055 → 10.875 s**, respectively (38.6% / 39.8% less). This is less work
+per job, not fewer generated chunks. Captured dry/stream/lake chunk, water and
+natural-feature hashes agree. The synthetic already-ready APPROACH replay changed
+150 prewarm calls / 1,650 requests to **six plan reconciliations / zero requests**,
+with the same endpoint and zero generation jobs in either version. Actual retry
+or cold-cache obligations still submit requests.
+
+Cold-catalog movement lock wait measured **1.772 s → 0.0000039 s** locally;
+movement completion was 2.461 → 1.237 s. In the existing sustained/cold command
+harness, SAY/LOOK p95 improved; STOP p95 was slightly higher, while maxima and
+heartbeat tails were lower. These are single local Windows runs with isolated
+SQLite, not Linux/PostgreSQL/network guarantees. See the report for CPU, phase
+costs, all latency values, cache metrics and limitations.
+
+The authorized last-32 bounded failure diagnostics are now included in this code
+release, rather than only preserved as an uncommitted patch. Retention, fields,
+admin RAW exposure, separate queue-rejection counter and restart loss are unchanged.
+The historical 13 failures still have no known cause. Remaining source spatial
+indexes, reusable local water products and explicit priority admission can be
+considered separately if new evidence warrants them; no claim that all repeated
+work or CPU contention is eliminated is made.
+
 ## Step 10 efficiency decisions and evidence (2026-09-27)
 
 These findings apply to investigation base
@@ -120,7 +201,7 @@ exclusions to gain speed.** Reduce unnecessary work before adding CPU-heavy work
 
 ### Ordered prewarm plans and speculative APPROACH
 
-Current APPROACH steering updates frequently and invalidates prewarming on vector
+At the investigation base, APPROACH steering updated frequently and invalidated prewarming on vector
 changes. A representative 15-second probe produced **150 prewarm submissions and
 1,650 underlying request calls**, but only six meaningful ordered plan changes
 (five unordered footprint changes). This is investigation evidence, not a deployed fix.
@@ -194,8 +275,9 @@ their messages/logs were not saved. The plateau while hundreds more chunks
 succeeded and queue rejection stayed zero argues against persistent total failure,
 but identifies no cause. Unrelated reproduced refusals cannot explain those events.
 
-The earlier authorized observability addition was implemented/tested **locally**;
-it remains an uncommitted, undeployed patch at documentation preservation time.
+At investigation preservation time the authorized observability addition was
+implemented/tested locally but uncommitted. The bounded implementation release
+above now includes it; deployment remains separate.
 It retains the last 32 failures per TerrainCache, cumulative sequence, UTC time,
 generation identity, chunk coordinates/size/spacing, exception type/category and
 a single-line message capped at 512 characters, exposed through admin RAW.

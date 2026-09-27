@@ -1,125 +1,97 @@
 ---
 title: Current status
-description: Implemented behavior, completed HOG investigations and bounded next work.
+description: Bounded HOG efficiency implementation, verification and release boundary.
 reviewed: 2026-09-27
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Current milestone and environment evidence
+## Current release candidate
 
-**The Step 10 efficiency investigation and fixed-500-foot terrain-sampling
-addendum are complete and durably preserved.** This update is documentation/evidence
-only: no new benchmark, optimization, game-code release or DEV/PROD deployment.
-Read [HOG decisions](hog.html#step-10-efficiency-decisions-and-evidence-2026-09-27),
-the [design record](design.html#world-time-travel-and-seasonal-light-2026-09-27)
-and [full evidence index](evidence.html) before starting further Step 10 work.
+The bounded Step 10 efficiency implementation is committed and pushed as
+`0472cce96f168e775616ab3b39c0d121c0fa1ec6` in private Crown-Call. Its subsequent pinned-documentation sync commit
+is the final DEV candidate. **DEV has not been automatically deployed; PROD is
+untouched.** Use only the exact final revision supplied in the completion report
+with the normal `sudo cc-update dev <exact-commit>` gate. Linux DEV pytest,
+migrations, activation and health checks remain mandatory; local success does
+not establish Linux/live verification.
 
-The inspected investigation base was private Crown-Call
-`e54acc982c1b68450b85e9c428fd0e82daa64d9c`, seed `867359018957601`.
-Thomas reports this as the DEV base and reported successful field behavior;
-this supersedes the prior status's assumption that the field utilities awaited
-deployment. This documentation task did not independently inspect the live symlink,
-health or services. Earlier Linux verification at `48bdb3faa660` (225 tests,
-migrations/health and exact release path) remains historical evidence, not proof
-of the current live revision. PROD was not inspected or modified.
+### Implemented behavior
 
-## Current implemented behavior
+- Immutable context-scoped regional network and bounded catchment/catalog reuse;
+  caller-isolated overlays and copies, with natural filtering before copying.
+- Cold assembly outside short publication locks; optional regional discovery
+  no longer holds the movement-wide certificate lock. No extra workers or
+  database/session ownership changes.
+- Ordered current/ahead/neighborhood plans each substep; cache-owned epochs and
+  bounded deadline reconciliation preserve failure/rejection/expiry/eviction
+  obligations. Steering remains continuous. STOP, arrival, target replacement
+  and disconnect discard receipts without orphan subscriptions.
+- Previously authorized bounded last-32 failure history and admin RAW diagnostics
+  included in the release. History remains in-memory, separate from queue rejection,
+  and is lost on restart. The historical 13 failures remain unexplained.
 
-At the inspected base: 500×500-foot runtime chunks, 25-foot terrain samples with
-coupled local certification, one bounded background generation worker, conservative
-water/terrain blocking and precise continuous movement. Field utilities include
-CLEAR, exact-heading TRAVEL, diagnostic APPROACH, grounded admin JUMP, STOP and
-speed/heading status. Stamina/pace, database/session/thread ownership and worker
-ownership safeguards remain unchanged. See [HOG field commands](hog.html#bounded-field-testing-commands).
+**Preserved:** 500-foot chunks, 25-foot samples, identity/seed/geography, two-mile
+guard, conservative certification and water blocking, GROUND, exact-heading travel,
+APPROACH, JUMP, STOP, stamina/pace, persistent objects and worker/session safeguards.
+The Pioneer Cabin remains unaudited; unknown crossing consequences remain blocked.
 
-Travel currently uses a combined approximately 24× factor; separate world-time
-and travel-convenience services are not implemented. No complete world calendar,
-dynamic travel controller, observer-dependent distant LOS or prose generator is
-claimed. Distant RAW remains diagnostic, not perceived geography.
+### Verification and measurements
 
-The earlier authorized **bounded failure-observability patch is implemented and
-tested locally, but remains uncommitted/undeployed application work**. The evidence
-commit preserves its patch without applying it as a documentation change. It
-retains the last 32 failures with identity/chunk/time/category/message details in
-memory and admin RAW; restart loses the history, and queue rejection stays separate.
-Fresh clones have evidence of the patch, not the new runtime behavior. Inspect and
-handle that work separately before any code release.
+Full regression suite: **299 passed, 13 warnings in 368.44s (0:06:08)**. Three fresh-process
+concurrency/session + field-worker overlap runs: **12 passed, 1 warning in 54.72s; 12 passed, 1 warning in 54.53s; 12 passed, 1 warning in 54.24s**.
+Focused regional/runtime/travel: 78 passed; new isolation/plan lifecycle: 13 passed.
+No benchmark ran concurrently with these tests.
 
-The historical cumulative 13 generation failures remain unexplained because no
-messages/logs were saved. The plateau while hundreds of later chunks succeeded
-and queue rejection stayed zero argues against a persistent total failure only.
-Do not attribute those failures to unrelated benchmark refusals.
+Fixed physical coverage: 26 dry / 28 water jobs unchanged. Generation wall time
+16.994 → 10.428 s / 18.055 → 10.875 s. Geography hashes match. Already-ready
+APPROACH replay: 150 prewarm calls / 1,650 requests → six meaningful reconciliations /
+zero requests, with the same endpoint; both generated zero jobs. Cold-catalog
+movement regional-lock wait: 1.772 s → about 4 microseconds locally.
+SAY/LOOK p95 and heartbeat tails improved in the sampled command run; STOP p95
+did not improve. Do not generalize these single local Windows/SQLite measurements
+to Linux/PostgreSQL/network or multiplayer guarantees.
 
-## Completed benchmark findings
+Read the [implementation report](https://github.com/twpaige/Crown-Call/blob/0472cce96f168e775616ab3b39c0d121c0fa1ec6/docs/hog-efficiency-release.md), [release evidence](https://github.com/twpaige/Crown-Call/tree/0472cce96f168e775616ab3b39c0d121c0fa1ec6/docs/evidence/hog-efficiency-release) and
+[HOG implementation contract](hog.html#bounded-efficiency-implementation-2026-09-27).
+The [two completed investigations](evidence.html) remain preserved, not rerun or
+replaced by these release measurements. Full-source/test lint retains eight
+pre-existing findings in untouched files; changed-file lint and diff checks pass.
 
-- Equal-area dry generation: 500/250/100-foot chunks took approximately
-  16.1/42.4/207.4 seconds. Retain 500-foot chunks for the current architecture.
-- Fixed 500-foot chunks with 25/50/100-foot samples: approximately
-  0.656/0.422/0.322 seconds wall per accepted chunk. At 100 feet, CPU fell 35.6%
-  and object size 86.8%; wall savings partly include fewer cooperative sleeps.
-- Accepted-terrain elevation differences stayed below 0.001 inch at 100 feet;
-  four movement outcomes and water geometry agreed. All main-site and targeted
-  real-edge certificate comparisons agreed, but synthetic tests expose reduced
-  safety-probe coverage. Retain 25-foot production samples pending independent
-  certification investigation.
-- Repeated regional query/reconstruction/copy work and shared-lock contention
-  are concrete optimization targets. Ordered prewarm-plan comparison can remove
-  redundant APPROACH submissions while retaining retries and continuous steering.
-- Speculative corridors are not the first optimization for a non-preemptive
-  single-worker FIFO. Slower travel removed preparation delay in the tested model
-  without speculation; this is not a live capacity guarantee.
+## Live-environment evidence
 
-These are local Windows measurements and explicitly labeled models, not new
-Linux/PostgreSQL/multiplayer guarantees. The [evidence](evidence.html) preserves
-117 spacing generation attempts, 64 targeted real-edge checks, original equal-area
-chunk results, profiles, summaries, limitations and reproduction scripts. No
-completed benchmark was rerun for this documentation task.
+Before this release, Thomas reported DEV base
+`e54acc982c1b68450b85e9c428fd0e82daa64d9c`, seed `867359018957601`, and successful
+field behavior. This task has no new live symlink/service/health inspection.
+Earlier Linux verification at `48bdb3faa660` remains historical evidence only.
+No DEV/PROD service, database, release pointer or configuration was changed here.
 
 ## Settled design not yet implemented
 
 The [September 27 design continuation](design.html#world-time-travel-and-seasonal-light-2026-09-27)
-sets world time to 1.75×, normal travel convenience to 2×, future dynamic convenience
-to 0.25×–2×, and smooth seasonal daylight targets. Normal effective travel becomes
-3.5×, implying 85.42% less steady virgin-terrain distance demand under comparable
-conditions. Pressure affects geographic travel convenience, not world time or
-ordinary gameplay. Numerical controller tuning remains future work.
+still sets separate 1.75× world time, 2× normal travel convenience and future
+0.25×–2× pressure control, plus smooth seasonal daylight. Current runtime retains
+its combined approximately 24× travel factor; a general calendar/dynamic controller
+was not added. Pressure must never slow ordinary non-travel gameplay.
 
 ## Recommended bounded next work
 
-Implementation requires separate approval; do not combine these into one release.
+1. Thomas may deploy the exact final candidate through the Linux DEV gate, then
+   verify active revision/service/health and field-test travel, APPROACH, STOP,
+   water blocks, grounded JUMP, RAW and responsiveness. Do not bypass failed gates.
+2. Retain 500/25. Consider remaining spatial indexing/local-water reuse only from
+   measured need; immutable reuse is implemented but does not eliminate CPU/GIL
+   contention or guarantee priority/preemption.
+3. In a separate authorized release, introduce explicit world-time and travel
+   convenience with epoch/continuity and telemetry-unit decisions. Dynamic control
+   follows only after pressure telemetry/hysteresis/recovery tests.
+4. Separately investigate 100-foot storage/interpolation with independent finer
+   certification and coarse-interpolant validation; neither coarse nor adaptive
+   sampling is authorized by this release.
+5. Later build query-specific perception/relevance filtering and on-demand LOS.
+   Keep precise movement hazards and detailed RAW; defer prose.
+6. Speculative APPROACH corridors, distributed/home workers and full runtime
+   pregeneration remain optional future architecture, not immediate requirements.
 
-1. Retain 500×500-foot chunks and 25-foot production sampling.
-2. Optimize repeated regional certification/source queries without changing
-   geography or weakening safety; preserve immutable/copy-isolated data and
-   movement priority.
-3. Suppress redundant APPROACH/prewarm submissions with ordered deduplicated plans
-   and bounded reconciliation for rejection, failure, expiry and eviction.
-4. In a separate release, introduce explicit 1.75× world time and 2× normal travel
-   convenience, resolving calendar epoch/continuity and telemetry units.
-5. Add dynamic 0.25×–2× travel throttling only after pressure telemetry, hysteresis
-   and recovery behavior are tested. Do not throttle merely by player count.
-6. Separately investigate candidate 100-foot terrain storage/interpolation with
-   sufficiently fine independent certification and coarse-interpolant validation.
-7. Later implement query-specific perception candidates, relevance horizons and
-   on-demand LOS. Preserve precise movement hazards and detailed admin RAW.
-8. Keep prose deferred. Distributed/home workers, full runtime pregeneration and
-   speculative APPROACH corridors are future options, not immediate requirements.
-
-Keep the diagnostic patch's review/release separate from these broader proposals.
-The Pioneer Cabin remains unaudited; unknown water/crossing consequences remain
-blocked. Preserve continuous travel, precise headings, APPROACH, JUMP, STOP,
-stamina/pace, certified GROUND, responsive background work and database/thread safety.
-
-## Verification and release boundaries
-
-Original field utility verification at `84b8461` included 285 local tests and
-three fresh-process concurrency runs of 12 tests each. The investigation's narrow
-diagnostic verification and benchmark limitations are retained in its verification
-report. These checks were not rerun as part of documentation publication.
-
-Documentation verification checks evidence hashes, links, source scope, Pages
-publication and pinned-reference integrity. Source publication and private reference
-synchronization do not deploy the game. No DEV or PROD runtime modification is
-authorized by this update; any future release needs its own exact revision and
-environment verification.
+Do not combine these separate contracts into one implementation release.
+Documentation publication and pinned-reference synchronization do not deploy the game.

@@ -48,3 +48,11 @@ unimplemented design, measurements and optional future architecture. Reports ret
 detail and limitations; they do not authorize broad implementation or game deployment.
 Major architecture changes may justify new measurements, but do not repeat the
 completed study just to recover conclusions already recorded here.
+
+## Bounded implementation release
+
+The subsequent [implementation report](https://github.com/twpaige/Crown-Call/blob/0472cce96f168e775616ab3b39c0d121c0fa1ec6/docs/hog-efficiency-release.md) and [release measurements/scripts](https://github.com/twpaige/Crown-Call/tree/0472cce96f168e775616ab3b39c0d121c0fa1ec6/docs/evidence/hog-efficiency-release)
+are preserved separately at code revision `0472cce96f168e775616ab3b39c0d121c0fa1ec6`. The original investigations
+above remain unchanged. The release implements only immutable regional reuse,
+reduced discovery lock contention, ordered prewarm reconciliation and the authorized
+diagnostics; it does not deploy the game or adopt coarse sampling/time changes.
