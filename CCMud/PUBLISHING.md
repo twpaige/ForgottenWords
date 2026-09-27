@@ -1,7 +1,7 @@
 ---
 title: Publishing & continuity
 description: One editable source, automatic browser pages, and reliable local references for development.
-reviewed: 2026-09-26
+reviewed: 2026-09-27
 nav: publishing
 permalink: /CCMud/publishing.html
 ---
@@ -29,6 +29,7 @@ The existing site uses GitHub Pages branch publishing from `main` at repository 
 | `CCMud/STATUS.md` | [Current status](status.html) |
 | `CCMud/DESIGN.md` | [Game design](design.html) |
 | `CCMud/HOG.md` | [Heart of Gold](hog.html) |
+| `CCMud/EVIDENCE.md` | [HOG investigation evidence](evidence.html) |
 | `CCMud/AGENTS.md` | [Development guide](development.html) |
 | `CCMud/PUBLISHING.md` | [Publishing](publishing.html) |
 
@@ -83,3 +84,17 @@ Tabletop pages remain a separate project. Shared hosting and colors do not give 
 ## Completion check
 
 For a documentation change, confirm source diff, successful remote push, successful Pages build, rendered content/links, and updated private reference manifest where needed. For a code change, additionally verify relevant implementation/tests and update the public status/design source as appropriate. Report website publication separately from DEV/PROD game state.
+
+## Durable investigation evidence
+
+The Step 10 reports and benchmark artifacts live in private Crown-Call
+`docs/evidence/hog-step10-efficiency/`, indexed by public `CCMud/EVIDENCE.md`.
+Keep full evidence separate from concise maintained architecture/status decisions.
+The public index uses an immutable private commit and clearly labels access limits;
+it does not expose private implementation or reproduction code.
+
+The existing seven-file pinned-reference mapping is unchanged. WORK_START_HERE,
+HOG, DESIGN and STATUS carry the evidence link and local path into fresh private
+checkouts; the full evidence is already tracked there. EVIDENCE.md is public
+navigation, not an independently edited private reference. No sync-script change
+or additional cross-repository mirroring is needed.

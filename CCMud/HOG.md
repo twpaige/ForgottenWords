@@ -1,7 +1,7 @@
 ---
 title: Heart of Gold
 description: Deterministic world-generation architecture, physical constraints, and preview limits.
-reviewed: 2026-09-26
+reviewed: 2026-09-27
 nav: hog
 permalink: /CCMud/hog.html
 ---
@@ -10,6 +10,205 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 
 * Contents
 {:toc}
+
+## Step 10 efficiency decisions and evidence (2026-09-27)
+
+These findings apply to investigation base
+`e54acc982c1b68450b85e9c428fd0e82daa64d9c`, principally seed
+`867359018957601`. They distinguish **current implementation**, **benchmark
+findings**, **settled unimplemented design**, and **future investigation**.
+They do not authorize an optimization release or game deployment. See the
+[durable evidence index](evidence.html) for both full reports, result JSON,
+edge audits, methodology and reproduction scripts. Do not rediscover these results
+merely because a future development session lacks the original conversation.
+
+### Three independent resolutions
+
+| Concern | Current implemented behavior | Decision / future investigation |
+| --- | --- | --- |
+| Runtime chunk dimensions | 500×500 feet | Retain for the measured architecture |
+| Terrain storage/interpolation | 25-foot sample spacing, continuous bilinear interpolation | Uniform 100-foot spacing is a promising candidate, not approved production behavior |
+| Terrain certification | Coupled to sample-lattice corners and patch centers | Investigate sufficiently fine independent safety coverage before coarsening representation |
+
+**Chunk dimensions, representation resolution and certification resolution are
+separate architectural concerns.** Positions remain continuous; a 100-foot
+interpolation patch would not be a MUD room. Exact local hazards and persistent
+object coordinates are not forced onto the terrain lattice.
+
+### Measured chunk-size and terrain-spacing findings
+
+The equal-physical-coverage dry benchmark took approximately **16.1 / 42.4 / 207.4
+seconds** for 500/250/100-foot chunks, holding terrain samples at 25 feet. The
+same footprint had the same unique elevation coordinates; subdivision repeated
+shared-edge evaluations, regional certification, scheduling/chunk overhead and
+cache requirements. **Retain 500-foot chunks now.** This is not a universal
+permanent optimum: major certification/cache changes may justify rebenchmarking.
+
+The distinct spacing experiment kept chunks at 500 feet. Equal-weight means of
+eight accepted sites' three-repeat medians were:
+
+| Terrain spacing | Local elevation + certificate-center evaluations | Wall / CPU per chunk | Approximate recursive Python object size |
+| --- | ---: | ---: | ---: |
+| 25 feet | 841 | 0.656 / 0.400 seconds | 85.8 KB |
+| 50 feet | 221 | 0.422 / 0.293 seconds | 26.9 KB |
+| 100 feet | 61 | 0.322 / 0.258 seconds | 11.3 KB |
+
+At 100 feet this is **92.7% fewer local evaluations, 50.8% less wall time, 35.6%
+less CPU time and 86.8% smaller chunk objects**. Wall savings partly reflect
+fewer cooperative sleeps (nominal 205/105/55 ms); they are not all CPU savings.
+Regional certification remained approximately 0.25–0.27 seconds per chunk.
+Illustrative compact/compressed serialization also shrank substantially. These
+are local Windows measurements, not process RSS, an implemented persistent chunk
+format, a full-world pregeneration recommendation or live-server capacity proof.
+
+On accepted real terrain, maximum elevation difference from the 25-foot reference
+at 100 feet was **under 0.001 inch**; slope, directional grades and uphill-bearing
+differences were very small. Dry travel, stream blocking, stream APPROACH and lake
+APPROACH had equivalent tested outcomes. One accuracy probe crossed an integer-Z
+rounding boundary, changing rounded GROUND by one inch despite a sub-thousandth-inch
+interpolation difference; none of the four movement endpoints changed.
+
+All 13 main-site certification outcomes agreed (eight accepted, five refused).
+An additional 64 real basin-edge chunks showed no differing local decisions.
+Rejected real cutoffs showed substantial slope smoothing, but remained rejected.
+Synthetic counterexamples showed finer checks detecting irregularities that
+50-foot and/or 100-foot checks missed. **These do not prove those synthetic
+irregularities exist in the generated world.** They prove that changing the
+lattice changes safety coverage; unchanged numerical thresholds do not establish
+equivalent certification. The current sampled certificate is itself not a
+universal mathematical proof.
+
+**Keep 500-foot chunks + 25-foot production samples.** A separately approved
+bounded prototype should evaluate uniform 100-foot storage/interpolation with
+independent finer certification and validation of the coarse interpolant itself.
+Fifty feet is not automatically a safe compromise. Adaptive 100/50/25-foot
+representation is optional future investigation; prefer uniform resolution if
+adequate. No decoupled/adaptive design has been proven or implemented.
+
+### Geography independence and movement safety
+
+Runtime spacing does not generate waterway centerlines, widths, boundary polygons
+or lake footprints. Their existing inferred vector representations, hydraulic
+facts and tested water membership were unchanged. An approximately 18-foot stream
+does not become 100 feet wide at 100-foot terrain spacing. Exact exclusion remains
+independent, while overall movement permission still requires terrain certification.
+Unknown bed/bank geometry, water depth and crossing consequences remain blocked.
+
+Natural-feature anchors, regional feature catalogs, biome source classification
+and regional tree-cover fields do not consume runtime terrain samples. Local
+validation/ground placement can be affected indirectly; slope/grade and terrain
+certification depend directly on the interpolated lattice. The regional biome
+boundary refusal remains necessary even if fewer sample nodes are inspected.
+The full sampling report contains the explicit system-by-system dependence matrix.
+
+### Repeated regional work is the main optimization target
+
+`_certify_area()` runs for each runtime chunk and scans coastline, regional lakes,
+hydrology and natural-feature information. Profiling found substantial repeated
+hydrology work: `regional_edges()` reconstructs regional waterways/network data
+and clips river mouths before bounded query filtering. Natural-feature queries
+also repeat catalog copying/query work. Regional discovery and movement
+certification contend on the same regional lock: one cold catalog operation
+blocked movement's lock acquisition for approximately **1.67 seconds** locally.
+
+Investigate immutable bounded regional products, spatial indexes, reusable water
+geometry and reduced reconstruction/copy work. Preserve API isolation: current
+query refinement mutates returned edge points, so simply sharing cached mutable
+edge dictionaries is unsafe. Reduce shared-lock contention while preserving
+movement priority. **Do not weaken conservative certification or precise water
+exclusions to gain speed.** Reduce unnecessary work before adding CPU-heavy workers.
+
+### Ordered prewarm plans and speculative APPROACH
+
+Current APPROACH steering updates frequently and invalidates prewarming on vector
+changes. A representative 15-second probe produced **150 prewarm submissions and
+1,650 underlying request calls**, but only six meaningful ordered plan changes
+(five unordered footprint changes). This is investigation evidence, not a deployed fix.
+
+Compare **ordered, deduplicated required chunk plans**, preserving current chunk,
+then forward chunks, then safety/neighborhood priority. Keep steering continuous
+while suppressing redundant submissions. Bounded reconciliation must preserve
+retries after failures, queue rejection, expiration and eviction; an unchanged
+plan does not mean its chunks are still ready. Express preparation in physical
+distance/time so changing chunk dimensions cannot silently shrink the envelope.
+The report's proposed envelope values are experiments to review, not new defaults.
+
+Do not enable a long speculative APPROACH corridor as the first optimization in
+the current single-worker FIFO executor. Lower queued priority cannot preempt an
+already-running speculative job when urgent work arrives. At proposed 3.5× travel,
+the tested capacity model had no preparation delays without speculation; this is
+a model result, not a live guarantee. Revisit only with safe preemption/resume,
+independently available spare capacity, or measured live need.
+
+### Three query contracts and progressive detail
+
+**Intended architecture; not yet a complete runtime API separation:**
+
+- **Movement certification:** exact local geography/hazards needed for the next
+  movement. Visibility must never remove a real movement hazard.
+- **Perception candidates:** geographically relevant plausible features for an
+  observer. Prefer stable ID, type/subtype, bearing, distance and distance basis,
+  prominence/scale, uncertainty and a detail handle. A candidate is not a visibility
+  claim. Request exact geometry only when necessary.
+- **Admin RAW:** retain diagnostic geometry, certification, hydraulic metadata,
+  internal state and regional/distant information. Do not cripple RAW to imitate
+  ordinary perception. Existing distant RAW is explicitly `perceived=false`.
+
+HOG owns detailed geographic truth but should return the minimum truthful data
+needed by each query. A creek half a mile away, if relevant, generally needs only
+its ID, type, approximate distance and bearing, not width/discharge, seasonal
+discharge, full centerline, polygons, hydraulic elevation, crossing certification
+or bank coordinates. Query finer information as the observer approaches.
+
+Feature-class/size/prominence relevance horizons are **starting hypotheses, not
+final visibility rules**: cave entrances very local; creeks/small streams short
+range, perhaps starting around 500 feet; ponds local; rivers local/moderate;
+lakes moderate/long according to scale; forest/tree lines longer; cliffs/escarpments
+moderate/long according to prominence; major mountains potentially 50–100 miles;
+ranges potentially out to the existing major-landmark horizon. Do not apply one
+universal radius. Reducing creek candidates must not hide a major mountain 42 miles away.
+
+### LOS belongs on demand in perception
+
+Do not precompute observer-dependent LOS into every chunk. HOG supplies geographic
+truth; cheap feature-class/distance/prominence filters narrow candidates; on-demand
+game-side perception/LOS then combines observer position/elevation, intervening
+terrain/vegetation, weather, daylight/twilight/moonlight, persistent structures and
+doors, and potentially character abilities. Cache with appropriate observer/spatial,
+environment, structure-state and generator-version keys and bounded invalidation.
+Urgent movement generation must not be starved by perception work. Future prose
+receives established perceived facts; it decides neither existence nor visibility.
+
+### Feature density and historical failures
+
+The supplied large-area feature study did not establish excessive world density:
+approximately one small pond per 325 square miles overall, one per 101 square
+miles in sampled wet low-relief terrain, one riffle per 18.5 river-miles, one rapid
+per 119 river-miles, either per 16 river-miles, and one natural-feature catalog
+record per 55 square miles. These are supplied investigation context, not a new
+benchmark executed by this documentation task. Crowded RAW partly reflects distant
+regional diagnostics. Address relevance and payloads before reducing feature density.
+
+The original cumulative **13 failures cannot be diagnosed retrospectively**:
+their messages/logs were not saved. The plateau while hundreds more chunks
+succeeded and queue rejection stayed zero argues against persistent total failure,
+but identifies no cause. Unrelated reproduced refusals cannot explain those events.
+
+The earlier authorized observability addition was implemented/tested **locally**;
+it remains an uncommitted, undeployed patch at documentation preservation time.
+It retains the last 32 failures per TerrainCache, cumulative sequence, UTC time,
+generation identity, chunk coordinates/size/spacing, exception type/category and
+a single-line message capped at 512 characters, exposed through admin RAW.
+Queue rejection remains separate. History is bounded, in memory and lost on
+process restart. The private evidence preserves the patch without applying it
+as part of this documentation release.
+
+Settled world-time/travel/daylight decisions are in the [design record](design.html#world-time-travel-and-seasonal-light-2026-09-27).
+The bounded release sequence is in [Status](status.html#recommended-bounded-next-work).
+Distributed/home workers, full runtime-chunk pregeneration and speculative corridors
+remain future options, not immediate requirements. Expensive persistent source
+tiles may eventually be useful; do not represent ordinary ocean as billions of
+runtime chunks or infer a persistent format from illustrative serialization.
 
 ## Generator overview
 

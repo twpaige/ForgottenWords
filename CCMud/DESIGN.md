@@ -1,7 +1,7 @@
 ---
 title: Game design
 description: The MUD's accepted decisions, preserved in full and separated from tabletop rules.
-reviewed: 2026-09-26
+reviewed: 2026-09-27
 nav: design
 permalink: /CCMud/design.html
 ---
@@ -14,10 +14,26 @@ For the existing illustrated reading edition, see [CCMUD_Design.html](/CCMUD_Des
 
 The record begins with consolidated decisions C01–C11, followed by preserved numbered decisions. Read its reconciliation instructions before interpreting older entries. Old questions are historical records and do not automatically reopen a completed design interview.
 
+## World time, travel and seasonal light (2026-09-27)
+
+**Settled design, not yet implemented:** the leading September 27 continuation in
+the [authoritative design record](/CCMUD_Design.txt) now owns the 1.75× world-time
+target, separate 2× normal travel convenience (future 0.25×–2× pressure range),
+and smooth seasonal daylight anchors. It supersedes conflicting older values;
+read its rationale, cadence, gameplay boundaries and implementation caveats before
+reopening these decisions. A complete world-calendar service and dynamic travel
+controller are not present in the inspected application.
+
+The [HOG efficiency decisions](hog.html#step-10-efficiency-decisions-and-evidence-2026-09-27)
+distinguish chunk dimensions, terrain representation and certification, retain
+500/25 production geometry, and define the recommended query/perception separation.
+The [evidence index](evidence.html) preserves both full investigations separately
+from these maintained decisions. Benchmarks are evidence, not release authorization.
+
 ## Finding a decision
 
-The design text begins with Thomas's **2026-09-26 terrain movement and offline
-rest decisions**: configurable surface/grade factors, independent precise
+After the September 27 continuation, the design text preserves Thomas's
+**2026-09-26 terrain movement and offline rest decisions**: configurable surface/grade factors, independent precise
 boundaries and elapsed-time offline stamina recovery. These supersede the old
 on-foot factor-below-0.50 impassability rule, without redesigning horse/wagon rules.
 The following **2026-09-26 continuous

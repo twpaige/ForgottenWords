@@ -1,117 +1,125 @@
 ---
 title: Current status
-description: What is implemented, what remains, and what has actually been verified.
-reviewed: 2026-09-26
+description: Implemented behavior, completed HOG investigations and bounded next work.
+reviewed: 2026-09-27
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Current milestone and verified live DEV
+## Current milestone and environment evidence
 
-The bounded Step 10 field-testing utility update is implemented, locally tested,
-committed and pushed as `84b84616ddab7321a9dec2985d149fd01427a3e8` in private Crown-Call. Its final documentation-sync
-revision is the next DEV candidate. **This utility release is not yet deployed or
-verified on the Linux server.** The server's complete pytest gate remains required.
-PROD is untouched. No migration, seed/generator change or automatic relocation is added.
+**The Step 10 efficiency investigation and fixed-500-foot terrain-sampling
+addendum are complete and durably preserved.** This update is documentation/evidence
+only: no new benchmark, optimization, game-code release or DEV/PROD deployment.
+Read [HOG decisions](hog.html#step-10-efficiency-decisions-and-evidence-2026-09-27),
+the [design record](design.html#world-time-travel-and-seasonal-light-2026-09-27)
+and [full evidence index](evidence.html) before starting further Step 10 work.
 
-Thomas reports the previous concurrency correction **`48bdb3faa660` is active on DEV**:
-225 tests passed on the actual Linux server, migrations and health passed, and
-`/srv/crown-call/dev/current` was manually verified as
-`/srv/crown-call/dev/releases/48bdb3faa660`. The native segmentation fault did not
-recur. This supersedes the earlier pre-deployment status and the older `6b270d460cb9`
-symlink observation. These server results are Thomas's verification, not a new SSH
-inspection by this development session.
+The inspected investigation base was private Crown-Call
+`e54acc982c1b68450b85e9c428fd0e82daa64d9c`, seed `867359018957601`.
+Thomas reports this as the DEV base and reported successful field behavior;
+this supersedes the prior status's assumption that the field utilities awaited
+deployment. This documentation task did not independently inspect the live symlink,
+health or services. Earlier Linux verification at `48bdb3faa660` (225 tests,
+migrations/health and exact release path) remains historical evidence, not proof
+of the current live revision. PROD was not inspected or modified.
 
-Thomas's subsequent field tests confirmed continuous multi-chunk travel, background
-generation, responsive SAY/STOP, normal exhaustion and pace changes, asynchronous
-regional RAW diagnostics, local water exclusions, and zero observed generation
-failures/queue rejections. At stream `867359018957601:waterway:7346:593`, ordinary
-travel stopped at the inferred boundary while travel along/away from it remained
-possible. `east!` was recognized and correctly refused unimplemented consequences.
-The new utility regression exercises this same generated stream geometry.
+## Current implemented behavior
 
-## Completed field utilities
+At the inspected base: 500×500-foot runtime chunks, 25-foot terrain samples with
+coupled local certification, one bounded background generation worker, conservative
+water/terrain blocking and precise continuous movement. Field utilities include
+CLEAR, exact-heading TRAVEL, diagnostic APPROACH, grounded admin JUMP, STOP and
+speed/heading status. Stamina/pace, database/session/thread ownership and worker
+ownership safeguards remain unchanged. See [HOG field commands](hog.html#bounded-field-testing-commands).
 
-- **CLEAR:** client-only transcript removal, preserving status, input, socket,
-  active travel, stamina and all server/HOG state. HELP documents it; no button.
-- **`TRAVEL <0-359>`:** whole-number clockwise compass heading. It starts/redirects
-  the existing controller at selected pace; malformed headings never start travel.
-- **`APPROACH <id|feature_id>`:** admin-only direct diagnostic steering. Ready local
-  water polygons take precedence; otherwise the current bounded regional catalog
-  supplies a real anchor/centerline/shoreline within 50 miles. No global ID index,
-  invented geometry or route planner. Cold catalogs return immediately with a retry
-  message. Nearest-point steering updates every substep; arrival stops within two
-  inches of the representation. All ordinary movement safety/stamina/STOP rules apply.
-- **`JUMP <direction> <positive miles>`:** admin outdoor field placement, with all
-  eight full names and N/S/E/W/NE/NW/SE/SW. `JUMP NE 192` is 192 miles total along
-  45 degrees. It requests/checks the destination, not the intervening route. Cold or
-  rejected destinations do not move the player or cancel travel. Success cancels
-  travel/warnings, preserves pace/stamina and saves the destination's **HOG GROUND Z**,
-  not the source Z. Certified dry standing ground and persistent footprint checks
-  remain mandatory; many far destinations can still be conservatively refused.
-- **Status:** plain-text effective game mph and compass heading beside stamina,
-  using existing worker messages. Stopped status shows 0 mph and no active heading.
+Travel currently uses a combined approximately 24× factor; separate world-time
+and travel-convenience services are not implemented. No complete world calendar,
+dynamic travel controller, observer-dependent distant LOS or prose generator is
+claimed. Distant RAW remains diagnostic, not perceived geography.
 
-Heading/APPROACH reuse the established certification, prewarming, caching, terrain,
-slope, hazards/water, stamina, observation and per-character worker flow. No new
-database ownership path is added. Targets contain immutable coordinates; sessions
-stay operation/thread-owned and close before integration. See [HOG](hog.html#bounded-field-testing-commands)
-for exact semantics, integer-coordinate tolerances and resolution limits.
+The earlier authorized **bounded failure-observability patch is implemented and
+tested locally, but remains uncommitted/undeployed application work**. The evidence
+commit preserves its patch without applying it as a documentation change. It
+retains the last 32 failures with identity/chunk/time/category/message details in
+memory and admin RAW; restart loses the history, and queue rejection stays separate.
+Fresh clones have evidence of the patch, not the new runtime behavior. Inspect and
+handle that work separately before any code release.
 
-## Verification
+The historical cumulative 13 generation failures remain unexplained because no
+messages/logs were saved. The plateau while hundreds of later chunks succeeded
+and queue rejection stayed zero argues against a persistent total failure only.
+Do not attribute those failures to unrelated benchmark refusals.
 
-- Focused utility and movement regression run: **90 passed**, 44.61 seconds.
-- Final complete suite: **285 passed**, 13 upstream warnings,
-  378.43 seconds, with Python fault handling enabled.
-- Three fresh-process concurrency runs: **12 passed each**,
-  57.3 / 55.36 / 55.35 seconds. Each includes the existing
-  connection/session suite, original real-HOG API/socket test and new worker-command
-  overlap test (heading, APPROACH, JUMP and STOP alongside direct DB reads).
-- New tests cover seven representative headings, invalid input, precise vectors,
-  pace/stamina/observations/STOP, inferred stream blocking, point/extended geometry,
-  dynamic steering, bounded/unknown/unready targets, all 16 JUMP name/alias forms,
-  normalized 192-mile diagonals, destination GROUND Z, rejected placement,
-  telemetry, access limits and thread/session boundaries.
-- Browser scripts execute shipped client functions: CLEAR sends nothing, preserves
-  active state/status, and permits later output/commands; speed/heading rendering
-  and automatic-stop presentation pass. Changed-file lint and diff checks pass.
-  Full lint retains the same eight pre-existing findings in untouched files.
+## Completed benchmark findings
 
-New command latency in milliseconds (median / p95 / maximum):
+- Equal-area dry generation: 500/250/100-foot chunks took approximately
+  16.1/42.4/207.4 seconds. Retain 500-foot chunks for the current architecture.
+- Fixed 500-foot chunks with 25/50/100-foot samples: approximately
+  0.656/0.422/0.322 seconds wall per accepted chunk. At 100 feet, CPU fell 35.6%
+  and object size 86.8%; wall savings partly include fewer cooperative sleeps.
+- Accepted-terrain elevation differences stayed below 0.001 inch at 100 feet;
+  four movement outcomes and water geometry agreed. All main-site and targeted
+  real-edge certificate comparisons agreed, but synthetic tests expose reduced
+  safety-probe coverage. Retain 25-foot production samples pending independent
+  certification investigation.
+- Repeated regional query/reconstruction/copy work and shared-lock contention
+  are concrete optimization targets. Ordered prewarm-plan comparison can remove
+  redundant APPROACH submissions while retaining retries and continuous steering.
+- Speculative corridors are not the first optimization for a non-preemptive
+  single-worker FIFO. Slower travel removed preparation delay in the tested model
+  without speculation; this is not a live capacity guarantee.
 
-| Workload | SAY | LOOK | STOP |
-| --- | ---: | ---: | ---: |
-| Burst / warm regional | 0.56 / 4.67 / 148.14 | 27.65 / 101.87 / 243.45 | 3.77 / 27.50 / 218.33 |
-| Sustained / cold regional | 0.54 / 4.31 / 270.94 | 28.96 / 225.87 / 307.70 | 5.67 / 7.60 / 804.83 |
+These are local Windows measurements and explicitly labeled models, not new
+Linux/PostgreSQL/multiplayer guarantees. The [evidence](evidence.html) preserves
+117 spacing generation attempts, 64 targeted real-edge checks, original equal-area
+chunk results, profiles, summaries, limitations and reproduction scripts. No
+completed benchmark was rerun for this documentation task.
 
-Nominal-five-ms event-loop heartbeat p95/max: **33.33/88.62 ms**
-for burst, **39.22/119.72 ms** for sustained/cold work.
-These are the established 30-round workloads on local Windows with independent
-SQLite WAL/QueuePool connections, real HOG generation and no competing test run.
-They are not Linux/PostgreSQL/network or multiplayer guarantees. Cold scheduling
-tails remain; no uniform improvement is claimed. Private
-`docs/hog-field-utilities-benchmark.json` retains aggregates, environment and commands.
+## Settled design not yet implemented
 
-## Preserved boundaries and next action
+The [September 27 design continuation](design.html#world-time-travel-and-seasonal-light-2026-09-27)
+sets world time to 1.75×, normal travel convenience to 2×, future dynamic convenience
+to 0.25×–2×, and smooth seasonal daylight targets. Normal effective travel becomes
+3.5×, implying 85.42% less steady virgin-terrain distance demand under comparable
+conditions. Pressure affects geographic travel convenience, not world time or
+ordinary gameplay. Numerical controller tuning remains future work.
 
-`9e70cce` remains a rejected release, not a deployment candidate. Its unsafe SQLite
-StaticPool connection sharing was corrected in the active `48bdb3faa660` release.
-The exact native crash was not reproduced locally; subsequent Linux success is
-recorded above. No session checks, concurrency tests, offloading or background HOG
-generation were weakened for these utilities.
+## Recommended bounded next work
 
-Seed `867359018957601`, GROUND walking policy `water_exclusions_v3`, deterministic
-geography, caches and persistent content remain unchanged. Unknown water depth,
-bank geometry and crossing consequences stay blocked. Distant features remain RAW
-diagnostics with `perceived=false`. The Pioneer Cabin remains unaudited. No prose
-generator, distant LOS, swimming or unrelated Step 10 work is implemented.
+Implementation requires separate approval; do not combine these into one release.
 
-Deploy only the new exact final revision provided with this update using
-`sudo cc-update dev <exact-commit>`. Do not bypass the gate. After success, compare
-the active symlink basename with the requested commit's first 12 characters and
-verify service/health. Then field-test CLEAR during travel, heading 298 along the
-stream, APPROACH from RAW IDs, STOP, and admin JUMP with destination GROUND checks.
-Verify the simple speed/heading display throughout. This candidate becomes DEV
-verified only after Thomas reports the actual deployment/activation checks.
-Documentation publication and reference synchronization are separate from game
-deployment; PROD is not authorized.
+1. Retain 500×500-foot chunks and 25-foot production sampling.
+2. Optimize repeated regional certification/source queries without changing
+   geography or weakening safety; preserve immutable/copy-isolated data and
+   movement priority.
+3. Suppress redundant APPROACH/prewarm submissions with ordered deduplicated plans
+   and bounded reconciliation for rejection, failure, expiry and eviction.
+4. In a separate release, introduce explicit 1.75× world time and 2× normal travel
+   convenience, resolving calendar epoch/continuity and telemetry units.
+5. Add dynamic 0.25×–2× travel throttling only after pressure telemetry, hysteresis
+   and recovery behavior are tested. Do not throttle merely by player count.
+6. Separately investigate candidate 100-foot terrain storage/interpolation with
+   sufficiently fine independent certification and coarse-interpolant validation.
+7. Later implement query-specific perception candidates, relevance horizons and
+   on-demand LOS. Preserve precise movement hazards and detailed admin RAW.
+8. Keep prose deferred. Distributed/home workers, full runtime pregeneration and
+   speculative APPROACH corridors are future options, not immediate requirements.
+
+Keep the diagnostic patch's review/release separate from these broader proposals.
+The Pioneer Cabin remains unaudited; unknown water/crossing consequences remain
+blocked. Preserve continuous travel, precise headings, APPROACH, JUMP, STOP,
+stamina/pace, certified GROUND, responsive background work and database/thread safety.
+
+## Verification and release boundaries
+
+Original field utility verification at `84b8461` included 285 local tests and
+three fresh-process concurrency runs of 12 tests each. The investigation's narrow
+diagnostic verification and benchmark limitations are retained in its verification
+report. These checks were not rerun as part of documentation publication.
+
+Documentation verification checks evidence hashes, links, source scope, Pages
+publication and pinned-reference integrity. Source publication and private reference
+synchronization do not deploy the game. No DEV or PROD runtime modification is
+authorized by this update; any future release needs its own exact revision and
+environment verification.

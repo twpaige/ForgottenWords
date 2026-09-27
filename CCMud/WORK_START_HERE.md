@@ -1,7 +1,7 @@
 ---
 title: Start here
 description: A durable home for Crown & Call MUD design, architecture, and development continuity.
-reviewed: 2026-09-26
+reviewed: 2026-09-27
 nav: home
 permalink: /CCMud/
 ---
@@ -28,6 +28,7 @@ The `/CCMud/` section belongs exclusively to the MUD. HOG and MUD operating rule
 | --- | --- |
 | [Current status](status.html) | Present development state, blockers, next actions, and verification |
 | [Game design](design.html) | Detailed MUD decisions and the preserved design record |
+| [HOG investigation evidence](evidence.html) | Full Step 10 reports, measurements and private reproduction artifacts |
 | [Heart of Gold](hog.html) | World-generation architecture and engineering constraints |
 | [Development](development.html) | Operating instructions, testing, Git safety, and recovery |
 | [Publishing](publishing.html) | Markdown sources, automatic HTML publishing, and local reference synchronization |
@@ -39,3 +40,8 @@ Each fact has one authoritative home. HTML is generated presentation. Crown-Call
 > Open Crown-Call. Read WORK_START_HERE.md and follow it. Inspect the repository and current status before making changes.
 
 The game runs at [game.crownandcall.com](https://game.crownandcall.com) on DigitalOcean. Documentation publication and game deployment are separate actions. PROD deployment always needs explicit authorization from Thomas.
+
+For Step 10 efficiency work, read the September 27 conclusions in HOG and the
+[evidence index](evidence.html) before proposing another benchmark. The full reports
+are version-controlled in private Crown-Call `docs/evidence/hog-step10-efficiency/`.
+Distinguish measured findings and settled design from implemented runtime behavior.

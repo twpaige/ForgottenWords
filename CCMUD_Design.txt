@@ -14,6 +14,64 @@ game. The original question queue is historical, not an instruction to ask
 those questions again. The review conversation is complete; do not resume
 interviewing merely because an old question looks unanswered.
 
+WORLD TIME, TRAVEL CONVENIENCE AND DAYLIGHT — THOMAS'S 2026-09-27 DECISIONS
+------------------------------------------------------------------------
+SETTLED DESIGN NOT YET IMPLEMENTED. These decisions supersede conflicting older
+world-time, travel-acceleration and daylight values in this preserved record.
+They do not claim that a new world calendar or dynamic controller is running.
+The inspected application at e54acc982c1b68450b85e9c428fd0e82daa64d9c uses a
+combined 24 factor for travel; it has no complete general world-calendar service.
+
+World time is fixed at 1.75 times real time, independently of travel convenience.
+One real hour is 1 hour 45 minutes game time. One game day takes approximately
+13h42m51s real time. Simple integer multipliers tend to align a player's repeated
+real-world login schedule with the same game clock time. At 1.75x, same-real-time
+daily login advances game time by 18 hours modulo 24 (six hours earlier on the
+clock); this repeats every four real days. It reduces alignment, not all periodicity.
+Implementation needs an explicit epoch/continuity decision and a time-consumer audit.
+
+Normal travel convenience is 2.0x, with future dynamic range 0.25x through 2.0x.
+At normal convenience, 1.75 x 2 = 3.5x effective geographic rate, compared with
+the current conceptual approximately 24x. Under comparable pace/terrain/coverage,
+steady virgin-terrain distance demand is 14.58% of current demand (85.42% less),
+giving HOG approximately 6.86x more preparation time per traveled distance.
+This is a rate calculation, not an 85.42% reduction in all server CPU work.
+
+Only geographic travel convenience responds to HOG exploration pressure. World
+time, SAY, combat, inventory and ordinary non-travel gameplay must not slow with
+HOG pressure. Selected pace remains the player's choice. Existing stamina uses
+real elapsed time and selected pace; do not silently change it with convenience.
+Distinguish base pace mph, miles per game hour and miles per real hour in telemetry.
+
+The future controller should use unmet urgent demand, oldest urgent-job age,
+measured service latency, worker availability, contiguous prepared runway,
+recent preparation-frontier stops and retry/failure state. Player count or generic
+CPU percentage alone is not the control signal. A known geography refusal must
+not be mistaken for global worker saturation. Use hysteresis and slower recovery
+after healthy runway is sustained. Numerical controller tuning in the investigation
+is a proposal requiring telemetry/tests, not settled thresholds or deployed behavior.
+
+Gameplay-oriented seasonal daylight targets in GAME hours:
+- Summer solstice: 75% daylight, 18 hours.
+- Fall equinox: 70%, 16h48m.
+- Winter solstice: 65%, 15h36m.
+- Spring equinox: 70%, 16h48m.
+Transition daylight duration smoothly between these anchors, without abrupt
+seasonal jumps. Future environment/perception work may include dawn, dusk,
+lunar phases, moonlight, starlight/ambient night illumination, and weather/cloud
+suppression of night illumination. Night remains meaningful while ordinarily
+clear conditions generally allow minimal navigation. This is a gameplay design,
+not a claim of an implemented astronomical model or universally visible geography.
+
+The authoritative engineering conclusions and safety limits from the completed
+Step 10 investigation live in CCMud/HOG.md (published at /CCMud/hog.html).
+Evidence is indexed by CCMud/EVIDENCE.md (/CCMud/evidence.html) and preserved in
+private Crown-Call docs/evidence/hog-step10-efficiency. Current implementation
+remains 500-foot runtime chunks and 25-foot terrain samples. Coarser storage and
+independent finer certification are separate future investigation; excellent
+measured coarse accuracy alone does not authorize weaker certificate coverage.
+The documentation update does not authorize any game deployment.
+
 TERRAIN MOVEMENT AND OFFLINE REST — THOMAS'S 2026-09-26 DECISIONS
 --------------------------------------------------------------
 This continuation preserves the continuous-travel rules below. For on-foot
