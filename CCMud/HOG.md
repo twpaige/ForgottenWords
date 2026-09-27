@@ -42,6 +42,76 @@ ground formula are unchanged; current local certification is revalidated on entr
 No character or persistent structure is relocated. A cold resumed location may
 require retrying entry after background certification. Other identities stay blocked.
 
+#### Bounded field-testing commands
+
+`CLEAR` is recognized by the web client (case-insensitive, surrounding whitespace
+ignored). It removes only the currently displayed transcript, including command
+echoes. It sends no server command, preserves the status line/socket/character and
+active travel, and returns focus to command entry. Later output appears normally.
+There is no new button or server-state reset.
+
+`TRAVEL <0-359>` accepts whole-number compass degrees: north 0, east 90, south 180,
+west 270, increasing clockwise. For example, `travel 298` starts or redirects at
+the selected pace. Invalid/out-of-range/fractional inputs and `travel 90!` are
+rejected; values are not wrapped. Named directions and their eight short aliases
+remain valid. Named directions, exact headings and APPROACH all use the same
+TravelController, inch-coordinate integration, certification, terrain/grade factors,
+stamina, 15-second observations, directional prewarming, water/hazard interception,
+persistent-structure checks and STOP. Accumulated ray steps retain the small component
+of nearly cardinal headings instead of rounding it away each tick. Rounded stop
+positions are rechecked before movement is committed.
+
+`APPROACH <id|feature_id>` is an **admin-only diagnostic navigation utility**. It
+does not establish perception or visibility. It first resolves matching feature or
+boundary IDs in ready local chunks within one chunk of the character, using their
+existing inferred water-exclusion polygons. Otherwise it searches only the current
+bounded regional diagnostic catalog (at most 4,096 entries, 50-mile distance ceiling).
+Regional natural features use their supplied point anchors; waterways use their
+represented centerlines; lakes/coastline use their represented closed shoreline.
+Geothermal/sinkhole/other natural IDs work only when present with usable geometry.
+An arbitrary global ID index, pathfinder, and new feature geometry are not built.
+
+An unavailable catalog is requested asynchronously and the command returns a retry
+message. Unknown, out-of-scope and geometry-less targets fail cleanly without
+starting or replacing travel. Successful resolution retains immutable coordinate
+values and generation identity, never live ORM state. Steering selects the nearest
+point on the represented geometry every integration substep; ready local water
+geometry takes precedence over the regional representation as it becomes available.
+This is direct steering, **not route planning** around obstacles. No forced crossing
+is requested. Ordinary certification/water/hazard/structure stops still apply.
+Arrival stops within two inches of the represented target; reaching an inferred
+boundary or approximate anchor does not certify the feature or its crossing.
+Pace changes preserve the target; STOP, exhaustion, safety stops, a new direction,
+disconnect or successful JUMP clear it. Target geometry may be retained after cache
+eviction, but a changed generation identity invalidates it. Every walked segment
+still requires current certified terrain.
+
+`JUMP <direction> <positive miles>` is a separate **admin DEV field-placement
+utility**, explicitly teleporting rather than walking. All eight full names and
+`N S E W NE NW SE SW` work, case-insensitively. Positive decimal miles are accepted.
+`jump east 192` moves 192 miles east; `jump NE 192` moves **192 miles total at 45°**,
+about 135.7645 miles per axis. The destination is rounded to integer inches. It
+must remain in implemented Zone C and be certified standing ground outside water
+exclusions and unaudited persistent-structure footprints. A cold destination queues
+normal bounded HOG preparation and returns without moving; retry after preparation.
+Rejected destinations leave active travel and character state unchanged. The route
+between endpoints is intentionally not inspected or materialized for a teleport.
+
+On success, JUMP resolves the **destination's HOG ground height** and saves that Z,
+outdoor context and spatial-index coordinates through the existing session/checkpoint
+boundary. It uses the existing character GROUND model, not a new attachment table;
+the source's numerical Z is not carried across. Successful JUMP cancels active
+travel/APPROACH and any crossing warning/authorization, preserving selected pace and
+current stamina. It is not a gameplay travel or hazard-consequence implementation.
+No migration, generator/version change, automatic relocation or PROD enablement is added.
+
+The existing top status line adds plain-text **speed and heading beside stamina**.
+Speed is the last integrated effective ground speed in game miles/hour, including
+terrain/grade/load factors (the existing 24× movement-time conversion is unchanged).
+Heading is clockwise from north, to one decimal degree. APPROACH updates it as it
+steers. Stopped/JUMP-completed status shows 0 mph and no active heading. Telemetry
+uses existing worker results, not new database queries or browser polling.
+
 #### Local water exclusions and responsiveness
 
 Existing local hydrology supplies inferred centerlines, estimated widths and lake

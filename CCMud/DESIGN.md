@@ -60,6 +60,13 @@ drowning design is inferred from discharge/width. Automatic safety stops explici
 say `You stop.` See the current Step 10
 exploration contract at the beginning of HOG for the accepted scope and limitations.
 
+The bounded field-testing utilities are documented in [HOG](hog.html#bounded-field-testing-commands):
+client-only CLEAR, exact-heading TRAVEL, admin diagnostic APPROACH, and admin JUMP
+to a certified destination's GROUND elevation. Heading/APPROACH reuse continuous
+travel; JUMP is explicit test placement and does not certify the intervening route.
+These utilities and the simple speed/heading status display do not implement the
+prose generator, distant perception, crossing consequences, or new geography.
+
 Use [HOG](hog.html) for detailed generator architecture and [Status](status.html) for current progress. Historical progress notes in the design text do not establish the current implementation or live environment state.
 
 The existing [world-design page](/CCMud.html) and [design-gap notes](/CCMUD_Holes.txt) remain available for context. Treat older gaps as historical until reconciled with accepted decisions and current code; they do not override the consolidated design record.
