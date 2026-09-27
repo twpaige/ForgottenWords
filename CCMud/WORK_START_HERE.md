@@ -45,3 +45,12 @@ For Step 10 efficiency work, read the September 27 conclusions in HOG and the
 [evidence index](evidence.html) before proposing another benchmark. The full reports
 are version-controlled in private Crown-Call `docs/evidence/hog-step10-efficiency/`.
 Distinguish measured findings and settled design from implemented runtime behavior.
+
+## Current bounded HOG release
+
+Read [Ravine Reservation Contract v1](hog.html#ravine-reservation-contract-v1-2026-09-27)
+and [current status](status.html) before further Step 10 changes. Exterior-only
+ravine certification is implemented; deployment and live acceptance remain separate.
+Its study and release evidence are retained under private
+`docs/evidence/ravine-reservation-v1/`; see the [evidence index](evidence.html).
+Do not broaden this into another natural-feature release before DEV acceptance.

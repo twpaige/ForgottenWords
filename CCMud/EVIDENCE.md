@@ -56,3 +56,12 @@ are preserved separately at code revision `0472cce96f168e775616ab3b39c0d121c0fa1
 above remain unchanged. The release implements only immutable regional reuse,
 reduced discovery lock contention, ordered prewarm reconciliation and the authorized
 diagnostics; it does not deploy the game or adopt coarse sampling/time changes.
+
+## Ravine Reservation Contract v1
+
+[Release report](https://github.com/twpaige/Crown-Call/blob/2aabec9dd523a0e3a8efd325c76ca0a8525ce7df/docs/ravine-reservation-v1-release.md) and [durable evidence](https://github.com/twpaige/Crown-Call/tree/2aabec9dd523a0e3a8efd325c76ca0a8525ce7df/docs/evidence/ravine-reservation-v1) at private revision
+`2aabec9dd523a0e3a8efd325c76ca0a8525ce7df` preserve the original refusal records, full proposal/methodology,
+572-ravine sample across 300 seed/cell pairs, and separate implementation
+measurements/tests. Private repository access is required. The study was not
+repeated; approved conclusions became the versioned contract in HOG architecture.
+The original Step 10 efficiency and terrain-sampling reports remain unchanged.

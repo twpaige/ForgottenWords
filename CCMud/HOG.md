@@ -11,6 +11,139 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 * Contents
 {:toc}
 
+## Ravine Reservation Contract v1 (2026-09-27)
+
+**Implemented and locally verified; not automatically deployed.** The bounded
+release is private Crown-Call `2aabec9dd523a0e3a8efd325c76ca0a8525ce7df`. Read the [release report](https://github.com/twpaige/Crown-Call/blob/2aabec9dd523a0e3a8efd325c76ca0a8525ce7df/docs/ravine-reservation-v1-release.md)
+and [preserved investigation, sample and release evidence](https://github.com/twpaige/Crown-Call/tree/2aabec9dd523a0e3a8efd325c76ca0a8525ce7df/docs/evidence/ravine-reservation-v1). This
+section supersedes earlier whole-chunk refusal descriptions for **ravines only**.
+Other natural-feature classes remain unresolved under their existing rules.
+
+### Approved prospective containment
+
+This is a generator-owned reservation, not a claim that catalog dimensions already
+describe a physical rim. With catalog width W, length L and vertical dimension H
+in feet:
+
+```text
+floor width budget  = 0.20 W
+floor length budget = 0.20 L
+B = max(W, 0.20 W + 2 H)
+A = max(L, 0.20 L + 2 H)
+T = max(5 feet, 0.25 H)
+```
+
+Center an A×B rectangle at the catalog anchor, expand it outward by a disk of
+radius T, and rotate it using the stored angle. Orientation is **counterclockwise
+from +X, with the length axis aligned to the angle**, not a compass bearing.
+The existing hashed angle gains these semantics through the versioned contract;
+catalog values and stable feature IDs do not change. Outer dimensions are
+A+2T by B+2T; exact area is AB+2T(A+B)+πT².
+
+H means **maximum vertical construction budget**, not actual or surveyed depth.
+The centered floor budget plus H wall run per side/end permits nominal 1:1 walls
+at full H relief before the separate transition band. This reserves construction
+space, not stable or walkable slopes. The five-foot minimum is independent of
+the 25-foot terrain lattice.
+
+**All ravine geometry, terrain deformation, floor, walls, rim, hazards and
+transition effects governed by v1 must remain wholly inside the reservation.**
+Ravine-induced deformation **and its gradient** must return to the authoritative
+background terrain by its outer boundary. Future geometry may use less space;
+geometry that cannot fit must be rejected or require an explicitly versioned
+reservation expansion. Future implementations must validate this contract;
+there is currently no admitted interior geometry or traversal system.
+
+The reservation is not necessarily the visible rim, wall, floor or eventual
+physical outline. Outside it, background terrain is authoritative subject to
+every independent certification requirement.
+
+### Representation, identity and spatial completeness
+
+The collision shape is a conservative 128-side circumscribed support polygon,
+never an inscribed polygon. Axis normals preserve straight sections; corner
+intersections overbound the circular arcs. Tiny outward numerical padding is
+independent of terrain sampling. The live ravine's maximum outward approximation
+is about 0.20 inch. Exact contract dimensions/area and conservative polygon/bounds
+are labeled separately in metadata.
+
+Walking identity includes **dev_walking=4** and **ravine_reservation=1**. Natural
+catalog generation remains v1 with stable IDs; query metadata separately identifies
+the reservation contract. New caches use the new identity. Existing character
+references from walking versions 1–3 require current-coordinate revalidation;
+compatibility is not permission to reuse old terrain or bypass exclusions.
+
+Per-feature lookup uses a conservative radius derived from hypot(A,B)/2+T plus
+polygon allowance. A source-context bound, derived once from maximum regional
+relief and the generator's dimension limits, also expands source-cell discovery.
+This is essential: updating only the per-feature filter would not establish
+complete lookup. Queries remain bounded; no per-chunk global catalog generation
+or new worker is introduced. Whole identical exclusion polygons are attached to
+each intersecting chunk, avoiding clipped-edge seam holes.
+
+### Exterior gameplay and diagnostics
+
+Only ravines replace whole-chunk natural-feature refusal with certified exterior
+plus blocked reservation. Existing slope/interpolation, biome, water, springs,
+wetlands, other unresolved features and persistent-overlay checks remain active.
+Whole-chunk background-field checks are retained; this is not a terrain
+certification redesign. Interior standing and GROUND resolution are refused.
+
+Full movement segments intersect polygon boundaries, including crossings whose
+endpoints are both outside. Boundary contact is conservative; parallel exterior
+travel and routes around it remain possible where independently certified.
+APPROACH continuously resolves the nearest represented perimeter and stops
+outside, within the existing two-inch arrival tolerance. The message is:
+
+> Unresolved ravine boundary; descent/crossing safety is unknown.
+
+RAW has separate local natural-hazard diagnostics: feature ID/kind, contract and
+version, W/L/H meaning, angle/convention, A/B/T, exact dimensions/area/radius,
+collision polygon/bounds/approximation, nearest boundary point and distance/bearing,
+certification and hazard. **perceived=false** remains explicit. Regional diagnostic
+targets use reservation boundaries without claiming LOS or a visible rim.
+Existing water geometry, navigation and messages remain unchanged.
+
+Existing GROUND placement audits flag unresolved geography for review; no object
+or character is silently moved. A character already inside an expanded reservation
+fails current-position validation and requires an explicit administrative decision.
+ABSOLUTE heights remain absolute, not ground-compatibility proof. Object footprints
+still need object-specific review; structure blockers remain. Admin JUMP retains
+endpoint-certified teleport semantics and cannot place its destination inside
+the reservation; no ravine jumping/crossing mechanic is implemented.
+
+### Exact regression and measured cost
+
+`867359018957601:C:natural:v1:site:7502:0:1` retains W=307.48, L=614.96 and
+H=219.64 feet. A=614.96, B=500.776, T=54.91 feet; outer dimensions
+**724.78×610.596 feet**, exact area **10.100082 acres**, enclosing radius
+**451.442598 feet** before conservative collision allowance. None is hard-coded.
+Chunks **[11560,68], [11560,69], [11559,69]** generate successfully with blocked
+reservation and independently certified exterior. Expanded-edge lookup, fresh
+source reproduction, through-crossing, exterior routes, RAW and actual game
+APPROACH are covered by local tests. Live acceptance awaits Thomas's deployment.
+
+Local Windows measurements: no-ravine warm generation median 384.3→389.4 ms;
+certificate 23.63→23.88 ms. Ravine certificate medians 22.0–22.3→23.0–23.3 ms;
+new successful full generation 388–391 ms. Old ravine calls **refused** at ~22 ms,
+so that is not a successful-generation performance comparison. Cached alongside
+collision median ~0.30 ms, crossing ~0.16 ms, geometry construction ~0.17 ms.
+Twenty controller replays all stop outside about 1.05 inches from the boundary.
+These small local samples are not Linux/network/DB latency guarantees.
+
+Full suite: **309 passed, 13 warnings in 411.55s (0:06:51)**. Three fresh-process concurrency/session runs:
+**12 passed, 1 warning in 55.29s; 12 passed, 1 warning in 56.23s; 12 passed, 1 warning in 54.71s**. Changed-file lint passes; 55 pre-existing repository
+findings remain in untouched files/evidence. No tests overlapped timing runs.
+
+Failure counters are unchanged: cumulative failures can include repeated
+geography-unavailable attempts. Bounded records distinguish that category from
+unexpected exceptions; queue rejection is separate. A category alone is not a
+complete cause diagnosis. The historical 13 failures remain unexplained.
+
+No ravine descent, floor/wall movement, climbing, falling, crossing consequences
+or bridges exist. Other natural-feature classes are unchanged. Retain 500-foot
+chunks, 25-foot samples, current movement/stamina/time and bounded prewarm behavior.
+
 ## Bounded efficiency implementation (2026-09-27)
 
 **Implemented and locally verified; not deployed to DEV or PROD.** Private

@@ -90,3 +90,16 @@ The existing [world-design page](/CCMud.html) and [design-gap notes](/CCMUD_Hole
 ## Updating design
 
 Make focused edits to the authoritative record when an approved decision changes. Keep durable rationale beside the decision. Update dependent architecture only where affected, and update STATUS when development state changes. A major restructuring of the legacy design record is a separate task.
+
+## Ravine containment and exterior certification (2026-09-27)
+
+Thomas approved [Ravine Reservation Contract v1](hog.html#ravine-reservation-contract-v1-2026-09-27).
+It is a prospective permanent containment promise: all future ravine effects must
+fit inside its deterministic rotated rounded rectangle, returning deformation
+and gradient to background terrain by the outer boundary. Expansion requires a
+version change. Catalog H is a vertical construction budget, not surveyed depth.
+Current gameplay certifies qualifying exterior terrain while the entire reservation
+remains blocked. The safety boundary is not a perceived rim. No interior traversal,
+climbing, falling or crossing is approved by this milestone; other natural features
+retain their existing rules. The approved formula and version/placement requirements
+have one maintained home in HOG architecture, linked above.
