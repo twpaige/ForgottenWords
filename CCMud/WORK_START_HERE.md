@@ -48,9 +48,11 @@ Distinguish measured findings and settled design from implemented runtime behavi
 
 ## Current bounded HOG release
 
-Read [Ravine Reservation Contract v1](hog.html#ravine-reservation-contract-v1-2026-09-27)
-and [current status](status.html) before further Step 10 changes. Exterior-only
-ravine certification is implemented; deployment and live acceptance remain separate.
-Its study and release evidence are retained under private
-`docs/evidence/ravine-reservation-v1/`; see the [evidence index](evidence.html).
-Do not broaden this into another natural-feature release before DEV acceptance.
+Read [Wetland Footprint v1](hog.html#wetland-footprint-v1-2026-09-27),
+[current status](status.html) and the [release report](https://github.com/twpaige/Crown-Call/blob/3812799921c4fa5ecfaef070fd82fcaf36d861d9/docs/wetland-footprint-v1-release.md) before further
+Step 10 work. Ordinary wetlands use a deterministic traversable ellipse; water,
+springs and Ravine Reservation Contract v1 remain independent. The prior wetland
+study is preserved in private `docs/evidence/wetland-footprint-v1/` and indexed in
+[evidence](evidence.html); its earlier algorithm recommendation is superseded.
+Thomas deploys DEV separately through the normal Linux gate, then verifies the
+reported JUMP and an interior-marsh location. No automatic game deployment occurs.

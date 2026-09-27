@@ -65,3 +65,13 @@ diagnostics; it does not deploy the game or adopt coarse sampling/time changes.
 measurements/tests. Private repository access is required. The study was not
 repeated; approved conclusions became the versioned contract in HOG architecture.
 The original Step 10 efficiency and terrain-sampling reports remain unchanged.
+
+## Wetland Footprint v1
+
+[Release report](https://github.com/twpaige/Crown-Call/blob/3812799921c4fa5ecfaef070fd82fcaf36d861d9/docs/wetland-footprint-v1-release.md) and [evidence](https://github.com/twpaige/Crown-Call/tree/3812799921c4fa5ecfaef070fd82fcaf36d861d9/docs/evidence/wetland-footprint-v1) at private code revision
+`3812799921c4fa5ecfaef070fd82fcaf36d861d9` preserve the full wetland investigation, 2,554 generated records,
+live source capture and diagnostic sensitivity results, plus separate simple-ellipse
+measurements, reproduction driver and final regression/concurrency logs. Private
+repository access is required. The investigation's hydrology-guided recommendation
+is superseded by Thomas's explicit traversable ellipse decision, maintained in
+[HOG](hog.html#wetland-footprint-v1-2026-09-27). No large calibration study was repeated.

@@ -11,6 +11,90 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 * Contents
 {:toc}
 
+## Wetland Footprint v1 (2026-09-27)
+
+**Implemented and locally verified; not automatically deployed.** Private code/evidence
+revision `3812799921c4fa5ecfaef070fd82fcaf36d861d9`. Read the [release report](https://github.com/twpaige/Crown-Call/blob/3812799921c4fa5ecfaef070fd82fcaf36d861d9/docs/wetland-footprint-v1-release.md) and [preserved evidence](https://github.com/twpaige/Crown-Call/tree/3812799921c4fa5ecfaef070fd82fcaf36d861d9/docs/evidence/wetland-footprint-v1).
+This section supersedes earlier wetland-refusal descriptions. Ravine Reservation
+Contract v1, springs, water and unrelated hazards retain their existing rules.
+
+### Traversable game geography
+
+Ordinary marsh, swamp, bog, wet meadow and seasonal variants are traversable terrain
+classifications, not automatically dangerous water, unstable footing or exclusions.
+Wetland Footprint v1 deliberately defines simple deterministic game geography rather
+than recovering a nonexistent saturation polygon. There is no hydrological growth,
+flood fill, drainage orientation or groundwater simulation in the footprint.
+
+Keep each existing stable ID, center, generated area A, subtype and seasonal flag.
+A is **gross wetland-complex area**: represented lakes/channels inside it retain
+independent water rules, and do not cause compensating ellipse expansion.
+
+### Exact shape contract
+
+For label `aspect` or `orientation`, SHA-256 hash UTF-8
+`wetland_footprint:1:{stable ID}:{label}`; interpret the first 8 bytes as unsigned
+big-endian, shift right 11, and divide by 2^53. Each u is in [0,1).
+R=1.25+0.75*u_aspect; theta=180*u_orientation degrees. R is semi-major/semi-minor
+ratio, bounded by the approved 1.25-2.00 range. Orientation is **counterclockwise
+from +X along the major axis**, not a gameplay compass bearing.
+
+With A in square miles, a=sqrt(A*R/pi), b=sqrt(A/(pi*R)). Full dimensions are 2a by
+2b and pi*a*b=A. Translate the coordinate and rotate into local axes; membership
+is (x/a)^2+(y/b)^2 <= 1+1e-8. Boundary contact is included; tolerance extends generated
+footprints less than about 0.001 inch, independently of the terrain lattice.
+Mathematical ellipse area remains A. No coarse raster or polygon determines membership.
+
+Rotated half-bounds are hypot(a*cos(theta),b*sin(theta)) and
+hypot(a*sin(theta),b*cos(theta)), padded by sqrt(1+1e-8). Exact chunk intersection
+checks normalized rectangle-edge minima plus ellipse-center containment, not just
+bounding-box overlap. Source discovery expands separately by the maximum possible
+semi-major axis sqrt(12.03*2/pi) including tolerance. Runtime/source-cell seams do
+not clip footprints; water connector refinement is unchanged. Existing bounded
+queries may require a smaller viewport if the expanded source set exceeds 64 cells.
+
+### Runtime, RAW and identity
+
+Whole-guard wetland refusal is removed. Ordinary background terrain still must pass
+all independent grade, interpolation, biome, coast, water, spring, natural-hazard
+and placement checks. Chunk wetland metadata and exact surface membership preserve
+the underlying biome. Crossing an ordinary marsh boundary does not stop movement.
+Overlapping footprints retain all distinct IDs sorted deterministically; no costly
+merging or subtype precedence is introduced. Explicit water remains independently
+blocked under its existing safety contract. Playas stay in the lake/water system.
+
+Seasonal metadata does not change the fixed ellipse. **No speed/stamina penalty,
+mount/wagon effect, dangerous mud/deep-pool model or seasonal state change exists.**
+Existing occupants and objects are not automatically moved because they are in marsh;
+no migration is introduced. Springs remain a separate unresolved feature class.
+
+Identity adds `wetland_footprint=1` to regional sampling/walking/cache dependencies;
+`dev_walking=4`, `ravine_reservation=1` and local hydrology=3 remain. Historical
+walking identities require current-coordinate revalidation, not stale cache reuse.
+Default identity: `0aafbfa9e975252672aa4734f03973d82bc99e32d57b751472c641ed6211a86e`. Stable wetland feature IDs do not change.
+
+RAW exposes all current membership IDs and up to eight compact local ellipse records
+from ready nearby chunks, with an omitted count. Records include ID/subtype/version,
+center/gross area, ratio, geometry angle/convention, dimensions/bounds, seasonal flag,
+inside/outside and perceived=false. No sampled boundary coordinates or expensive
+per-LOOK generation are added. Normal underfoot facts retain biome plus memberships.
+The admin map draws and selects the same ellipse. General RAW/DEBUG redesign is deferred.
+
+### Live acceptance and evidence
+
+`867359018957601:wetland:5822:80` retains area 10.738035272632617 square miles. Its
+aspect is 1.9673120430452131; angle 139.09105493907856 degrees CCW from +X; full dimensions
+5.186257760372709 by 2.6362151234253983 miles. The prior `JUMP SOUTH 500` destination
+`[69363083,-31266049]` in chunk `[11560,-5212]` is outside and certifies locally.
+Rounded anchor `[69588139,-31352317]` is inside marsh and also certifies locally.
+No test coordinate is special-cased. Thomas must separately deploy through the
+unchanged Linux pytest/migration/activation/health gate, then verify JUMP and RAW.
+Local test/measurement details and limitations live in the release report.
+
+The earlier 2,554-record investigation and raw evidence are retained privately.
+Its hydrology-guided recommendation is historical and superseded by this explicit
+simple-ellipse decision; do not repeat that study to rediscover the approved scope.
+
 ## Ravine Reservation Contract v1 (2026-09-27)
 
 **Implemented and locally verified; not automatically deployed.** The bounded
@@ -85,7 +169,8 @@ each intersecting chunk, avoiding clipped-edge seam holes.
 
 Only ravines replace whole-chunk natural-feature refusal with certified exterior
 plus blocked reservation. Existing slope/interpolation, biome, water, springs,
-wetlands, other unresolved features and persistent-overlay checks remain active.
+other unresolved features and persistent-overlay checks remain active. Ordinary
+wetlands now follow Wetland Footprint v1 above.
 Whole-chunk background-field checks are retained; this is not a terrain
 certification redesign. Interior standing and GROUND resolution are refused.
 
@@ -442,8 +527,9 @@ The old 2,000-foot administrative stop is removed from runtime chunks. Admission
 requires dry ground outside represented water exclusions, no unresolved coast or
 regional macro-lake/natural-feature extent,
 no unresolved vegetation transition, grades no greater than 5%, and patch-center
-error no greater than 0.25 inch against the continuous field. Springs/wetlands in
-the two-mile guard survey conservatively deny certification. These are certificate
+error no greater than 0.25 inch against the continuous field. Springs in
+the two-mile guard survey conservatively deny certification; ordinary wetlands
+follow Wetland Footprint v1 rather than whole-guard refusal. These are certificate
 restrictions, not newly invented global hazard thresholds. Unknown, late or failed
 chunks stop travel; `direction!` cannot bypass unavailable geography. Expanded
 chunks are disposable in the existing bounded cache; all Zone C is never materialized.
@@ -544,7 +630,7 @@ current velocity. Existing data does not support those claims. Starting inside a
 exclusion is refused; ordinary travel stops at the last safe integer coordinate
 before its boundary. A water warning uses the existing scoped hazard contract, but
 `direction!` remains blocked without an approved consequence consumer. Regional
-macro-lakes, coasts, springs, wetlands and unresolved natural-feature extents retain
+macro-lakes, coasts, springs and unresolved natural-feature extents retain
 their previous conservative refusal. No swimming/drowning/current rule is invented.
 
 Nearby ready chunks contribute at most eight admin RAW water diagnostics: stable

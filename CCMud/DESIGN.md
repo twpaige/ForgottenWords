@@ -103,3 +103,16 @@ remains blocked. The safety boundary is not a perceived rim. No interior travers
 climbing, falling or crossing is approved by this milestone; other natural features
 retain their existing rules. The approved formula and version/placement requirements
 have one maintained home in HOG architecture, linked above.
+
+## Ordinary wetlands and simple footprints (2026-09-27)
+
+Thomas approved [Wetland Footprint v1](hog.html#wetland-footprint-v1-2026-09-27):
+a deterministic area-preserving ellipse creates stable game geography. Ordinary
+marsh, swamp, bog and wet meadow are traversable classifications; neither proximity
+nor membership implies unsafe water or unknown footing. Existing explicit water,
+springs, ravines and independent hazards retain their own contracts. Gross area,
+stable seasonal footprint, overlap and version semantics are maintained in HOG.
+No movement penalty, stamina/mount/wagon effect or seasonal state change is implemented.
+No persistent occupant/object is relocated merely for wetland membership.
+This deliberate gameplay decision supersedes the investigation's more elaborate
+hydrology-guided proposal; it does not authorize broader geography redesign.
