@@ -1,12 +1,33 @@
 ---
 title: Current status
-description: Water Movement v1 implemented and tested; manual DEV deployment awaits review.
+description: Water Movement v1 DEV live-test cleanup; stationary observations and completion prose corrected.
 reviewed: 2026-09-28
 nav: status
 permalink: /CCMud/status.html
 ---
 
 ## Current bounded phase
+
+Thomas reports Water Movement v1 baseline `3e8f5c74fe3def301dbbac87e3c06578e161465a`
+deployed and manually verified on DEV against a real major river. Core entry, modes,
+current displacement, settings and automatic bank-to-bank transitions worked.
+This follow-up preserves those mechanics and fixes presentation only:
+
+- Automatic movement observations require changed accepted coordinates; stationary
+  FLOATING produces no periodic travel/RAW output. LOOK/STATUS and safety messages remain.
+- STOP swimming emits one clear transition to floating, without a generic stop message.
+- ENTER-water completes with ordinary prose using the resolved water feature kind.
+
+Cleanup implementation pushed: `02140228843edde84a88a71582addbd5c5efd43f`.
+Focused water/travel/world tests: **119 passed**, 1 upstream warning, 5.06s.
+Full suite: **458 passed**, 13 upstream deprecation warnings, **399.74s**; no skips
+or expected failures reported. Changed-file Ruff, whitespace and browser checks pass.
+
+No certification, geometry, current physics, stamina, depth or auto-transition rules
+changed. No migration added. This cleanup performs **no DEV/PROD deployment** and
+runs no cc-update. Thomas manually deploys the reviewed fix.
+
+## Water Movement v1 implementation baseline
 
 Water Movement v1 is implemented and pushed at private commit
 `bb6c15eb0280611f676b9d7eef3d1ca5e9830791`, from baseline
@@ -28,7 +49,7 @@ Character mode and default-OFF AUTOWADE/AUTOSWIM are persisted by additive migra
 normal elapsed-time offline rest applies with no offline drift, and floating resumes
 on reconnect. No offline tick loop, drowning or knockdown mechanics are added.
 
-## Verification
+## Baseline verification
 
 Final full suite: **449 passed**, **13 upstream deprecation warnings**, **431.68s**;
 no skipped/expected failures reported. Focused water/travel: **91 passed**, 1 warning,
@@ -47,7 +68,7 @@ FLOATING **162.213**. Seven batches of 1000 calls, run after pytest; excludes co
 geography, database, network, observation rendering and live load. This is local CPU
 evidence, not a live player-capacity claim.
 
-## Environment and next action
+## Baseline release context (historical)
 
 **No DEV deployment. No PROD deployment. No cc-update invocation.** Active live runtime
 revision was not checked. Thomas reviews the implementation report before manually

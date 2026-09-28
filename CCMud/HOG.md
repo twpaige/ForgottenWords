@@ -13,6 +13,16 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 
 ## Water Movement v1 (2026-09-28)
 
+FLOATING does not itself imply geographic movement or periodic travel observations.
+Automatic movement observations require a changed accepted authoritative position since
+the previous movement observation (or initial position before the first). Stationary
+shallow/zero-current floating and certification-blocked drift produce no periodic
+travel/RAW output. Explicit LOOK/STATUS, transitions and safety messages remain available;
+observations resume after accepted displacement resumes. STOP while SWIMMING says
+"You stop swimming and begin floating." without a generic stop message. ENTER-water
+completion says "You wade into the river and stop." (using the resolved feature kind),
+without internal geometry/certification language. These are presentation fixes only.
+
 The server's existing TravelController now owns LAND, WADING, SWIMMING and FLOATING.
 This supersedes ordinary <=3-foot water walking; certification is geometry, not
 permission. HOG geography, the 25-foot depth cap, deterministic currents, ground Z,
