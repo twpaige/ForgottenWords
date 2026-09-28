@@ -34,7 +34,7 @@ These are the documented current source-level commands. Release and feature gate
 
 | Family | Commands | Current meaning |
 | --- | --- | --- |
-| Observe | `LOOK` | Inspect the local world. Current HOG LOOK and later Cormac descriptions must describe authoritative observations, not invent distant visibility. |
+| Observe | `LOOK`, `L`, `LOOK BRIEF`, `LOOK NORMAL`, `LOOK MAXIMUM` | Cormac v1 describes local wilderness geography with a stable title/body. Verbosity is a session preference, initially NORMAL. Admin RAW remains separate. Temporary ordinary local perception does not imply distant certified LOS. |
 | Travel direction | `N`, `NE`, `E`, `SE`, `S`, `SW`, `W`, `NW` and full direction names; `TRAVEL <0–359>` | Set a continuous compass heading. North is 0°, east is 90°. |
 | Travel pace | `TRUDGE`, `WALK`, `JOG`, `RUN`, `SPRINT` | Select land pace, distinct from direction. |
 | Stop | `STOP` | Stop active voluntary travel; when swimming, enter FLOATING. Floating does not cancel current. |

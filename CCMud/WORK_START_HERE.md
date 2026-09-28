@@ -49,6 +49,8 @@ Distinguish measured findings and settled design from implemented runtime behavi
 
 ## Current bounded HOG release
 
+Ordinary wilderness LOOK now uses [Cormac v1](hog.html#cormac-v1-2026-09-28), with stable titles and BRIEF/NORMAL/MAXIMUM session verbosity. Admin RAW remains separate.
+
 Read [Water Movement v1](hog.html#water-movement-v1-2026-09-28) and [Status](status.html).
 The server now implements explicit WADE/SWIM/FLOAT modes, persisted SET settings,
 current displacement, STATUS and deliberate ENTER-water behavior. Ordinary <=3-foot

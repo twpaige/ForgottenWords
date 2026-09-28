@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Riffles no longer block otherwise certified waterway chunks; manual DEV release remains separate.
+description: Cormac v1 provides stable, factual wilderness LOOK prose; game deployment remains separate.
 reviewed: 2026-09-28
 nav: status
 permalink: /CCMud/status.html
@@ -8,97 +8,52 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Riffles are now classified as descriptive/nonblocking in startup and lazy walking
-certification. Their natural-feature metadata remains unchanged; represented waterway
-geometry continues to govern traversal. Both previously refused chunks `(11700,-5250)`
-and `(11699,-5250)` for seed `867359018957601` certify under the general rule.
-No feature-ID or chunk exception, new geometry, water mechanics or retry change.
-Other unsupported features remain fail-closed; ravine reservations are unchanged.
+Cormac v1 starts from private baseline `3012bee` (including the newer command-reference
+handoff commits). It adds a small deterministic classification/narration layer to the
+existing wilderness LOOK command. HOG, water physics, certification and movement are
+unchanged. Read the [Cormac contract](hog.html#cormac-v1-2026-09-28) and [command review](commands.html).
 
-Implementation pushed: `f4892b399db8e7d37ac91ece4f1965c91124c2fb`, based on
-`8911c3cdbb8d2b8d340095512470d81f3d71fd16`. Focused riffle/ravine/dry/water suites:
-**134 passed**, 1 upstream warning, 114.87s. Full suite: **465 passed**, 13 upstream
-deprecation warnings, **443.11s**; no skips or expected failures reported.
-Changed-file Ruff and whitespace checks pass. Seven new cases include both real chunks,
-retained metadata/depth/current, general riffle eligibility and retained unsupported-feature blocking.
+LOOK supplies a playerless descriptive title/body. `LOOK BRIEF|NORMAL|MAXIMUM` selects
+a session preference, initially NORMAL. Stable descriptive scenes reuse cached prose;
+small numeric changes and threshold jitter do not continually rewrite the description.
+Local water geometry decides inside-versus-near-water. Nearby HOG candidates use the
+explicit temporary ordinary-perception assumption; diagnostic unavailable LOS is not
+interpreted as invisibility. No distant certified sight or invented atmosphere is claimed.
+Admin RAW remains separate and available. Periodic travel narration is unchanged.
 
-No DEV/PROD deployment and no cc-update invocation. Thomas deploys the reviewed
-commit manually. The previous live-test cleanup and release evidence follow.
+Implementation pushed: `502bb2da3b280062fcb10d0269d66ab65850a954`.
+Final full suite: **488 passed**, 13 upstream deprecation warnings, **424.01s**, with
+no skipped/expected failures reported. Final Cormac/field/water suites: **130 passed**,
+1 warning, 13.98s. The 23 Cormac-specific cases cover stable scenes, meaningful changes,
+eight-point directions, distance/verbosity, water truth, RAW bypass, admin coordinates,
+cache bounds and hysteresis. Real HOG/API/RAW checks also passed (47 tests).
+Changed-file Ruff, whitespace and existing browser presentation checks pass.
 
-## Previous DEV live-test cleanup
+## Known limits and next action
 
-Thomas reports Water Movement v1 baseline `3e8f5c74fe3def301dbbac87e3c06578e161465a`
-deployed and manually verified on DEV against a real major river. Core entry, modes,
-current displacement, settings and automatic bank-to-bank transitions worked.
-This follow-up preserves those mechanics and fixes presentation only:
+No DEV or PROD deployment, cc-update invocation or live database migration occurred.
+Active live revision was not checked in this task. Local tests and documentation
+publication do not establish live gameplay verification. Review the implementation
+before a separately authorized/manual DEV release.
 
-- Automatic movement observations require changed accepted coordinates; stationary
-  FLOATING produces no periodic travel/RAW output. LOOK/STATUS and safety messages remain.
-- STOP swimming emits one clear transition to floating, without a generic stop message.
-- ENTER-water completes with ordinary prose using the resolved water feature kind.
+Cold source catalogs may initially omit a nearby landmark, then enrich the description
+when existing background queries finish. Uncertain bank geometry is omitted. Verbosity
+and recent scene/language memory are session/process-local. Sparse scenes stay short.
+CORMAC uses fixed templates; vocabulary and classification live in cormac.py. There is
+no LLM, grammar engine, weather invention, full travel narrator or new LOS implementation.
+Cormac v2 should refine allowed-feature/perception inputs and useful geographic detail,
+then introduce controlled wording variation only for genuinely changed scenes.
 
-Cleanup implementation pushed: `02140228843edde84a88a71582addbd5c5efd43f`.
-Focused water/travel/world tests: **119 passed**, 1 upstream warning, 5.06s.
-Full suite: **458 passed**, 13 upstream deprecation warnings, **399.74s**; no skips
-or expected failures reported. Changed-file Ruff, whitespace and browser checks pass.
+## Preserved gameplay baseline
 
-No certification, geometry, current physics, stamina, depth or auto-transition rules
-changed. No migration added. This cleanup performs **no DEV/PROD deployment** and
-runs no cc-update. Thomas manually deploys the reviewed fix.
+Water Movement v1 remains LAND/WADING/SWIMMING/FLOATING with persisted AUTOWADE/AUTOSWIM,
+0.1-second integration and configurable 15-second observations. Stationary FLOAT does
+not emit movement observations. Disconnect acts like STOP, with normal offline rest
+and no offline drift. Drowning and knockdowns remain deferred.
 
-## Water Movement v1 implementation baseline
-
-Water Movement v1 is implemented and pushed at private commit
-`bb6c15eb0280611f676b9d7eef3d1ca5e9830791`, from baseline
-`31f44e2bb6531a4b7aef49aebd147ccf47f832d3`.
-[Implementation report](https://github.com/twpaige/Crown-Call/blob/bb6c15eb0280611f676b9d7eef3d1ca5e9830791/docs/water-movement-v1.md)
-and [benchmark samples](https://github.com/twpaige/Crown-Call/blob/bb6c15eb0280611f676b9d7eef3d1ca5e9830791/docs/water-movement-v1-benchmark.json)
-require private repository access. Read the [current rules](hog.html#water-movement-v1-2026-09-28).
-
-The existing server controller owns LAND/WADING/SWIMMING/FLOATING, precise ordered
-water boundaries, current-vector displacement, stamina, WADE/SWIM/FLOAT/STAND/STOP,
-SET toggles, STATUS and deliberate ENTER-water. Geometry, generator output, ground Z,
-0.1-second integration and configurable 15-second observations remain unchanged.
-Ordinary <=3-foot water walking is superseded: WADING <4 feet, SWIMMING >1 foot,
-FLOATING any represented depth with current displacement only above 1 foot.
-Independent terrain/structure restrictions remain active; certification is not permission.
-
-Character mode and default-OFF AUTOWADE/AUTOSWIM are persisted by additive migration
-`20260928_01`. Disconnect explicitly acts like STOP: swimming becomes FLOATING,
-normal elapsed-time offline rest applies with no offline drift, and floating resumes
-on reconnect. No offline tick loop, drowning or knockdown mechanics are added.
-
-## Baseline verification
-
-Final full suite: **449 passed**, **13 upstream deprecation warnings**, **431.68s**;
-no skipped/expected failures reported. Focused water/travel: **91 passed**, 1 warning,
-4.53s, including 61 new parametrized water cases. Real seeded river/creek, dry movement,
-terrain/hazard, chunk and offline-recovery regressions pass. The earlier full run's
-single ravine-message regression was corrected and verified in the final full rerun.
-
-Changed-file Ruff and diff checks pass. Repository-wide Ruff has **55 pre-existing
-findings in 12 untouched baseline files**. Node browser syntax, automatic-stop prose,
-CLEAR isolation and server-authored water text rendering checks pass. Migration tests
-use isolated SQLite; PostgreSQL and browser gameplay require the later live release.
-
-Warm synthetic controller medians (microseconds/step): legacy optional-water-disabled
-dry **47.498**, water-aware dry **122.800**, WADING **143.871**, SWIMMING **158.393**,
-FLOATING **162.213**. Seven batches of 1000 calls, run after pytest; excludes cold
-geography, database, network, observation rendering and live load. This is local CPU
-evidence, not a live player-capacity claim.
-
-## Baseline release context (historical)
-
-**No DEV deployment. No PROD deployment. No cc-update invocation.** Active live runtime
-revision was not checked. Thomas reviews the implementation report before manually
-running the DEV release process, migrations and live browser/PostgreSQL verification.
-Documentation publication is separate from game deployment. PROD is not authorized.
-
-The next bounded verification is the manual DEV release and live testing of settings,
-manual entry, automatic transitions, current drift, STOP/exhaustion and reconnect in
-already certified HOG-generated channels. Unknown terrain stays inaccessible.
-Lakes/coasts/oceans, absolute water-surface/riverbed Z, drowning, knockdowns, swimming
-skills, new equipment penalties, rescue, boats and hydraulic realism remain deferred.
-Current never displaces WADING characters.
-
-Earlier investigation and release evidence remain accessible through [Evidence](evidence.html).
+Riffles remain descriptive/nonblocking; actual waterway geometry governs traversal.
+The prior riffle implementation `f4892b3` and pinned release `ea9e4d4` had 465 passing
+tests. Other unsupported natural features remain fail-closed, with existing ravine
+reservations and five-second retry behavior. Earlier release evidence is preserved in
+Git and [Evidence](evidence.html); Thomas reported successful manual DEV water testing
+on the earlier `3e8f5c7` baseline. This task does not independently reverify that deployment.

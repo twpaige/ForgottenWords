@@ -11,6 +11,77 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 * Contents
 {:toc}
 
+## Cormac v1 (2026-09-28)
+
+Cormac is a deterministic server-side wilderness LOOK narrator: **HOG supplies facts;
+Cormac classifies and describes them.** It does not generate geography, decide movement
+permission, implement LOS, or call an LLM. The existing LOOK command and transport remain
+in use; ordinary prose gets a descriptive title and body. Admin `HOGDISPLAY RAW`, explicitly enabled admin coordinate diagnostics and
+periodic travel observations keep their existing diagnostic/presentation paths.
+
+`LOOK` defaults to NORMAL. `LOOK BRIEF`, `LOOK NORMAL`, and `LOOK MAXIMUM` (also `L`)
+select a session preference; following plain LOOK uses it. Disconnect clears it.
+There is no database migration or new persistent preference framework. Targeted object
+LOOK remains a separate future command milestone.
+
+The temporary input adapter assumes ordinary perception for nearby geographic features,
+using ready local water/restriction shapes and nearby candidates from the existing
+background discovery catalog. The default narration radius is 1,000 feet. Unavailable
+LOS and diagnostic perceived=false do not suppress these local geographic candidates.
+No distant 50-mile view, people, objects, or unaudited structures are promoted into prose.
+Cold geometry/catalog work is queued through existing bounded mechanisms, never awaited
+by LOOK; descriptions can gain a landmark when its source becomes ready. Certification
+and physical safety gates remain unchanged. A future perception layer should replace
+candidate selection and continue supplying the same immutable Geography/Landmark input.
+
+Local Waterway Geometry membership, depth and current are authoritative; stale top-level
+RAW water strings are not narration inputs. In-water descriptions come first, followed
+by local terrain and nearby landmarks. Prose is playerless: it describes the scene and
+what exists here without addressing "you". It invents no weather, species, sounds,
+smells, lighting, water color, rocks, mud or physical bank geometry. Unknown or ambiguous
+bank/egress distances are omitted. Existing floored depth prose is retained (1-6 feet;
+below 1 shallow; >=7 deep), rather than copying the reference example's near-three-foot
+rounding. Reliable existing deeper-water orientation is included at MAXIMUM.
+
+Classification lives in `src/crown_call/cormac.py`, not HOG. `ProseConfig` centralizes
+thresholds, distance words, local radius and cache bounds. Initial defaults:
+
+| Fact | Descriptive classification |
+| --- | --- |
+| Tree cover | <15% open grassland; 15-<50% light woodland; 50-<75% woodland; >=75% dense woodland, for grass/woodland surfaces |
+| Absolute slope | <0.5% nearly level; <5% gently sloping; <15% sloping; otherwise steep |
+| River/stream width | >=100 ft broad |
+| Distance | <25 ft a few feet; <75 roughly fifty; <150 roughly a hundred; <300 roughly two hundred; <750 roughly five hundred; otherwise roughly a thousand within the local radius |
+| Direction | Eight compass points, nearest 45-degree sector |
+| Current | Existing qualitative Water Movement v1 bands; no exact mph |
+
+Simple hysteresis holds the previous distance bucket within 10 feet of an edge, tree
+cover within 3 percentage points, slope within 0.1 percentage points, current within
+0.05 mph, detailed tree-cover estimates within 2 percentage points of ten-point rounding boundaries, and compass direction an extra 3 degrees beyond its ordinary sector. Water
+membership and depth descriptions are not delayed by hysteresis. These are descriptive
+choices, not changes to terrain speed, swimming thresholds or current physics.
+
+BRIEF includes immediate terrain/water and the nearest landmark. NORMAL adds vegetation
+context, local current/channel orientation and up to two nearby landmarks. MAXIMUM adds
+up to four landmarks, rounded tree-cover estimates and reliable deeper-water orientation. Sparse scenes stay short;
+no word-count padding. A richer scene should supply more useful detail, not atmosphere.
+
+A scene signature contains descriptive terrain/slope, grassland context, selected
+landmark identities and classified relationships, and local water/depth/current facts.
+Raw coordinates, elevation fluctuations, diagnostic flags, exact distances and hashes
+are excluded. Same signature plus verbosity returns the same cached Description.
+Small changes such as 188->181 feet, 37->38% tree cover and 109->106 degrees stay stable;
+water entry/exit, significant terrain changes and landmark changes update the scene.
+The process cache and per-character scene memories are bounded at 256 entries each.
+Recent scene signatures and recent generated language are separate eight-entry deques;
+these are expansion hooks, not a grammar/variation engine. Cache hits do not vary prose.
+
+Expand vocabulary/thresholds in ProseConfig and the small renderer, and geographic inputs
+in HogGame.describe_look. Cormac v2 should first improve the allowed-feature/perception
+input and useful landmark detail, then add deterministic language variation for genuinely
+new scenes. Full travel narration, advanced LOS, weather prose and LLM generation are
+outside v1. No game deployment accompanies documentation publication.
+
 ## Water Movement v1 (2026-09-28)
 
 Riffles are descriptive, nonblocking natural features. Their metadata remains available
