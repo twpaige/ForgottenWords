@@ -48,11 +48,11 @@ Distinguish measured findings and settled design from implemented runtime behavi
 
 ## Current bounded HOG release
 
-Read [Wetland Footprint v1](hog.html#wetland-footprint-v1-2026-09-27),
-[current status](status.html) and the [release report](https://github.com/twpaige/Crown-Call/blob/3812799921c4fa5ecfaef070fd82fcaf36d861d9/docs/wetland-footprint-v1-release.md) before further
-Step 10 work. Ordinary wetlands use a deterministic traversable ellipse; water,
-springs and Ravine Reservation Contract v1 remain independent. The prior wetland
-study is preserved in private `docs/evidence/wetland-footprint-v1/` and indexed in
-[evidence](evidence.html); its earlier algorithm recommendation is superseded.
-Thomas deploys DEV separately through the normal Linux gate, then verifies the
-reported JUMP and an interior-marsh location. No automatic game deployment occurs.
+Read [Waterway Geometry v1](hog.html#waterway-geometry-v1-2026-09-27), [status](status.html),
+and the [release report](https://github.com/twpaige/Crown-Call/blob/52723969e7103254dc20b543a0bae7da41d72880/docs/waterway-geometry-v1-release.md). Ordinary movement wades through <=3-ft channel water
+and stops before deeper water. Centerline/width, depth/current, exact membership and
+round joins are deterministic. Wetland ellipses and ravine reservations remain independent.
+Full evidence is preserved at private `docs/evidence/waterway-geometry-v1/`.
+Do not repeat earlier investigations to rediscover maintained decisions.
+Thomas deploys DEV separately through the Linux gate, then verifies the live river's
+bank-to-wading-to-stop behavior. No automatic game deployment or PROD authorization.

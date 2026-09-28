@@ -11,6 +11,87 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 * Contents
 {:toc}
 
+## Waterway Geometry v1 (2026-09-27)
+
+**Implemented and locally tested; no automatic game deployment.** Code/evidence
+revision `52723969e7103254dc20b543a0bae7da41d72880`; [full release report](https://github.com/twpaige/Crown-Call/blob/52723969e7103254dc20b543a0bae7da41d72880/docs/waterway-geometry-v1-release.md) and [reproduction evidence](https://github.com/twpaige/Crown-Call/tree/52723969e7103254dc20b543a0bae7da41d72880/docs/evidence/waterway-geometry-v1).
+This section supersedes older channel square-cap, unknown-depth and bank-stop descriptions.
+Lakes, springs, wetlands, ravines and unrelated terrain retain independent contracts.
+
+### Simple geometry and three-foot wading
+
+Thomas authorizes ordinary ground movement through water **up to and including 3.0 ft deep**.
+Greater depth is swimming territory; this release stops walking before entry and says
+that the water ahead is too deep to wade safely. Confirmation cannot override it.
+No swimming, drowning, breath, drift, resistance, knockdown, boats, bridges, fords,
+new stamina penalty or character swimming checks are implemented.
+
+Use each existing ordered generated centerline and `width_feet` from the unchanged
+width generator: max(0.2,2.5*sqrt(mean four-season discharge)). Preserve class, stable ID
+and discharge metadata. Gameplay depth/current are not independently inferred from CFS.
+For W in feet, R=W/2 and shortest polyline distance d:
+
+- Maximum depth D=min(W/5,30) ft. The 30-ft cap is intentional.
+- P=max(0,1-(d/R)^2). Local depth=D*P and current=Vmax*P inside; outside values are null.
+- Banks are analytic radius-R capsules around the segments, with round joins/endcaps.
+- D<=3 permits crossing the whole reach; D>3 blocks the capsule core of radius
+  R*sqrt(1-3/D). Swept segment tests prevent skipping a deep strip between endpoints.
+- Overlapping reaches form a union; depth/current take maxima, never sums. Largest-current
+  contributor supplies aggregate direction with stable-ID tie breaking; all contributors remain available.
+
+Hash UTF-8 `waterway_geometry:1:{stable ID}:current` with SHA-256. Read the first
+8 bytes unsigned big-endian, shift right 11, divide by 2^53, and interpolate mph ranges:
+rivulet/run and creek 0.25-1; stream 0.5-2; river 1-3; major river 2-5.
+The hash never reaches the upper endpoint. No runtime-randomized hashing.
+Downstream direction is the nearest ordered segment tangent, bearing atan2(dx,dy)
+modulo 360, with unit and mph vectors. Direction can change at segment joins;
+scalar profiles remain continuous. This is game geography, not confluence hydraulics.
+
+### Runtime and limits
+
+Walking discovers full local paths with bounded source-cell padding and exact capsule
+intersection; viewport refinement cannot switch physical walking geometry. Existing
+source-cell entry/outlet midpoints already join. Full immutable shapes cross chunk seams
+without clipping or rasterization; queries/caches retain their existing bounds.
+Numerical contact tolerance is 1e-6 inch, not a gameplay depth allowance.
+
+`Chunk.waterway_facts` queries local geometry without granting standing permission.
+Shallow standing retains the existing certified ground Z and records point-specific water
+membership. No absolute river stage or carved bed Z is inferred. This limitation matters
+for future systems needing vertical water placement. Ordinary biome speeds and stamina
+are unchanged; the generic shallow-water speed table is not newly activated.
+APPROACH targets the actual bank; continuing WALK may wade beyond it.
+Independent lake/spring/natural/biome/coast/grade/structure checks remain authoritative.
+
+RAW retains up to eight nearby ready-water records with width, local/max depth and current,
+bearing/vector, membership, wading permission and version; no sampled channel polygons.
+Outside distance is exact bank distance. Inside distance=0 means membership; profile
+clearance and a nearest reach-bank projection are not surveyed union-egress geometry.
+Diagnostic candidates still do not establish perception or LOS.
+
+Identity adds `waterway_geometry=1`; dev_walking=4, ravine_reservation=1,
+wetland_footprint=1 and local_hydrology=3 remain. Stable feature IDs are unchanged.
+Current default identity: `fa7832319e2551c9310fb52c00f79b762ab3a05887bb9e70094c4453855aae0f`. Historical occupants revalidate
+under current geometry; prior caches do not certify the new generation.
+No floods, seasonal stages, dynamic banks, erosion, raster solver or hydraulic simulation.
+
+### Live river and speed finding
+
+`867359018957601:waterway:5822:89` has width 126.54709438328703 ft,
+maximum depth 25.309418876657407 ft, and deterministic maximum current
+4.927746122474707 mph. The previously reported 201.70288094248087-degree bearing
+is segment 1; eastward entry uses segment 0 at 199.08331474263062 degrees.
+From [70282734,-31352345], the bank is approximately 864.0724 ft east and the
+3-ft limit is approximately 868.1656 ft east. Local integration stops at
+[70293151,-31352345], just under 3 ft; the next eastward inch is refused.
+Expected behavior: dry ground, bank, shallow water, progressively deeper wading, stop.
+The old reproduction also allowed approach to the bank: its 810-ft RAW value was
+observer-to-diagnostic geometry distance, not evidence of an 810-ft exclusion setback.
+
+The reported 0.85 speed factor is the existing light_woodland policy for Wooded grassland
+at that coordinate: WALK 2.55 mph, TRUDGE 0.85 mph. Wetland membership does not apply it.
+No speed rule was changed; broader balance would be a separate decision.
+
 ## Wetland Footprint v1 (2026-09-27)
 
 **Implemented and locally verified; not automatically deployed.** Private code/evidence
@@ -60,8 +141,8 @@ all independent grade, interpolation, biome, coast, water, spring, natural-hazar
 and placement checks. Chunk wetland metadata and exact surface membership preserve
 the underlying biome. Crossing an ordinary marsh boundary does not stop movement.
 Overlapping footprints retain all distinct IDs sorted deterministically; no costly
-merging or subtype precedence is introduced. Explicit water remains independently
-blocked under its existing safety contract. Playas stay in the lake/water system.
+merging or subtype precedence is introduced. Explicit water retains its independent contract: modeled waterways permit up to
+3-ft wading under Waterway Geometry v1, while unresolved lakes remain blocked. Playas stay in the lake/water system.
 
 Seasonal metadata does not change the fixed ellipse. **No speed/stamina penalty,
 mount/wagon effect, dangerous mud/deep-pool model or seasonal state change exists.**
@@ -71,7 +152,7 @@ no migration is introduced. Springs remain a separate unresolved feature class.
 Identity adds `wetland_footprint=1` to regional sampling/walking/cache dependencies;
 `dev_walking=4`, `ravine_reservation=1` and local hydrology=3 remain. Historical
 walking identities require current-coordinate revalidation, not stale cache reuse.
-Default identity: `0aafbfa9e975252672aa4734f03973d82bc99e32d57b751472c641ed6211a86e`. Stable wetland feature IDs do not change.
+Historical wetland-release identity: `0aafbfa9e975252672aa4734f03973d82bc99e32d57b751472c641ed6211a86e`. Stable wetland feature IDs do not change.
 
 RAW exposes all current membership IDs and up to eight compact local ellipse records
 from ready nearby chunks, with an omitted count. Records include ID/subtype/version,

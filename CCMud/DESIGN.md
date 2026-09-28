@@ -69,9 +69,9 @@ objects survive. This supersedes any older implication that exploration freezes
 terrain. DEV now supports certified dry/gentle HOG walking with bounded ahead-of-travel
 materialization. Hazard consequences and unresolved terrain remain gated. Thomas
 chose admin-only RAW diagnostics for distant geography in the current milestone;
-certified distant LOS/player discovery remains separate. Inferred local channel and
-lake footprints may bound certified dry exterior ground, but unknown water depth,
-bed/bank geometry and crossing consequences remain blocked. No complete swimming or
+certified distant LOS/player discovery remains separate. Waterway Geometry v1 defines analytic channel banks, depth/current and ordinary
+wading up to and including 3 feet. Deeper channel water remains blocked until
+swimming exists. Inferred lake footprints retain unresolved-interior exclusion. No complete swimming or
 drowning design is inferred from discharge/width. Automatic safety stops explicitly
 say `You stop.` See the current Step 10
 exploration contract at the beginning of HOG for the accepted scope and limitations.
@@ -116,3 +116,15 @@ No movement penalty, stamina/mount/wagon effect or seasonal state change is impl
 No persistent occupant/object is relocated merely for wetland membership.
 This deliberate gameplay decision supersedes the investigation's more elaborate
 hydrology-guided proposal; it does not authorize broader geography redesign.
+
+
+## Waterway geometry and ordinary wading (2026-09-27)
+
+Thomas approved [Waterway Geometry v1](hog.html#waterway-geometry-v1-2026-09-27):
+existing centerline/width, depth min(width/5,30), simple analytic depth/current profiles,
+and deterministic class-based current. Ordinary ground movement may enter and traverse
+water <=3 ft deep; it stops before >3 ft. Deeper water is future swimming territory.
+Current/direction remain data, without forced drift or resistance. No new stamina,
+speed, swimming, drowning, boats, bridges or ford mechanics. The exact versioned
+formulas, source/join semantics, limits and live river values are maintained in HOG.
+Ordinary wetlands remain traversable; independent lakes/springs/ravines retain safety rules.

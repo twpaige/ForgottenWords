@@ -75,3 +75,12 @@ measurements, reproduction driver and final regression/concurrency logs. Private
 repository access is required. The investigation's hydrology-guided recommendation
 is superseded by Thomas's explicit traversable ellipse decision, maintained in
 [HOG](hog.html#wetland-footprint-v1-2026-09-27). No large calibration study was repeated.
+
+
+## Waterway Geometry v1
+
+[Release report](https://github.com/twpaige/Crown-Call/blob/52723969e7103254dc20b543a0bae7da41d72880/docs/waterway-geometry-v1-release.md) and [evidence](https://github.com/twpaige/Crown-Call/tree/52723969e7103254dc20b543a0bae7da41d72880/docs/evidence/waterway-geometry-v1) at private revision
+`52723969e7103254dc20b543a0bae7da41d72880` preserve before/after live geometry, old versus new eastward stops,
+chunk/profile timings, benchmark driver, regression/concurrency logs and tested-source hashes.
+Private repository access is required. Thomas's authoritative <=3-ft ordinary wading
+rule supersedes the initial bank-only plan. Earlier investigations remain unchanged.
