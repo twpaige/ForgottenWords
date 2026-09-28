@@ -28,6 +28,7 @@ The `/CCMud/` section belongs exclusively to the MUD. HOG and MUD operating rule
 | --- | --- |
 | [Current status](status.html) | Present development state, blockers, next actions, and verification |
 | [Game design](design.html) | Detailed MUD decisions and the preserved design record |
+| [Commands](commands.html) | Current commands and reviewed Shadows/SOI command adoption decisions |
 | [HOG investigation evidence](evidence.html) | Full Step 10 reports, measurements and private reproduction artifacts |
 | [Heart of Gold](hog.html) | World-generation architecture and engineering constraints |
 | [Development](development.html) | Operating instructions, testing, Git safety, and recovery |
