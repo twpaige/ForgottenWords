@@ -34,6 +34,12 @@ by LOOK; descriptions can gain a landmark when its source becomes ready. Certifi
 and physical safety gates remain unchanged. A future perception layer should replace
 candidate selection and continue supplying the same immutable Geography/Landmark input.
 
+Cormac v1.1 merges local/regional representations by authoritative HOG feature ID
+before landmark selection and rendering, preferring local geometry for relationships.
+Distinct IDs remain distinct even at identical distance/direction; distance bands still
+refresh as the character moves. Light-woodland titles use **Among Light Woodland**.
+Other title wording, prose caching, movement and RAW diagnostics are unchanged.
+
 Local Waterway Geometry membership, depth and current are authoritative; stale top-level
 RAW water strings are not narration inputs. In-water descriptions come first, followed
 by local terrain and nearby landmarks. Prose is playerless: it describes the scene and

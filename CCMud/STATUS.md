@@ -8,10 +8,14 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Cormac v1 starts from private baseline `3012bee` (including the newer command-reference
-handoff commits). It adds a small deterministic classification/narration layer to the
-existing wilderness LOOK command. HOG, water physics, certification and movement are
-unchanged. Read the [Cormac contract](hog.html#cormac-v1-2026-09-28) and [command review](commands.html).
+Cormac v1.1 is a narrow correction from private baseline `b5f282f`.
+Local lake shorelines and regional discovery previously supplied the same HOG identity
+twice because only waterway IDs entered the adapter's exclusion set. Local restrictions
+now use their authoritative feature ID and exclude matching regional entries; Cormac
+also deduplicates by ID before landmark selection. Distinct IDs remain distinct.
+Light-woodland titles now say **Among Light Woodland**. Dynamic distance bands, session
+verbosity, RAW/admin diagnostics, movement and water geometry are unchanged.
+Read the [Cormac contract](hog.html#cormac-v1-2026-09-28) and [command review](commands.html).
 
 LOOK supplies a playerless descriptive title/body. `LOOK BRIEF|NORMAL|MAXIMUM` selects
 a session preference, initially NORMAL. Stable descriptive scenes reuse cached prose;
@@ -21,18 +25,20 @@ explicit temporary ordinary-perception assumption; diagnostic unavailable LOS is
 interpreted as invisibility. No distant certified sight or invented atmosphere is claimed.
 Admin RAW remains separate and available. Periodic travel narration is unchanged.
 
-Implementation pushed: `502bb2da3b280062fcb10d0269d66ab65850a954`.
-Final full suite: **488 passed**, 13 upstream deprecation warnings, **424.01s**, with
-no skipped/expected failures reported. Final Cormac/field/water suites: **130 passed**,
-1 warning, 13.98s. The 23 Cormac-specific cases cover stable scenes, meaningful changes,
-eight-point directions, distance/verbosity, water truth, RAW bypass, admin coordinates,
-cache bounds and hysteresis. Real HOG/API/RAW checks also passed (47 tests).
-Changed-file Ruff, whitespace and existing browser presentation checks pass.
+Implementation pushed: `7ea60629ef00ace45b4d228f1ac0b12847f3298d`.
+Full suite: **495 passed**, 13 dependency deprecation warnings, **442.71s**.
+Focused Cormac/field/water suites: **137 passed**, 1 warning, **13.10s**.
+Seven new regression cases cover duplicate input IDs, local/regional lake identity and
+aliases, preservation of distinct lakes, stream/lake combinations, changing distances
+and dominant titles across movement. Existing verbosity, water, RAW/admin and stable
+scene tests remain passing. Changed-file Ruff, whitespace and browser presentation
+checks pass.
 
 ## Known limits and next action
 
 No DEV or PROD deployment, cc-update invocation or live database migration occurred.
-Active live revision was not checked in this task. Local tests and documentation
+Thomas reports Cormac v1 deployed and working in DEV. The active live revision was
+not independently checked in this corrective task. Local tests and documentation
 publication do not establish live gameplay verification. Review the implementation
 before a separately authorized/manual DEV release.
 
