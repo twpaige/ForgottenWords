@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Bounded water geometry integration; player-facing swimming remains deferred.
+description: Water Movement v1 implemented and tested; manual DEV deployment awaits review.
 reviewed: 2026-09-28
 nav: status
 permalink: /CCMud/status.html
@@ -8,50 +8,57 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-The September 28 water geometry integration starts from private reviewed baseline
-`b327df339ff7c6acffc73d6afce2d63e9d238c8f`, incorporating the existing Waterway
-Geometry v1 implementation at `5272396`. It corrects maximum depth to **25 ft**,
-adds ordered analytic bank/depth-contour events, and separates geometry certification
-from ordinary standing permission. Read the [current contract](hog.html#water-geometry-integration-2026-09-28).
+Water Movement v1 is implemented and pushed at private commit
+`bb6c15eb0280611f676b9d7eef3d1ca5e9830791`, from baseline
+`31f44e2bb6531a4b7aef49aebd147ccf47f832d3`.
+[Implementation report](https://github.com/twpaige/Crown-Call/blob/bb6c15eb0280611f676b9d7eef3d1ca5e9830791/docs/water-movement-v1.md)
+and [benchmark samples](https://github.com/twpaige/Crown-Call/blob/bb6c15eb0280611f676b9d7eef3d1ca5e9830791/docs/water-movement-v1-benchmark.json)
+require private repository access. Read the [current rules](hog.html#water-movement-v1-2026-09-28).
 
-The parabolic depth/current profile and stable current hashing remain unchanged.
-Cache identity uses waterway_geometry=2; previous occupants revalidate against current
-geometry. No HOG generator output, movement controller, ground Z, integration timing,
-observation timing, stamina, or player-facing water command changes are introduced.
-Ordinary movement still permits <=3-ft water and blocks deeper water. Certification
-of deeper water does not itself authorize movement. Unsupported lake/ravine geometry
-and independent terrain/structure hazards retain their safety checks.
+The existing server controller owns LAND/WADING/SWIMMING/FLOATING, precise ordered
+water boundaries, current-vector displacement, stamina, WADE/SWIM/FLOAT/STAND/STOP,
+SET toggles, STATUS and deliberate ENTER-water. Geometry, generator output, ground Z,
+0.1-second integration and configurable 15-second observations remain unchanged.
+Ordinary <=3-foot water walking is superseded: WADING <4 feet, SWIMMING >1 foot,
+FLOATING any represented depth with current displacement only above 1 foot.
+Independent terrain/structure restrictions remain active; certification is not permission.
+
+Character mode and default-OFF AUTOWADE/AUTOSWIM are persisted by additive migration
+`20260928_01`. Disconnect explicitly acts like STOP: swimming becomes FLOATING,
+normal elapsed-time offline rest applies with no offline drift, and floating resumes
+on reconnect. No offline tick loop, drowning or knockdown mechanics are added.
 
 ## Verification
 
-Implementation committed/pushed at `cf6450e90a3534e33782663f99cc71e891c999f4`.
-[Integration report](https://github.com/twpaige/Crown-Call/blob/c07999c5d5302d1c62007868aa836c40db64c96e/docs/water-geometry-integration.md)
-and [benchmark samples](https://github.com/twpaige/Crown-Call/blob/cf6450e90a3534e33782663f99cc71e891c999f4/docs/water-geometry-integration-benchmark.json).
+Final full suite: **449 passed**, **13 upstream deprecation warnings**, **431.68s**;
+no skipped/expected failures reported. Focused water/travel: **91 passed**, 1 warning,
+4.53s, including 61 new parametrized water cases. Real seeded river/creek, dry movement,
+terrain/hazard, chunk and offline-recovery regressions pass. The earlier full run's
+single ravine-message regression was corrected and verified in the final full rerun.
 
-Focused water suites: **49 passed**, 1 warning, 45.76s. Expanded query suite:
-**18 passed**, 0.17s. Full suite on final implementation: **387 passed**, 13 upstream
-deprecation warnings, 404.27s. Changed source/tests/benchmark pass Ruff.
+Changed-file Ruff and diff checks pass. Repository-wide Ruff has **55 pre-existing
+findings in 12 untouched baseline files**. Node browser syntax, automatic-stop prose,
+CLEAR isolation and server-authored water text rendering checks pass. Migration tests
+use isolated SQLite; PostgreSQL and browser gameplay require the later live release.
 
-Sequential warm benchmark after pytest: first entry **17.946 microseconds** versus
-**21.109** for the previous implementation; point sample **9.649**; all bank/1-ft/4-ft
-events **65.364**. Seven batches of 2000 calls replay the preserved real major river.
-These exclude terrain generation, database/network costs and live load testing.
-The real river has corrected center depth **25 ft**, unchanged center current
-**4.927746122474707 mph**, and ordered bank/1-ft/4-ft entry then exit events.
-Its current three-foot stop contour is **868.2179149109494 ft** east of
-[70282734,-31352345]. Historical measurements remain labeled separately.
+Warm synthetic controller medians (microseconds/step): legacy optional-water-disabled
+dry **47.498**, water-aware dry **122.800**, WADING **143.871**, SWIMMING **158.393**,
+FLOATING **162.213**. Seven batches of 1000 calls, run after pytest; excludes cold
+geography, database, network, observation rendering and live load. This is local CPU
+evidence, not a live player-capacity claim.
 
-## Environment and next phase
+## Environment and next action
 
-No DEV/PROD deployment, live database access or live gameplay verification is part
-of this pass. Active runtime revision is not checked here. Publication and automated
-tests are separate from game deployment; PROD has no release authorization.
+**No DEV deployment. No PROD deployment. No cc-update invocation.** Active live runtime
+revision was not checked. Thomas reviews the implementation report before manually
+running the DEV release process, migrations and live browser/PostgreSQL verification.
+Documentation publication is separate from game deployment. PROD is not authorized.
 
-Return this geometry integration for review before implementing WADE/SWIM/FLOAT,
-AUTOWADE/AUTOSWIM, SET/STATUS, water prose, stamina changes or current-driven movement.
-The next movement layer must apply its own mode policy to certified positions,
-handle enter/exit/touch events and strict depth comparisons, and compose chunk-local
-queries without duplicate seam events. Existing independent hazards remain mandatory.
-Lakes/coasts/oceans and absolute water-surface/riverbed Z remain outside this pass.
+The next bounded verification is the manual DEV release and live testing of settings,
+manual entry, automatic transitions, current drift, STOP/exhaustion and reconnect in
+already certified HOG-generated channels. Unknown terrain stays inaccessible.
+Lakes/coasts/oceans, absolute water-surface/riverbed Z, drowning, knockdowns, swimming
+skills, new equipment penalties, rescue, boats and hydraulic realism remain deferred.
+Current never displaces WADING characters.
 
 Earlier investigation and release evidence remain accessible through [Evidence](evidence.html).

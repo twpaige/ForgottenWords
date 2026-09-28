@@ -14,7 +14,91 @@ For the existing illustrated reading edition, see [CCMUD_Design.html](/CCMUD_Des
 
 The record begins with consolidated decisions C01–C11, followed by preserved numbered decisions. Read its reconciliation instructions before interpreting older entries. Old questions are historical records and do not automatically reopen a completed design interview.
 
+## Water Movement v1 (2026-09-28)
+
+The server's existing TravelController now owns LAND, WADING, SWIMMING and FLOATING.
+This supersedes ordinary <=3-foot water walking; certification is geometry, not
+permission. HOG geography, the 25-foot depth cap, deterministic currents, ground Z,
+0.1-second integration and configurable 15-second observations remain unchanged.
+
+| Mode | Precise legality | Geographic movement | Stamina |
+| --- | --- | --- | --- |
+| LAND | Certified dry terrain | Existing selected pace, terrain and slope | Existing rules |
+| WADING | Represented water, depth <4 ft | Existing pace; no current displacement | Existing ordinary movement rules |
+| SWIMMING | Represented water, depth >1 ft | 1 mph effort plus authoritative current vector | Existing JOG recovery/drain |
+| FLOATING | Any represented water depth | Current only above 1 ft; zero displacement at <=1 ft | TRUDGE recovery component; no movement drain |
+
+The deliberate 1-to-4-foot overlap preserves the chosen mode. Exactly 1 foot
+cannot be swum; exactly 4 feet cannot be waded. No feature label, minimum width,
+minimum duration, crossing-success heuristic or artificial loop prevention changes
+these rules. A narrow deep strip and repeated encounters with the same river are valid.
+Selected land pace persists through water; swimming uses its specified effort speed.
+Existing runtime travel-time conversion is retained; the separate future clock redesign
+is not implemented here.
+
+Commands are server-side: `WADE <direction>`, `WADE`, `SWIM <direction>`, `FLOAT`,
+`STAND`, `STOP`, `SET`, `SET AUTOWADE`, `SET AUTOSWIM`, `STATUS`, and `ENTER <water feature>`.
+WADE without a direction and STAND enter WADING without initiating movement when
+local depth permits. SWIM in shallow water explains an actual WADE command.
+FLOAT works even in an inch of represented water, but fails on dry land.
+STOP while swimming enters FLOATING; STOP while floating does not cancel current.
+Swimming exhaustion also enters FLOATING, visibly. Restart requires one integration
+interval of net JOG stamina. Floating recovery is the existing TRUDGE gross recovery
+component (90% of standing at current rules), without TRUDGE's movement drain.
+
+AUTOWADE and AUTOSWIM are persisted per-character booleans, both initially OFF.
+Plain SET lists them; each SET name toggles it. AUTOSWIM never implies AUTOWADE.
+With AUTOWADE OFF, ordinary travel stops before the bank; manual WADE authorizes
+entry. AUTOWADE ON continues LAND -> WADING. At 4 feet, AUTOSWIM ON with sufficient
+stamina continues WADING -> SWIMMING; otherwise stop before invalid water.
+At <=1 foot SWIMMING becomes WADING: continue with AUTOWADE ON, otherwise stop and
+explain WADE. With both enabled, direction survives LAND -> WADE -> SWIM -> WADE -> LAND.
+Manual wading with AUTOWADE OFF stops on exiting to land and needs a new direction.
+Automatic settings never select FLOATING.
+
+**Disconnect acts like STOP**, as explicitly approved: swimming becomes persisted
+FLOATING. No offline drift is simulated. Elapsed offline time applies normal resting
+recovery, capped at maximum; rapid reconnect cannot instantly restore stamina.
+Reconnect resumes floating/current behavior. Persisted swimming recovered after an
+unclean disconnect also becomes FLOATING. Offline characters receive no recovery ticks.
+
+ENTER resolves a nearby represented channel by kind or stable feature identity,
+reports ambiguity rather than guessing, and uses ordinary checked movement to the
+first representable wadeable point just inside its bank. It stops there in WADING;
+it neither teleports to the center nor crosses the whole feature. Unsupported water
+nouns do not create geometry. Admin JUMP uses endpoint certification and explicit
+wading legality (<4 feet), preserving the existing placement-only scope.
+
+Ordered Waterway Geometry events intercept banks and 1/4-foot contours inside each
+movement interval, including exact four-foot touches and narrow bands. Full shapes
+are gathered from a bounded certified chunk corridor and deduplicated by feature,
+preserving repeated crossings and seam continuity. No new intersection mathematics
+or water sampling grid is introduced. Independent cliffs, structures, unsupported
+water/terrain and incomplete chunks remain blocked. Safety interception can halt drift;
+STOP itself is not an anchor. A new valid movement/FLOAT command retries after a safety stop.
+Dangerous non-water consequences remain gated.
+
+Normal prose floors depths 1-6 feet; below 1 is shallow water, >=7 is deep water.
+Current is described by natural compass and deterministic qualitative bands (below
+0.25/1/2/3/4 mph: barely moving/slowly/steadily/briskly/swiftly; otherwise strongly).
+Exact values remain internal/RAW. STATUS identifies mode, effort direction, depth,
+current and resulting geographic movement. LOOK adds reliable local deeper-water
+orientation for a single unambiguous nearby channel; ambiguous bank directions are
+omitted. Depth/current prose is change-driven on the existing observation cadence,
+not a full LOOK every integration step; mode changes echo immediately.
+The web client renders server text and contains no water rules. Server command tests
+exercise behavior independently of browser rendering; no new Telnet transport is added.
+
+No drowning, knockdown, current-induced wading displacement/hazard, skill/failure roll,
+panic, unconsciousness, temperature, wet clothing, armor/encumbrance swimming penalty,
+buoyancy, rapids/waterfall consequence, rescue, boat, tide, wave, undertow, surf,
+automatic compensation, intelligent crossing or hydraulic simulation is introduced.
+Lakes/coasts/oceans still need compatible certified geometry; absolute water-surface
+and riverbed Z are not invented. No game deployment accompanies this implementation.
+
 ## Water geometry correction (2026-09-28)
+
+Historical prerequisite scope; Water Movement v1 above now supplies player behavior.
 
 Waterway Geometry v1 remains authoritative: maximum depth is now min(width/5,25)
 feet, with the existing parabolic bank taper and unchanged deterministic currents.
@@ -79,9 +163,8 @@ objects survive. This supersedes any older implication that exploration freezes
 terrain. DEV now supports certified dry/gentle HOG walking with bounded ahead-of-travel
 materialization. Hazard consequences and unresolved terrain remain gated. Thomas
 chose admin-only RAW diagnostics for distant geography in the current milestone;
-certified distant LOS/player discovery remains separate. Waterway Geometry v1 defines analytic channel banks, depth/current and ordinary
-wading up to and including 3 feet. Deeper channel water remains blocked until
-swimming exists. Inferred lake footprints retain unresolved-interior exclusion. No complete swimming or
+certified distant LOS/player discovery remains separate. Waterway Geometry v1 defines analytic channel banks, depth/current and explicit
+water modes under Water Movement v1. Inferred lake footprints retain unresolved-interior exclusion. No complete swimming or
 drowning design is inferred from discharge/width. Automatic safety stops explicitly
 say `You stop.` See the current Step 10
 exploration contract at the beginning of HOG for the accepted scope and limitations.
@@ -129,6 +212,8 @@ hydrology-guided proposal; it does not authorize broader geography redesign.
 
 
 ## Waterway geometry and ordinary wading (2026-09-27)
+
+Historical policy, superseded by Water Movement v1 above.
 
 Thomas approved [Waterway Geometry v1](hog.html#waterway-geometry-v1-2026-09-27):
 existing centerline/width, depth min(width/5,25) after the September 28 cap correction,

@@ -48,12 +48,11 @@ Distinguish measured findings and settled design from implemented runtime behavi
 
 ## Current bounded HOG release
 
-Read the [September 28 geometry integration](hog.html#water-geometry-integration-2026-09-28),
-[Waterway Geometry v1](hog.html#waterway-geometry-v1-2026-09-27), [status](status.html),
-and the historical September 27 [release report](https://github.com/twpaige/Crown-Call/blob/52723969e7103254dc20b543a0bae7da41d72880/docs/waterway-geometry-v1-release.md). Ordinary movement wades through <=3-ft channel water
-and stops before deeper water. Centerline/width, depth/current, exact membership and
-round joins are deterministic. Wetland ellipses and ravine reservations remain independent.
-Full evidence is preserved at private `docs/evidence/waterway-geometry-v1/`.
-Do not repeat earlier investigations to rediscover maintained decisions.
-Thomas deploys DEV separately through the Linux gate, then verifies the live river's
-bank-to-wading-to-stop behavior. No automatic game deployment or PROD authorization.
+Read [Water Movement v1](hog.html#water-movement-v1-2026-09-28) and [Status](status.html).
+The server now implements explicit WADE/SWIM/FLOAT modes, persisted SET settings,
+current displacement, STATUS and deliberate ENTER-water behavior. Ordinary <=3-foot
+water walking is superseded. Geometry remains deterministic and certification remains
+separate from movement permission. Independent terrain/structure hazards stay gated.
+Thomas reviews the implementation report before manually deploying DEV. No DEV or
+PROD deployment is part of this task. The geometry and prior release reports remain
+historical evidence; do not treat their three-foot rule as current gameplay policy.
