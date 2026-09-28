@@ -16,6 +16,11 @@ The record begins with consolidated decisions C01–C11, followed by preserved n
 
 ## Water Movement v1 (2026-09-28)
 
+Riffles are descriptive, nonblocking natural features. Their metadata remains available
+for discovery and prose; traversal is governed by the underlying represented waterway
+geometry and existing water movement rules. Riffle extents do not reject walking chunks.
+Other unsupported natural features retain their certification restrictions.
+
 FLOATING does not itself imply geographic movement or periodic travel observations.
 Automatic movement observations require a changed accepted authoritative position since
 the previous movement observation (or initial position before the first). Stationary

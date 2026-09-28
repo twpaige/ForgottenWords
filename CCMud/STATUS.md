@@ -1,12 +1,31 @@
 ---
 title: Current status
-description: Water Movement v1 DEV live-test cleanup; stationary observations and completion prose corrected.
+description: Riffles no longer block otherwise certified waterway chunks; manual DEV release remains separate.
 reviewed: 2026-09-28
 nav: status
 permalink: /CCMud/status.html
 ---
 
 ## Current bounded phase
+
+Riffles are now classified as descriptive/nonblocking in startup and lazy walking
+certification. Their natural-feature metadata remains unchanged; represented waterway
+geometry continues to govern traversal. Both previously refused chunks `(11700,-5250)`
+and `(11699,-5250)` for seed `867359018957601` certify under the general rule.
+No feature-ID or chunk exception, new geometry, water mechanics or retry change.
+Other unsupported features remain fail-closed; ravine reservations are unchanged.
+
+Implementation pushed: `f4892b399db8e7d37ac91ece4f1965c91124c2fb`, based on
+`8911c3cdbb8d2b8d340095512470d81f3d71fd16`. Focused riffle/ravine/dry/water suites:
+**134 passed**, 1 upstream warning, 114.87s. Full suite: **465 passed**, 13 upstream
+deprecation warnings, **443.11s**; no skips or expected failures reported.
+Changed-file Ruff and whitespace checks pass. Seven new cases include both real chunks,
+retained metadata/depth/current, general riffle eligibility and retained unsupported-feature blocking.
+
+No DEV/PROD deployment and no cc-update invocation. Thomas deploys the reviewed
+commit manually. The previous live-test cleanup and release evidence follow.
+
+## Previous DEV live-test cleanup
 
 Thomas reports Water Movement v1 baseline `3e8f5c74fe3def301dbbac87e3c06578e161465a`
 deployed and manually verified on DEV against a real major river. Core entry, modes,
