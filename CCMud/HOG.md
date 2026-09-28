@@ -1,7 +1,7 @@
 ---
 title: Heart of Gold
 description: Deterministic world-generation architecture, physical constraints, and preview limits.
-reviewed: 2026-09-27
+reviewed: 2026-09-28
 nav: hog
 permalink: /CCMud/hog.html
 ---
@@ -10,6 +10,53 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 
 * Contents
 {:toc}
+
+## Water geometry integration (2026-09-28)
+
+This bounded extension retains the Waterway Geometry v1 model with a **25-foot
+maximum depth**, ordered analytic segment queries, and separate position geometry
+certification. It does not implement WADE/SWIM/FLOAT or change movement timing,
+stamina, current drift, ground Z, or the existing ordinary-wading <=3-ft policy.
+The 0.1-second integration and configurable 15-second observations remain current.
+
+`WaterwayArea.intervals(A,B,radius=None)` returns all merged occupied intervals
+as segment fractions in [0,1]. `crossing` retains first-entry compatibility.
+`segment_events(A,B,depths=())` returns ordered immutable records with `feature_id`,
+`t`, `point` (world inches), `depth_feet` and `kind` (enter/exit/touch).
+Zero depth denotes the bank; positive depths query the region depth >= threshold.
+Duplicate requested thresholds collapse; finite nonnegative thresholds above the
+feature maximum return no contour events. Invalid thresholds raise ValueError.
+A tangent is one touch, not an entry/exit pair. Stationary segments have no events.
+Endpoints inside water do not invent transitions. Actual boundary intersections at
+segment endpoints are included. A segment lying along a contour retains the endpoints
+of that closed contact interval; callers must use precise point depth for strict
+movement-legality comparisons rather than interpreting contact as deeper water.
+
+The existing analytic capsule intersections are retained as intervals and merged
+with a 1e-6-inch spatial tolerance. Repeated encounters with one winding feature
+remain separate. No stepping, rasterization, hydraulic solver or flow calculation
+is added. Depth contours use R*sqrt(1-depth/D). Point overlap aggregation remains
+maximum depth and the strongest contributor's current vector; per-feature identities
+remain available and segment events do not sum currents.
+
+`Chunk.position_facts(x,y)` returns `classification` plus `water` facts:
+CERTIFIED_DRY, CERTIFIED_WATER, or UNKNOWN. Only complete, in-bounds certified terrain
+can qualify. Unsupported restricted areas override water membership; unresolved coarse
+water flags do not certify water. Deep modeled water can be geometrically certified
+without granting standing permission. `Chunk.surface`, MovementGate, structure checks
+and the current <=3-ft movement restriction remain in force. No riverbed or water-surface
+Z is created. Future modes must explicitly consume certification and apply their own
+movement policy; they must not globally bypass existing hazards.
+
+`Chunk.water_events(A,B,depths=())` requires a supported segment within that complete
+chunk and refuses intersections with unsupported restricted areas. It sorts per-feature
+events deterministically and deduplicates identical records. Across chunks, callers split
+at seams and deduplicate identical feature/contour seam events; full source shapes are
+retained, so splitting does not create spurious bank events. This geometry query is not
+a general movement authorization. Lakes/coasts/oceans remain unsupported here.
+
+The prior release report and evidence retain their old measurements. Current test and
+performance results belong in Status and the new integration report.
 
 ## Waterway Geometry v1 (2026-09-27)
 
@@ -31,7 +78,7 @@ width generator: max(0.2,2.5*sqrt(mean four-season discharge)). Preserve class, 
 and discharge metadata. Gameplay depth/current are not independently inferred from CFS.
 For W in feet, R=W/2 and shortest polyline distance d:
 
-- Maximum depth D=min(W/5,30) ft. The 30-ft cap is intentional.
+- Maximum depth D=min(W/5,25) ft. Thomas corrected the prior 30-ft cap on 2026-09-28; only widths greater than 125 ft change.
 - P=max(0,1-(d/R)^2). Local depth=D*P and current=Vmax*P inside; outside values are null.
 - Banks are analytic radius-R capsules around the segments, with round joins/endcaps.
 - D<=3 permits crossing the whole reach; D>3 blocks the capsule core of radius
@@ -69,13 +116,18 @@ Outside distance is exact bank distance. Inside distance=0 means membership; pro
 clearance and a nearest reach-bank projection are not surveyed union-egress geometry.
 Diagnostic candidates still do not establish perception or LOS.
 
-Identity adds `waterway_geometry=1`; dev_walking=4, ravine_reservation=1,
+The original release added `waterway_geometry=1`; the September 28 correction uses
+`waterway_geometry=2` to invalidate old geometry caches. The current hash namespace
+remains `waterway_geometry:1` so existing currents do not reroll. dev_walking=4, ravine_reservation=1,
 wetland_footprint=1 and local_hydrology=3 remain. Stable feature IDs are unchanged.
-Current default identity: `fa7832319e2551c9310fb52c00f79b762ab3a05887bb9e70094c4453855aae0f`. Historical occupants revalidate
+Historical September 27 identity: `fa7832319e2551c9310fb52c00f79b762ab3a05887bb9e70094c4453855aae0f`. Historical occupants revalidate
 under current geometry; prior caches do not certify the new generation.
 No floods, seasonal stages, dynamic banks, erosion, raster solver or hydraulic simulation.
 
-### Live river and speed finding
+### Historical September 27 river and speed finding
+
+The following measurements used the old 30-ft cap. They remain historical evidence,
+not current contour/stop coordinates. The corrected maximum depth for this river is 25 ft.
 
 `867359018957601:waterway:5822:89` has width 126.54709438328703 ft,
 maximum depth 25.309418876657407 ft, and deterministic maximum current

@@ -1,7 +1,7 @@
 ---
 title: Game design
 description: The MUD's accepted decisions, preserved in full and separated from tabletop rules.
-reviewed: 2026-09-27
+reviewed: 2026-09-28
 nav: design
 permalink: /CCMud/design.html
 ---
@@ -13,6 +13,16 @@ The existing **[CCMUD_Design.txt](/CCMUD_Design.txt)** remains the detailed game
 For the existing illustrated reading edition, see [CCMUD_Design.html](/CCMUD_Design.html). That older HTML is a separate legacy presentation, not an automatically generated version of the text. When wording differs, consult the text and current explicit decisions. The new Markdown-to-HTML publishing system applies to this `/CCMud/` knowledge base; it does not silently convert old pages.
 
 The record begins with consolidated decisions C01–C11, followed by preserved numbered decisions. Read its reconciliation instructions before interpreting older entries. Old questions are historical records and do not automatically reopen a completed design interview.
+
+## Water geometry correction (2026-09-28)
+
+Waterway Geometry v1 remains authoritative: maximum depth is now min(width/5,25)
+feet, with the existing parabolic bank taper and unchanged deterministic currents.
+[Geometry certification and ordered segment queries](hog.html#water-geometry-integration-2026-09-28)
+are separate from player movement permission. No WADE/SWIM/FLOAT commands or new
+water movement rules are implemented by this integration pass. Keep 0.1-second
+integration and configurable 15-second observations; older 5/30-second references
+do not supersede the current implementation.
 
 ## World time, travel and seasonal light (2026-09-27)
 
@@ -121,7 +131,8 @@ hydrology-guided proposal; it does not authorize broader geography redesign.
 ## Waterway geometry and ordinary wading (2026-09-27)
 
 Thomas approved [Waterway Geometry v1](hog.html#waterway-geometry-v1-2026-09-27):
-existing centerline/width, depth min(width/5,30), simple analytic depth/current profiles,
+existing centerline/width, depth min(width/5,25) after the September 28 cap correction,
+simple analytic depth/current profiles,
 and deterministic class-based current. Ordinary ground movement may enter and traverse
 water <=3 ft deep; it stops before >3 ft. Deeper water is future swimming territory.
 Current/direction remain data, without forced drift or resistance. No new stamina,

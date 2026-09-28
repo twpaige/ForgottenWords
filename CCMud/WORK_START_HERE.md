@@ -1,7 +1,7 @@
 ---
 title: Start here
 description: A durable home for Crown & Call MUD design, architecture, and development continuity.
-reviewed: 2026-09-27
+reviewed: 2026-09-28
 nav: home
 permalink: /CCMud/
 ---
@@ -48,8 +48,9 @@ Distinguish measured findings and settled design from implemented runtime behavi
 
 ## Current bounded HOG release
 
-Read [Waterway Geometry v1](hog.html#waterway-geometry-v1-2026-09-27), [status](status.html),
-and the [release report](https://github.com/twpaige/Crown-Call/blob/52723969e7103254dc20b543a0bae7da41d72880/docs/waterway-geometry-v1-release.md). Ordinary movement wades through <=3-ft channel water
+Read the [September 28 geometry integration](hog.html#water-geometry-integration-2026-09-28),
+[Waterway Geometry v1](hog.html#waterway-geometry-v1-2026-09-27), [status](status.html),
+and the historical September 27 [release report](https://github.com/twpaige/Crown-Call/blob/52723969e7103254dc20b543a0bae7da41d72880/docs/waterway-geometry-v1-release.md). Ordinary movement wades through <=3-ft channel water
 and stops before deeper water. Centerline/width, depth/current, exact membership and
 round joins are deterministic. Wetland ellipses and ravine reservations remain independent.
 Full evidence is preserved at private `docs/evidence/waterway-geometry-v1/`.
