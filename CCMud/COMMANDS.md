@@ -44,6 +44,12 @@ These are the documented current source-level commands. Release and feature gate
 | Places and objects | `ENTER <place>`, `EXIT`, `GET <object>`, `DROP <object>`, `INVENTORY`, `CUT <resource>`, `OPEN <door>`, `CLOSE <door>` | Interact with implemented structures, resources and objects. ENTER can deliberately enter a nearby represented waterway under its current rules; existing feature gates still apply. |
 | Communication and session | `SAY <message>`, `HELP`, `QUIT` | Speak to nearby listeners, list help, or close the session. |
 
+For the audited Pioneer Cabin on the DEV seed, approach the south-facing entrance,
+use `OPEN DOOR` when closed, then `ENTER CABIN`; `EXIT` returns through the same
+door. Door reach and intervening walls matter. A nearby valid place resolves before
+water ENTER. Ordinary movement still collides with the cabin even with its door open.
+Other unaudited structures remain gated; see the [cabin attachment contract](hog.html#pioneer-cabin-attachment-and-regression-invariant-2026-09-28).
+
 `CLEAR` clears the **web transcript locally**. It does not send an in-world command or stop travel. Do not assume its availability or effects in a telnet client.
 
 ### Staff diagnostics

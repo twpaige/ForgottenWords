@@ -1036,16 +1036,50 @@ No cardinal-vector defect was found. Command echo makes future path reports easi
 to verify; it is not a reconstruction of earlier live commands.
 
 The north-origin blocker is the seeded **Pioneer Cabin**, `pioneer_cabin`, from
-migration `20260922_05`: footprint X −90..90, Y 1230..1410 inches, absolute floor Z=0.
+migration `20260922_05`: footprint X −90..90, Y 1230..1410 inches, legacy floor Z=0.
 Its `pioneer_cabin_door` has exterior `(0,1200,0)` and interior `(0,1260,0)`.
-It is persistent legacy test content, not generated HOG geography. HOG's ground near
-the origin is about 17,156 inches, and the cabin has no reviewed ground/footprint/
-portal-height adaptation. The walking adapter therefore blocks its full XY footprint.
-RAW identifies nearby structures diagnostically without claiming they are visible.
-No automatic deletion, grounding, relocation or approval is appropriate. Any such
-adaptation requires Thomas's separate decision and a footprint/interior/portal audit.
-These coordinates identify the migration record; the live database was not inspected
-in this continuation because the available SSH connection timed out.
+It is persistent test content, not generated HOG geography. The September 28 cabin
+correction supplies a reviewed runtime ground attachment for this exact layout on
+seed `867359018957601`; the persisted layout and non-HOG absolute-Z behavior remain intact.
+
+### Pioneer Cabin attachment and regression invariant (2026-09-28)
+
+The original implementation (`96ce97a`) exposed the cabin's exterior description in
+LOOK and resolved OPEN/CLOSE/ENTER by portal keywords and three-dimensional reach.
+`ENTER CABIN` crosses the existing portal after OPEN; ordinary movement always hits walls.
+HOG's initial gate (`2fa0a6b`) suppressed outdoor perception/entry pending certification.
+Real HOG walking (`280aea0`) then placed characters near Z=17,156 while leaving the
+legacy door at Z=0. Its XY footprint remained deliberately blocked. The later RAW
+label (`4215ba4`) described this missing audit; it was not itself a target filter.
+Water Movement (`bb6c15e`) additionally intercepted every outdoor ENTER before place
+resolution, producing a water-only failure even when the cabin was the intended target.
+
+The correction preserves the audit boundary. Only the exact seeded cabin bounds,
+floor, single portal and endpoint coordinates qualify. Both covering walking chunks
+must be complete and contain no restricted areas or boundaries. Reviewed ground samples
+over the footprint and entrance must differ by at most one inch. Missing certification,
+altered layout, an explicit GroundPlacement override, another overlapping structure,
+or unresolved water/hazards deny the
+attachment. The level interior floor and both portal heights use certified ground at
+the exterior door through the existing GROUND height resolver. This runtime adapter
+does not insert a persistent attachment or override authored placement requirements.
+No generator output, saved structure coordinates, or live database
+is rewritten. Other structures remain unaudited and blocked.
+
+Normal nearby LOOK includes the audited cabin and current door state; RAW keeps legacy
+and attached floor heights distinct. Ordinary local perception does not imply distant
+LOS certification. Door reach uses the existing three-dimensional pickup distance plus
+a certified, unobstructed path to the exterior endpoint. A line through a wall cannot
+open the door even when the endpoint is within that radius. A valid nearby place is
+resolved before the existing water ENTER path; water WADE/SWIM behavior is unchanged.
+
+All persistent footprints, including the audited cabin with its door open, still block
+continuous travel. Only explicit ENTER/EXIT changes interior/exterior space. Entry stops
+and clears outdoor travel; interior ticks cannot overwrite the portal destination.
+Reconnect accepts this audited interior and retains its attached height. Continuous
+interior travel remains outside this milestone. Tests use the real DEV seed and original
+coordinates, isolated SQLite state, both collision paths, wall reach rejection,
+closed/open entry, exit, reconnect and fail-closed audit cases. Live deployment is separate.
 
 Existing continuous travel, selected pace, stamina, elapsed offline recovery,
 significant-boundary checks and scoped hazard confirmations remain in force.

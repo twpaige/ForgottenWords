@@ -14,6 +14,18 @@ For the existing illustrated reading edition, see [CCMUD_Design.html](/CCMUD_Des
 
 The record begins with consolidated decisions C01–C11, followed by preserved numbered decisions. Read its reconciliation instructions before interpreting older entries. Old questions are historical records and do not automatically reopen a completed design interview.
 
+## Pioneer Cabin correction (2026-09-28)
+
+The existing cabin/door/ENTER behavior is restored through a narrowly reviewed HOG
+ground attachment, preserving persistent coordinates and the full collision footprint.
+Only the exact seeded layout with certified dry local geometry qualifies. Nearby LOOK
+can expose this audited structure; OPEN requires real door reach without an intervening
+wall, and ENTER requires an open portal. Place resolution precedes water entry.
+Interior transitions stop outdoor travel and survive reconnect. This is not general
+structure certification, targeted LOOK, or continuous interior movement.
+The [HOG cabin contract](hog.html#pioneer-cabin-attachment-and-regression-invariant-2026-09-28)
+owns the audit conditions, regression cause and invariant.
+
 ## Cormac v1 (2026-09-28)
 
 Cormac is a deterministic server-side wilderness LOOK narrator: **HOG supplies facts;
