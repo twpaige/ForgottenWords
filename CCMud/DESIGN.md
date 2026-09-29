@@ -1,7 +1,7 @@
 ---
 title: Game design
 description: The MUD's accepted decisions, preserved in full and separated from tabletop rules.
-reviewed: 2026-09-28
+reviewed: 2026-09-29
 nav: design
 permalink: /CCMud/design.html
 ---
@@ -41,6 +41,15 @@ Interior transitions stop outdoor travel and survive reconnect. This is not gene
 structure certification, targeted LOOK, or continuous interior movement.
 The [HOG cabin contract](hog.html#pioneer-cabin-attachment-and-regression-invariant-2026-09-28)
 owns the audit conditions, regression cause and invariant.
+
+## Ordinary biome transitions (2026-09-29)
+
+Transitions between reviewed HOG biome classes remain traversable. The selected pace
+persists while the terrain factor refreshes at the represented regional boundary;
+ordinary transitions require no confirmation. Missing or unsupported geography and
+independent hazards remain gated. [Walking policy version 5](hog.html#reviewed-regional-biome-transitions-2026-09-29)
+validates all intersecting cells, including sub-sample strips, without changing HOG
+biome/elevation generation or saved positions.
 
 ## Cormac v1 (2026-09-28)
 

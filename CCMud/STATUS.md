@@ -1,54 +1,47 @@
 ---
 title: Current status
-description: Admin navigation, precision movement and reusable command shortcuts implemented; deployment remains manual.
-reviewed: 2026-09-28
+description: Reviewed regional biome transitions remain certified and traversable; deployment remains manual.
+reviewed: 2026-09-29
 nav: status
 permalink: /CCMud/status.html
 ---
 
 ## Current bounded phase
 
-Admin Navigation & Testing QoL is implemented on top of the Pioneer Cabin fix
-`055d2ae6de34ac2f35d7600e03a797ee86996dde`. Concurrent upstream ruleset-only commits
-through `f6b4d8a` were incorporated without conflict.
-Implementation commit: `979d0a6b607d5c743aef1ff9494b726ead961b65`.
-Fixture correction: `158e51051d71472fe631aca7f0353d97d3104878`. These and the upstream
-ruleset changes are pushed at `775affbafdd6fe0fee86bb9f7d8ec052aa7e64dd`.
+Reviewed regional biome transitions are implemented on private baseline `e121d7e`.
+The newer cabin, navigation, shortcuts and upstream ruleset changes are preserved.
+Walking policy version 5 validates every intersecting regional cell, including narrow
+strips between ground samples. Reviewed surface changes become safe movement boundaries;
+missing/unsupported geography and independent hazards still fail closed.
 
-APPROACH resolves the audited cabin's exterior south entrance through normal travel.
-Optional cardinal feet use the existing integrator; bare directions remain continuous.
-JUMP retains relative miles and adds signed absolute XY inches with authoritative
-ground Z. Ready geography places immediately; cold generation completes automatically
-without a repeat command. Cancellation, authorization, certified placement, water and
-structure restrictions remain enforced. Prose is not a placement requirement.
+The seed `867359018957601` woodland/mixed-forest transition in chunks `[60-63,11]`
+remains traversable. Local 42-degree and reverse 222-degree travel tests continue
+without confirmation or stopping, preserve WALK/stamina, and refresh factors from
+85% light woodland to 65% heavy woodland and back at integer-inch crossing precision.
+See the [transition contract](hog.html#reviewed-regional-biome-transitions-2026-09-29).
 
-Admins receive authoritative coordinates and compact PROSE/RAW/precision controls.
-All players have LK/STAT plus four editable Run/Enter shortcuts that retain text
-and save per account in the browser. The [field utility contract](hog.html) and
-[command reference](commands.html) define units, permissions and cancellation details.
+The old generation `1f14772c2e663ce762201381df0fba4f46ff47a8a0363929447afe72c3f33285`
+remains accepted for character revalidation, while walking certificates regenerate
+under version 5. Biome/elevation grids match pre-fix fingerprints; no saved coordinates,
+source geography or database schema changes.
 
 ## Verification and next action
 
-Broader focused command, movement, HOG, structure and web checks: **336 passed**,
-one dependency warning, **148.50s**. After the final swimming-completion and invalid
-confirmed-alias edge fixes, movement/admin-navigation/travel checks: **137 passed**,
-one dependency warning, **35.02s**. Full suite: **545 passed, one fixture failure**,
-13 dependency warnings, **621.28s**. The old disconnect test stub lacked the new
-pending-JUMP state. Its fixture was corrected without changing runtime code; all
-**7 prewarm/lifecycle tests then passed in 0.45s**. The full suite was not repeated
-after that fixture-only correction.
-
-Headless Edge checks pass against actual client HTML with mocked account/WebSocket
-responses: typed/button command parity, roles, authoritative HUD, revocation,
-disconnect, reusable CLEAR, shortcut Enter/retention/refresh/account isolation, and
-1000px/375px responsive layout. These are isolated tests, not live gameplay verification.
-Changed-file Ruff and whitespace checks pass. Repository-wide Ruff has **55 existing
-findings**, an exact normalized match to the earlier untouched baseline.
+Implementation pushed: `f6daa784aea30fca17bb1e7dacd7e590ddc64476`.
+Full suite on the combined baseline: **571 passed**, 13 dependency deprecation
+warnings, **490.12s**. Expanded focused checks before upstream integration: **128 passed**,
+1 warning, 101.68s. Final-baseline boundary/terrain/Cormac checks: **76 passed**,
+1 warning, 2.79s. The 25 new regression cases include the exact seed, forward/reverse
+travel, factor refresh, narrow strips, corner crossings, missing classes, old certificate
+rejection, saved-position validation and unchanged source-grid fingerprints.
+Changed-file Ruff and whitespace checks pass. The existing CLEAR browser check passes.
+The inherited travel-presentation extraction script fails because its isolated context
+omits the newer positionText helper; script and client are unchanged from e121d7e.
+This is recorded separately from the passing Python suite; no live browser claim is made.
 
 No DEV or PROD deployment, cc-update invocation, or live database migration occurred.
-After review, Thomas can manually update DEV to the final pushed private commit, which
-also pins this documentation. PROD remains unauthorized. Live revisions were not
-inspected. Public website publication is separate from game deployment.
+Thomas will manually deploy the reviewed final private revision. Local automated tests
+are not live gameplay verification. Documentation publication is separate from game deployment.
 
 ## Preserved baseline and limits
 
@@ -61,4 +54,4 @@ Water Movement v1 retains LAND/WADING/SWIMMING/FLOATING, AUTOWADE/AUTOSWIM, ordi
 currents, certification and hazard restrictions. Completing a swimming distance uses
 normal floating behavior. Disconnect still stops travel with no offline drift.
 Drowning, knockdowns, unsupported natural features and future nine-zone expansion
-remain deferred. No generator version, world-unit architecture or migration changed.
+remain deferred. Only the walking-certificate version changes; world generators, units and schema remain unchanged.

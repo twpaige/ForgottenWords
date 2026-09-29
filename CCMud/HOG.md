@@ -1,7 +1,7 @@
 ---
 title: Heart of Gold
 description: Deterministic world-generation architecture, physical constraints, and preview limits.
-reviewed: 2026-09-28
+reviewed: 2026-09-29
 nav: hog
 permalink: /CCMud/hog.html
 ---
@@ -10,6 +10,34 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 
 * Contents
 {:toc}
+
+## Reviewed regional biome transitions (2026-09-29)
+
+DEV walking policy version 5 certifies chunks containing multiple **reviewed** regional
+biome cells. Every intersecting cell is validated analytically, including narrow areas
+between 25-foot ground samples and cells owning a closed chunk endpoint. Missing or
+unsupported classifications still fail closed. Ground grade/interpolation limits,
+coastlines, water, ravine reservations and unsupported natural-feature checks remain.
+
+Nearest-cell classification uses one half-open ownership convention: the higher index
+owns the exact half-cell edge. Classification, RAW tree-cover diagnostics and Cormac
+inputs share it. Edges are calculated from the existing regional grid in inch coordinates;
+they describe the current coarse biome model, not newly surveyed forest boundaries.
+Movement-significant surface changes emit ordinary nonhazardous Boundary segments.
+The existing travel controller refreshes terrain factors across these edges without
+stopping, requesting confirmation, changing selected pace or changing stamina rules.
+Same-surface transitions need no movement boundary; point classification still updates.
+
+For seed `867359018957601`, chunks `[60-63,11]` now support the boundary at
+`y = 66,694.736842` inches: Open woodland / light_woodland (85%) to Mixed forest /
+heavy_woodland (65%). Chunks in row 10 and row 12 retain their respective classifications.
+42-degree travel and reverse 222-degree travel continue automatically through the edge.
+
+Only dev_walking changes from version 4 to 5 in generation identity. Old walking chunks
+are not reused; bounded runtime caches regenerate current certificates. The exact prior
+version-4 world identity remains compatible for existing characters subject to normal
+current-position revalidation. No biome/elevation generator, seed, source geography,
+saved coordinate or database schema is changed. No game deployment is implied.
 
 ## Cormac v1 (2026-09-28)
 
@@ -705,8 +733,8 @@ Unknown bed/bank geometry, water depth and crossing consequences remain blocked.
 Natural-feature anchors, regional feature catalogs, biome source classification
 and regional tree-cover fields do not consume runtime terrain samples. Local
 validation/ground placement can be affected indirectly; slope/grade and terrain
-certification depend directly on the interpolated lattice. The regional biome
-boundary refusal remains necessary even if fewer sample nodes are inspected.
+certification depend directly on the interpolated lattice. Regional biome coverage must remain independent of ground sample spacing; version 5
+validates every intersecting cell and represents reviewed transitions as safe boundaries.
 The full sampling report contains the explicit system-by-system dependence matrix.
 
 ### Repeated regional work is the main optimization target
@@ -835,7 +863,7 @@ using directional prewarming, 25-foot samples and precise inch positions.
 The old 2,000-foot administrative stop is removed from runtime chunks. Admission
 requires dry ground outside represented water exclusions, no unresolved coast or
 regional macro-lake/natural-feature extent,
-no unresolved vegetation transition, grades no greater than 5%, and patch-center
+reviewed classifications in every intersecting biome cell, grades no greater than 5%, and patch-center
 error no greater than 0.25 inch against the continuous field. Springs in
 the two-mile guard survey conservatively deny certification; ordinary wetlands
 follow Wetland Footprint v1 rather than whole-guard refusal. These are certificate
@@ -845,7 +873,8 @@ chunks are disposable in the existing bounded cache; all Zone C is never materia
 Generation failures have a bounded five-second retry cooldown. Initial startup
 products remain bounded at 64; runtime cache capacity remains 64.
 
-The local walking policy is version 3. The exact prior version-1 and version-2 identities remain
+The local walking policy is version 5. Previously supported identities, including the
+exact prior version-4 identity, remain
 accepted for existing DEV test characters because the physical generator and
 ground formula are unchanged; current local certification is revalidated on entry.
 No character or persistent structure is relocated. A cold resumed location may
