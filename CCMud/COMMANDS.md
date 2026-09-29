@@ -35,7 +35,7 @@ These are the documented current source-level commands. Release and feature gate
 | Family | Commands | Current meaning |
 | --- | --- | --- |
 | Observe | `LOOK`, `L`, `LOOK BRIEF`, `LOOK NORMAL`, `LOOK MAXIMUM` | Cormac v1 describes local wilderness geography with a stable title/body. Verbosity is a session preference, initially NORMAL. Admin RAW remains separate. Temporary ordinary local perception does not imply distant certified LOS. |
-| Travel direction | `N`, `NE`, `E`, `SE`, `S`, `SW`, `W`, `NW` and full direction names; `TRAVEL <0–359>` | Set a continuous compass heading. North is 0°, east is 90°. |
+| Travel direction | `N`, `NE`, `E`, `SE`, `S`, `SW`, `W`, `NW` and full direction names; `TRAVEL <0–359>`; `north [feet]`, `south [feet]`, `east [feet]`, `west [feet]` | Bare directions set continuous travel. Cardinal directions/aliases with positive feet stop after that distance, subject to all normal safety rules. North is 0°, east is 90°. |
 | Travel pace | `TRUDGE`, `WALK`, `JOG`, `RUN`, `SPRINT` | Select land pace, distinct from direction. |
 | Stop | `STOP` | Stop active voluntary travel; when swimming, enter FLOATING. Floating does not cancel current. |
 | Water | `WADE <direction>`, `WADE`, `SWIM <direction>`, `FLOAT`, `STAND` | Choose water movement or state as permitted by represented depth. See [Water Movement v1](design.html#water-movement-v1-2026-09-28). |
@@ -56,9 +56,17 @@ Other unaudited structures remain gated; see the [cabin attachment contract](hog
 
 | Command | Access and role |
 | --- | --- |
-| `APPROACH <id|feature_id>` | Admin diagnostic steering to known prepared geography; all normal safety and certification restrictions apply. It is not player navigation or a perception claim. |
-| `JUMP <direction> <miles>` | Admin endpoint jump to certified geography; it is not ordinary travel or a general override. |
+| `APPROACH <id|feature_id>` | Admin diagnostic steering to known geography or an audited persistent entrance. `approach pioneer_cabin` targets the exterior south door without opening or entering it. All normal safety restrictions apply; no pathfinding or perception claim. |
+| `JUMP <direction> <miles>`; `JUMP <x>, <y>` | Admin endpoint jump. Relative distances are miles; absolute XY values are signed integer inches. Destination ground supplies Z. No confirmation: ready valid destinations execute immediately; cold generation completes automatically, or fails safely. STOP cancels a pending request. Presentation/prose is not a placement prerequisite. |
 | `HOGDISPLAY RAW` / `HOGDISPLAY PROSE` | Admin session presentation toggle. RAW is diagnostic; PROSE is the normal path. |
+
+The compact web toolbar sends these same commands. `LK` and `STAT` send LOOK and
+STATUS. Admins also see PROSE/RAW and compass-arranged N1/N10, S1/S10, E1/E10, W1/W10
+(feet), plus authoritative X/Y/Z inches beside Heading. Privileged command checks and
+coordinate disclosure are enforced by the server. Buttons disable when disconnected.
+Four editable shortcut fields each have a Run button; Enter in a field also runs it.
+Their text persists per account in this browser and remains after use. For example,
+save `clear` to clear the local transcript repeatedly. Saved commands never auto-run.
 
 ### STATUS name collision
 

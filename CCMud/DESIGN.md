@@ -14,6 +14,22 @@ For the existing illustrated reading edition, see [CCMUD_Design.html](/CCMUD_Des
 
 The record begins with consolidated decisions C01–C11, followed by preserved numbered decisions. Read its reconciliation instructions before interpreting older entries. Old questions are historical records and do not automatically reopen a completed design interview.
 
+## Admin navigation and testing (2026-09-28)
+
+APPROACH can resolve the audited Pioneer Cabin's exterior door point through ordinary
+travel. Cardinal commands accept optional feet through the same integrator; bare
+directions remain continuous. JUMP retains relative miles and adds absolute comma-separated
+XY inches with authoritative destination ground Z. Ready destinations execute immediately;
+cold destinations complete automatically after certification, without a second command.
+Missing prose never grants or denies placement; genuine geography failures still deny it.
+Admin HUD coordinates and compact PROSE/RAW/precision controls use server state and
+commands. LK/STAT shortcuts are available to all players. No browser movement engine,
+new generator, global safety bypass or deployment is included. The
+[field utility contract](hog.html) owns units, cancellation, permission and safety details.
+Four editable command shortcuts retain their text after use and save per account in
+the current browser. Run/Enter uses ordinary command dispatch, including local CLEAR;
+stored commands never execute automatically.
+
 ## Pioneer Cabin correction (2026-09-28)
 
 The existing cabin/door/ENTER behavior is restored through a narrowly reviewed HOG

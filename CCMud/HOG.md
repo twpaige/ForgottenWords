@@ -870,8 +870,23 @@ persistent-structure checks and STOP. Accumulated ray steps retain the small com
 of nearly cardinal headings instead of rounding it away each tick. Rounded stop
 positions are rechecked before movement is committed.
 
+Cardinal directions and aliases accept optional positive feet: `north 1`, `south 10`,
+`east 212`, `w 1`. These are ordinary player movement commands. The shared unit helper
+converts feet to integer inches (decimal feet round to the nearest inch; half rounds up).
+A fixed destination is consumed by the same travel integrator with zero arrival tolerance;
+`north 1` reaches 12 inches north and stops. There is no teleport or second movement
+engine. Terrain, stamina, structures, water permissions and hazards can stop travel early.
+Completing a swimming distance uses normal FLOATING stop behavior; currents still apply.
+Bare directions keep continuous behavior. Optional distance is cardinal-only and cannot
+be combined with hazard-confirmation `!`. STOP or a new direction cancels the target.
+
 `APPROACH <id|feature_id>` is an **admin-only diagnostic navigation utility**. It
-does not establish perception or visibility. It first resolves matching feature or
+does not establish perception or visibility. A persistent Space ID first resolves its
+audited exterior portal endpoint. `approach pioneer_cabin` steers toward `(0,1200)`
+inches, outside the south-facing door. It neither opens nor enters the cabin, teleports,
+nor routes around walls. The existing cabin audit is rechecked during travel; a changed
+or unavailable entrance stops movement. Unaudited structures remain unavailable.
+For natural geography it resolves matching feature or
 boundary IDs in ready local chunks within one chunk of the character, using their
 existing inferred water-exclusion polygons. Otherwise it searches only the current
 bounded regional diagnostic catalog (at most 4,096 entries, 50-mile distance ceiling).
@@ -895,14 +910,29 @@ disconnect or successful JUMP clear it. Target geometry may be retained after ca
 eviction, but a changed generation identity invalidates it. Every walked segment
 still requires current certified terrain.
 
-`JUMP <direction> <positive miles>` is a separate **admin DEV field-placement
-utility**, explicitly teleporting rather than walking. All eight full names and
+`JUMP <direction> <positive miles>` and `JUMP <x>, <y>` are **admin DEV field-placement
+utilities**, explicitly teleporting rather than walking. All eight full names and
 `N S E W NE NW SE SW` work, case-insensitively. Positive decimal miles are accepted.
 `jump east 192` moves 192 miles east; `jump NE 192` moves **192 miles total at 45°**,
 about 135.7645 miles per axis. The destination is rounded to integer inches. It
-must remain in implemented Zone C and be certified standing ground outside water
-exclusions and unaudited persistent-structure footprints. A cold destination queues
-normal bounded HOG preparation and returns without moving; retry after preparation.
+must remain in implemented Zone C. The comma form accepts signed integer XY coordinates
+in inches, with optional whitespace around the comma; no Z is supplied. This retains
+the existing Zone C boundary policy and world coordinate system without inventing
+addressing for future zones. Ground Z always comes from the destination.
+
+A ready valid destination executes on the first command. There is no confirmation.
+The former need to repeat a cold JUMP was a preparation retry, not a confirmation gate.
+A cold destination now queues normal bounded HOG generation and completes automatically
+on a subsequent server tick once ready. One pending request per character is retained,
+with a 30-second deadline. STOP, disconnect, a replacement JUMP or another command other
+than LOOK/STATUS/HOGDISPLAY cancels the request. Permissions and interior context are
+rechecked on completion. A failed/timed-out request reports its diagnostic and does not
+move the character; it cannot retain a stale authorization after demotion.
+
+JUMP still requires complete compatible geography, a valid authoritative ground height,
+no unresolved exclusion or structure at the endpoint, and water shallower than four feet
+when water is represented. Polished prose, Cormac, and descriptive discovery are not
+placement prerequisites. Genuine certification/geometry failures remain failures.
 Rejected destinations leave active travel and character state unchanged. The route
 between endpoints is intentionally not inspected or materialized for a teleport.
 
@@ -914,12 +944,32 @@ travel/APPROACH and any crossing warning/authorization, preserving selected pace
 current stamina. It is not a gameplay travel or hazard-consequence implementation.
 No migration, generator/version change, automatic relocation or PROD enablement is added.
 
-The existing top status line adds plain-text **speed and heading beside stamina**.
+The existing top status line includes plain-text **speed and heading beside stamina**.
 Speed is the last integrated effective ground speed in game miles/hour, including
 terrain/grade/load factors (the existing 24× movement-time conversion is unchanged).
 Heading is clockwise from north, to one decimal degree. APPROACH updates it as it
 steers. Stopped/JUMP-completed status shows 0 mph and no active heading. Telemetry
-uses existing worker results, not new database queries or browser polling.
+uses existing worker results without browser polling. Admins additionally receive actual
+integer world X/Y/Z inches alongside Heading, from the server's saved movement state
+and initial/transition HUD messages. Account role is checked server-side when producing
+these diagnostics; normal players receive no admin coordinate field.
+
+Under the command field, compact `LK` and `STAT` buttons send LOOK and STATUS for all
+players. The admin testing group adds `PROSE`/`RAW` and compass-arranged `N1`/`N10`,
+`S1`/`S10`, `E1`/`E10`, `W1`/`W10`. Directional values are feet. All buttons share the
+typed command dispatch; there is no browser movement math or separate HOG display state.
+Controls wrap on narrow screens, have full tooltips/accessibility labels, and disable
+on disconnect. The server remains authoritative for privileged commands even if a
+browser control is manually exposed. Missing permission in status messages hides the
+admin group and removes coordinates.
+
+Four editable shortcut fields are available to all players. Type a command and click
+its Run button (or press Enter in that field); the text remains for reuse. Edits save
+per account in this browser's local storage and restore after refresh. Stored text
+never runs automatically. The fields use the same command dispatch and server permission
+checks. A `clear` shortcut clears only the local transcript, exactly like typed CLEAR.
+If browser storage is unavailable, shortcuts still work for the current page session.
+The four slots form one desktop row and two rows on narrow screens.
 
 #### Local water exclusions and responsiveness
 

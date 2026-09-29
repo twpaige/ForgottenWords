@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Pioneer Cabin door and entry restored through a reviewed HOG attachment; deployment remains manual.
+description: Admin navigation, precision movement and reusable command shortcuts implemented; deployment remains manual.
 reviewed: 2026-09-28
 nav: status
 permalink: /CCMud/status.html
@@ -8,53 +8,57 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Pioneer Cabin corrective work starts from private `22a66c7` (Cormac v1.1).
-The original cabin survives in persistent geometry, but the HOG adapter left its
-door at absolute Z=0 while characters stood on generated ground near Z=17,156.
-Outdoor perception/entry gates and later water-only ENTER dispatch compounded this.
-The [cabin contract](hog.html#pioneer-cabin-attachment-and-regression-invariant-2026-09-28)
-records the introducing changes and safety invariant.
+Admin Navigation & Testing QoL is implemented on top of the Pioneer Cabin fix
+`055d2ae6de34ac2f35d7600e03a797ee86996dde`. Concurrent upstream ruleset-only commits
+through `f6b4d8a` were incorporated without conflict.
+Implementation commit: `979d0a6b607d5c743aef1ff9494b726ead961b65`.
+Fixture correction: `158e51051d71472fe631aca7f0353d97d3104878`. These and the upstream
+ruleset changes are pushed at `775affbafdd6fe0fee86bb9f7d8ec052aa7e64dd`.
 
-The exact seeded cabin now has a reviewed, fail-closed runtime ground attachment.
-Its stored coordinates, dimensions, legacy behavior and full collision footprint
-are preserved. Nearby LOOK exposes the audited cabin and door state. OPEN requires
-three-dimensional reach and a certified path to the entrance without an intervening
-wall. ENTER CABIN resolves the place before water, requires an open door, and clears
-outdoor travel state. EXIT and interior reconnect retain the correct attachment.
-Other structures remain unaudited; continuous interior travel is still unavailable.
+APPROACH resolves the audited cabin's exterior south entrance through normal travel.
+Optional cardinal feet use the existing integrator; bare directions remain continuous.
+JUMP retains relative miles and adds signed absolute XY inches with authoritative
+ground Z. Ready geography places immediately; cold generation completes automatically
+without a repeat command. Cancellation, authorization, certified placement, water and
+structure restrictions remain enforced. Prose is not a placement requirement.
+
+Admins receive authoritative coordinates and compact PROSE/RAW/precision controls.
+All players have LK/STAT plus four editable Run/Enter shortcuts that retain text
+and save per account in the browser. The [field utility contract](hog.html) and
+[command reference](commands.html) define units, permissions and cancellation details.
 
 ## Verification and next action
 
-Implementation pushed: `5adebb8ae781af23a061127f352bb95eea17d682`.
-Full suite on this implementation: **509 passed**, 13 dependency deprecation warnings,
-**587.65s**. Final focused cabin/world/water/field commands and
-HOG walking/runtime/real-field/Cormac: **210 passed**, 1 dependency deprecation warning,
-**111.06s**. Fourteen new cases cover real-seed entry, exit, reconnect, stopped travel,
-five wall/distance positions, and seven audit failures, including explicit authored
-GroundPlacement overrides. The unchanged baseline reproduces all three reported
-OPEN/ENTER/LOOK failures at the entrance; the same reproduction passes with this fix.
-Changed-file Ruff and whitespace checks pass. Repository-wide Ruff reports **55 existing
-findings**, also reproduced in an untouched `22a66c7` export.
+Broader focused command, movement, HOG, structure and web checks: **336 passed**,
+one dependency warning, **148.50s**. After the final swimming-completion and invalid
+confirmed-alias edge fixes, movement/admin-navigation/travel checks: **137 passed**,
+one dependency warning, **35.02s**. Full suite: **545 passed, one fixture failure**,
+13 dependency warnings, **621.28s**. The old disconnect test stub lacked the new
+pending-JUMP state. Its fixture was corrected without changing runtime code; all
+**7 prewarm/lifecycle tests then passed in 0.45s**. The full suite was not repeated
+after that fixture-only correction.
+
+Headless Edge checks pass against actual client HTML with mocked account/WebSocket
+responses: typed/button command parity, roles, authoritative HUD, revocation,
+disconnect, reusable CLEAR, shortcut Enter/retention/refresh/account isolation, and
+1000px/375px responsive layout. These are isolated tests, not live gameplay verification.
+Changed-file Ruff and whitespace checks pass. Repository-wide Ruff has **55 existing
+findings**, an exact normalized match to the earlier untouched baseline.
 
 No DEV or PROD deployment, cc-update invocation, or live database migration occurred.
-The scenario uses seed `867359018957601` and original coordinates in isolated SQLite
-tests; this is not live gameplay verification. After review, Thomas can manually update
-DEV to the final pushed private commit. PROD remains unauthorized.
+After review, Thomas can manually update DEV to the final pushed private commit, which
+also pins this documentation. PROD remains unauthorized. Live revisions were not
+inspected. Public website publication is separate from game deployment.
 
 ## Preserved baseline and limits
 
-Cormac v1.1 retains stable factual wilderness prose, landmark identity deduplication,
-BRIEF/NORMAL/MAXIMUM session verbosity and separate RAW/admin diagnostics. The nearby
-audited cabin description is supplied by persistent structure facts; Cormac's natural
-geography classification and cache are unchanged. No targeted LOOK was added.
+The cabin's reviewed ground attachment, coordinates, collision footprint, door reach,
+OPEN/ENTER/EXIT and interior reconnect behavior remain intact. Other structures are
+unaudited; this does not add continuous indoor movement or route pathfinding.
 
-Water Movement v1 remains LAND/WADING/SWIMMING/FLOATING with persisted AUTOWADE/AUTOSWIM,
-0.1-second integration and configurable 15-second observations. Stationary FLOAT does
-not emit movement observations. Disconnect acts like STOP, with normal offline rest
-and no offline drift. Drowning and knockdowns remain deferred. Riffles remain descriptive;
-underlying waterway geometry governs traversal. Other unsupported natural features stay
-fail-closed, including ravine reservations and certification retries.
-
-Live DEV/PROD revisions were not inspected. Prior deployment reports are historical
-evidence, not verification of this correction. Public documentation publication and
-private reference synchronization are separate from game deployment.
+Cormac v1.1 prose, verbosity, stable feature identity and RAW diagnostics are unchanged.
+Water Movement v1 retains LAND/WADING/SWIMMING/FLOATING, AUTOWADE/AUTOSWIM, ordinary
+currents, certification and hazard restrictions. Completing a swimming distance uses
+normal floating behavior. Disconnect still stops travel with no offline drift.
+Drowning, knockdowns, unsupported natural features and future nine-zone expansion
+remain deferred. No generator version, world-unit architecture or migration changed.
