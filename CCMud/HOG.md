@@ -52,117 +52,114 @@ saved coordinate or database schema is changed. No game deployment is implied.
 ## Cormac v1 (2026-09-28)
 
 Cormac is a deterministic server-side wilderness LOOK narrator: **HOG supplies facts;
-Cormac classifies and describes them.** It does not generate geography, decide movement
-permission, implement LOS, or call an LLM. The existing LOOK command and transport remain
-in use; ordinary prose gets a descriptive title and body. Admin `HOGDISPLAY RAW`, explicitly enabled admin coordinate diagnostics and
-periodic travel observations keep their existing diagnostic/presentation paths.
+Cormac observes, interprets and describes them.** No LLM, world generation or movement
+permission lives in prose. `LOOK`/`L` defaults to NORMAL; BRIEF/NORMAL/MAXIMUM select a
+session preference cleared on disconnect. Login and explicit LOOK share the same path.
+Interiors retain authored text and do not invoke geographic Eyes sampling.
 
-`LOOK` defaults to NORMAL. `LOOK BRIEF`, `LOOK NORMAL`, and `LOOK MAXIMUM` (also `L`)
-select a session preference; following plain LOOK uses it. Disconnect clears it.
-There is no database migration or new persistent preference framework. Targeted object
-LOOK remains a separate future command milestone.
+### Cormac Eyes v1 (2026-09-29)
 
-The temporary input adapter assumes ordinary perception for nearby geographic features,
-using ready local water/restriction shapes and nearby candidates from the existing
-background discovery catalog. The default narration radius is 1,000 feet. Unavailable
-LOS and diagnostic perceived=false do not suppress these local geographic candidates.
-No distant 50-mile view, people, objects, or unaudited structures are promoted into prose.
-Cold geometry/catalog work is queued through existing bounded mechanisms, never awaited
-by LOOK; descriptions can gain a landmark when its source becomes ready. Certification
-and physical safety gates remain unchanged. A future perception layer should replace
-candidate selection and continue supplying the same immutable Geography/Landmark input.
+The active gameplay provider supplies the observation; no admin context or new provider
+is constructed for LOOK. Immutable measurements record direction, distance, source,
+regional cell identity, values and known/unavailable status. Separate interpreted facts
+record terrain trends, biome changes and independently established cover differences,
+with indices back to their evidence. Certified HERE state and deduplicated landmarks
+remain structured too. This can support later travel comparisons without parsing prose.
 
-Cormac v1.1 merges local/regional representations by authoritative HOG feature ID
-before landmark selection and rendering, preferring local geometry for relationships.
-Distinct IDs remain distinct even at identical distance/direction; distance bands still
-refresh as the character moves. Light-woodland titles use **Among Light Woodland**.
-Other title wording, movement and RAW diagnostics are unchanged; the clockwise extension below preserves descriptive cache stability.
+`EyesConfig` centralizes the initial sampling and interpretation defaults:
 
-Local Waterway Geometry membership, depth and current are authoritative; stale top-level
-RAW water strings are not narration inputs. In-water descriptions come first, followed
-by local terrain and nearby landmarks. Prose is playerless: it describes the scene and
-what exists here without addressing "you". It invents no weather, species, sounds,
-smells, lighting, water color, rocks, mud or physical bank geometry. Unknown or ambiguous
-bank/egress distances are omitted. Existing floored depth prose is retained (1-6 feet;
-below 1 shallow; >=7 deep), rather than copying the reference example's near-three-foot
-rounding. Reliable existing deeper-water orientation is included at MAXIMUM.
+| Source | Bounded observation | Interpretation/limits |
+| --- | --- | --- |
+| Continuous HOG elevation | HERE plus eight directions at 500, 2,640 and 5,280 feet: 25 evaluations | A rise/fall needs at least 8 feet and 0.15% mean rise/run over the mile, with no sampled reversal greater than 1 foot. Existing trends retain at 80% of those thresholds. No safety, cliff or intervening-profile guarantee. |
+| Regional biome/cover | HERE plus eight directions at one-eighth and one-half of the smaller regional cell spacing, capped at 16 miles | Current seed: approximately 3.856 and 15.425 miles. Repeated source cells are read once per observation; 17 references are not 17 independent local vegetation surveys. |
+| Tree-cover differences | Compare actual regional percentages independently of biome names | At least 15 percentage points to introduce greater/lighter cover; retain at 12. Equal-cover biome changes never imply denser/thinner trees. |
+| Geographic landmarks | One pass over the existing ready discovery catalog, up to 32 candidates | Ordinary small features within 1,000 feet, medium waterways within one mile, large features within five miles, landmark-class features within 20 miles. Local features take precedence, then larger-scale features, then other distant waterways. |
 
-Classification lives in `src/crown_call/cormac.py`, not HOG. `ProseConfig` centralizes
-thresholds, distance words, local radius and cache bounds. Initial defaults:
+Regional biome names describe broader country, not a surveyed forest edge or its exact
+distance. Unknown cells and failed elevation probes are omitted, never interpreted as
+empty geography. The optional four-mile vegetation-detail raster is not used in v1.
+Fine vegetation, individual trees/species and local canopy/undergrowth remain unknown.
 
-| Fact | Descriptive classification |
-| --- | --- |
-| Tree cover | <15% open grassland; 15-<50% light woodland; 50-<75% woodland; >=75% dense woodland, for grass/woodland surfaces |
-| Absolute slope | <0.5% nearly level; <5% gently sloping; <15% sloping; otherwise steep |
-| River/stream width | >=100 ft broad |
-| Distance | <25 ft a few feet; <75 roughly fifty; <150 roughly a hundred; <300 roughly two hundred; <750 roughly five hundred; otherwise roughly a thousand within the local radius |
-| Direction | Eight compass points, nearest 45-degree sector |
-| Current | Existing qualitative Water Movement v1 bands; no exact mph |
+Eyes reuses RegionalDiscovery's four cached 16-mile-anchor catalogs and existing single
+background worker. Catalog construction retains one hydrology viewport query and four
+bounded natural-feature quadrant queries, not a query per ray/ring. A new presentation
+selector avoids RAW's two-per-distance-band truncation; RAW retains its original path.
+Regional channel distances are to supplied centerlines; lake distances use supplied
+shorelines; most natural features remain estimated anchors (ravines use their existing
+reservation polygon). Ready local water/restriction geometry overrides matching regional
+IDs. Distinct IDs remain distinct. Wetland/spring prose is not newly integrated here.
 
-Simple hysteresis holds the previous distance bucket within 10 feet of an edge, tree
-cover within 3 percentage points, slope within 0.1 percentage points, current within
-0.05 mph, detailed tree-cover estimates within 2 percentage points of ten-point rounding boundaries, and compass direction an extra 3 degrees beyond its ordinary sector. Water
-membership and depth descriptions are not delayed by hysteresis. These are descriptive
-choices, not changes to terrain speed, swimming thresholds or current physics.
+Cold catalogs are requested asynchronously. LOOK uses currently available information
+and never waits for their completion. Warm catalogs can add features on subsequent LOOK;
+missing candidates are not evidence of absence. Directional Eyes uses no walking chunks.
+The former LOOK neighborhood-prewarm call is removed: ready local geometry supplies
+HERE/water, while movement retains its own prewarming and certification. No Origin hot
+zone, generator/version change, certificate invalidation or database migration is added.
 
-BRIEF includes immediate terrain/water and the nearest landmark. NORMAL adds vegetation
-context, local current/channel orientation and up to two nearby landmarks. MAXIMUM adds
-up to four landmarks, rounded tree-cover estimates and reliable deeper-water orientation. Sparse scenes stay short;
-no word-count padding. A richer scene should supply more useful detail, not atmosphere.
-
-A scene signature contains descriptive terrain/slope, grassland context, supplied
-landmark identities and classified relationships, and local water/depth/current facts.
-Raw coordinates, elevation fluctuations, diagnostic flags, exact distances and hashes
-are excluded. Same signature plus verbosity returns the same cached Description.
-Small changes such as 188->181 feet, 37->38% tree cover and 109->106 degrees stay stable;
-water entry/exit, significant terrain changes and landmark changes update the scene.
-The process cache and per-character scene memories are bounded at 256 entries each.
-Recent scene signatures and recent generated language are separate eight-entry deques;
-these are expansion hooks, not a grammar/variation engine. Cache hits do not vary prose.
+The current geographic-context policy assumes ordinary perception; it does not certify
+LOS, terrain obstruction, darkness or weather visibility. Broad regional facts are not
+proof of visual access or safe passage. `ordinary_perception` isolates this policy.
+Structured facts carry a channel, allowing future authoritative audible information to
+be admitted independently of visual information. No current audible-source feed exists;
+audibility metadata alone produces no sound prose. Sound is a future supported channel;
+scent and acoustic simulation remain out of scope.
 
 ### Clockwise LOOK and Nearby (2026-09-29)
 
-Geographic composition establishes **HERE first**, then orders selected surrounding
-facts **N → NE → E → SE → S → SW → W → NW** in one continuous paragraph. The compass
-is absolute and eight-point; travel heading cannot rotate the scene. Selection considers
-all supplied local candidates before verbosity limits: the nearest/dominant identity
-still controls the title and BRIEF selection, rather than favoring northern landmarks.
-NORMAL selects up to two landmarks and MAXIMUM up to four. Reliable deeper-water
-orientation joins the clockwise survey at MAXIMUM; immediate water/current stays HERE.
-Missing directions produce no filler. Multiple representations of the same HOG feature,
-including adjacent bearings, collapse by stable feature ID; distinct features remain distinct.
+Composition establishes **HERE first**, with precise local water taking priority over
+regional vegetation, then selected facts in **N → NE → E → SE → S → SW → W → NW** order.
+It is one playerless geographic paragraph, not eight headings or mandatory sentences.
+Equivalent adjacent conclusions merge, including across NW/N; absent/uninteresting
+sectors create no filler. Feature direction and channel-flow orientation stay separate.
 
-Current inputs support local terrain/vegetation/slope, exact represented water membership,
-depth/current and nearby landmark bearings. They do **not** supply a certified eight-sector
-vegetation or distant elevation survey. One local sample is never extrapolated into
-fictional directional changes. Existing ready-geometry and bounded background-discovery
-selection, the 1,000-foot geographic radius and temporary ordinary local perception
-assumption remain; this is not certified LOS or an omniscient survey.
+BRIEF identifies the place with at most one surrounding fact. NORMAL gives a compact
+mental map with up to three; MAXIMUM uses up to six useful surrounding facts. Landmarks
+are limited to one/two/four respectively. Immediate water/current and HERE context are
+separate from those limits. Nearby defining landmarks take precedence, followed by
+regional biome changes and terrain relationships; selection precedes clockwise ordering.
+Stable titles use HERE and at most one landmark within the original 1,000-foot range;
+distant minor features cannot change the heading. Light woodland retains **Among Light
+Woodland**. Sparse scenes can legitimately have identical NORMAL/MAXIMUM prose.
 
-Discrete entities appear separately under **Nearby:**, with compass abbreviation,
-approximate feet and a functional label. Rows sort clockwise, then nearest first within
-a sector; ties use stable IDs. Empty sections are omitted. All verbosity modes retain
-supported entities. Today the supported subset is the existing audited Pioneer Cabin
-within its existing 100-foot observation range, including current door state. Distance
-is to the nearest footprint point at its attached floor. The immutable NearbyEntity
-presentation seam accepts already-perceived entities; it does not establish perception.
-No trustworthy generic wilderness player/NPC/item feed is currently connected, so the
-legacy proximity-only lists are not promoted into Nearby. Large structures also becoming
-landscape landmarks remains a future design question.
+Tree cover becomes sparse/scattered/substantial/dense coverage prose, not percentages.
+The existing thresholds remain <15%, <50%, <75%, then dense; HERE slope bands remain
+<0.5%, <5%, <15%, then steep. Distances remain humanized, extending the original feet
+bands to roughly a quarter/half mile, about one/two miles, several/many miles. Existing
+distance, compass, slope and cover hysteresis remains; local water entry/exit is immediate.
+Cormac invents no weather, species, sound, scent, lighting, water color or bank material.
 
-Nearby is rebuilt from the current observation on every LOOK, outside Cormac's geographic
-cache. The signature now considers all supplied deduplicated geographic candidates;
-existing descriptive buckets, hysteresis, cache bounds and recent-language hooks remain.
-Entity arrival/departure/state changes therefore need not invalidate geographic prose.
-RAW and optional Position diagnostics remain separate. LOOK is the spatial survey;
-future travel prose should describe meaningful changes, not repeat full surveys. This
-pass changes no generation, certificates, coordinates, movement or travel observations.
+**Nearby:** remains a separate live text list, clockwise then nearest within each sector,
+with approximate feet and a functional label. All verbosity modes retain supported
+entities; empty sections are omitted. The audited Pioneer Cabin within its existing
+100-foot observation range is the current supported subset. Door state and distance to
+its footprint/floor update independently of geographic prose. No generic wilderness
+player/NPC/item feed or large-structure landmark policy is introduced.
 
-Expand vocabulary/thresholds in ProseConfig and the small renderer, and geographic inputs
-in HogGame.describe_look. Cormac v2 should first improve the allowed-feature/perception
-input and useful landmark detail, then add deterministic language variation for genuinely
-new scenes. Full travel narration, advanced LOS, weather prose and LLM generation are
-outside v1. No game deployment accompanies documentation publication.
+### Stability and diagnostics
+
+The prose signature includes classified HERE, stable landmark identities/relationships
+and interpreted directional conclusions, excluding sample coordinates/raw elevations,
+timings and evidence indices. Existing 256-entry prose and character-memory bounds and
+eight-entry recent-scene/language hooks remain. Repeated stable scenes reuse prose.
+
+There is no new observation-result cache. Eyes recomputes the bounded survey, retaining
+only the latest observation for at most 256 characters to support diagnostics and simple
+hysteresis. Generation identity includes zone/seed/version; prior interpretations cannot
+carry across identities. Disconnect removes the retained observation. Default per-character
+measurements are bounded at 42; regional landmark candidates at 32 plus existing bounded
+ready-local geometry. No entity state is stored in that geographic observation.
+
+The server-side admin helper `HogGame.cormac_debug(character_id)` checks admin permission
+and returns the last HERE state, measurements, interpreted facts/evidence, candidates,
+feature availability, unique regional-cell reads, query count, construction/feature time,
+and prose reuse flag. It performs no new survey. This is a Python diagnostic helper,
+not a new player command or RAW display mode. Ordinary players receive no instrumentation.
+RAW and live optional Position remain separate and unchanged.
+
+LOOK is the spatial survey; future travel prose can compare structured observations for
+meaningful changes. Travel narration, authored outdoor overrides, certified perception,
+vegetation-detail integration and language variation are not implemented in this phase.
+
 
 ## Water Movement v1 (2026-09-28)
 

@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Cormac clockwise LOOK and independently refreshed Nearby; deployment remains manual.
+description: Cormac Eyes observes surrounding HOG geography without walking materialization; deployment remains manual.
 reviewed: 2026-09-29
 nav: status
 permalink: /CCMud/status.html
@@ -8,56 +8,55 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Cormac's wilderness LOOK now establishes HERE, then composes selected geographic
-landmarks clockwise from north using the absolute eight-point compass. Selection still
-uses the complete supplied candidate set and nearest/dominant priority; verbosity
-controls density, not a northern directional bias. Missing directions create no filler.
-Existing stable feature identity collapses duplicate representations; distinct features
-remain distinct. Immediate water, title relationships, approximate distance updates,
-playerless prose and descriptive hysteresis remain intact.
+Cormac Eyes v1 adds server-side geographic observation and interpretation to wilderness
+LOOK on private baseline `dde15adfbd346c3857570e62c3809925d7dec8a2`.
+It reuses the active HOG provider for continuous elevation, regional biome/tree cover,
+and one bounded discovery-catalog pass. Precise HERE water remains authoritative.
 
-Nearby is a separate current-observation display, ordered clockwise and then nearest
-within each sector. All verbosity modes retain supported entities. The existing audited
-Pioneer Cabin, within its original observation range and with live door state, is the
-current supported subset. Generic wilderness characters/NPCs/items await a trustworthy
-perception feed. Nearby never enters the geographic cache. RAW/Position stay separate.
+Meaningful rise/fall, broader biome changes and independently established cover changes
+join landmarks in the existing clockwise paragraph. Percentages are replaced with simple
+coverage language. Nearby and live Position remain outside geographic caching. Authored
+interiors, RAW, session verbosity, login LOOK and movement retain their existing paths.
 
-HOG supplies local terrain/vegetation/slope, represented water and nearby geographic
-bearings. It does not supply a certified eight-sector vegetation/elevation survey.
-The implementation describes available facts, with no new generation or invented
-spatial variation. See the [Cormac contract](hog.html#clockwise-look-and-nearby-2026-09-29).
-Travel observations retain their existing behavior; future travel prose should describe
-meaningful changes rather than repeat LOOK surveys.
+The directional survey requires no walking materialization. LOOK no longer prewarms its
+surrounding walking neighborhood; movement prewarming is unchanged. Cold discovery is
+asynchronous. No world generation, persistence, certificate or saved-position change is
+introduced. See the [Eyes contract](hog.html#cormac-eyes-v1-2026-09-29) for source scales,
+thresholds, fact limits, diagnostics and perception assumptions.
 
 ## Verification and next action
 
-Implementation pushed: `655c621e204611e2d561bbd48174750e13a0a982`, from private baseline
-`15a294ca39371a77160cb8a79d29eb59606669fb`.
+Implementation pushed: `d1d75c21eb142e514d06388f6da122b48847c2e7`.
+Focused Eyes/Cormac/cabin tests: **86 passed**, one dependency warning, **62.04s**.
+Complete suite: **635 passed**, 13 dependency deprecation warnings, **550.07s**.
+Changed-file Ruff and whitespace checks pass. Repository-wide Ruff retains 55 existing
+findings in untouched files. Shipped client CLEAR isolation and travel/water rendering
+checks pass. No client implementation changed.
 
-Focused Cormac/cabin tests: **58 passed**, one dependency warning, **31.03s**.
-Complete suite: **607 passed**, 13 dependency deprecation warnings, **541.64s**.
-Changed-file Ruff and whitespace checks pass. Fourteen new regression cases cover
-clockwise composition without north-biased selection, adjacent duplicate features,
-water-first/deeper-water ordering, shared compass edges, live independently formatted
-Nearby, cabin door state, verbosity, heading independence and empty-section omission.
-Existing movement, water, admin/RAW and persistence tests remain green.
+Real-seed examples cover all three verbosity modes at Origin, the known regional biome
+transition, two streams, riffles/river and meaningful slope. Each LOOK generated zero
+walking chunks. Origin remains locally nearly level; surrounding mixed forest and real
+waterways now add context. No synthetic map or live world changes were used.
 
-Twelve actual-seed LOOK examples were captured through HogGame/WorldService with isolated
-SQLite state: all verbosity levels at the cabin, one stream, two distinct streams, and
-riffles alongside a river. No synthetic geography or live server was used.
+Local Windows/SQLite benchmarks, measured alongside regression work: directional
+observation median **5.49 ms**, feature selection **26.83 ms**, warm full LOOK **34.21 ms**
+(p95 **40.61 ms**). One cold LOOK returned in **16.46 ms** while background catalog work
+still needed **2.51 seconds**. These are illustrative component/local command results,
+not DEV network/PostgreSQL guarantees; a less-contended initial run measured warm LOOK
+at 20.74 ms. The committed benchmark script reproduces the isolated workflow.
 
-No DEV or PROD deployment, cc-update invocation, or live database migration occurs in
-this phase. Thomas will manually deploy the reviewed revision.
+Thomas will manually deploy the reviewed revision and evaluate the real examples in DEV;
+no live DEV browser verification is claimed.
 
-## Preserved baseline and limits
+## Limits and preserved behavior
 
-Persistent ODOMETER/TRIP and the browser COPY/CLEAR/RESET TRIP controls remain in place.
-Migration `20260929_01` from that earlier phase still initializes existing characters'
-counters at zero; this LOOK pass introduces no additional migration.
+Regional vegetation is coarse context, not a local forest-edge survey. Certified LOS,
+weather/daylight filtering, fine vegetation, generic Nearby entities and authored outdoor
+zones remain future work. The optional vegetation-detail raster is deferred. Sound is
+an allowed future independent perception channel, but no authoritative hearing feed is
+connected and no sound is inferred from geographic existence.
 
-The cabin's ground attachment, footprint/collision, door reach, OPEN/ENTER/EXIT and
-interior reconnect behavior are unchanged. Water Movement v1, certification, movement,
-stamina, terrain factors and offline recovery remain separate from presentation.
-Version-5 walking certificates, world-generation identity, saved coordinates and HOG
-geography remain unchanged. Advanced LOS, directional vegetation surveys, generic entity
-perception, language variation and full travel narration remain future work.
+No DEV or PROD deployment, cc-update invocation or live migration occurs in this phase.
+Water Movement v1, odometers, cabin interactions, continuous travel, terrain factors,
+stamina and offline recovery remain unchanged. Walking-generation version 5 and HOG's
+underlying seed behavior remain intact. No travel-prose overhaul or Origin hot zone.
