@@ -6,10 +6,87 @@ nav: hog
 permalink: /CCMud/hog.html
 ---
 
+## Regional lake resolution (2026-09-29)
+
+Investigation on private baseline `99fa30a` reproduces the reported generation
+`205fd56d85ee04fa04255808e0f9fc60e2f9d04f95966613b6b8f49ae255eeb0`.
+Walking certification unconditionally rejects any chunk whose bounds touch a
+continental lake cell, before building the existing local water restrictions.
+This is deterministic, independent of cold/warm state and lake size; it denies
+whole 500-foot chunks, including dry portions beside the represented boundary.
+Local polygon lakes already use conservative exterior-only restrictions, but
+continental cell-union lakes never reach that adapter. Discovery also omits the
+continental lake list, while Eyes sees its `open_water` biome as "lake or pond".
+
+The supplied ID `867359018957601:lake:8226:0` is a different local lake: area
+0.233822229 square miles (about 150 acres), extent about 0.6044 miles east-west by
+0.6218 miles north-south. Its `medium` diagnostic class comes from the discovery
+rule "lake area below one square mile" and sets a search/visibility diagnostic
+band; it is not a universal physical-size vocabulary. Other feature kinds use
+different rules (for example, major-network status for waterways and dimensions
+for natural features), so a diagnostic class must not become a generic lake-size noun. The nearby continental
+object is `867359018957601:regional-lake:4`, a union of 105 existing regional cells:
+115,928.4 square miles, extent about 370.19 miles east-west by 465.26 miles
+north-south, and stored regional water surface 1,005 feet. Its cell-edge bounds
+are west 1215.2277647, south 144.2105263, east 1585.4192941, north 609.4736842 miles.
+These are dimensions of the represented coarse geometry, not a surveyed shore.
+At `(78947938, 14572800)` inches, its represented shore is about 292 feet east;
+the local lake's shore is about 35,734 feet away. No dimensions or IDs are inferred
+from prose, and production behavior must not special-case either lake.
+
+The source has no certified shore slope, shallow/deep profile or currents for
+continental lakes. Existing local polygon lakes also deny interior traversal.
+The resolution must preserve that conservative water policy rather than invent
+a lake bed or relabel water as dry ground. JUMP shares this walking certificate;
+unresolved springs/natural features remain a separate unsupported-extent issue.
+
+
+
 This is the canonical HOG architecture reference, carried forward from Crown-Call's existing `docs/heart-of-gold.md` at revision `a6b2fc76dfa27f38eaf623034c98dd6f67c3975e`. Its detailed engineering content is preserved. Current progress and live-environment evidence belong in [Status](status.html). HOG applies only to the MUD.
 
 * Contents
 {:toc}
+
+The walking adapter now indexes these existing cell unions once, preserving lake IDs,
+placement, area and source-grid resolution. Chunk certification retains only intersecting
+four-vertex cell restrictions, alongside existing local polygons and river geometry.
+A represented open-water biome is admitted only when its matching lake restriction
+exists; unsupported/unmatched water remains rejected. The dry part of a shoreline
+chunk can therefore certify, while footprint membership remains water with unknown
+depth and the interior has no certified standing/travel surface. Islands remain dry
+holes. No full-lake walking raster, synthetic bank profile or new lake generator is added.
+This is conservative resolution of the represented coarse shoreline, not proof of a
+surveyed walking-scale shore or a wadeable bank.
+
+A second integration defect checked water at the full movement endpoint even after
+intercepting a hazard. Movement now checks the safe-side endpoint before processing its
+ordinary hazard stop; a confirmed crossing still validates its destination. The lake
+warning therefore replaces a generic unsupported-position error. WADE, AUTOWADE,
+AUTOSWIM, SWIM and JUMP do not override unknown lake depth. Existing certified river
+water entry, currents, exit and FLOAT/STAND behavior are unchanged.
+
+Discovery now includes continental lake identities and exposed cell-union shoreline
+segments, without internal cell edges or chords across islands. Local/regional lake
+landmarks retain `area_sq_miles` and `extent_miles` (west, south, east, north). Cormac's
+central area bands use pond below 100 acres, small lake below one square mile, lake
+below 25, large lake below 1,000, vast lake below 10,000, and inland-sea-scale lake
+above that. These are presentation bands, not visibility claims. Unknown scale remains
+"lake". Lake-specific biome context uses the authoritative identity/area where known,
+and avoids duplicating an already selected lake landmark. Ordinary prose includes no
+precise dimensions. Certified LOS and Eyes' bounded observation policy are unchanged;
+LOOK never requests distant walking geometry.
+
+Walking adapter version 6 invalidates cached certificates while retaining compatibility
+with prior saved identities through ordinary position revalidation. Underlying seed,
+continental/local hydrology, biomes and elevation outputs are unchanged. Existing dry
+positions are not relocated. Known lake interiors remain invalid saved positions.
+
+Admin JUMP uses the same certificate and now accepts a valid dry position in a chunk
+that also contains lake water, while rejecting the water footprint. Springs/natural
+features remain a separate fail-closed restriction. A warning-only JUMP exception is
+not included: their existing extents can reserve unknown ground hazards, so bypassing
+them is not yet demonstrably safe. A separate task should distinguish presentation-only
+features from physical reservations before permitting any admin placement exception.
 
 ## Travel distance accounting (2026-09-29)
 

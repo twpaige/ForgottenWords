@@ -14,6 +14,17 @@ For the existing illustrated reading edition, see [CCMUD_Design.html](/CCMUD_Des
 
 The record begins with consolidated decisions C01–C11, followed by preserved numbered decisions. Read its reconciliation instructions before interpreting older entries. Old questions are historical records and do not automatically reopen a completed design interview.
 
+## Regional lake integration (2026-09-29)
+
+Existing continental lake cell unions now reach local walking as conservative water
+footprints. Dry shoreline-chunk portions can certify; unknown lake depths remain blocked.
+No new lake placement, bed, fine shoreline or world regeneration is introduced. Discovery,
+APPROACH and Cormac share the stable lake ID, area, extent and exposed shoreline segments.
+Physical area bands inform lake wording independently of diagnostic visibility classes.
+Eyes remains bounded and LOOK generates no surrounding walking chunks. The
+[HOG lake contract](hog.html#regional-lake-resolution-2026-09-29) records the reproduced
+identity mismatch, geometry limits, safety checks and walking-version compatibility.
+
 ## Admin navigation and testing (2026-09-28)
 
 APPROACH can resolve the audited Pioneer Cabin's exterior door point through ordinary
