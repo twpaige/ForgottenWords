@@ -149,7 +149,7 @@ Playtest use only. Not licensed for redistribution.
 
     <div class="card">
       <h2>This sheet’s kit</h2>
-      <div class="mono">Arming Sword &nbsp; 1H +0 &nbsp; 2H +2 &nbsp; DEEP<br>Shield (Light) &nbsp; 1H +2 &nbsp; 2H +4 &nbsp; LITE<br>Call Flame (MAGIC 1) &nbsp; MOTION×2, WORDS, SIGHT</div>
+      <div class="mono">Arming Sword &nbsp; 1H +0 &nbsp; 2H +2 &nbsp; SM +1<br>Shield (Light) &nbsp; 1H +2 &nbsp; 2H +4 &nbsp; SM +0<br>Call Flame (MAGIC 1) &nbsp; MOTION×2, WORDS, SIGHT</div>
       <p>Offense = CAP + Wield + Aggression − Wound Level<br>
       Defense = CAP + Wield − Aggression − Wound Level</p>
       <p>Ranged never uses Aggression (W1).</p>
@@ -161,9 +161,10 @@ Playtest use only. Not licensed for redistribution.
       <p>Ranged needs 10 ft or more (W1a). Thrown −1 per 10 ft (W11).</p>
       <p><b>Engaged (W1b):</b> adjacent to an enemy willing to oppose you. Leaving that square is your whole ACT. Opposed withdraw vs each who contests (WEAPONS or ATHLETICS). Win all: walk a legal path. Fail any: stay. No free hit. −10 first is optional.</p>
       <p><b>Protect (T7):</b> PREP “I protect [name].” Leftover Speed only for this. Melee only. You must reach a square adjacent to both ally and attacker. You become the target. Once per Turn. You stay there. That square Engages you (W1b). You do not stroll off.</p>
-      <div class="mono">MoV → wound, then ceiling, then armor (W3–W5)<br>
+      <div class="mono">MoV → Base Wound → SM → armor → Final Wound (W3–W5)<br>
       1–4 FLSH &nbsp; 5–8 LITE &nbsp; 9–12 DEEP<br>
       13–16 SEVR &nbsp; 17–20 GRAV &nbsp; 21+ MORT<br>
+      SM +0 to +3 raises severity by that many steps; cap at MORT. No wound ceilings: even a dagger (SM +0) can reach MORT with enough MoV.<br>
       Armor: none +1 &nbsp; leather 0 &nbsp; chain −1 &nbsp; plate −2. No AC.<br>
       Ladder (W8): 2 FLSH=LITE · 2 LITE=DEEP · 2 DEEP=SEVR · 2 SEVR=GRAV · 2 GRAV=MORT<br>
       C5 penalty is the worst rung: FLSH−1 … MORT−6. Hits WEAPONS, RANGED, ATHLETICS, THIEVERY, SENSE. MAGIC, ACADEMICS, FAITH are clean.</div>
@@ -173,7 +174,7 @@ Playtest use only. Not licensed for redistribution.
     <div class="card">
       <h2>Calling (M)</h2>
       <p>Listed Calls only. Flame needs MAGIC 1+, two free hands, spoken words, sight of the target (M10). Leather or less to Gather (M11). You do not invent a Call mid-fight (M1).</p>
-      <p>Damaging Call: MAGIC vs MAGIC (M7). A sword is not defended with MAGIC. MAGIC 0 still rolls d20+0.</p>
+      <p>Damaging Call: MAGIC vs MAGIC (M7). SM +0/+1/+2/+3 at MAGIC 1–5/6–10/11–15/16–20 (M6). A sword is not defended with MAGIC. MAGIC 0 still rolls d20+0.</p>
       <p>Range 5 ft × MAGIC. Area = MAGIC contiguous 5-ft squares, all in range (M9). Area is one roll vs the strongest named defender. Win: split the wound down the M3 steps. Lose: nobody in the paint is hit.</p>
       <p><b>Gather (M4):</b> up to 3 still Rounds (no MOVE, PREP, ACT, talk). Release is the whole Turn, up to 4 Calls. A wound dumps the store. Attacked while Gathering: keep the store and defend on a die of 1, or abandon and defend normally.</p>
       <p><b>Convert-heal (M8):</b> announce first. Single-target only. Roll vs an enemy still in the fight, not a friend. Virtual wound heals the named ally one rung lower. FLSH converts to nothing. Area cannot convert.</p>
@@ -181,7 +182,7 @@ Playtest use only. Not licensed for redistribution.
 
     <div class="card">
       <h2>Faith (F, G7)</h2>
-      <p>Natural 20 on a combat roll: add FAITH now, or try to bank Guidance (d20+FAITH &gt; 20, max 1 banked) (F1–F2). Spend Guidance later to add FAITH to a combat roll, even after you see the dice (F3). Not on jumps or locks.</p>
+      <p>Natural 20 on a combat d20 explodes: add another d20; each added 20 explodes again. It also gives a Critical Opportunity: add FAITH now or try to bank Guidance (d20+FAITH &gt; 20, max 1 banked) (F1–F2). Natural 1 implodes: the opponent adds another d20, which can explode on 20. Compare final totals; no automatic failure (F4). Spend Guidance later to add FAITH to a combat roll, even after you see the dice (F3). Not on jumps or locks. Risky (3d6) explodes at natural 18, implodes at natural 3. Stable (4d6 drop lowest) uses 18/3 after dropping; 18 needs at least three sixes, 3 needs four ones (O3).</p>
       <p>Prayer never copies a Call. It can change a circumstance the GM already thought was possible (F5). Petition for the dead is two raw d20s; higher restores. FAITH does not auto-add. God is never obligated (F6).</p>
       <h2 style="margin-top:16px">After the fight (O)</h2>
       <p>No potions. No Full Rest. Clock, not a gift (O1).</p>
