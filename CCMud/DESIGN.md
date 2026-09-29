@@ -42,6 +42,35 @@ structure certification, targeted LOOK, or continuous interior movement.
 The [HOG cabin contract](hog.html#pioneer-cabin-attachment-and-regression-invariant-2026-09-28)
 owns the audit conditions, regression cause and invariant.
 
+## Character odometers and transcript controls (2026-09-29)
+
+ODOMETER is a persistent lifetime travel counter; TRIP is a separately resettable
+counter. Both are server-side character features available to every client through
+`ODOMETER` and `TRIP RESET`. The reset response is `Trip odometer reset.` and does not
+change lifetime distance, selected pace or active travel.
+
+Counters measure accepted physical travel segments using the existing travel engine's
+horizontal world-distance metric, including walking/running/sprinting, wading,
+swimming and actual current-driven drift. Rejected movement and the uncompleted
+portion of a requested distance never count. Ground-relative Z maintenance, JUMP,
+teleports/admin placement, login restoration, coordinate correction and placement-only
+coordinate-space transitions do not count. Future ordinary travel can use the same
+accepted-displacement accounting hook rather than command-specific increments.
+
+The lifetime and trip counters persist as integer inches, with integer millionth-inch
+carry for diagonal segment lengths so per-tick rounding does not lose whole inches.
+No floating-point miles are stored. Distance is credited in the same database transaction
+as the accepted position; its receipt is consumed only after commit. The migration
+initializes existing characters to zero; historical distance cannot be reconstructed.
+
+The web HUD displays compact ODO/TRIP readings in whole feet below a mile and tenths
+of miles thereafter. RESET TRIP sends the normal server command. COPY copies every
+current transcript entry as plain text, including off-screen entries; its brief success
+or failure notice is outside the transcript. CLEAR uses the existing local clear path,
+leaving gameplay, odometers and saved shortcuts untouched. The client currently has no
+Up/Down command-history subsystem; this change adds none. Responsive viewport sizing
+reserves space for command entry and controls while the transcript scrolls normally.
+
 ## Ordinary biome transitions (2026-09-29)
 
 Transitions between reviewed HOG biome classes remain traversable. The selected pace

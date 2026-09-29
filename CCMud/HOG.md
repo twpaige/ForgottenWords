@@ -11,6 +11,16 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 * Contents
 {:toc}
 
+## Travel distance accounting (2026-09-29)
+
+Accepted travel segments now carry a distance receipt to the existing character-position
+checkpoint. The same transaction credits lifetime ODOMETER and resettable TRIP;
+administrative JUMP uses that checkpoint without a travel receipt. Legacy directional
+movement uses the same integer accounting helper after its safety checks. No HOG
+certificate, terrain factor, stamina, selected pace or hazard behavior changes.
+The [odometer contract](design.html#character-odometers-and-transcript-controls-2026-09-29)
+defines persistence, included/excluded movement and web/text-client presentation.
+
 ## Reviewed regional biome transitions (2026-09-29)
 
 DEV walking policy version 5 certifies chunks containing multiple **reviewed** regional

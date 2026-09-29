@@ -1,7 +1,7 @@
 ---
 title: Commands
 description: Current CCMUD commands and reviewed legacy command candidates.
-reviewed: 2026-09-28
+reviewed: 2026-09-29
 nav: commands
 permalink: /CCMud/commands.html
 ---
@@ -40,6 +40,8 @@ These are the documented current source-level commands. Release and feature gate
 | Stop | `STOP` | Stop active voluntary travel; when swimming, enter FLOATING. Floating does not cancel current. |
 | Water | `WADE <direction>`, `WADE`, `SWIM <direction>`, `FLOAT`, `STAND` | Choose water movement or state as permitted by represented depth. See [Water Movement v1](design.html#water-movement-v1-2026-09-28). |
 | Preferences | `SET`, `SET AUTOWADE`, `SET AUTOSWIM` | List settings or toggle the two independent, persisted water-travel preferences. Both default OFF. |
+| Character | `ODOMETER` | Lifetime ODO and resettable TRIP distances; persistent server-side integer-inch counters. |
+| Character | `TRIP RESET` | Reset TRIP only; responds `Trip odometer reset.` without stopping travel. |
 | Character | `STATUS` | Current CCMUD status, including travel state; historical Shadows STATUS has different, unresolved semantics. |
 | Places and objects | `ENTER <place>`, `EXIT`, `GET <object>`, `DROP <object>`, `INVENTORY`, `CUT <resource>`, `OPEN <door>`, `CLOSE <door>` | Interact with implemented structures, resources and objects. ENTER can deliberately enter a nearby represented waterway under its current rules; existing feature gates still apply. |
 | Communication and session | `SAY <message>`, `HELP`, `QUIT` | Speak to nearby listeners, list help, or close the session. |
@@ -50,7 +52,11 @@ door. Door reach and intervening walls matter. A nearby valid place resolves bef
 water ENTER. Ordinary movement still collides with the cabin even with its door open.
 Other unaudited structures remain gated; see the [cabin attachment contract](hog.html#pioneer-cabin-attachment-and-regression-invariant-2026-09-28).
 
-`CLEAR` clears the **web transcript locally**. It does not send an in-world command or stop travel. Do not assume its availability or effects in a telnet client.
+The web HUD shows ODO/TRIP in feet or miles. RESET TRIP dispatches `TRIP RESET`.
+COPY copies the whole current transcript, including scrolled-out text, and reports
+success/failure outside it. These presentation controls never alter game state.
+
+`CLEAR` (typed or its button) clears the **web transcript locally**. It does not send an in-world command or stop travel. Do not assume its availability or effects in a telnet client.
 
 ### Staff diagnostics
 

@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Reviewed regional biome transitions remain certified and traversable; deployment remains manual.
+description: Persistent travel odometers and responsive transcript controls; deployment remains manual.
 reviewed: 2026-09-29
 nav: status
 permalink: /CCMud/status.html
@@ -8,40 +8,39 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Reviewed regional biome transitions are implemented on private baseline `e121d7e`.
-The newer cabin, navigation, shortcuts and upstream ruleset changes are preserved.
-Walking policy version 5 validates every intersecting regional cell, including narrow
-strips between ground samples. Reviewed surface changes become safe movement boundaries;
-missing/unsupported geography and independent hazards still fail closed.
+Persistent ODOMETER/TRIP and small web-client display controls are implemented on
+private baseline `c0c260750d1ce69a822e80250a8115d852d35138`.
+Counters record accepted travel through the position checkpoint; admin placement carries
+no travel distance. Integer inches plus integer sub-inch carry survive reconnect/restart.
+`ODOMETER` serves all clients; `TRIP RESET` resets only TRIP without stopping travel.
+Migration `20260929_01` starts existing characters at zero; no historical travel is inferred.
 
-The seed `867359018957601` woodland/mixed-forest transition in chunks `[60-63,11]`
-remains traversable. Local 42-degree and reverse 222-degree travel tests continue
-without confirmation or stopping, preserve WALK/stamina, and refresh factors from
-85% light woodland to 65% heavy woodland and back at integer-inch crossing precision.
-See the [transition contract](hog.html#reviewed-regional-biome-transitions-2026-09-29).
-
-The old generation `1f14772c2e663ce762201381df0fba4f46ff47a8a0363929447afe72c3f33285`
-remains accepted for character revalidation, while walking certificates regenerate
-under version 5. Biome/elevation grids match pre-fix fingerprints; no saved coordinates,
-source geography or database schema changes.
+The web HUD displays ODO/TRIP. RESET TRIP uses the server command, CLEAR reuses local
+transcript clearing, and COPY captures all transcript entries with a separate notice.
+Viewport sizing reserves space for input/controls. Saved shortcuts remain intact;
+there was no existing Up/Down command-history subsystem and none is introduced.
+See the [odometer contract](design.html#character-odometers-and-transcript-controls-2026-09-29)
+and [commands](commands.html).
 
 ## Verification and next action
 
-Implementation pushed: `f6daa784aea30fca17bb1e7dacd7e590ddc64476`.
-Full suite on the combined baseline: **571 passed**, 13 dependency deprecation
-warnings, **490.12s**. Expanded focused checks before upstream integration: **128 passed**,
-1 warning, 101.68s. Final-baseline boundary/terrain/Cormac checks: **76 passed**,
-1 warning, 2.79s. The 25 new regression cases include the exact seed, forward/reverse
-travel, factor refresh, narrow strips, corner crossings, missing classes, old certificate
-rejection, saved-position validation and unchanged source-grid fingerprints.
-Changed-file Ruff and whitespace checks pass. The existing CLEAR browser check passes.
-The inherited travel-presentation extraction script fails because its isolated context
-omits the newer positionText helper; script and client are unchanged from e121d7e.
-This is recorded separately from the passing Python suite; no live browser claim is made.
+Implementation pushed: `a5e10ad50d3b00789fcea3c96620135262a6ad5e`.
+Final full suite: **593 passed**, 13 dependency deprecation warnings, **513.41s**.
+Expanded focused suite: **164 passed**, 1 warning, 77.75s. After retry-accounting
+hardening, focused movement/water/lifecycle tests: **133 passed**, 1 warning, 11.50s;
+final odometer suite: **22 passed**, 1 warning, 3.78s. Changed-file Ruff and whitespace
+checks pass. The existing real-seed biome-crossing tests also verify distance accounting.
+
+Headless Edge tests pass against actual client HTML with mocked account/WebSocket
+responses: admin/player controls, complete transcript copy, unobtrusive success/failure,
+local CLEAR, shortcut retention, HUD, and visible controls at 1366x768, 1280x720,
+1024x600, 1920x1080 and 375x812. Existing CLEAR and travel-presentation scripts pass;
+the inherited missing positionText helper in the latter's test context was corrected.
+No unrelated runtime failure was found.
 
 No DEV or PROD deployment, cc-update invocation, or live database migration occurred.
-Thomas will manually deploy the reviewed final private revision. Local automated tests
-are not live gameplay verification. Documentation publication is separate from game deployment.
+Thomas will manually deploy the reviewed revision; the normal updater applies the new
+counter migration. Local browser tests use mocked account/WebSocket responses, not DEV.
 
 ## Preserved baseline and limits
 
@@ -54,4 +53,5 @@ Water Movement v1 retains LAND/WADING/SWIMMING/FLOATING, AUTOWADE/AUTOSWIM, ordi
 currents, certification and hazard restrictions. Completing a swimming distance uses
 normal floating behavior. Disconnect still stops travel with no offline drift.
 Drowning, knockdowns, unsupported natural features and future nine-zone expansion
-remain deferred. Only the walking-certificate version changes; world generators, units and schema remain unchanged.
+remain deferred. The existing version-5 walking certificate and world generators are unchanged. The
+only schema change is the new character distance counters and fractional carry.
