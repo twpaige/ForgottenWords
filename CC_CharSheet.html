@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 Crown & Call character sheet
-Version: 202609191618
+Version: 202609281951
 Copyright (c) 2026 Thomas Paige. All rights reserved.
 Playtest use only. Not licensed for redistribution.
 -->
@@ -282,14 +282,14 @@ Playtest use only. Not licensed for redistribution.
 
     <div class="wlab">Weapons</div>
     <div class="wep wep-head">
-      <span>Name</span><span>1H</span><span>2H</span><span>Ceil</span><span>Used with</span><span>Kind</span>
+      <span>Name</span><span>1H</span><span>2H</span><span>SM</span><span>Used with</span><span>Kind</span>
     </div>
     <div id="weapons">
       <div class="wep">
         <input id="aname" type="text" placeholder="Weapon A">
         <input class="plain" id="a1h" type="text" inputmode="numeric" value="0" title="1H">
         <input class="plain" id="a2h" type="text" inputmode="numeric" value="0" title="2H">
-        <input id="aceil" type="text" placeholder="ceil">
+        <select id="asm" title="Severity Modifier"><option value="0">+0</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option></select>
         <select id="astat"><option value="weapons" selected>WEAPONS</option><option value="ranged">RANGED</option></select>
         <select id="akind"><option value="melee" selected>Melee</option><option value="ranged">Ranged</option></select>
       </div>
@@ -297,7 +297,7 @@ Playtest use only. Not licensed for redistribution.
         <input id="bname" type="text" placeholder="Weapon B">
         <input class="plain" id="b1h" type="text" inputmode="numeric" value="0" title="1H">
         <input class="plain" id="b2h" type="text" inputmode="numeric" value="0" title="2H">
-        <input id="bceil" type="text" placeholder="ceil">
+        <select id="bsm" title="Severity Modifier"><option value="0">+0</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option></select>
         <select id="bstat"><option value="weapons" selected>WEAPONS</option><option value="ranged">RANGED</option></select>
         <select id="bkind"><option value="melee" selected>Melee</option><option value="ranged">Ranged</option></select>
       </div>
@@ -305,7 +305,7 @@ Playtest use only. Not licensed for redistribution.
         <input id="cname" type="text" placeholder="Weapon C">
         <input class="plain" id="c1h" type="text" inputmode="numeric" value="0" title="1H">
         <input class="plain" id="c2h" type="text" inputmode="numeric" value="0" title="2H">
-        <input id="cceil" type="text" placeholder="ceil">
+        <select id="csm" title="Severity Modifier"><option value="0">+0</option><option value="1">+1</option><option value="2">+2</option><option value="3">+3</option></select>
         <select id="cstat"><option value="ranged" selected>RANGED</option><option value="weapons">WEAPONS</option></select>
         <select id="ckind"><option value="ranged" selected>Ranged</option><option value="melee">Melee</option></select>
       </div>
@@ -318,7 +318,7 @@ Playtest use only. Not licensed for redistribution.
     <div class="live" id="mods"></div>
     <div class="notes" id="notes"></div>
   </div>
-  <p class="foot">Ver. 202609191618 · © 2026 Thomas Paige · playtest, not for redistribution</p>
+  <p class="foot">Ver. 202609281951 · © 2026 Thomas Paige · playtest, not for redistribution</p>
 </div>
 
 <script>
@@ -483,20 +483,20 @@ function render() {
   const spd = speed();
   const squares = spd / 5;
   const diag = Math.floor(squares / 2);
-  let ceil = "DEEP";
-  if (mag >= 16) ceil = "MORT";
-  else if (mag >= 11) ceil = "GRAV";
-  else if (mag >= 6) ceil = "SEVR";
+  const callSm = mag >= 16 ? 3 : mag >= 11 ? 2 : mag >= 6 ? 1 : 0;
 
   document.getElementById("mods").innerHTML = `
     <div class="mod"><span>${a.name} offense 1H / 2H</span><b>${a.off}</b></div>
     <div class="mod"><span>${a.name} defense 1H / 2H</span><b>${a.def}</b></div>
+    <div class="mod"><span>${a.name} Severity Modifier</span><b>+${n("asm")}</b></div>
     <div class="mod"><span>${b.name} offense 1H / 2H</span><b>${b.off}</b></div>
     <div class="mod"><span>${b.name} defense 1H / 2H</span><b>${b.def}</b></div>
+    <div class="mod"><span>${b.name} Severity Modifier</span><b>+${n("bsm")}</b></div>
     <div class="mod"><span>${c.name} offense 1H / 2H</span><b>${c.off}</b></div>
     <div class="mod"><span>${c.name} defense 1H / 2H</span><b>${c.def}</b></div>
+    <div class="mod"><span>${c.name} Severity Modifier</span><b>+${n("csm")}</b></div>
     <div class="mod"><span>Dodge (ATHLETICS, melee)</span><b>${signed(dodgeDef)}</b></div>
-    <div class="mod"><span>Call / ceiling (M6)</span><b>${signed(mag)} · ${ceil}</b></div>
+    <div class="mod"><span>Call / SM (M6)</span><b>${signed(mag)} · SM +${callSm}</b></div>
     <div class="mod"><span>Speed / squares</span><b>${spd} ft · ${squares} sq</b></div>
     <div class="mod"><span>Wound / C5 / Guidance</span><b>${worstName()} · ${wpen} · ${document.getElementById("guidance").checked ? "FAITH " + faith : "off"}</b></div>
     <div class="mod"><span>Aggression live</span><b>${document.getElementById("adjacent").checked ? signed(agg) : "0 not adjacent"}</b></div>
@@ -505,7 +505,10 @@ function render() {
 
   const adj = document.getElementById("adjacent").checked;
   const notes = [];
-  notes.push(`Add d20 (or the table's dice mode). MoV 1–4 FLSH, 5–8 LITE, 9–12 DEEP, 13–16 SEVR, 17–20 GRAV, 21+ MORT — then apply the weapon/Call ceiling and armor.`);
+  notes.push(`Add d20 (or the table's dice mode). MoV 1–4 FLSH, 5–8 LITE, 9–12 DEEP, 13–16 SEVR, 17–20 GRAV, 21+ MORT — then add weapon/Call SM (+0 to +3), cap at MORT, and apply armor. Any weapon can reach MORT with enough MoV.`);
+  notes.push("Combat criticals (F1/F4): natural 20 explodes; add d20, repeating on 20. Natural 1 implodes; opponent adds d20, which explodes on 20. Compare final totals. A 20 also grants a Critical Opportunity: add FAITH or try to bank Guidance.");
+  notes.push("Risky 3d6: natural 18/3 explode/implode. Stable 4d6 drop lowest: natural 18/3 explode/implode (three sixes / four ones).");
+  notes.push("For launched attacks, use projectile Wielding Modifier and SM; launcher sets range and firing rules (W11).");
   notes.push(`Aggression in the boxes: ${adj ? signed(agg) : "0 (not adjacent)"}. Ranged rolls ignore it.`);
   notes.push(`Diagonal this Turn: at most ${diag} of ${squares} squares (T3).`);
   notes.push(`Meditation minutes today: ${faith * 15} (O6).`);
@@ -525,7 +528,7 @@ function weaponState(prefix) {
     name: document.getElementById(prefix + "name").value,
     h1: n(prefix + "1h"),
     h2: n(prefix + "2h"),
-    ceil: document.getElementById(prefix + "ceil").value,
+    sm: n(prefix + "sm"),
     stat: document.getElementById(prefix + "stat").value,
     kind: document.getElementById(prefix + "kind").value
   };
@@ -555,7 +558,10 @@ function applyWeapon(prefix, data) {
   document.getElementById(prefix + "name").value = data.name || "";
   document.getElementById(prefix + "1h").value = data.h1 ?? 0;
   document.getElementById(prefix + "2h").value = data.h2 ?? 0;
-  document.getElementById(prefix + "ceil").value = data.ceil || "";
+  // Convert saved v1 ceiling labels to the closest new SM when loading old sheets.
+  const oldSm = { LITE: 0, DEEP: 1, SEVR: 2, GRAV: 2, MORT: 3 };
+  const savedSm = data.sm ?? oldSm[String(data.ceil || "").toUpperCase()] ?? 0;
+  document.getElementById(prefix + "sm").value = String(Math.max(0, Math.min(3, Number(savedSm) || 0)));
   if (data.stat) document.getElementById(prefix + "stat").value = data.stat;
   if (data.kind) document.getElementById(prefix + "kind").value = data.kind;
 }
