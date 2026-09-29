@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Persistent travel odometers and responsive transcript controls; deployment remains manual.
+description: Cormac clockwise LOOK and independently refreshed Nearby; deployment remains manual.
 reviewed: 2026-09-29
 nav: status
 permalink: /CCMud/status.html
@@ -8,50 +8,56 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Persistent ODOMETER/TRIP and small web-client display controls are implemented on
-private baseline `c0c260750d1ce69a822e80250a8115d852d35138`.
-Counters record accepted travel through the position checkpoint; admin placement carries
-no travel distance. Integer inches plus integer sub-inch carry survive reconnect/restart.
-`ODOMETER` serves all clients; `TRIP RESET` resets only TRIP without stopping travel.
-Migration `20260929_01` starts existing characters at zero; no historical travel is inferred.
+Cormac's wilderness LOOK now establishes HERE, then composes selected geographic
+landmarks clockwise from north using the absolute eight-point compass. Selection still
+uses the complete supplied candidate set and nearest/dominant priority; verbosity
+controls density, not a northern directional bias. Missing directions create no filler.
+Existing stable feature identity collapses duplicate representations; distinct features
+remain distinct. Immediate water, title relationships, approximate distance updates,
+playerless prose and descriptive hysteresis remain intact.
 
-The web HUD displays ODO/TRIP. RESET TRIP uses the server command, CLEAR reuses local
-transcript clearing, and COPY captures all transcript entries with a separate notice.
-Viewport sizing reserves space for input/controls. Saved shortcuts remain intact;
-there was no existing Up/Down command-history subsystem and none is introduced.
-See the [odometer contract](design.html#character-odometers-and-transcript-controls-2026-09-29)
-and [commands](commands.html).
+Nearby is a separate current-observation display, ordered clockwise and then nearest
+within each sector. All verbosity modes retain supported entities. The existing audited
+Pioneer Cabin, within its original observation range and with live door state, is the
+current supported subset. Generic wilderness characters/NPCs/items await a trustworthy
+perception feed. Nearby never enters the geographic cache. RAW/Position stay separate.
+
+HOG supplies local terrain/vegetation/slope, represented water and nearby geographic
+bearings. It does not supply a certified eight-sector vegetation/elevation survey.
+The implementation describes available facts, with no new generation or invented
+spatial variation. See the [Cormac contract](hog.html#clockwise-look-and-nearby-2026-09-29).
+Travel observations retain their existing behavior; future travel prose should describe
+meaningful changes rather than repeat LOOK surveys.
 
 ## Verification and next action
 
-Implementation pushed: `a5e10ad50d3b00789fcea3c96620135262a6ad5e`.
-Final full suite: **593 passed**, 13 dependency deprecation warnings, **513.41s**.
-Expanded focused suite: **164 passed**, 1 warning, 77.75s. After retry-accounting
-hardening, focused movement/water/lifecycle tests: **133 passed**, 1 warning, 11.50s;
-final odometer suite: **22 passed**, 1 warning, 3.78s. Changed-file Ruff and whitespace
-checks pass. The existing real-seed biome-crossing tests also verify distance accounting.
+Implementation pushed: `655c621e204611e2d561bbd48174750e13a0a982`, from private baseline
+`15a294ca39371a77160cb8a79d29eb59606669fb`.
 
-Headless Edge tests pass against actual client HTML with mocked account/WebSocket
-responses: admin/player controls, complete transcript copy, unobtrusive success/failure,
-local CLEAR, shortcut retention, HUD, and visible controls at 1366x768, 1280x720,
-1024x600, 1920x1080 and 375x812. Existing CLEAR and travel-presentation scripts pass;
-the inherited missing positionText helper in the latter's test context was corrected.
-No unrelated runtime failure was found.
+Focused Cormac/cabin tests: **58 passed**, one dependency warning, **31.03s**.
+Complete suite: **607 passed**, 13 dependency deprecation warnings, **541.64s**.
+Changed-file Ruff and whitespace checks pass. Fourteen new regression cases cover
+clockwise composition without north-biased selection, adjacent duplicate features,
+water-first/deeper-water ordering, shared compass edges, live independently formatted
+Nearby, cabin door state, verbosity, heading independence and empty-section omission.
+Existing movement, water, admin/RAW and persistence tests remain green.
 
-No DEV or PROD deployment, cc-update invocation, or live database migration occurred.
-Thomas will manually deploy the reviewed revision; the normal updater applies the new
-counter migration. Local browser tests use mocked account/WebSocket responses, not DEV.
+Twelve actual-seed LOOK examples were captured through HogGame/WorldService with isolated
+SQLite state: all verbosity levels at the cabin, one stream, two distinct streams, and
+riffles alongside a river. No synthetic geography or live server was used.
+
+No DEV or PROD deployment, cc-update invocation, or live database migration occurs in
+this phase. Thomas will manually deploy the reviewed revision.
 
 ## Preserved baseline and limits
 
-The cabin's reviewed ground attachment, coordinates, collision footprint, door reach,
-OPEN/ENTER/EXIT and interior reconnect behavior remain intact. Other structures are
-unaudited; this does not add continuous indoor movement or route pathfinding.
+Persistent ODOMETER/TRIP and the browser COPY/CLEAR/RESET TRIP controls remain in place.
+Migration `20260929_01` from that earlier phase still initializes existing characters'
+counters at zero; this LOOK pass introduces no additional migration.
 
-Cormac v1.1 prose, verbosity, stable feature identity and RAW diagnostics are unchanged.
-Water Movement v1 retains LAND/WADING/SWIMMING/FLOATING, AUTOWADE/AUTOSWIM, ordinary
-currents, certification and hazard restrictions. Completing a swimming distance uses
-normal floating behavior. Disconnect still stops travel with no offline drift.
-Drowning, knockdowns, unsupported natural features and future nine-zone expansion
-remain deferred. The existing version-5 walking certificate and world generators are unchanged. The
-only schema change is the new character distance counters and fractional carry.
+The cabin's ground attachment, footprint/collision, door reach, OPEN/ENTER/EXIT and
+interior reconnect behavior are unchanged. Water Movement v1, certification, movement,
+stamina, terrain factors and offline recovery remain separate from presentation.
+Version-5 walking certificates, world-generation identity, saved coordinates and HOG
+geography remain unchanged. Advanced LOS, directional vegetation surveys, generic entity
+perception, language variation and full travel narration remain future work.
