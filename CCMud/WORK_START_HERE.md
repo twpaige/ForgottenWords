@@ -60,3 +60,12 @@ separate from movement permission. Independent terrain/structure hazards stay ga
 Thomas reviews the implementation report before manually deploying DEV. No DEV or
 PROD deployment is part of this task. The geometry and prior release reports remain
 historical evidence; do not treat their three-foot rule as current gameplay policy.
+
+
+## Bounded rabbit hit test (2026-09-30)
+
+After Hunting Knife Slice 1, Thomas authorized Rabbit MOB + THROW, then REMOVE.
+MOB (mobile) is CCMUD's NPC terminology. This increment resolves hit/miss and
+preserves the same knife through held, embedded and ground states. Wounds, killing,
+full encounter turns and rabbit AI remain deferred. Read section 15 of
+[the object contract](objects.html) before expanding it. No game deployment is authorized.

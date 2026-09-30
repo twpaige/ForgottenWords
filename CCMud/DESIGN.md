@@ -5,8 +5,17 @@ reviewed: 2026-09-30
 nav: design
 permalink: /CCMud/design.html
 ---
-**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 implementation on September 30. Later slices and deployment remain unauthorized; see current status for verification.
+**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE hit test on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
+
+## Bounded Rabbit MOB hit test (2026-09-30)
+
+CCMUD calls NPCs **MOBs (mobiles)**. Thomas authorized Rabbit + THROW and then
+REMOVE, with an explicit hit/miss-only stop line: no wounds or killing yet.
+Use the adopted opposed RANGE/ATHLX and range rules; do not adopt newer tabletop
+wound changes or build the full C05/C06 encounter machinery for this increment.
+The same knife moves between hand, certified ground, and an embedded-MOB location.
+See [the exact bounded contract](objects.html#15-rabbit-mob-throw-and-remove-hit-test).
 
 ## Authoritative design record
 

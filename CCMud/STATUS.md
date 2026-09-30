@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Hunting Knife Slice 1 implementation and verification; no game deployment.
+description: Bounded Rabbit MOB, THROW and REMOVE hit test; no game deployment.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -8,75 +8,57 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Thomas authorized **Slice 1 — Hunting Knife** on September 30, based on the current
-[object architecture](objects.html). The existing WorldObject/prototype/capability
-foundation now supports LOOK, player APPROACH, GET/TAKE, INV/INVENTORY/I, and DROP
-with persistent right/left hands. No later slice is authorized or implemented.
+Thomas authorized **Rabbit MOB + THROW**, explicitly reduced the outcome to hit/miss
+without wounds or killing, and then added **REMOVE**. CCMUD calls NPCs MOBs (mobiles).
+The exact contract is [object architecture section 15](objects.html#15-rabbit-mob-throw-and-remove-hit-test).
 
-The migration seeds one knife, ID `00000000-0000-0000-0000-000000000010`, at X=600,
-Y=0 inches (50 feet east of Origin), attached to HOG ground. LOOK never spawns it.
-GET stops voluntary travel even on failure; APPROACH uses current perception and
-normal movement/barriers. Conditional pickup and unique hand occupancy protect
-against contested transfers. DROP preserves identity and leaves the knife at the
-current feet position without stopping ordinary travel. Held state survives restart.
+The migration adds one persistent rabbit 70 feet east of Origin (X=840, Y=0),
+RANGE default 0, the Hunting Knife's throwable capability, and an embedded-MOB
+object location. The existing knife retains its ID. LOOK never spawns either.
+A physical hand is sufficient; WIELD is not required and no WIELD system is added.
+
+THROW uses adopted opposed d20 + RANGE + knife modifier (+2), minus one per full
+ten feet, against d20 + ATHLX. Minimum distance is ten feet; ties miss. A miss leaves
+the knife on supported ground at the target's feet. A hit embeds it in the rabbit.
+REMOVE requires current visibility, the existing interaction range and a free hand,
+then returns that same knife to the right hand first, otherwise the left.
+Full hands and invalid targets leave possessions unchanged. Both commands use
+existing STOP semantics and never close distance automatically.
+
+Object identity and exclusive hand/ground/MOB placement persist across restart.
+Conditional transfers and unique hand occupancy protect competing actions. MOB sight
+uses the existing bounded ready-ground geometry checks; Nearby presentation stays
+outside cached geographic prose. HOG generation, cabin/water barriers, travel and
+odometer authority remain unchanged.
 
 ## Verification
 
-Runtime implementation: [e4dcd3c](https://github.com/twpaige/Crown-Call/commit/e4dcd3cdd5d85a8bd04183e1d6b4d20ffb2d29da).
-Verification used that runtime with the accompanying documentation-sync changes
-and updated permission assertions. No outstanding test failure remains.
+Runtime implementation: [8010b6c](https://github.com/twpaige/Crown-Call/commit/8010b6cfbc38898df5e699d4ac1a9ef1ecc4d9c2), based on `3af197f22cb639c2853a27abd5100bc3058e84c7`.
+Focused rabbit tests: **32 passed**, one dependency warning, 24.74 seconds.
+Earlier rabbit/knife combined run: **48 passed**, one dependency warning, 45.81 seconds.
+The later rabbit run adds the authored Origin loop and REMOVE rollback coverage.
+Full suite: **695 passed**, 13 dependency deprecation warnings, **588.30 seconds**.
+The subsequent 32-case rabbit run covers the newly added Origin loop and REMOVE
+rollback case; the final migration run verifies both ground and held starting states
+(**2 passed**, 1.35 seconds). Together these runs cover all 698 current cases.
+Changed-file Ruff, whitespace and the existing Node client-login timing checks pass.
+No application code changed after the full suite started; the additional cases extend tests.
+Tests use isolated SQLite databases and the real HOG DEV seed, never a live database.
 
-| Check | Result |
-| --- | --- |
-| `python -m pytest -q` | 663 passed, one stale permission assertion failed, 13 dependency warnings; 736.92 seconds. The assertion still assumed all APPROACH commands were admin-only. |
-| Corrected `tests/test_field_commands.py` | All 37 passed; 11.56 seconds. Player object targeting and restricted feature-ID targeting are checked separately. |
-| Final `python -m pytest --lf -q` | The sole recorded failure passed after that correction; 1.58 seconds. Together with the full run, all 664 collected cases are verified. |
-| Focused knife/navigation/cabin/water/odometer/database suite | 173 passed; 132.91 seconds. Includes independent-connection pickup contention, restart, both hands/full hands, changing barriers, cabin boundaries and refused water placement. |
-| Reference synchronization tests | 5 passed, including explicit eight-file adoption and protection of locally modified references. |
-| Changed-file Ruff and whitespace | Passed. Repository-wide Ruff retains 55 findings; every affected file is unchanged from the pre-task baseline. |
+## Limits and next action
 
-The new migration and targeted DEV cleanup were exercised only in isolated fixtures.
-The original object brainstorm is unchanged; Markdown/source links and review-copy
-consistency were checked. Public publication and private reference pinning accompany
-this report; no game deployment is included.
+This is the bounded hit test, not a completed hunt or combat encounter engine.
+Wounds, bleeding, death, rabbit AI, turn scheduling, corpse processing, SKIN, fire,
+cooking, food, containers and other object slices remain deferred. Tabletop severity
+modifier changes are not adopted implicitly; no wound rule is applied by this increment.
 
-Tests use isolated SQLite databases, independent connections, and the real HOG DEV
-seed where applicable. No live database or deployed game has been tested. PostgreSQL
-runtime contention has not been exercised on this workstation; compare-and-swap
-and hand constraints are tested with overlapping independent SQLite transactions.
+After review, Thomas can deploy DEV manually and exercise LOOK → APPROACH KNIFE →
+GET KNIFE → THROW KNIFE RABBIT. On a hit, move within 15 feet and REMOVE KNIFE RABBIT;
+on a miss use ordinary APPROACH/GET. Check inventory and restart persistence.
+The earlier Slice 1 deployment prerequisites remain in README-APP.md; no live cleanup,
+`cc-update`, migration, DEV deployment or PROD deployment has been performed here.
 
-## Migration and next action
-
-Before any separately authorized DEV migration, audit incompatible legacy held
-objects with `python scripts/legacy_hand_cleanup.py`. Explicitly remove only reviewed
-obsolete DEV IDs using `--confirm-dev-database --remove-dev-object ID` (repeat for
-each ID). The migration refuses remaining legacy holders instead of silently deleting
-them or creating invisible inventory. No live audit, cleanup, migration, or deployment
-was performed here. The helper is restricted to development environments and refuses
-post-migration use. Detailed behavior and syntax are in the object document and README.
-
-**Next action:** Thomas reviews the completed Slice 1 report. Deployment and Slice 2
-remain separate decisions. After an authorized future DEV migration, verify LOOK →
-APPROACH KNIFE → GET KNIFE → INV → DROP KNIFE, then restart and confirm the same ID.
-No `cc-update` or other DEV/PROD deployment is part of this task.
-
-## Limits and preserved behavior
-
-Visibility reads ready certified geometry only, with a 100-foot maximum query radius,
-cover, direct terrain sight checks, walls, and unresolved natural-barrier exclusions.
-It is separate from the current 15-foot interaction range and is deliberately
-conservative, not a comprehensive vegetation/LOS simulation. Unsupported water-object
-placements fail without losing the held object. GET uses existing water STOP semantics:
-swimming becomes floating; current is not canceled. Unreviewed absolute objects are
-not silently moved onto terrain. Admin object inspection is read-only.
-
-HOG generation, Cormac/Eyes geography, cabin doorway and wall authority, water rules,
-travel integration, and odometer accounting remain the existing systems. No WIELD,
-THROW, containers, rabbits, crafting, fire, food, or universal object infrastructure
-was added. The original `CC_Objects.txt` remains unchanged.
-
-The prior regional-lake implementation is `210163fe725861f8e230fcdcd223e07647bc886f`;
-its preserved contract and historical verification remain in [HOG](hog.html#regional-lake-resolution-2026-09-29).
-Read Crown-Call's WORK_START_HERE and current public CC_Objects.md to continue;
-Project chat context is not needed. Public documentation publication, private reference
-synchronization, and game deployment are reported separately.
+The prior bug fix `3af197f` repairs object APPROACH controller wiring, with an actual
+startup/travel-tick regression, and adds immediate character-entry connection feedback.
+Live environment revisions are not inferred from source pushes. Update reports include
+an exact `sudo cc-update dev <pushed-commit>` command for Thomas to run.

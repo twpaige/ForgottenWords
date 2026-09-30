@@ -8,11 +8,13 @@ permalink: /CCMud/objects.html
 
 # CCMUD Object Architecture
 
-**Working Draft 5 — Slice 1 implementation authorized September 30, 2026. Later slices and deployment remain unauthorized.**
+**Working Draft 5 — Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE increment are authorized. Other slices and game deployment remain separate decisions.**
 
 This document condenses the historical object exploration into the smallest persistent object foundation needed for a playable Alpha. It strengthens the existing implementation and defines six bounded slices. It is not a mandate to build every system mentioned in the exploration.
 
 **LOCKED** identifies approved decisions or preserved governing constraints. **PROVISIONAL** identifies recommendations and implementation details still subject to review. **DEFERRED** means outside these slices. **REJECTED** identifies excluded approaches. The latest explicit decisions recorded here supersede conflicting earlier draft policies and historical design alternatives. Architecture approval, implementation authorization, documentation publication, and deployment remain separate steps.
+
+The September 30 Rabbit increment in section 15 supersedes earlier stop lines only for its explicit scope. MOB (mobile) is CCMUD terminology for an NPC, including wildlife.
 
 ## 1. Authority and evidence
 
@@ -28,7 +30,7 @@ Start future work with private Crown-Call's [WORK_START_HERE.md](https://github.
 
 The review used the exploration's complete numbered topic outline, substantive passages across its foundational and Alpha topics, and its late convergence material, especially points 1981–2080. This is a thematic architecture review, not a line-by-line certification of every speculative example. Relevant accepted game-design sections and implementation paths were read directly. Earlier Project chats supplied no authority.
 
-The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instruction explicitly authorizes Hunting Knife Slice 1 implementation and commit/push. It does not authorize later slices or deployment. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
+The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instructions authorize Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE hit test in section 15, including commit/push. Other slices and game deployment remain separate decisions. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
 
 ## 2. Terminology and boundaries
 
@@ -37,7 +39,7 @@ The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 in
 | Category | Meaning |
 | --- | --- |
 | **PC** | Player-controlled character. |
-| **NPC** | All non-player characters, including humans and wildlife such as rabbits, deer, and horses. |
+| **MOB (mobile)** | All non-player characters, including humans and wildlife such as rabbits, deer, and horses. |
 | **OBJECT** | Manipulable physical things: knives, rifles, backpacks, furniture, food, packed tents. |
 | **DWELLING** | Enterable habitation: cabins, houses, pitched tents. |
 | **VEHICLE** | Wagons, carriages, sleds, boats, ships. |
@@ -56,7 +58,7 @@ Preserve these governing boundaries:
 - Cormac and Eyes present supplied facts. Perception neither creates world truth nor grants movement permission. Preserve useful admin RAW diagnostics.
 - Outdoors uses signed 64-bit integer inches: positive X east, positive Y north, Z elevation. Preserve PostgreSQL, deliberate Alembic migrations, travel accounting, and ground-placement authority.
 - Adopted Crown's Calling rules remain above object storage. Future CCAI uses restricted, validated operations, not unrestricted database or shell authority.
-- Only Slice 1 implementation and publication are authorized. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
+- Slice 1 and the bounded section 15 hit test are authorized for implementation and publication. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
 
 ## 3. Existing implementation and required changes
 
@@ -103,7 +105,7 @@ LOOK and ordinary loading never spawn replacements, relocate objects, or repair 
 
 Retain the existing character-holder case. Add only the handling state needed by Slice 1, and an object-parent case when Slice 2 needs containment. Exact columns, constraints, and subordinate records are implementation choices. Outdoor `space_id = NULL` may be adapted into an explicit logical outdoor context without creating a universal spatial database first. Persisted chunk coordinates remain derived lookup aids, never a second location authority.
 
-Transformations follow their specific approved rule. The same tent persists through packing and pitching. NPC death and SKIN create the distinct results specified in section 10; stable identity does not mean every material transformation must retain an input's ID.
+Transformations follow their specific approved rule. The same tent persists through packing and pitching. MOB death and SKIN create the distinct results specified in section 10; stable identity does not mean every material transformation must retain an input's ID.
 
 ## 5. Outdoor placement, ROOM interiors, and barriers
 
@@ -121,7 +123,7 @@ Held possessions follow the PC through ENTER/EXIT. A backpack dropped indoors be
 
 **LOCKED DROP:** outdoors, leave the item at the dropper's feet on the supported surface in the current SPACE, using authoritative position at the transfer boundary. Indoors, leave it in the current ROOM; flavor text may say “at your feet” without creating an intra-room positioning requirement. DROP itself does not stop continuous travel. Unsupported outdoor placement, including unsupported water-object contexts, fails with the item still held.
 
-**LOCKED collision rule:** ordinary PCs, NPCs, OBJECTS, and VEHICLES are not tactical movement obstacles. A knife, pile of small items, chair, horse, crowd, or wagon creates no positioning puzzle, automatic stop, or avoidance route. Do not add a generic OBJECT collision toggle or a numeric small-item cutoff. Real barriers come from DWELLINGS, STRUCTURES, and HOG geography where appropriate: cabin walls and fences can block. The rule abstracts maneuvering around ordinary occupants and items; it does not bypass a wall.
+**LOCKED collision rule:** ordinary PCs, MOBs, OBJECTS, and VEHICLES are not tactical movement obstacles. A knife, pile of small items, chair, horse, crowd, or wagon creates no positioning puzzle, automatic stop, or avoidance route. Do not add a generic OBJECT collision toggle or a numeric small-item cutoff. Real barriers come from DWELLINGS, STRUCTURES, and HOG geography where appropriate: cabin walls and fences can block. The rule abstracts maneuvering around ordinary occupants and items; it does not bypass a wall.
 
 VEHICLES are a distinct future access case. Exposed, reachable contents may eventually be manipulated from outside; do not automatically give them the DWELLING interaction boundary. Nested containers still enforce their own access rules. Vehicle implementation remains deferred.
 
@@ -129,7 +131,7 @@ VEHICLES are a distinct future access case. Exposed, reachable contents may even
 
 **LOCKED:** GET is the canonical documented command; TAKE remains an alias. Outdoors GET never moves the PC. It requires a currently valid target, interaction range, portability, access, and an available hand. A previously observed target must be revalidated at action time.
 
-**LOCKED player APPROACH:** the outdoor target must already be perceptible and in direct line of sight. Move directly toward it and stop at interaction range. APPROACH does not pathfind around walls, fences, or buildings and does not automatically GET the target. PCs, NPCs, OBJECTS, and VEHICLES do not obstruct this movement; DWELLINGS, STRUCTURES, and HOG geography may block it. A known ID, coordinate, or admin reference is not player perception.
+**LOCKED player APPROACH:** the outdoor target must already be perceptible and in direct line of sight. Move directly toward it and stop at interaction range. APPROACH does not pathfind around walls, fences, or buildings and does not automatically GET the target. PCs, MOBs, OBJECTS, and VEHICLES do not obstruct this movement; DWELLINGS, STRUCTURES, and HOG geography may block it. A known ID, coordinate, or admin reference is not player perception.
 
 Use current movement and geometry authority for the supported path. Revalidate the target and path during movement; stop safely if the target is lost or the permitted direct path becomes blocked. Do not route around an obstruction or expand this into general navigation. Indoors APPROACH is unnecessary for an accessible object in the same ROOM.
 
@@ -188,13 +190,13 @@ Persist only authoritative current facts: IDs, definition references, direct pla
 
 **LOCKED:** a packed tent is an OBJECT; the pitched form is a DWELLING with a ROOM interior. It remains the same particular tent throughout. Preserve stable identity across pitching/packing without requiring every gameplay category to share one table.
 
-Dismantling is allowed only when the interior contains no PCs, NPCs, or loose OBJECTS. An occupied tent or one with a backpack left inside cannot be packed; do not eject occupants, sweep contents into magical storage, or silently delete anything.
+Dismantling is allowed only when the interior contains no PCs, MOBs, or loose OBJECTS. An occupied tent or one with a backpack left inside cannot be packed; do not eject occupants, sweep contents into magical storage, or silently delete anything.
 
 Tent pitching remains part of the separately accepted navigation Alpha exercise: travel at least two miles, place a tent, leave sight, and return to that same persistent tent using the intended navigation tools. It adds no seventh object-system slice and no general construction system. Storage details for the tent's two forms belong to that milestone.
 
 ## 10. Rabbit, corpses, Craft, and the first meal
 
-**LOCKED death model:** NPC death ends the active NPC and loads/creates a generic CORPSE OBJECT populated with relevant current details: race/species, weight, short description, and appropriate identification for named characters. The corpse is a resulting OBJECT, not a living NPC retained under a new label. Populating its description does not require storing former owners, location history, or a provenance graph.
+**LOCKED death model:** MOB death ends the active MOB and loads/creates a generic CORPSE OBJECT populated with relevant current details: race/species, weight, short description, and appropriate identification for named characters. The corpse is a resulting OBJECT, not a living MOB retained under a new label. Populating its description does not require storing former owners, location history, or a provenance graph.
 
 **LOCKED processing:** SKIN consumes that CORPSE and creates separate RAW PELT/SKIN, CARCASS, and GUTS OBJECTS. The consumed corpse cannot be skinned again. Consume/create results atomically so retries or simultaneous actions cannot duplicate yield. These outputs have their own identities and valid physical destinations; no output is placed in invisible inventory.
 
@@ -212,7 +214,7 @@ The object slices do not replace combat, Craft, or perception. Accepted rabbit l
 
 ## 11. Six slices and their acceptance proofs
 
-**LOCKED order and stop line; only Slice 1 is authorized for implementation.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
+**The six-slice plan remains; authorized implementation is Slice 1 plus the explicit bounded section 15 exception.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
 
 | Slice | Bounded deliverable | Acceptance proof |
 | --- | --- | --- |
@@ -220,7 +222,7 @@ The object slices do not replace combat, Craft, or perception. Accepted rabbit l
 | **2. Backpack** | One container type, PUT/GET, LOOK contents, parent validation, capacity and recursive load. | Knife follows backpack without copied coordinates; INV omits contents; LOOK respects access; cycle/depth/capacity failures are atomic; restart preserves parent chain. |
 | **3. DWELLING/cabin integration** | ROOM interaction and presentation, possession transitions through ENTER/EXIT, leave/retrieve contents. | Accessible same-ROOM objects need no APPROACH; another ROOM requires moving there; outside cannot GET inside; restart preserves cabin contents and door state. |
 | **4. Equipment/use** | HOLD/WIELD and WEAR/REMOVE using actual hand/wear state; knife/backpack first. | Occupied hands reject invalid changes; readiness changes preserve identity; worn backpack retains contents; restart restores state. A rifle can test two hands without implying working firearms. |
-| **5. Rabbit/resources** | Adopted encounter/combat boundary, death to generic corpse, SKIN to raw pelt/carcass/guts. | NPC ends; corpse description reflects the NPC; repeated death/skin processing cannot duplicate results; outputs persist. Whole cooking and optional butchering remain valid routes. |
+| **5. Rabbit/resources** | Adopted encounter/combat boundary, death to generic corpse, SKIN to raw pelt/carcass/guts. | MOB ends; corpse description reflects the MOB; repeated death/skin processing cannot duplicate results; outputs persist. Whole cooking and optional butchering remain valid routes. |
 | **6. Fire/first meal** | Minimal material acquisition, tinder/fuel/ignition, fire, spit/roasting, progressive EAT, required Craft/Work Timer integration. | Fuel/time survives restart; processing is atomic; retries cannot duplicate food or fuel; edible quantity decreases correctly. |
 
 Slice 1 does not include containment, wear layers, combat, food, property administration, or CCAI. Existing valid ENTER/EXIT with held possessions must continue working before Slice 3; slice order is not permission to lose possessions or make the cabin unusable. Later slices must name missing gameplay prerequisites without adding a parallel substitute system.
@@ -243,7 +245,7 @@ Stop expanding the object foundation when players can reliably obtain, carry, st
 
 Draft 5 closes the previously open policy questions: named gameplay categories replace the formal umbrella taxonomy; current identity has no provenance history; DWELLINGS use ROOM interaction; visibility is separate from reach; GET and APPROACH have distinct movement behavior; inventory shows only held/worn objects; tents preserve particular identity; collision follows the approved category rule; death/SKIN have explicit outputs; obsolete incompatible DEV possessions can be removed before hands are enabled.
 
-**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; later slices remain outside the current task. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
+**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; other slices remain outside the task except for the bounded section 15 authorization. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
 
 Later content choices belong before their owning slices: actual container capacities, resource/food quantities, Craft output destinations within the physical handling rules, and the fire burn clock. None requires reopening the location model or adding a future system. If implementation evidence exposes a real conflict, present that specific conflict rather than expanding the architecture speculatively.
 
@@ -267,7 +269,52 @@ Before applying the migration, run `scripts/legacy_hand_cleanup.py` against the 
 
 No WIELD, THROW, containers, rabbits, Craft, fire, food, or later-slice infrastructure was added. Existing historical exploration remains unchanged. The public source, command reference, status, and private onboarding/reference snapshot carry continuity; publication and game deployment are separate.
 
-## 15. Source map for deeper review
+## 15. Rabbit MOB THROW and REMOVE hit test
+
+Thomas authorized a small playable increment after Slice 1, then explicitly deferred
+wounds and killing: resolve whether the throw hits. He subsequently authorized
+`REMOVE KNIFE RABBIT`. This is not the complete hunt or a new combat system.
+
+- A migration authors one persistent rabbit MOB at X=840, Y=0 inches (70 feet east
+  of Origin), on supported HOG ground. Its test ATHLX is 0. LOOK and restart never
+  spawn replacements. Movement AI, concealment behavior, wounds, bleeding, death,
+  corpse processing, SKIN, fire, cooking and food remain deferred.
+- `THROW <object> <target>` requires a single throwable object in either physical
+  hand. Holding is sufficient; WIELD is not required. A wielded object remaining
+  in a hand qualifies by the same predicate. No WIELD command or equipment system
+  is added. The Hunting Knife's existing prototype gains a throwable capability.
+- Use adopted C05/R1/R2/R4/W1a/W11 hit resolution: attacker d20 + RANGE + the
+  knife's one-hand modifier (+2), minus one per complete ten feet, opposed by
+  d20 + the MOB's ATHLX dodge. Ranged attacks require at least ten feet. Higher
+  total wins; a tie does not hit. No Aggression or armor modifies hit probability.
+  RANGE is persisted and defaults to ordinary competence, 0, for this test increment.
+- Wound ceilings versus newer tabletop severity modifiers are deliberately not
+  resolved or applied here: this increment records hit/miss only. No full encounter,
+  initiative, turn scheduler, repeated attack loop, rabbit behavior or damage result
+  is claimed. Each explicit THROW resolves one opposed attempt.
+- Targets must pass the existing bounded, ready HOG ground/visibility/barrier checks.
+  Cabin walls, interior boundaries, unavailable geometry and unsupported water remain
+  barriers. Both THROW and REMOVE stop voluntary travel through existing STOP behavior;
+  they never close distance automatically or resume movement afterward.
+- A miss leaves the same knife on supported ground at the target's feet. This bounded
+  landing rule adds no scatter or flight simulation. A hit transfers the same knife
+  to an embedded-MOB location with no independent coordinates or hand. LOOK describes
+  the rabbit with the embedded knife, without claiming injury severity or death.
+- `REMOVE <object> <target>` requires the visible MOB within the existing 15-foot
+  interaction range. Move closer with ordinary travel if needed. It uses the first
+  free hand (right, then left); full hands fail without dropping or moving anything.
+  Removal is a conditional transfer of the original object, not a replacement knife.
+  GET does not retrieve embedded objects. Restart preserves both embedded and removed state.
+- The object's exclusive location constraint now covers ground, character hand, or
+  embedded MOB. Competing transfers cannot duplicate the knife. Deleting a referenced
+  MOB cannot cascade-delete its embedded possessions.
+
+The previous Slice 1 bug fix, `3af197f`, shares controller attachment between DEV
+startup and construction. Its travel-tick regression preserves HOG generation checks.
+It also supplies immediate connection feedback and protects character entry against
+competing sockets and stale callbacks. No game deployment is implied by these commits.
+
+## 16. Source map for deeper review
 
 The historical exploration remains [CC_Objects.txt](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/CC_Objects.txt). Its useful clusters are: identity/location and boundaries (19–25, 221–239, 601–640); storage and spaces (721–780, 1561–1640); inventory alternatives and handling (781–860); durability (961–1000, 2051–2054); concrete slices (1121–1260); templates (1941–1980); convergence and the first-slice gate (1981–2080). These are evidence and alternatives, not 2,080 approved requirements.
 
