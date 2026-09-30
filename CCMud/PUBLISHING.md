@@ -27,6 +27,7 @@ The existing site uses GitHub Pages branch publishing from `main` at repository 
 | --- | --- |
 | `CCMud/WORK_START_HERE.md` | [/CCMud/](/CCMud/) |
 | `CCMud/STATUS.md` | [Current status](status.html) |
+| `CCMud/CC_Objects.md` | [Object architecture working draft](objects.html) |
 | `CCMud/DESIGN.md` | [Game design](design.html) |
 | `CCMud/HOG.md` | [Heart of Gold](hog.html) |
 | `CCMud/EVIDENCE.md` | [HOG investigation evidence](evidence.html) |

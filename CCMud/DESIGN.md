@@ -5,6 +5,8 @@ reviewed: 2026-09-29
 nav: design
 permalink: /CCMud/design.html
 ---
+**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Final architecture approval is pending; implementation is not authorized.
+
 
 ## Authoritative design record
 

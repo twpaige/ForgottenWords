@@ -1,12 +1,32 @@
 ---
 title: Current status
-description: Regional lake shore resolution and authoritative water-body scale; deployment remains manual.
+description: Object architecture Draft 5 awaits final review; regional lake implementation remains the latest verified game baseline.
 reviewed: 2026-09-29
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Current bounded phase
+## Current object architecture review
+
+[CC_Objects.md — Working Draft 5](objects.html) records the approved terminology,
+one current location path, ROOM-based DWELLING interactions, separate GET/APPROACH,
+physical hands/containers, corpse processing, and six-slice stop line. It supersedes
+Draft 4's fixed visibility limit and legacy DEV-possession preservation requirement.
+The original private `CC_Objects.txt` is preserved as historical exploration.
+
+**Next action:** review Draft 5 for final architecture approval, then prepare the
+Hunting Knife implementation handoff. No additional foundational question has been
+identified. Do not implement until Thomas separately authorizes it. No game code,
+schema, live DEV cleanup, or deployment changed during this documentation task.
+
+Review used private `e3491580ab952874f46cf9716a33f1bd0934e6f3` and public
+`ea2c03d7a93f0458a9c8e4a28bb35fc135e742af`. Existing world/cabin/Cormac tests passed
+78 cases with one dependency warning. Those tests verify the baseline, not the new
+architecture. Draft Markdown, source links, and review-copy consistency were checked.
+Future chats should read Crown-Call's WORK_START_HERE, this status, and the current
+public draft; no Project chat context is required.
+
+## Latest verified game implementation
 
 Regional Lake Resolution & Major Water Scale starts from private `99fa30a`.
 Tested implementation pushed: `210163fe725861f8e230fcdcd223e07647bc886f`.
