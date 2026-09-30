@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Admin prototype discovery and object/MOB loading.
+description: Simple admin wildcards and audited legacy ground seed correction.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -8,55 +8,61 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Admin `OLIST <search>` and `MLIST <search>` now search definitions by stable
-prototype ID, name and keywords. Bare commands show usage. Results identify what
-can be created, independently of existing instances; no vnums are introduced.
+Admin OLIST, MLIST, FIND O and FIND M accept `*` for any sequence of characters.
+`*` alone explicitly requests all matches. Existing catalog limits, the bounded
+20-result FIND pager, retained displayed numbers and current-location JUMP FIND
+remain intact. Other pattern characters remain literal. See the
+[command contract](commands.html#prototype-discovery-and-loading).
 
-`LOAD O <prototype_id>` / `LOAD OBJECT <prototype_id>` create one new ordinary
-persistent OBJECT at the admin's current feet or in the current ROOM. Existing
-ground validation, ground attachments, physical invariants and object lifecycle
-creation hooks remain authoritative. LOAD does not put the object in a hand.
-Specialized corpses still require the death process and cannot be loaded directly.
+## Ground-object investigation and correction
 
-`LOAD M <prototype_id>` / `LOAD MOB <prototype_id>` use shared MOB/world creation.
-The small read-only authored MOB catalog currently contains `rabbit`, preserving
-athletics 0, severity modifier +2 and empty wounds. It does not depend on surviving
-rabbit instances. Current MOB persistence only supports outdoor placement, so
-ROOM MOB loading is refused. There is no new MOB Builder or persistence redesign.
+Thomas supplied a read-only DEV database audit on September 30. Exactly two
+outdoor, unparented objects lacked ground attachments: the original weathered
+iron lantern and worn woodsman's axe. Both retained their original stable IDs,
+quantity one, absolute (0,0,0), chunks (0,0), portability and empty morph schedules.
+The axe also retained its tool capability. These were flat-world seed placements;
+the later opt-in ground-attachment migration deliberately did not convert them.
 
-See the [command contract](commands.html#prototype-discovery-and-loading).
-The web Builder remains the authoring interface. Existing FIND/JUMP FIND,
-player targeting, hands, Crafts and morphs remain unchanged.
+FIND correctly reported their horizontal locations. Ordinary perception correctly
+rejected their absolute Z=0 against the actual HOG ground elevation. This was
+legacy seed data, not a Nearby, targeting, capability, chunk or morph regression.
+
+Migration `20260930_08` deliberately adds zero-offset ordinary ground attachments
+only to those exact seed identities/prototypes while all original placement and
+state guards still match. It preserves identity and stored coordinates. Moved,
+held, ROOM, embedded, changed-quantity, morphed, scheduled, removed or already
+attached seeds are skipped. Unrelated absolute placements remain absolute.
+No runtime observation repairs data, no perception/access rule is relaxed, and no
+missing object is respawned. Rollback requires a reviewed data migration rather
+than stripping valid attachments. The read-only audit SQL is retained privately
+at `scripts/audit_ground_objects.sql`.
 
 ## Verification
 
-Implementation: [bf6001b](https://github.com/twpaige/Crown-Call/commit/bf6001b4dcb488adec4aab4e3f3599d3f91a2b31), committed and pushed to main.
+Implementation: [cb3ebcd](https://github.com/twpaige/Crown-Call/commit/cb3ebcdd14ef979cdc65e0aa183b98e31eb3110c), committed and pushed to main.
 
-- Directly affected tests: **150 passed**, one existing dependency warning,
-  166.06 seconds: admin loading, rabbit THROW, MOB wounds, object Builder/morphs,
-  Hunting Knife and Craft Builder.
-- Final feature tests: **15 passed**, one existing warning, 5.95 seconds. Includes
-  permissions, bare usage, aliases, catalog discovery without instances, bounded
-  catalog results, literal search, distinct persistent identities, held restart
-  state, current feet during travel, ROOM objects, unsupported ROOM MOBs, unknown
-  IDs, specialized corpse refusal, ground/structure/cold-placement checks,
-  creation-time morph scheduling and rollback on attachment failure.
-- Changed-file Ruff and whitespace checks passed. These runs overlap and their
-  counts are not additive. No full suite or unrelated browser checks were run.
+- Admin search/loading and FIND/JUMP FIND: **33 passed**, one existing dependency
+  warning, 36.89 seconds. Includes wildcard patterns, literal SQL/pattern characters,
+  cold searches, bounded paging, retained numbers, parent locations and re-resolution.
+- Legacy placement, Hunting Knife and targeting: **32 passed**, one existing
+  warning, 55.16 seconds. Reproduces hidden absolute seeds on real DEV HOG terrain
+  and verifies migration guards and normal perception/GET afterward.
+- Final migration regression file: **11 passed**, one existing warning, 26.62
+  seconds, including an explicit successful APPROACH assertion. Final expanded
+  MLIST wildcard assertions also passed in a focused three-test run.
+- Changed-file Ruff and diff checks passed. Counts overlap. No full suite ran.
 
-Tests use isolated SQLite fixtures and real/synthetic HOG providers. PostgreSQL
-runtime and live game behavior were not verified in this task. No schema migration
-is required. Public command documentation and the private reference pin accompany
-this change.
+Tests use isolated SQLite and real/synthetic HOG fixtures. The supplied live audit
+establishes DEV data state; PostgreSQL migration execution and post-correction
+live gameplay have not yet been verified.
 
 ## Deployment state and next action
 
-No DEV/PROD deployment, migration or restart was performed. Live revisions were
-not inspected. Thomas controls FAST DEV playtesting and full DEV checkpoints.
-After deploying the final pinned revision when desired, try OLIST knife, MLIST
-rabbit, LOAD O hunting_knife and LOAD M rabbit, then LOOK and ordinary interactions.
-Also verify bare catalog usage and object loading in the cabin ROOM.
+No DEV/PROD deployment, migration or restart was performed. Thomas controls FAST
+DEV playtesting and full checkpoints. The normal updater will apply the guarded
+seed-data migration when this revision is deployed. Afterward, check LOOK,
+APPROACH and GET for the lantern/axe at Origin, plus wildcard searches and FIND
+paging/JUMP FIND. No additional database output is needed from the completed audit.
 
-Earlier admin FIND/JUMP FIND remains available for actual instances; this task
-adds prototype discovery/loading without changing FIND. Parked content publishing,
-MOB Builder, ROOM MOB persistence and other deferred gameplay remain deferred.
+Existing prototype loading, hands, ROOMs, Craft/morph systems and broader gameplay
+contracts remain unchanged. Parked Builder/content work remains deferred.

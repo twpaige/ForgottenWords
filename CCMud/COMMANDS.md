@@ -98,6 +98,14 @@ keywords; multiple words must all match. Results sort by prototype ID. OBJECT
 searches show at most 50 matches with a request to narrow broader searches.
 Bare `OLIST` and `MLIST` return `Usage: OLIST <search>` and `Usage: MLIST <search>`.
 
+OLIST, MLIST and FIND O/M support a single wildcard: `*` matches any sequence
+of characters, including none. `*` alone explicitly requests all matches (catalog
+limits and FIND paging still apply). Examples: `OLIST *sword*`, `MLIST *rabbit*`,
+`FIND O *knife*`, and `FIND O hunting_*`. Searches retain case-insensitive substring
+matching; each search word must match an ID, name or keyword field, and wildcard
+segments must occur in order within that field. `%`, `_`, `?` and brackets are
+literal characters, not additional pattern syntax. No regex is supported.
+
 `LOAD O hunting_knife` creates one new persistent Hunting Knife, without occupying
 a hand or modifying another instance. Outdoor placement uses the same certified
 dry-ground, slope and structure checks as ordinary object placement, including a
@@ -130,7 +138,8 @@ and keywords. `FIND M rabbit` searches the current persistent MOB species, name,
 and keywords; the current MOB implementation has no separate prototype table.
 FIND searches the database independently of active areas and HOG caches. It does
 not spawn, move, warm, reconcile timed morphs, or otherwise alter found instances.
-Definitions without instances do not produce results.
+Definitions without instances do not produce results. `FIND O *` and `FIND M *`
+search all resolvable instances of the requested kind through the same pager.
 
 Results show a temporary number, name, horizontal map distance in feet, compass
 direction, and physical state: ground, ROOM, held by a character, or embedded.
