@@ -1,7 +1,7 @@
 ---
 title: Commands
 description: Current CCMUD commands and reviewed legacy command candidates.
-reviewed: 2026-09-29
+reviewed: 2026-09-30
 nav: commands
 permalink: /CCMud/commands.html
 ---
@@ -34,7 +34,7 @@ These are the documented current source-level commands. Release and feature gate
 
 | Family | Commands | Current meaning |
 | --- | --- | --- |
-| Observe | `LOOK`, `L`, `LOOK BRIEF`, `LOOK NORMAL`, `LOOK MAXIMUM` | Cormac Eyes describes HERE plus meaningful surrounding terrain, regional biome/cover differences and geographic landmarks, clockwise using absolute eight-point directions. BRIEF/NORMAL/MAXIMUM select from the same observation; MAXIMUM is prose, not RAW. Cold regional features may appear on a later LOOK. A separate Nearby lists supported perceived entities (currently the audited cabin), clockwise then nearest within each sector, at every verbosity. Verbosity is a session preference, initially NORMAL. Admin RAW remains separate. Temporary ordinary local perception does not imply distant certified LOS. |
+| Observe | `LOOK`, `L`, `LOOK BRIEF`, `LOOK NORMAL`, `LOOK MAXIMUM` | Cormac Eyes describes HERE plus meaningful surrounding terrain, regional biome/cover differences and geographic landmarks, clockwise using absolute eight-point directions. BRIEF/NORMAL/MAXIMUM select from the same observation; MAXIMUM is prose, not RAW. Cold regional features may appear on a later LOOK. A separate Nearby lists supported perceived entities (the audited cabin and supported loose objects), clockwise then nearest within each sector, at every verbosity. Verbosity is a session preference, initially NORMAL. Admin RAW remains separate. Temporary ordinary local perception does not imply distant certified LOS. |
 | Travel direction | `N`, `NE`, `E`, `SE`, `S`, `SW`, `W`, `NW` and full direction names; `TRAVEL <0–359>`; `north [feet]`, `south [feet]`, `east [feet]`, `west [feet]` | Bare directions set continuous travel. Cardinal directions/aliases with positive feet stop after that distance, subject to all normal safety rules. North is 0°, east is 90°. |
 | Travel pace | `TRUDGE`, `WALK`, `JOG`, `RUN`, `SPRINT` | Select land pace, distinct from direction. |
 | Stop | `STOP` | Stop active voluntary travel; when swimming, enter FLOATING. Floating does not cancel current. |
@@ -43,6 +43,7 @@ These are the documented current source-level commands. Release and feature gate
 | Character | `ODOMETER` | Lifetime ODO and resettable TRIP distances; persistent server-side integer-inch counters. |
 | Character | `TRIP RESET` | Reset TRIP only; responds `Trip odometer reset.` without stopping travel. |
 | Character | `STATUS` | Current CCMUD status, including travel state; historical Shadows STATUS has different, unresolved semantics. |
+| Physical possessions | `APPROACH <object>`, `GET <object>`, `TAKE <object>`, `INV`, `INVENTORY`, `I`, `DROP <object>` | Slice 1: approach a perceived outdoor object through normal movement to interaction range; GET never closes distance and stops voluntary travel even on failure. Right hand first, then left; full hands fail. Inventory shows hands only in this slice. DROP leaves the same object at your feet. See [object architecture](objects.html#14-slice-1-implementation-2026-09-30). |
 | Places and objects | `ENTER <place>`, `EXIT`, `GET <object>`, `DROP <object>`, `INVENTORY`, `CUT <resource>`, `OPEN <door>`, `CLOSE <door>` | Interact with implemented structures, resources and objects. ENTER can deliberately enter a nearby represented waterway under its current rules; existing feature gates still apply. |
 | Communication and session | `SAY <message>`, `HELP`, `QUIT` | Speak to nearby listeners, list help, or close the session. |
 
@@ -62,6 +63,7 @@ success/failure outside it. These presentation controls never alter game state.
 
 | Command | Access and role |
 | --- | --- |
+| `OBJECT <persistent object ID>` | Admin read-only current object identity, placement/parent and hand diagnostics. |
 | `APPROACH <id|feature_id>` | Admin diagnostic steering to known geography or an audited persistent entrance. `approach pioneer_cabin` targets the exterior south door without opening or entering it. All normal safety restrictions apply; no pathfinding or perception claim. |
 | `JUMP <direction> <miles>`; `JUMP <x>, <y>` | Admin endpoint jump. Relative distances are miles; absolute XY values are signed integer inches. Destination ground supplies Z. No confirmation: ready valid destinations execute immediately; cold generation completes automatically, or fails safely. STOP cancels a pending request. Presentation/prose is not a placement prerequisite. |
 | `HOGDISPLAY RAW` / `HOGDISPLAY PROSE` | Admin session presentation toggle. RAW is diagnostic; PROSE is the normal path. |
@@ -137,7 +139,7 @@ The historical handoff mentions several of these conditionally. Their appearance
 
 | Candidate | Decision | Reason |
 | --- | --- | --- |
-| `TAKE`, `INV`, `I` | Review as GET/INVENTORY aliases | Preserve familiarity when parser ambiguity and implementation are checked. Do not advertise today as live aliases. |
+| `TAKE`, `INV`, `I` | Implemented aliases | TAKE uses GET; INV and I use INVENTORY. See the Live section. |
 | `YELL` | Merge with SHOUT | One loud-speech range and hearing policy. |
 | `HIT`, `STRIKE`, `KILL` | Review as ATTACK aliases | One combat-intent and Crown's Calling rules engine; KILL carries a different intent and needs explicit review. |
 | `SCAN` | Merge or review under LOOK/SEARCH | Avoid redundant perception code unless directional scanning has a real distinct function. |

@@ -1,10 +1,20 @@
 ---
 title: Heart of Gold
 description: Deterministic world-generation architecture, physical constraints, and preview limits.
-reviewed: 2026-09-29
+reviewed: 2026-09-30
 nav: hog
 permalink: /CCMud/hog.html
 ---
+
+## Hunting Knife integration (2026-09-30)
+
+[Object Slice 1](objects.html#14-slice-1-implementation-2026-09-30) opens bounded
+outdoor LOOK/APPROACH/GET/DROP for supported persistent objects on certified dry
+ground. It supersedes the historical blanket object-interaction gate below only
+for this slice. Perception reads ready geometry and checks cover, terrain sight,
+walls and unresolved barriers; normal travel retains movement authority. No HOG
+generator, seed, geography, water or odometer rule changed. CUT and unsupported
+interactions remain gated. See [status](status.html) for tests and deployment state.
 
 ## Regional lake resolution (2026-09-29)
 

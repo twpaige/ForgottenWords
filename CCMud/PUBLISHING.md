@@ -1,7 +1,7 @@
 ---
 title: Publishing & continuity
 description: One editable source, automatic browser pages, and reliable local references for development.
-reviewed: 2026-09-27
+reviewed: 2026-09-30
 nav: publishing
 permalink: /CCMud/publishing.html
 ---
@@ -94,8 +94,10 @@ Keep full evidence separate from concise maintained architecture/status decision
 The public index uses an immutable private commit and clearly labels access limits;
 it does not expose private implementation or reproduction code.
 
-The existing seven-file pinned-reference mapping is unchanged. WORK_START_HERE,
+The pinned-reference mapping now includes eight files, including CC_Objects.md. WORK_START_HERE,
 HOG, DESIGN and STATUS carry the evidence link and local path into fresh private
 checkouts; the full evidence is already tracked there. EVIDENCE.md is public
-navigation, not an independently edited private reference. No sync-script change
-or additional cross-repository mirroring is needed.
+navigation, not an independently edited private reference. CC_Objects.md was added
+explicitly for Slice 1. The one-time transition from the seven-file snapshot uses
+`--add-object-reference` together with an exact revision; normal later refreshes
+use the commands above. No automatic cross-repository publication is introduced.

@@ -1,7 +1,7 @@
 ---
 title: Start here
 description: A durable home for Crown & Call MUD design, architecture, and development continuity.
-reviewed: 2026-09-28
+reviewed: 2026-09-30
 nav: home
 permalink: /CCMud/
 ---
@@ -28,7 +28,7 @@ The `/CCMud/` section belongs exclusively to the MUD. HOG and MUD operating rule
 | --- | --- |
 | [Current status](status.html) | Present development state, blockers, next actions, and verification |
 | [Game design](design.html) | Detailed MUD decisions and the preserved design record |
-| [Object architecture — Working Draft 5](objects.html) | Approved object decisions, six slices, and final architecture review; implementation not authorized |
+| [Object architecture — Working Draft 5](objects.html) | Approved object decisions and Hunting Knife Slice 1; later slices and deployment require authorization |
 | [Commands](commands.html) | Current commands and reviewed Shadows/SOI command adoption decisions |
 | [HOG investigation evidence](evidence.html) | Full Step 10 reports, measurements and private reproduction artifacts |
 | [Heart of Gold](hog.html) | World-generation architecture and engineering constraints |

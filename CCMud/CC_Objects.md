@@ -1,14 +1,14 @@
 ---
 title: CCMUD Object Architecture — Working Draft 5
 description: A bounded object architecture reconciled with approved gameplay decisions and the existing implementation.
-reviewed: 2026-09-29
+reviewed: 2026-09-30
 nav: design
 permalink: /CCMud/objects.html
 ---
 
 # CCMUD Object Architecture
 
-**Working Draft 5 — decisions reconciled; final architecture approval pending. Do not implement until separately authorized.**
+**Working Draft 5 — Slice 1 implementation authorized September 30, 2026. Later slices and deployment remain unauthorized.**
 
 This document condenses the historical object exploration into the smallest persistent object foundation needed for a playable Alpha. It strengthens the existing implementation and defines six bounded slices. It is not a mandate to build every system mentioned in the exploration.
 
@@ -28,7 +28,7 @@ Start future work with private Crown-Call's [WORK_START_HERE.md](https://github.
 
 The review used the exploration's complete numbered topic outline, substantive passages across its foundational and Alpha topics, and its late convergence material, especially points 1981–2080. This is a thematic architecture review, not a line-by-line certification of every speculative example. Relevant accepted game-design sections and implementation paths were read directly. Earlier Project chats supplied no authority.
 
-The editable source is `ForgottenWords/CCMud/CC_Objects.md`. Publishing this working draft makes it available for review; it does not finalize the architecture or authorize implementation. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
+The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instruction explicitly authorizes Hunting Knife Slice 1 implementation and commit/push. It does not authorize later slices or deployment. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
 
 ## 2. Terminology and boundaries
 
@@ -56,7 +56,7 @@ Preserve these governing boundaries:
 - Cormac and Eyes present supplied facts. Perception neither creates world truth nor grants movement permission. Preserve useful admin RAW diagnostics.
 - Outdoors uses signed 64-bit integer inches: positive X east, positive Y north, Z elevation. Preserve PostgreSQL, deliberate Alembic migrations, travel accounting, and ground-placement authority.
 - Adopted Crown's Calling rules remain above object storage. Future CCAI uses restricted, validated operations, not unrestricted database or shell authority.
-- No implementation, live data cleanup, DEV deployment, or PROD deployment is authorized by this revision.
+- Only Slice 1 implementation and publication are authorized. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
 
 ## 3. Existing implementation and required changes
 
@@ -212,7 +212,7 @@ The object slices do not replace combat, Craft, or perception. Accepted rabbit l
 
 ## 11. Six slices and their acceptance proofs
 
-**LOCKED order and stop line; no implementation authorization.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
+**LOCKED order and stop line; only Slice 1 is authorized for implementation.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
 
 | Slice | Bounded deliverable | Acceptance proof |
 | --- | --- | --- |
@@ -243,21 +243,29 @@ Stop expanding the object foundation when players can reliably obtain, carry, st
 
 Draft 5 closes the previously open policy questions: named gameplay categories replace the formal umbrella taxonomy; current identity has no provenance history; DWELLINGS use ROOM interaction; visibility is separate from reach; GET and APPROACH have distinct movement behavior; inventory shows only held/worn objects; tents preserve particular identity; collision follows the approved category rule; death/SKIN have explicit outputs; obsolete incompatible DEV possessions can be removed before hands are enabled.
 
-**No further foundational decision is identified as necessary before final architecture approval.** The architecture is ready for that review, not implementation. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
+**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; later slices remain outside the current task. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
 
 Later content choices belong before their owning slices: actual container capacities, resource/food quantities, Craft output destinations within the physical handling rules, and the fire burn clock. None requires reopening the location model or adding a future system. If implementation evidence exposes a real conflict, present that specific conflict rather than expanding the architecture speculatively.
 
-Final architecture approval still does not authorize coding. Prepare the concise Hunting Knife implementation handoff only after that approval, and begin implementation only on a separate instruction to proceed.
+The September 30 instruction is the separate authorization to implement Hunting Knife Slice 1. Completion does not authorize starting Slice 2 or deploying the game.
 
-## 14. Verification and publication
+## 14. Slice 1 implementation (2026-09-30)
 
-The reviewed baseline passed `python -m pytest tests/test_world.py tests/test_hog_cabin.py tests/test_cormac.py -q`: **78 passed, one dependency warning**, using Python 3.12 and isolated SQLite fixtures. The reference synchronization check verified seven pinned references. These results predate the proposed changes; they do not verify hand-aware inventory, player object APPROACH, ROOM-wide interaction, containment, PostgreSQL contention, or live deployment. Prose revisions do not warrant rerunning the unchanged game suite.
+Implementation commit [e4dcd3c](https://github.com/twpaige/Crown-Call/commit/e4dcd3cdd5d85a8bd04183e1d6b4d20ffb2d29da) supports LOOK → APPROACH KNIFE → GET/TAKE KNIFE → INV/INVENTORY → DROP KNIFE through the existing object and travel services. This is source-level implementation; no DEV or PROD deployment is claimed. [Current status](status.html) records verification results.
 
-Future verification must cover real text dispatch and service operations, restart from committed storage, PostgreSQL contention, failed commits, travel stopping and odometers, outdoor perception versus reach, direct-path blockers, ROOM boundaries, hands, nesting, recursive mass, and double-consumption prevention. Preserve water movement, cabin geometry, Cormac/Eyes, and RAW regressions while making the explicitly approved behavior changes.
+Migration `20260930_01` adds physical hand state and a unique holder/hand constraint. It seeds exactly one Hunting Knife, ID `00000000-0000-0000-0000-000000000010`, at outdoor X=600, Y=0 inches: 50 feet east of Origin. Its ground attachment supplies current HOG elevation. It is never spawned by LOOK, login, or restart. On the supported DEV seed, approach it from Origin with ordinary player commands. This is a placed world object, not free starting equipment.
 
-This revision publishes the working draft and continuity links, with a matching local review copy. The original `CC_Objects.txt` remains untouched. No code, schema, live data, or deployment changes are made.
+GET selects right then left and uses an atomic conditional update, with a character lock and hand uniqueness protecting the destination. Success is reported after commit. Held placement has no coordinates, chunks, SPACE, or ground attachment; DROP commits the current supported surface and frees the hand. Persistent identity survives both changes. Normal ground objects do not obstruct movement.
 
-The working draft is published in `ForgottenWords/CCMud/` for cross-chat review. Current status and onboarding link to it; the existing private reference snapshot is refreshed for continuity. At finalization, reconcile command documentation and deliberately add the approved document to the private reference mapping. The current sync script maps seven files and does not automatically include it. Pin the exact published commit and verify the expanded manifest; never independently edit generated reference copies. Report publication, private synchronization, and any deployment separately.
+Object visibility is deliberately conservative: query at most 64 loose candidates within the configured look range, capped at 100 feet for this slice. Read only ready certified geometry; apply cover, a direct terrain sight check, persistent walls, and unresolved natural-barrier exclusions. This limit is independent of the configured interaction range (currently 15 feet). It does not implement a comprehensive vegetation/LOS simulation or claim unknown geometry is clear. LOOK performs no surrounding walking generation for objects. Unreviewed absolute placements that do not meet certified ground remain hidden rather than being relocated.
+
+Player APPROACH revalidates the same object's identity, placement and perception during ordinary travel integration. It stops within interaction range or safely stops when the object disappears, moves, or loses its clear path. It never pathfinds or retrieves automatically. Admin feature-ID APPROACH remains a distinct restricted path. Admin `OBJECT <id>` explains current identity, prototype, hand/parent and effective placement without changing state.
+
+GET stops voluntary travel even when it fails, cancels pending jumps, and never resumes the old direction. Existing STOP semantics are preserved in water: swimming becomes floating, and natural current is not an invented anchor. Unsupported water-object pickup/drop remains gated. DROP accounts elapsed travel before placing the object at the character's feet and does not itself stop walking. Carrying through the existing cabin doorway preserves hand state; outside cannot GET cabin contents. No new cabin navigation or door system was added.
+
+Before applying the migration, run `scripts/legacy_hand_cleanup.py` against the intended DEV database to list legacy held IDs. If present, explicitly remove only reviewed obsolete DEV IDs using `--confirm-dev-database --remove-dev-object ID` (repeat the latter for each ID). The migration refuses incompatible holdings rather than deleting them or inventing invisible slots. The cleanup command refuses non-development environments and post-migration use. No live cleanup was performed in this task. Do not run these operations against PROD as part of this authorization.
+
+No WIELD, THROW, containers, rabbits, Craft, fire, food, or later-slice infrastructure was added. Existing historical exploration remains unchanged. The public source, command reference, status, and private onboarding/reference snapshot carry continuity; publication and game deployment are separate.
 
 ## 15. Source map for deeper review
 
@@ -265,6 +273,6 @@ The historical exploration remains [CC_Objects.txt](https://github.com/twpaige/C
 
 For governing gameplay, consult the [preserved design](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMUD_Design.txt): C01–C02, C09–C11, Q86–92, Q114–130, and Q146–148. Its earlier world-time values are superseded by its dated 1.75× decision; implementation remains separately evidenced.
 
-For current boundaries, consult [HOG](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/HOG.md), [commands](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/COMMANDS.md), and [publishing](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/PUBLISHING.md). The command reference lists TAKE/I as candidates although current dispatch already accepts them; reconcile that documentation discrepancy when finalizing, without claiming an outdoor gate is already lifted.
+For current boundaries, consult [HOG](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/HOG.md), [commands](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/COMMANDS.md), and [publishing](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/PUBLISHING.md). The current command reference records GET/TAKE and INV/INVENTORY/I as implemented, with outdoor object support bounded by Slice 1.
 
 For implementation evidence, also consult [cabin attachment](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/src/crown_call/hog_structures.py), [ground placement](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/src/crown_call/hog_placement.py), [Nearby formatting](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/src/crown_call/cormac.py), [world tests](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/tests/test_world.py), and [HOG cabin tests](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/tests/test_hog_cabin.py).
