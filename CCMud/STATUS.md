@@ -1,98 +1,74 @@
 ---
 title: Current status
-description: Fast DEV iteration mode and player APPROACH corrections; no agent deployment.
+description: Bounded THROW wounds, rabbit death and persistent corpse handling.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Deployment iteration tool
-
-`sudo cc-update dev --fast [git-ref]` uses the existing immutable committed-release
-machinery, dependency installation, forward migrations, activation, restart, health
-check and code rollback. It skips pytest, runs inexpensive dependency consistency
-checking, and prints **FAST / NOT FULLY VERIFIED**. Normal `sudo cc-update dev [git-ref]`
-still runs the complete suite, including reused releases. No fast PROD is allowed.
-See the [authoritative deployment guide](development.html#cc-update-authority-and-installation).
-
-The installed updater must be refreshed from the tracked source only after any
-currently running update completes. Thomas reported a DEV update in progress during
-this work; its outcome/revision have not been inspected. No server file, process,
-migration or deployment was touched by this task.
-
-Updater verification: 37 isolated Bash control-flow tests plus 5 reference-sync tests
-passed (42 total, 6.07 seconds),
-covering parsing, root/lock safety, full/fast selection, dependency and migration
-failures, release reuse and startup/readiness rollback. Bash syntax, changed-file
-Ruff and whitespace checks pass. Server commands are stubbed; these tests do not
-claim live Ubuntu deployment verification. Implementation: [96efe55](https://github.com/twpaige/Crown-Call/commit/96efe55b69986e2890449c0222bf4d9f6c9323ac), committed and pushed to main.
-
 ## Current bounded phase
 
-Thomas authorized **Rabbit MOB + THROW**, explicitly reduced the outcome to hit/miss
-without wounds or killing, and then added **REMOVE**. CCMUD calls NPCs MOBs (mobiles).
-The exact contract is [object architecture section 15](objects.html#15-rabbit-mob-throw-and-remove-hit-test).
+THROW → wound → death → corpse extends the existing Rabbit MOB/THROW/REMOVE
+interaction. Thomas explicitly adopted current weapon severity modifiers, then
+replaced the proposed DEEP death threshold with a **+2 MOB severity modifier**.
+The final rule applies weapon SM, armor, then MOB severity, capped at MORT.
+For Hunting Knife +0 against an unarmored (+1) rabbit with MOB +2, MoV 1–4 gives
+SEVR, 5–8 GRAV and 9+ MORT. Survivor wounds persist and combine under W8; C5 reduces
+subsequent dodge. A rabbit at MORT dies immediately, including combined wounds.
+Ordinary character MORT/bleed-out rules remain unchanged. The exact contract is
+[object architecture section 16](objects.html#16-throw-wounds-death-and-corpse-2026-09-30).
 
-The migration adds one persistent rabbit 70 feet east of Origin (X=840, Y=0),
-RANGE default 0, the Hunting Knife's throwable capability, and an embedded-MOB
-object location. The existing knife retains its ID. LOOK never spawns either.
-A physical hand is sufficient; WIELD is not required and no WIELD system is added.
+Death atomically removes the active MOB, creates a generic CORPSE OBJECT at its
+supported ground location, and transfers all embedded items to the corpse without
+changing their IDs. Current corpse name, species and weight persist. Conditional
+wound updates prevent duplicate deaths; failed transactions restore the prior MOB
+and knife state. No HP, special kill command, replacement knife or rabbit respawn.
 
-THROW uses adopted opposed d20 + RANGE + knife modifier (+2), minus one per full
-ten feet, against d20 + ATHLX. Minimum distance is ten feet; ties miss. A miss leaves
-the knife on supported ground at the target's feet. A hit embeds it in the rabbit.
-REMOVE requires current visibility, the existing interaction range and a free hand,
-then returns that same knife to the right hand first, otherwise the left.
-Full hands and invalid targets leave possessions unchanged. Both commands use
-existing STOP semantics and never close distance automatically.
+LOOK and inventory show the corpse and embedded knife. Ordinary APPROACH, GET,
+DROP, free-hand/portability checks and cabin transitions apply. REMOVE works from
+a visible ground corpse or one's own held corpse. Another player's pickup prevents
+removal. Existing perceptible OBJECT/MOB APPROACH keeps normal arrival prose and
+interaction range; HOG generation, travel, cabin and water authority are preserved.
 
-Object identity and exclusive hand/ground/MOB placement persist across restart.
-Conditional transfers and unique hand occupancy protect competing actions. MOB sight
-uses the existing bounded ready-ground geometry checks; Nearby presentation stays
-outside cached geographic prose. HOG generation, cabin/water barriers, travel and
-odometer authority remain unchanged.
-
-## Player APPROACH correction
-
-APPROACH resolves perceptible OBJECTs and MOBs before the restricted admin geographic
-catalog. Both use the existing continuous-travel controller and the same interaction-range
-steering. Current object/MOB interaction range is 180 inches. Every tick revalidates
-identity, fixed location and perception; movement or loss of the target stops travel.
-There is no chasing or pathfinding. HOG feature targets retain their generation checks.
-
-Ordinary arrival now says "You approach the Hunting Knife and stop." or
-"You approach the rabbit and stop." The browser honors this server arrival text;
-admin geographic diagnostics keep their existing separate wording.
+Migration `20260930_03` retains existing knife/rabbit identity and hand/ground/embedded
+placements, adds wounds and revision checks, gives existing rabbits severity +2 with
+no retroactive wounds, and adds corpse details/embedded-object constraints. No live
+migration or deployment has been performed for this increment.
 
 ## Verification
 
-APPROACH runtime: [8895854](https://github.com/twpaige/Crown-Call/commit/88958549c53f368b4a768a33ef6d2b0becdcf9db), committed and pushed to main.
-Focused and regression run: **328 passed**, one dependency deprecation warning,
-182.28 seconds. Suites cover player approach, Hunting Knife, rabbit THROW/REMOVE,
-field commands, admin/field navigation, travel, HOG walking, cabin, water movement
-and odometer. The seven new cases cover object/MOB arrival and final interaction
-range for players/admins, already-in-range arrival, moved targets, wall visibility
-and cross-kind ambiguity. Five initial cases failed against the previous code.
-Node client login/arrival rendering checks, changed-file Ruff and whitespace checks pass.
-Earlier rabbit implementation: [8010b6c](https://github.com/twpaige/Crown-Call/commit/8010b6cfbc38898df5e699d4ac1a9ef1ecc4d9c2).
-Its full-suite baseline passed 695 tests; subsequent focused cases brought coverage
-to 698 cases before this APPROACH correction. Tests use isolated SQLite databases
+Focused wound/corpse suite: **27 passed**, one dependency deprecation warning,
+30.88 seconds. Changed-file Ruff, whitespace and Node client login/arrival checks
+pass. Full suite: **768 passed**, 13 dependency deprecation warnings, 655.84 seconds.
+No application code changed after that run began. The 27-case focused run includes
+one additional regression for the runtime's disabled-autoflush policy with foreign
+keys enforced, covering all 769 current cases together with the full run.
+Implementation: [0d4886f](https://github.com/twpaige/Crown-Call/commit/0d4886fc10cf3f0491747a4f45290138a2e8d3e6), committed and pushed to main.
+The focused wound/corpse tests exercise survival, lethal and combined wounds,
+restart, knife identity, corpse GET/REMOVE, cabin handling, rollback at transfer and
+commit, duplicate death, competing fatal throws and removal/pickup races. Migration
+checks cover existing ground, held and embedded knives. Tests use isolated SQLite
 and the real HOG DEV seed, never a live database.
 
-## Limits and next action
+## Deployment state and next action
 
-This is the bounded hit test, not a completed hunt or combat encounter engine.
-Wounds, bleeding, death, rabbit AI, turn scheduling, corpse processing, SKIN, fire,
-cooking, food, containers and other object slices remain deferred. Tabletop severity
-modifier changes are not adopted implicitly; no wound rule is applied by this increment.
+Thomas's pasted server output verified FAST DEV revision `575b87bb4d4ba3fce66e3ae41e49089078198a1c`
+before this increment: current release `575b87bb4d4b`, service active, `/health`
+ready, database up, HOG walking `certified_origin`. The installed updater's hash
+matched the committed source. That fast run skipped pytest as designed; it is not
+full milestone verification and contains no new wound/corpse implementation.
 
-After review, Thomas can deploy DEV manually and exercise LOOK → APPROACH KNIFE →
-GET KNIFE → THROW KNIFE RABBIT. On a hit, APPROACH RABBIT and REMOVE KNIFE RABBIT;
-on a miss use ordinary APPROACH/GET. Check inventory and restart persistence.
-The earlier Slice 1 deployment prerequisites remain in README-APP.md; no live cleanup,
-`cc-update`, migration, DEV deployment or PROD deployment has been performed here.
+The [deployment guide](development.html#cc-update-authority-and-installation) owns
+`sudo cc-update dev --fast [ref]` for iteration and `sudo cc-update dev [ref]` for
+full verification. No fast PROD. No server command, migration, restart or deployment
+was run by this task. After review, Thomas can deploy a pinned revision and playtest
+LOOK → APPROACH KNIFE → GET KNIFE → THROW KNIFE RABBIT. On death, APPROACH CORPSE,
+REMOVE KNIFE CORPSE and GET CORPSE; a held corpse also permits REMOVE with a free hand.
+Use full DEV periodically and at feature/milestone completion.
 
-The prior bug fix `3af197f` repairs object APPROACH controller wiring, with an actual
-startup/travel-tick regression, and adds immediate character-entry connection feedback.
-Live environment revisions are not inferred from source pushes. Update reports include
-an exact `sudo cc-update dev <pushed-commit>` command for Thomas to run.
+## Deferred
+
+SKIN, carcass/pelt/guts, butchering, decay, fire, cooking, food, bleeding simulation,
+MOB AI/chasing, other species' wound/death profiles, healing and the full combat
+encounter/turn system remain outside this increment. Death does not respawn the
+rabbit; any new test animal/reset requires separate content authorization.

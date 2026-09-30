@@ -5,17 +5,23 @@ reviewed: 2026-09-30
 nav: design
 permalink: /CCMud/design.html
 ---
-**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE hit test on September 30. Other slices and deployment remain separate decisions; see current status for verification.
+**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death and corpses on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
 
-## Bounded Rabbit MOB hit test (2026-09-30)
+## Bounded Rabbit MOB wounds and corpse (2026-09-30)
 
-CCMUD calls NPCs **MOBs (mobiles)**. Thomas authorized Rabbit + THROW and then
-REMOVE, with an explicit hit/miss-only stop line: no wounds or killing yet.
-Use the adopted opposed RANGE/ATHLX and range rules; do not adopt newer tabletop
-wound changes or build the full C05/C06 encounter machinery for this increment.
-The same knife moves between hand, certified ground, and an embedded-MOB location.
-See [the exact bounded contract](objects.html#15-rabbit-mob-throw-and-remove-hit-test).
+CCMUD calls NPCs **MOBs (mobiles)**. The original THROW/REMOVE hit test now uses
+actual persisted wounds. Thomas explicitly adopted weapon severity modifiers
+(Hunting Knife +0), the existing unarmored +1 adjustment, and a persisted **+2 MOB
+severity modifier** for the rabbit after weapon/armor. Equal wounds combine under
+W8 and C5 penalizes wounded dodge. There are no rabbit hit points or DEEP death rule.
+A rabbit dies immediately on MORT (including combined wounds), an explicit bounded
+animal rule; ordinary character MORT/bleed-out rules are unchanged. Death atomically
+ends the active MOB, creates a generic persistent corpse with current identifying
+details, and reparents all embedded items without changing their IDs. Existing
+LOOK, APPROACH, GET, DROP, hands and REMOVE handle the corpse and knife.
+See [the exact contract](objects.html#16-throw-wounds-death-and-corpse-2026-09-30).
+No bleeding simulation, AI, encounter scheduler, SKIN, butchering or food is added.
 
 ## Authoritative design record
 

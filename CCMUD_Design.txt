@@ -765,8 +765,9 @@ numeric ceiling was finalized. CAPTURE is a distinct desired mechanic,
 not a new generic GRAPPLE subsystem with invented throws/chokes/escapes.
 
 Raw wound: MoV 1-4 FLSH; 5-8 LITE; 9-12 DEEP; 13-16 SEVR;
-17-20 GRAV; 21+ MORT. Apply the weapon ceiling and armor as defined by
-W4/W5. Armor changes severity, not the chance to hit: none +1, leather 0,
+17-20 GRAV; 21+ MORT. September 30 adoption replaces weapon ceilings with
+current W4 Severity Modifiers (+0 through +3); Hunting Knife has SM +0.
+Apply weapon SM, then W5 armor. Armor changes severity, not the chance to hit: none +1, leather 0,
 chainmail -1, plate -2. No tier exists above MORT.
 Two equal wounds combine into one next tier through GRAV -> MORT;
 MORT boxes do not combine into a higher rank. W8 value in FLSH units:
@@ -781,9 +782,24 @@ Scale is how many MORTs defeat a creature; it is not bonus CAP or added
 wound steps. Scale 1 people drop at one MORT, with W6's subsequent-wound
 death rule. Larger creatures follow W7/W9, not automatic human collapse.
 
+September 30 bounded rabbit wound/death adoption:
+- Rabbit MOB severity modifier +2 applies AFTER weapon SM and armor. Clamp to
+  the existing wound ladder; no wound exceeds MORT. This supersedes the proposed
+  DEEP death threshold. MOB fragility changes severity, not hit probability or HP.
+- Persist survivor wounds, combine by W8, and apply C5 to subsequent ATHLX dodge.
+- For this bounded rabbit increment only, MORT is immediate death, including
+  combined wounds. Ordinary Scale-1 character W6 remains unchanged. No bleeding
+  simulation is introduced. Other species require their own reviewed profiles.
+- Atomically remove the active MOB, create one generic corpse object populated
+  with current name/species/weight, and transfer all embedded items to that corpse
+  without changing their IDs. Conditional updates prevent duplicate death results.
+- Ordinary object perception, approach, hands, portability and GET/DROP apply.
+  REMOVE recovers from a visible ground corpse or one's own held corpse. No SKIN,
+  carcass/pelt/guts, butchering, fire, cooking, food, AI or encounter expansion.
+
 Ranged equipment (W11):
-Thrown attacks use RANGED, the thrown item's modifier/ceiling, and -1 per
-ten feet to target. Launched attacks use projectile modifier/ceiling and
+Thrown attacks use RANGED, the thrown item's attack modifier and SM, and -1 per
+ten feet to target. Launched attacks use projectile attack modifier/SM and
 launcher effective range, range penalty, allowed ammunition and hand rule.
 A bow used as a club uses its melee line, not its arrow's statistics.
 Loading sling, shortbow, longbow, light crossbow and blowgun is PREP;

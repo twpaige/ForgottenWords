@@ -271,13 +271,13 @@ No WIELD, THROW, containers, rabbits, Craft, fire, food, or later-slice infrastr
 
 ## 15. Rabbit MOB THROW and REMOVE hit test
 
-Thomas authorized a small playable increment after Slice 1, then explicitly deferred
-wounds and killing: resolve whether the throw hits. He subsequently authorized
-`REMOVE KNIFE RABBIT`. This is not the complete hunt or a new combat system.
+The initial hit-test increment added `THROW KNIFE RABBIT` and
+`REMOVE KNIFE RABBIT`. Section 16 now extends it with actual wounds, death and corpses;
+the command, identity and movement rules below remain in force.
 
 - A migration authors one persistent rabbit MOB at X=840, Y=0 inches (70 feet east
   of Origin), on supported HOG ground. Its test ATHLX is 0. LOOK and restart never
-  spawn replacements. Movement AI, concealment behavior, wounds, bleeding, death,
+  spawn replacements. Movement AI, concealment behavior, bleeding simulation,
   corpse processing, SKIN, fire, cooking and food remain deferred.
 - `THROW <object> <target>` requires a single throwable object in either physical
   hand. Holding is sufficient; WIELD is not required. A wielded object remaining
@@ -288,10 +288,9 @@ wounds and killing: resolve whether the throw hits. He subsequently authorized
   d20 + the MOB's ATHLX dodge. Ranged attacks require at least ten feet. Higher
   total wins; a tie does not hit. No Aggression or armor modifies hit probability.
   RANGE is persisted and defaults to ordinary competence, 0, for this test increment.
-- Wound ceilings versus newer tabletop severity modifiers are deliberately not
-  resolved or applied here: this increment records hit/miss only. No full encounter,
-  initiative, turn scheduler, repeated attack loop, rabbit behavior or damage result
-  is claimed. Each explicit THROW resolves one opposed attempt.
+- The wound resolution adopted explicitly in section 16 supersedes the original
+  hit/miss-only stop line. No full encounter, initiative, turn scheduler or repeated
+  attack loop is added; each explicit THROW resolves one opposed attempt.
 - Targets must pass the existing bounded, ready HOG ground/visibility/barrier checks.
   Cabin walls, interior boundaries, unavailable geometry and unsupported water remain
   barriers. Both THROW and REMOVE stop voluntary travel through existing STOP behavior;
@@ -299,14 +298,14 @@ wounds and killing: resolve whether the throw hits. He subsequently authorized
 - A miss leaves the same knife on supported ground at the target's feet. This bounded
   landing rule adds no scatter or flight simulation. A hit transfers the same knife
   to an embedded-MOB location with no independent coordinates or hand. LOOK describes
-  the rabbit with the embedded knife, without claiming injury severity or death.
-- `REMOVE <object> <target>` requires the visible MOB within the existing 15-foot
+  the surviving rabbit and its wounds with the embedded knife; section 16 governs death.
+- `REMOVE <object> <target>` requires the visible MOB or ground corpse within the existing 15-foot
   interaction range. Move closer with ordinary travel if needed. It uses the first
   free hand (right, then left); full hands fail without dropping or moving anything.
   Removal is a conditional transfer of the original object, not a replacement knife.
   GET does not retrieve embedded objects. Restart preserves both embedded and removed state.
 - The object's exclusive location constraint now covers ground, character hand, or
-  embedded MOB. Competing transfers cannot duplicate the knife. Deleting a referenced
+  embedded MOB or corpse OBJECT. Competing transfers cannot duplicate the knife. Deleting a referenced
   MOB cannot cascade-delete its embedded possessions.
 
 The previous Slice 1 bug fix, `3af197f`, shares controller attachment between DEV
@@ -323,3 +322,55 @@ For governing gameplay, consult the [preserved design](https://github.com/twpaig
 For current boundaries, consult [HOG](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/HOG.md), [commands](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/COMMANDS.md), and [publishing](https://github.com/twpaige/ForgottenWords/blob/ea2c03d7a93f0458a9c8e4a28bb35fc135e742af/CCMud/PUBLISHING.md). The current command reference records GET/TAKE and INV/INVENTORY/I as implemented, with outdoor object support bounded by Slice 1.
 
 For implementation evidence, also consult [cabin attachment](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/src/crown_call/hog_structures.py), [ground placement](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/src/crown_call/hog_placement.py), [Nearby formatting](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/src/crown_call/cormac.py), [world tests](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/tests/test_world.py), and [HOG cabin tests](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/tests/test_hog_cabin.py).
+
+
+## 16. THROW wounds, death and corpse (2026-09-30)
+
+Thomas explicitly authorized this bounded extension and resolved the wound-rule
+conflict: adopt current weapon severity modifiers instead of old weapon ceilings.
+Use the existing W3 wound ladder (MoV 1–4 FLSH, 5–8 LITE, 9–12 DEEP, 13–16 SEVR,
+17–20 GRAV, 21+ MORT), then weapon SM, armor, and finally a MOB severity modifier.
+Clamp each stage to the existing ladder; no rank exceeds MORT. Hunting Knife SM is
++0; an unarmored rabbit receives the existing +1 armor adjustment. The rabbit's
+persisted MOB severity modifier is **+2**. This is a target property, not extra hit
+points, an attack bonus, a special knife/rabbit kill rule, or a DEEP death threshold.
+
+After weapon/armor, FLSH becomes DEEP, LITE becomes SEVR, DEEP becomes GRAV and
+SEVR or worse becomes MORT. For this unarmored knife/rabbit matchup, MoV 1–4 yields
+SEVR, 5–8 yields GRAV and 9+ yields MORT. Poor hits can leave a surviving wound;
+solid hits are lethal. W8 combines equal wounds up the ladder (two GRAV become
+MORT); separate MORT boxes do not combine upward. Persist normalized wounds on
+surviving MOBs. C5's worst wound level penalizes the rabbit's ATHLX dodge on its
+next opposed throw defense, without changing its stored base ATHLX.
+
+**LOCKED bounded animal death:** a rabbit reaching MORT dies immediately, including
+through combined wounds. Thomas explicitly selected this while excluding bleeding
+simulation. Ordinary character Scale-1 MORT/unconsciousness/bleed-out rules remain
+unchanged and are not implemented by this increment. Other MOB species do not
+silently inherit rabbit mortality rules.
+
+Death removes the active MOB row and creates one generic CORPSE OBJECT at its
+current supported ground location. Its current details retain name, species and
+weight; the bounded authored rabbit profile weighs 48 ounces. No provenance log,
+respawn or replacement animal is created. A corpse has its own object ID. Every
+embedded item's original ID moves from the MOB to the corpse parent in the same
+transaction, with no independent coordinates. Surviving wounds, knife placement,
+corpse creation and ending the MOB commit together or roll back together. A
+conditional wound revision update ensures retries and simultaneous deaths cannot
+create duplicate corpses or apply a stale wound twice.
+
+LOOK describes the corpse and its embedded items; inventory does likewise when
+held. `APPROACH CORPSE`, `GET CORPSE`, `DROP CORPSE` and `REMOVE KNIFE CORPSE` use
+ordinary movement, perception, hand and portability rules. `REMOVE KNIFE RABBIT`
+can also match the rabbit corpse when unambiguous. REMOVE works from a visible
+ground corpse or one's own held corpse, needs a free hand, and cannot take a knife
+from a corpse that another player has picked up. A held corpse and its embedded
+knife follow the holder through outdoor travel and ROOM transitions. Parent deletion
+cannot silently cascade-delete an embedded knife. A generic corpse is not a carcass.
+
+Migration `20260930_03` preserves existing rabbit/knife identity and location,
+initializes existing rabbits without fabricated wounds, sets rabbit severity +2,
+and adds the generic corpse prototype/portability plus exclusive embedded-object
+placement. It does not spawn another rabbit or corpse. SKIN, carcass/pelt/guts,
+butchering, decay, fire, cooking, food, bleeding simulation, MOB AI, other species'
+wound/death profiles and broader combat remain outside this increment.
