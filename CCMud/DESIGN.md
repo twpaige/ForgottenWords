@@ -5,7 +5,7 @@ reviewed: 2026-09-30
 nav: design
 permalink: /CCMud/design.html
 ---
-**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses and bounded SKIN on September 30. Other slices and deployment remain separate decisions; see current status for verification.
+**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, and MAKE SPIT / GATHER FIREWOOD on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
 
 ## Bounded Rabbit MOB wounds and corpse (2026-09-30)
@@ -33,6 +33,21 @@ No automatic hand juggling, Craft roll, work timer or cooking is introduced.
 Retries and concurrent attempts cannot duplicate outputs. Normal perception,
 reach, ground/ROOM placement, LOOK and object handling apply. The cleaned carcass
 is reserved for later whole roasting. See [the exact contract](objects.html#17-rabbit-corpse-skin-2026-09-30).
+
+## Basic survival materials (2026-09-30)
+
+`GATHER FIREWOOD` yields one 5 lb bundle; `MAKE SPIT` yields one 8 oz wooden spit
+from a suitable fallen stick. Both appear at the character's feet and use ordinary
+persistent object handling. Existing HOG woodland facts and supported dry ground
+are required; no tree/branch nodes, broad gathering or depletion simulation exist.
+No special CAP, recipe or tool is required for these trivial survival actions.
+
+The minimal Work Timer now exists: each result is immediate and adds five real
+minutes atomically. Entry requires debt below 48 hours, elapsed offline/online in
+real time. Repeated deliberate commands are new charged work; stale concurrent
+attempts and transaction failures cannot leave extra outputs or lose debt. See
+[the exact contract](objects.html#18-make-spit-and-gather-firewood-2026-09-30).
+No fire, fuel consumption, roasting, EAT or general crafting catalog is added.
 
 ## Authoritative design record
 

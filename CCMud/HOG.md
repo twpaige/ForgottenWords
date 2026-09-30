@@ -57,6 +57,21 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 * Contents
 {:toc}
 
+## Bounded survival-material availability (2026-09-30)
+
+MAKE SPIT and GATHER FIREWOOD consume existing current-position HOG classification
+facts without materializing individual trees, branches or resource nodes. Light
+and heavy woodland (wooded grassland, woodland, mixed forest, wet forest) qualify;
+other classifications fail. This is an explicit coarse material-availability
+abstraction, not a new walking-scale vegetation model. Existing ready certified
+dry-ground object placement still controls the actual output location. Interiors,
+water, unsafe or unavailable ground do not become eligible through a biome label.
+No generator/version, natural feature, terrain certificate, surrounding generation,
+or resource depletion behavior changes. The object contract
+[section 18](objects.html#18-make-spit-and-gather-firewood-2026-09-30) owns outputs and
+real-time Work Timer accounting; HOG only supplies environmental facts.
+
+
 The walking adapter now indexes these existing cell unions once, preserving lake IDs,
 placement, area and source-grid resolution. Chunk certification retains only intersecting
 four-vertex cell restrictions, alongside existing local polygons and river geometry.

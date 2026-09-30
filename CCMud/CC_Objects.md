@@ -14,7 +14,7 @@ This document condenses the historical object exploration into the smallest pers
 
 **LOCKED** identifies approved decisions or preserved governing constraints. **PROVISIONAL** identifies recommendations and implementation details still subject to review. **DEFERRED** means outside these slices. **REJECTED** identifies excluded approaches. The latest explicit decisions recorded here supersede conflicting earlier draft policies and historical design alternatives. Architecture approval, implementation authorization, documentation publication, and deployment remain separate steps.
 
-The September 30 Rabbit increments in sections 15-17 supersede earlier stop lines only for their explicit scope. MOB (mobile) is CCMUD terminology for an NPC, including wildlife.
+The September 30 Rabbit increments in sections 15-18 supersede earlier stop lines only for their explicit scope. MOB (mobile) is CCMUD terminology for an NPC, including wildlife.
 
 ## 1. Authority and evidence
 
@@ -30,7 +30,7 @@ Start future work with private Crown-Call's [WORK_START_HERE.md](https://github.
 
 The review used the exploration's complete numbered topic outline, substantive passages across its foundational and Alpha topics, and its late convergence material, especially points 1981–2080. This is a thematic architecture review, not a line-by-line certification of every speculative example. Relevant accepted game-design sections and implementation paths were read directly. Earlier Project chats supplied no authority.
 
-The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instructions authorize Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE / wounds / corpse / SKIN interactions in sections 15-17, including commit/push. Other slices and game deployment remain separate decisions. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
+The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instructions authorize Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE / wounds / corpse / SKIN / survival-material interactions in sections 15-18, including commit/push. Other slices and game deployment remain separate decisions. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
 
 ## 2. Terminology and boundaries
 
@@ -58,7 +58,7 @@ Preserve these governing boundaries:
 - Cormac and Eyes present supplied facts. Perception neither creates world truth nor grants movement permission. Preserve useful admin RAW diagnostics.
 - Outdoors uses signed 64-bit integer inches: positive X east, positive Y north, Z elevation. Preserve PostgreSQL, deliberate Alembic migrations, travel accounting, and ground-placement authority.
 - Adopted Crown's Calling rules remain above object storage. Future CCAI uses restricted, validated operations, not unrestricted database or shell authority.
-- Slice 1 and the bounded sections 15-17 interactions are authorized for implementation and publication. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
+- Slice 1 and the bounded sections 15-18 interactions are authorized for implementation and publication. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
 
 ## 3. Existing implementation and required changes
 
@@ -214,7 +214,7 @@ The object slices do not replace combat, Craft, or perception. Accepted rabbit l
 
 ## 11. Six slices and their acceptance proofs
 
-**The six-slice plan remains; authorized implementation is Slice 1 plus the explicit bounded sections 15-17 exceptions.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
+**The six-slice plan remains; authorized implementation is Slice 1 plus the explicit bounded sections 15-18 exceptions.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
 
 | Slice | Bounded deliverable | Acceptance proof |
 | --- | --- | --- |
@@ -245,7 +245,7 @@ Stop expanding the object foundation when players can reliably obtain, carry, st
 
 Draft 5 closes the previously open policy questions: named gameplay categories replace the formal umbrella taxonomy; current identity has no provenance history; DWELLINGS use ROOM interaction; visibility is separate from reach; GET and APPROACH have distinct movement behavior; inventory shows only held/worn objects; tents preserve particular identity; collision follows the approved category rule; death/SKIN have explicit outputs; obsolete incompatible DEV possessions can be removed before hands are enabled.
 
-**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; other slices remain outside the task except for the bounded sections 15-17 authorization. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
+**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; other slices remain outside the task except for the bounded sections 15-18 authorization. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
 
 Later content choices belong before their owning slices: actual container capacities, resource/food quantities, Craft output destinations within the physical handling rules, and the fire burn clock. None requires reopening the location model or adding a future system. If implementation evidence exposes a real conflict, present that specific conflict rather than expanding the architecture speculatively.
 
@@ -407,3 +407,48 @@ The bounded 48-ounce rabbit yields a 36-ounce carcass, 6-ounce raw pelt and
 6-ounce guts. This is a fixed test profile, not a general resource/yield system.
 No tanning, butchering, Craft, work timer, spit-making, fire, cooking, EAT, decay,
 bleeding simulation, MOB AI or broader resource/combat system is added.
+
+
+## 18. MAKE SPIT and GATHER FIREWOOD (2026-09-30)
+
+The next authorized increment adds exactly two basic survival actions, without a
+learned recipe, CAP, cutting tool or empty-hand prerequisite:
+
+- `GATHER FIREWOOD`: one persistent firewood OBJECT, a 5 lb bundle of ordinary
+  dead wood and brush (quantity one, 80 ounces).
+- `MAKE SPIT`: one persistent simple wooden spit OBJECT (quantity one, 8 ounces),
+  fashioned from a suitable fallen stick in the local environment.
+
+All outputs go on the ground at the character's feet. Hands and held objects are
+unchanged. The objects use ordinary IDs, portable definitions, HOG ground attachments,
+LOOK, APPROACH, GET and DROP, and survive restart. The spit is intended for later
+whole-rabbit roasting; neither cooking nor a fire is implemented by these actions.
+
+**Bounded availability:** read the existing HOG light/heavy woodland classification
+at the current position: wooded grassland, woodland, mixed forest or wet forest.
+This permits ordinary woody material gathering as a gameplay abstraction, not a
+claim of a surveyed stick at walking resolution. Supported dry ground is also
+required. Open grassland, interiors, water, unsupported/unavailable geography and
+unreviewed biomes fail without material or labor changes. No individual landscape
+objects, resource nodes, resource counters or general depletion system are created.
+
+**Minimal Craft integration:** results are immediate and deterministic. Each action
+adds five real minutes of labor in the same transaction as its output. Persist one
+per-character `work_until`; compute `max(now, work_until) + duration`. Entry requires
+remaining debt strictly below 48 real hours; an accepted action may cross that
+threshold. Debt elapses online/offline without travel or world-time acceleration.
+The response states remaining whole minutes (rounded up). Costs and bundle weights
+are bounded test tuning, not a new general recipe/catalog system.
+
+A conditional labor/position update rejects stale concurrent attempts. Failed
+validation or a failed transaction leaves no object and no debt. Every deliberate
+new command is new work and may produce another output with another labor charge;
+C02 explicitly allows repeated Crafts. There is no per-recipe cooldown. The existing
+command protocol has no retry identifier or automatic command replay; this does not
+promise deduplication of two separately submitted commands. Restart never replays
+creation. Commands stop travel through the existing accepted-movement boundary.
+
+Migration `20260930_05` adds only the timestamp and two portable definitions. It
+neither spawns outputs nor changes existing object identity, hand or location.
+Ignition, burning/fuel consumption, roasting, EAT, tanning, butchering, broad gathering,
+learning, and a general crafting catalog remain outside this increment.

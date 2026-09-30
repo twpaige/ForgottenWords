@@ -502,6 +502,19 @@ Origin sells maps/compasses; remote crafting of a compass requires minerals
 materials, food portions, ignition costs or opening-Craft tables. Do not
 claim these content tables were finalized or grant the missing items free.
 
+September 30 bounded survival-material adoption:
+- GATHER FIREWOOD yields one 5 lb bundle; MAKE SPIT yields one 8 oz simple wooden
+  spit from a suitable fallen stick. Both use local HOG light/heavy woodland
+  facts and supported dry ground, without individual tree/branch/resource nodes.
+- These basic actions require no special CAP, learned recipe, cutting tool or
+  empty hand. Outputs are persistent physical objects at the character's feet.
+- Apply C02 minimally: each output appears immediately with five real minutes
+  of per-character labor debt, atomically. Entry remains strictly below 48 hours.
+  Deliberate repeated commands are new charged work; stale concurrent attempts
+  and failed transactions do not create extra outputs or lose labor charges.
+- No ignition, burning/fuel consumption, roasting, EAT, broad gathering, learning
+  or general Craft catalog. CC_Objects section 18 owns the exact bounded contract.
+
 C02 — CRAFT TIMER AND FLUSH WILDLIFE
 -----------------------------------
 Review topic H05 (wildlife); original audit H04. Refines Q85's deferral for

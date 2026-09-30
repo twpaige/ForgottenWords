@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Bounded rabbit corpse SKIN into persistent carcass, raw pelt and guts.
+description: MAKE SPIT and GATHER FIREWOOD with physical outputs and minimal Work Timer accounting.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -8,47 +8,52 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-`SKIN CORPSE` extends the existing THROW / wound / death / corpse / REMOVE loop.
-An accessible rabbit corpse may be in the character's hand or on the ground within
-normal interaction range. A suitable cutting tool must be held in either hand;
-the Hunting Knife qualifies and stays in its original hand. Embedded items must
-be removed first. Processing consumes the corpse and creates exactly three persistent
-OBJECTS: rabbit carcass, raw rabbit pelt and rabbit guts, all at the character's feet.
-No invisible inventory or automatic hand juggling. LOOK, GET and DROP use normal
-physical-object rules, including inside the cabin. See
-[object architecture section 17](objects.html#17-rabbit-corpse-skin-2026-09-30).
+`MAKE SPIT` and `GATHER FIREWOOD` add the next two basic survival actions.
+Existing HOG light/heavy woodland classification supplies suitable fallen wood
+without individual tree/branch/resource nodes. The current position must also
+pass the existing dry-ground placement checks. Interiors, open grassland,
+water and unavailable/unsupported ground fail plainly. No special CAP, recipe,
+cutting tool or empty hand is required.
 
-The corpse claim, deletion and output creation share one transaction. Conditional
-location/tool checks and the single corpse claim prevent duplicate processing
-through retries or concurrent players; failures restore the input and all outputs.
-Each output receives its own persistent identity. The knife's identity is unchanged.
-Existing visibility, HOG ground attachment, travel-stop and ROOM rules are reused.
-Migration `20260930_04` adds three output prototypes/portability and the Hunting
-Knife's cutting capability. It does not spawn or relocate world objects.
+GATHER creates one 5 lb firewood bundle; MAKE creates one 8 oz wooden spit. Both
+are persistent portable OBJECTS on the ground at the character's feet. Existing
+LOOK, APPROACH, GET and DROP apply; held possessions are unchanged. The intended
+next use is campfire fuel and whole-rabbit roasting, neither implemented yet.
+See [object architecture section 18](objects.html#18-make-spit-and-gather-firewood-2026-09-30).
 
-Prior rabbit combat remains unchanged: weapon severity modifiers, unarmored +1,
-MOB severity +2, persisted/combined wounds and rabbit MORT immediate death.
-Ordinary character death rules are unchanged. A dead rabbit is not respawned.
+Minimal Craft integration now persists one per-character real-time `work_until`.
+Each output appears immediately and adds five minutes to max(now, work_until), in
+one transaction. Entry requires remaining debt strictly below 48 hours; an accepted
+action may cross that threshold. Offline time reduces debt; travel/world acceleration
+does not. Success text reports remaining minutes. A conditional labor/position
+update rejects stale concurrent attempts with no output or debt. Repeated deliberate
+commands remain new charged work under C02, not a per-recipe cooldown. The current
+protocol has no command retry token or automatic replay.
+
+Migration `20260930_05` adds the nullable timestamp and two portable definitions,
+without spawning outputs or changing existing objects. The prior rabbit THROW,
+wound, corpse, REMOVE and SKIN interactions remain unchanged. SKIN continues to
+use its explicitly bounded immediate processing rule; no retroactive debt is added.
 
 ## Verification
 
-Implementation: [0073ef0](https://github.com/twpaige/Crown-Call/commit/0073ef0d3838904b2b182865ec7ac24f3b5a7373), committed and pushed to main.
+Implementation: [733e847](https://github.com/twpaige/Crown-Call/commit/733e84710f3a314a06bc324244f988f4dddc401c), committed and pushed to main.
 
-- Focused SKIN suite: **22 passed**. Covers held/ground input, occupied hands,
-  held cutting-tool requirement, inaccessible targets, unsupported placement,
-  all three outputs at the feet, consumed input, tool identity, restart/LOOK,
-  cabin GET, travel stopping, rollback, concurrent processing and transfer races.
-- Combined object/wound/approach/world/cabin/walking/water/travel/odometer regressions,
-  including SKIN: **302 passed** in 182.25 seconds.
-- Cormac, Eyes and knowledge-base synchronization regressions: **74 passed** in
-  20.74 seconds. Total selected coverage: **376 passed**; each run reported one
-  existing dependency deprecation warning. Tests use isolated SQLite, never live data.
-- Changed-file Ruff and whitespace checks pass. Alembic has one head, `20260930_04`.
-  Repository-wide Ruff reports 55 existing findings outside the changed files.
-- The complete pytest suite was not rerun for this bounded increment. The prior
-  wound/corpse milestone passed 768 full-suite cases plus its additional focused
-  disabled-autoflush/foreign-key regression. That is historical evidence, not a
-  claim of full-suite verification for the current SKIN revision.
+- Focused survival-material suite: **31 passed** in 23.27 seconds, exercising the
+  actual DEV-origin woodland, object identity/location/weight, full hands,
+  LOOK/GET and restart, unsuitable/unavailable terrain, additive migration,
+  Work Timer entry threshold, offline elapsed time, repeated charged work,
+  rollback, concurrent stale attempts, position revalidation and travel stopping.
+- Combined appropriate regressions: **415 passed** in 230.28 seconds. Includes
+  the new suite, rabbit SKIN/wounds/THROW, Hunting Knife, player APPROACH, world,
+  cabin, HOG walking, water movement, travel, odometers, stamina recovery,
+  authentication, Cormac and Eyes. One existing dependency deprecation warning.
+  Tests use isolated SQLite, never live data.
+- Changed-file Ruff and whitespace checks pass. Alembic has one head,
+  `20260930_05`. The complete pytest suite was not rerun for this bounded increment.
+- Prior SKIN milestone: 376 selected tests passed at implementation `0073ef0`;
+  final documentation pin `6ff847e`. This is historical evidence, not a claim of
+  current full-suite or live-server verification.
 
 ## Deployment state and next action
 
@@ -59,9 +64,8 @@ have not been verified by this task. No server command, migration, restart or
 DEV/PROD deployment was run for this increment.
 
 After the final documentation pin is pushed, Thomas can deploy that committed
-revision and playtest APPROACH CORPSE -> REMOVE KNIFE CORPSE -> SKIN CORPSE -> LOOK.
-GET CORPSE before SKIN is optional; the knife must remain held. Outputs always
-land at the player's feet. A cleaned carcass supports normal GET but no cooking yet.
+revision and playtest MAKE SPIT -> GATHER FIREWOOD -> LOOK, then ordinary GET/DROP.
+Both products appear immediately at the character's feet. No fire can be lit yet.
 The [deployment guide](development.html#cc-update-authority-and-installation) owns
 `sudo cc-update dev --fast [ref]` for iteration and `sudo cc-update dev [ref]` for
 full verification. Use full DEV periodically and at feature/milestone completion.
@@ -69,7 +73,8 @@ No fast PROD exists. Game deployment is separate from documentation publication.
 
 ## Deferred
 
-Tanning, butchering, Craft, work timers, spit-making, fire, cooking, EAT, decay,
-bleeding simulation, MOB AI/chasing, other species' profiles and broader combat
-or resource systems remain outside this increment. The carcass is reserved for
-later whole roasting. A new test rabbit/reset needs separate content authorization.
+Ignition, burning/fuel consumption, roasting, EAT, tanning, butchering, decay,
+broad gathering, a crafting catalog, learning, bleeding simulation, MOB AI/chasing
+and broader combat/resource systems remain outside this increment. The rabbit
+carcass is reserved for later whole roasting. A new test rabbit/reset still needs
+separate content authorization; dead rabbits do not respawn.
