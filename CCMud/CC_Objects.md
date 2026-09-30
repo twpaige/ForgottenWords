@@ -480,7 +480,7 @@ prototype IDs/quantities, optional sector expression, real-second labor cost, an
 placement. The only v1 placement/effect is `ground_at_feet`. There is no script,
 eval, user-defined callback, construction effect, or recipe-specific executor.
 
-The server validates strict fields, registered flags, existing portable prototypes,
+The server validates strict fields, registered flags, existing ordinary prototypes,
 known capability/property combinations, positive material quantities and bounded
 lists/costs. Current limits are eight aliases, eight rows per material/tool list,
 100 total input units and 100 total output units, and 0-48 hours per action.
@@ -500,7 +500,9 @@ future migration needs explicit corpse targeting/state support, not a shortcut.
 All outputs have new persistent IDs with ordinary quantities and direct ground/ROOM
 locations at the accepted character position. Hands are unchanged. Existing outdoor
 dry-ground checks and HOG attachments apply; sector eligibility never grants ground
-placement. No invisible inventory or automatic hand juggling.
+placement. Non-portable outputs are permitted on the ground; inputs remain portable.
+Craft never grants hand eligibility to non-portable objects. No invisible inventory
+or automatic hand juggling.
 
 Consumption, creation, ground attachments, Work Timer, character execution revision
 and optional request receipt commit atomically. Work Timer remains
@@ -547,7 +549,8 @@ and revision. Stale saves or conflicting aliases fail atomically.
 
 The shared validated server operations are the boundary for future Object/MOB
 Builders and restricted CCAI clients. CCAI does not receive shell/database authority;
-no CCAI integration or full Object/MOB Builder is included. Content authoring belongs
+section 20 adds the bounded Object Builder, while MOB Builder and CCAI integration
+remain deferred. Content authoring belongs
 primarily in this web interface, not a growing in-game builder-command language.
 
 Migration `20260930_06` adds definitions, unique aliases, execution receipts and a
@@ -555,3 +558,86 @@ character execution revision, and seeds the two crafts. It preserves existing
 Work Timer timestamps, objects, quantities, identities and locations. It creates
 no physical objects. No fire, ignition, roasting, EAT, tanning, butchering, cabin
 construction, resource depletion, quality, discovery or progression is added.
+
+
+## 20. Object Builder and timed morph v1 (2026-09-30)
+
+Thomas authorized a compact desktop `/builder` with **Crafts | Objects**. Both
+editors use short rows and three columns, fitting ordinary creation/editing on a
+1280×720 desktop viewport without page scrolling. Longer material lists scroll
+within their panels. The browser only authors definitions; the authenticated,
+revision-checked server operations remain the authority and future CCAI boundary.
+
+Object authoring exposes stable identity (immutable after creation), name, keywords,
+ground and held/inventory descriptions, weight in ounces per unit, portable,
+existing cutting/woodcutting tool purpose, existing throwable attack/severity
+modifiers, and timed morph. Capabilities have strict server schemas; no arbitrary
+JSON, scripts or unrestricted database access. Saves record editor/revision/time.
+Saving never spawns an instance. There is no prototype deletion, wearable,
+container, armor, durability or MOB Builder in v1. Mechanical edits that affect
+live instances or pending morph destinations are rejected; use a new prototype.
+Description corrections remain shared. Saves revalidate affected definition rules
+and Craft compatibility; ground outputs may be non-portable, but inputs remain
+portable. Morphable input/output quantities must be one.
+
+### Timed morph definition and persisted state
+
+An optional `timed_morph` capability contains `after_seconds` (positive integer real
+seconds), `action` (`morph` or `disappear`), and `target_prototype_id` (required for
+morph, absent/null for disappear). No world-time, Work Timer or travel multiplier
+applies. Chains must be acyclic and have at most **16 transitions**: enough for
+short staged lifecycles, while bounding validation and unattended catch-up. Each
+duration is at most 315360000 seconds (ten 365-day years), preventing unreasonable
+arithmetic/input sizes. Targets must exist; corpses and specialized-state morphs
+are excluded. Stages preserve portability so a held object remains legally held.
+
+Ordinary object creation captures the complete small pending chain as absolute UTC
+deadlines and destination prototype IDs, with null destination meaning disappearance.
+The instance stores this pending list plus an indexed `morph_at` equal to the first
+remaining deadline. Each later deadline is computed from the preceding deadline,
+never the observation time. Applied entries are removed; there is no history or
+copy of all prototype defaults. Timing/target edits affect new lifecycles only.
+Existing instances without timers do not acquire one on a definition edit.
+
+Reconciliation catches up all elapsed stages in one transaction. Morphs retain the
+same object ID, quantity one, and valid hand, embedded-parent, ROOM or outdoor
+placement, including existing ground attachment semantics. Descriptions, weight
+and capabilities then come from the new prototype. Terminal disappearance removes
+the object and its ground attachment, freeing its hand if held.
+
+**Explicit embedded-object rule:** Thomas directed that a morph proceeds even when
+items are embedded in the morphing object. Every embedded descendant disappears
+in the same transaction on each morph or terminal disappearance. This is an
+explicit lifecycle exception to the ordinary parent-deletion protection, not a
+general container cascade policy. An embedded object may itself morph while
+preserving its own parent; its terminal disappearance leaves that parent intact.
+Corpse morphs remain excluded, so ordinary rabbit death/SKIN/knife recovery rules
+are unchanged. Wearable and general container morph behavior remains deferred.
+
+### Relevance, concurrency and restart
+
+One scoped reconciliation service runs before local LOOK/ROOM presentation,
+inventory, object interactions, Craft input/tool checks, APPROACH selection and
+travel-target revalidation, and carried-load snapshots. It includes relevant
+embedded objects. Expired rows are reconciled before visibility result limits,
+name matching or capability checks. A changed/vanished APPROACH target stops travel
+through the existing navigation authority. Unrelated distant objects are untouched.
+
+Short database transactions reconcile elapsed time, then lock relevant lifecycle
+objects through interaction validation and mutation. Deterministic object-lock
+ordering and the same service arbitrate simultaneous readers/transfers/morphs;
+SQLite tests use conditional/write locking, PostgreSQL uses transaction row locks.
+Elapsed reconciliation is committed before ordinary action validation so rejection
+of a request does not reset the timer. Embedded deletion, stage changes and pending
+deadlines commit or roll back together. A small authoring transaction lock serializes
+morph graph edits, Craft definition validation and new schedule capture, including
+concurrent edge changes that would otherwise introduce a cycle. No object mutation
+history or general scheduler is added.
+
+Restart reads committed deadlines and catches up lazily. Craft retry receipts may
+report the original creation, but never recreate expired outputs. Read-only admin
+diagnostics do not reconcile state. There is no global object polling, background
+cleanup worker, ignition, fuel consumption, cooking or new campfire recipe in this
+increment. The deadline index permits bounded cleanup later if actually needed.
+Migration `20260930_07` adds authoring metadata and timer state without starting
+old timers, spawning objects or changing existing identity/location.

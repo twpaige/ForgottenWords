@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Data-driven Craft Engine v1 and a validated web Craft Builder.
+description: Compact Craft/Object Builders and persistent linear timed morphs.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -8,88 +8,87 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-One server-side Craft Engine now executes persisted definitions. GATHER FIREWOOD
-and MAKE SPIT resolve exact aliases through the same generic path; their bespoke
-material handler is removed. Both require `TREES & !WATER`, output at the player's
-feet and add five real minutes of Work Timer debt. Firewood remains one 5 lb bundle;
-the spit remains one 8 oz object. MAKE SPIT now requires a held cutting tool, including
-the Hunting Knife. No invisible inventory or automatic hand juggling.
+The authorized Object Builder and timed-morph increment is implemented. `/builder`
+now offers **Crafts | Objects**, using compact desktop forms checked at 1280×720
+and 1366×768 without ordinary page scrolling. The account screen links to Builder.
+Object authoring supports identity, descriptions/keywords, weight, portable,
+cutting/woodcutting tools, existing throwing modifiers and timed morph. Authenticated
+server validation, revision checks and editor metadata remain authoritative. Saving
+never spawns an instance; prototype deletion, wearable/container/armor/durability
+fields and MOB/CCAI implementation remain excluded.
 
-Definitions support names/identities, command aliases, physical prototype/quantity
-inputs and outputs, held capability requirements, sector expressions, labor cost,
-and the v1 ground-at-feet effect. Existing HOG/ROOM perception, reach, placement and
-Work Timer authority are reused. Full/partial input consumption, output creation,
-attachments, debt, execution revision and optional retry receipt commit atomically.
-The same request ID returns the original craft result after restart without another
-output, charge, consumption or travel stop; fresh IDs are new work. The web client
-supplies IDs. SKIN retains its current bounded behavior and handler.
+A Craft may now produce a non-portable object on the ground at the character's
+feet; GET still rejects non-portable objects. Inputs remain portable and tools
+remain held. Existing GATHER FIREWOOD and MAKE SPIT definitions retain their sector,
+quantity, weight and five-minute Work Timer rules. There is no new campfire recipe,
+ignition, fuel consumption or cooking behavior.
 
-Builder/admin accounts access `/builder` from the account screen. The form offers
-prototype quantities, tool capabilities, aliases, flag/operator controls and labor
-cost; all validation and execution remain server-side. Authenticated Builder APIs
-and shared validated operations reject invalid references/expressions/quantities,
-reserved or conflicting aliases and stale revisions. Saves record/log the editor.
-This is the future Object/MOB/CCAI client boundary, not full Object/MOB builders or
-CCAI implementation. CCAI receives no shell/database authority.
+Timed morphs use positive real-world integer seconds and acyclic chains of at
+most 16 transitions. Creation captures absolute pending deadlines and target IDs;
+subsequent deadlines derive from the preceding deadline. Existing schedules are
+unaffected by definition edits. Timers survive restart and catch up lazily before
+relevant presentation, interaction, Craft and travel/load checks. No global polling
+or general scheduler is present. Morphs preserve the object ID and valid placement;
+quantity must be one, and corpse/specialized-state morphs are excluded.
 
-Flags are derived from HOG/ROOM facts without a second geography map. The parser
-supports `!`, `&`, `|`, parentheses and the nine requested names. Multiple flags can
-apply. Missing facts remain unknown under NOT, and restrictions must resolve true.
-ROAD is registered but unknown until authoritative road geometry exists. Mountain
-and rocky labels use the explicitly documented regional biome interpretation;
-SHORE only certifies proximity to represented ready water edges. See
-[Craft Engine contract](objects.html#19-craft-engine-v1-and-web-builder-2026-09-30)
-and [HOG sector sources](hog.html#craft-sector-facts-2026-09-30).
+Thomas's explicit clarification applies: **anything embedded in a morphing object
+disappears atomically when that object morphs or disappears**. An embedded object
+may itself morph while retaining its own parent. Terminal disappearance removes
+its ground attachment and frees its hand. Ordinary rabbit death, corpse, SKIN and
+knife recovery are unchanged because corpse morphs remain excluded.
 
-Migration `20260930_06` seeds the two definitions and adds aliases, receipts and the
-character craft revision. It preserves existing Work Timer debt, object identities,
-quantities and locations, and creates no physical outputs.
+Migration `20260930_07` adds prototype revision/editor/time and per-instance pending
+morph deadlines plus the deadline index. It does not start old timers, spawn objects,
+change placement or reset existing game state. PostgreSQL authoring transaction
+locking prevents concurrent edits from introducing a cycle; ordinary interactions
+use scoped lifecycle row locks and current-stage checks. See the
+[governing Object Builder/morph contract](objects.html#20-object-builder-and-timed-morph-v1-2026-09-30).
 
 ## Verification
 
-Implementation: [656b1ba](https://github.com/twpaige/Crown-Call/commit/656b1ba5fdfee7a64aa3f26c1cacc97dbe985163), committed and pushed to main.
+Implementation revision: [5a4ed86](https://github.com/twpaige/Crown-Call/commit/5a4ed862a1bb212e5502df34ec388d406440ed84), committed and pushed to main.
 
-- Focused Craft Engine, Builder API and migrated-material run: **119 passed** in
-  71.88 seconds. Tests exercise data-driven edits/aliases, all grammar operators,
-  simultaneous/unknown flags, real HOG and ROOM facts, capabilities, physical inputs,
-  stack quantities, tool identity, outputs, Work Timer, restart, retry receipts,
-  rollback, zero-cost revision safety, competing requests/inputs and migration.
-- Directly affected gameplay/authentication regressions: **178 passed** in
-  145.52 seconds: rabbit SKIN/wounds/THROW, Hunting Knife, player APPROACH, world,
-  auth, cabin, odometer and stamina recovery. Each run reports one existing
-  dependency deprecation warning. Isolated SQLite only; no live database.
-- Final Builder API/shared-operation run: **18 passed** in 22.15 seconds, including
-  three additional strict revision-validation cases. Together the named runs cover
-  **300 distinct pytest cases**; the final run also checks the last validation/logging
-  changes. This is focused coverage, not the full suite.
-- Client login/arrival, browser navigation/request-ID/role visibility, and Builder
-  forms regressions pass. A real local test API/browser smoke also verified invalid
-  expression rejection, create/save/reload persistence, tool display and desktop/
-  mobile layouts. Its temporary test server used an isolated database and was stopped.
-- Changed-file Ruff, whitespace and single Alembic head checks pass. No full suite
-  was run; focused tests and directly affected regressions follow Thomas's request.
+- Focused Craft/Object/Morph/Builder/material run: **157 passed** in 109.04 seconds.
+- Final expanded Object Builder/morph run: **37 passed** in 32.90 seconds, including
+  API validation/authorization/revision protection, cycles/depth/timer validation,
+  immutable schedules after edits, non-portable Craft output, linear/offline catch-up,
+  terminal disappearance, identity/ground/ROOM/hand/embedded placement, restart,
+  retry receipts, atomic embedded deletion/rollback, concurrent GET and graph edits,
+  migration preservation, changed/expired APPROACH targets and position revalidation.
+- Directly affected gameplay regressions: **245 passed** in 160.52 seconds: rabbit
+  SKIN, wounds, THROW/REMOVE, Hunting Knife, player APPROACH, world, cabin, water
+  movement, stamina recovery and odometer. Together these runs cover **404 distinct
+  pytest cases**, not the full suite. SQLite tests use isolated databases and
+  independent connections; the existing Starlette/httpx deprecation warning remains.
+- A final API create/edit/catalog/authorization check passed after tightening
+  revision-consistent catalog reads and save responses.
+- Headless Edge/Playwright checks pass for both compact Builder tabs, form payloads,
+  revisions/reload, server errors, desktop and mobile overflow; existing client
+  login/arrival and navigation/request-ID/role visibility checks also pass.
+- Changed-file Ruff, whitespace, single Alembic head, SQLite migration execution,
+  and PostgreSQL offline migration SQL compilation pass. No PostgreSQL integration
+  database or live DEV/PROD database was used.
 
 ## Deployment state and next action
 
-Thomas's last pasted server evidence verified FAST DEV revision
-`575b87bb4d4ba3fce66e3ae41e49089078198a1c`: release `575b87bb4d4b`, service active,
-health ready, database up, HOG walking certified_origin. Later server revisions
-have not been verified by this task. No DEV/PROD command, migration, restart or
-deployment was run for Craft Engine v1. Local test-server activity is separate.
+No DEV/PROD deployment, migration or restart was run for this increment. Thomas's
+last pasted deployment evidence was FAST DEV `575b87bb4d4ba3fce66e3ae41e49089078198a1c`;
+no later live revision is claimed here. Documentation publication is separate.
 
 After the final documentation pin is pushed, Thomas can deploy that committed
-revision and playtest GATHER FIREWOOD, GET KNIFE, MAKE SPIT and LOOK in woodland.
-Builder/admin accounts can open Craft Builder from their account screen, edit a
-definition, save and execute its alias; no game objects are created just by saving.
-The [deployment guide](development.html#cc-update-authority-and-installation) owns
+revision and use Builder/admin access to create ordinary object prototypes, connect
+linear morph stages, and author a ground-output Craft to create a test instance.
+Test LOOK after elapsed deadlines, restart catch-up, portability and recovery before
+expiry. A save alone never creates a physical instance. The
+[deployment guide](development.html#cc-update-authority-and-installation) owns
 `sudo cc-update dev --fast [ref]` for iteration and `sudo cc-update dev [ref]` for
-full verification. No fast PROD. Documentation publication is separate from game
-deployment. Future code work should default to focused and directly affected tests;
-full-suite testing requires sufficiently broad changes or an explicit request.
+full verification. No fast PROD. Default development checks remain focused tests
+and directly affected regressions; run the full suite only for sufficiently broad
+changes or Thomas's explicit request.
 
 ## Deferred
 
-Ignition, burning/fuel consumption, roasting, EAT, tanning, butchering, cabin
-construction, resource depletion, quality, recipe discovery, skill progression,
-a general scripting engine, full Object/MOB Builders and CCAI integration remain
-outside v1. No new rabbit/reset or broader combat behavior is added.
+Wearables, containers, armor, durability, MOB Builder/CCAI clients, repeating/circular
+morphs, specialized-state morphs, general scheduling/background cleanup, ignition,
+fuel consumption, roasting, EAT, tanning, butchering, cabin construction, broad
+resources/depletion, quality, recipe discovery and skill progression remain deferred.
