@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Compact Craft/Object Builders and persistent linear timed morphs.
+description: Builder cloning, shared nearest-first ordinal targeting and clearer Nearby prose.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -8,83 +8,52 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-The authorized Object Builder and timed-morph increment is implemented. `/builder`
-now offers **Crafts | Objects**, using compact desktop forms checked at 1280×720
-and 1366×768 without ordinary page scrolling. The account screen links to Builder.
-Object authoring supports identity, descriptions/keywords, weight, portable,
-cutting/woodcutting tools, existing throwing modifiers and timed morph. Authenticated
-server validation, revision checks and editor metadata remain authoritative. Saving
-never spawns an instance; prototype deletion, wearable/container/armor/durability
-fields and MOB/CCAI implementation remain excluded.
+The small Builder/targeting usability increment is implemented:
 
-A Craft may now produce a non-portable object on the ground at the character's
-feet; GET still rejects non-portable objects. Inputs remain portable and tools
-remain held. Existing GATHER FIREWOOD and MAKE SPIT definitions retain their sector,
-quantity, weight and five-minute Work Timer rules. There is no new campfire recipe,
-ignition, fuel consumption or cooking behavior.
+- Craft and Object Builder offer Clone as an unsaved editable draft. The copied
+  name becomes `Clone of <name>`, identity is new/editable and revision is zero.
+  Save still validates on the server; no source definition is overwritten.
+- Nearby and ordinary object/MOB selection share nearest-first ordering with
+  compass sector and stable ID ties. Contextual `2.knife`, `3.rabbit`, etc. work
+  through shared selection in GET, LOOK inspection, APPROACH, DROP, THROW, REMOVE
+  and SKIN. GET excludes held objects and selects eligible ground/ROOM candidates.
+- Nearby renders description first: `A Hunting Knife. (here)` or
+  `A simple wooden spit. (2 ft E)`, without grouping or a final extra period.
 
-Timed morphs use positive real-world integer seconds and acyclic chains of at
-most 16 transitions. Creation captures absolute pending deadlines and target IDs;
-subsequent deadlines derive from the preceding deadline. Existing schedules are
-unaffected by definition edits. Timers survive restart and catch up lazily before
-relevant presentation, interaction, Craft and travel/load checks. No global polling
-or general scheduler is present. Morphs preserve the object ID and valid placement;
-quantity must be one, and corpse/specialized-state morphs are excluded.
-
-Thomas's explicit clarification applies: **anything embedded in a morphing object
-disappears atomically when that object morphs or disappears**. An embedded object
-may itself morph while retaining its own parent. Terminal disappearance removes
-its ground attachment and frees its hand. Ordinary rabbit death, corpse, SKIN and
-knife recovery are unchanged because corpse morphs remain excluded.
-
-Migration `20260930_07` adds prototype revision/editor/time and per-instance pending
-morph deadlines plus the deadline index. It does not start old timers, spawn objects,
-change placement or reset existing game state. PostgreSQL authoring transaction
-locking prevents concurrent edits from introducing a cycle; ordinary interactions
-use scoped lifecycle row locks and current-stage checks. See the
-[governing Object Builder/morph contract](objects.html#20-object-builder-and-timed-morph-v1-2026-09-30).
+Existing compact Crafts | Objects forms, validated authoring APIs, Craft execution,
+physical transfers and lazy linear timed morphs remain in place. No schema change,
+new gameplay system or deployment machinery is introduced. See the
+[usability contract](objects.html#21-builder-cloning-and-ordinary-target-usability-2026-09-30)
+and [Object Builder/morph contract](objects.html#20-object-builder-and-timed-morph-v1-2026-09-30).
 
 ## Verification
 
-Implementation revision: [5a4ed86](https://github.com/twpaige/Crown-Call/commit/5a4ed862a1bb212e5502df34ec388d406440ed84), committed and pushed to main.
+Implementation revision: [6e82fb8](https://github.com/twpaige/Crown-Call/commit/6e82fb80b30d1e592855bd5d0d35e48939ead332), committed and pushed to main.
 
-- Focused Craft/Object/Morph/Builder/material run: **157 passed** in 109.04 seconds.
-- Final expanded Object Builder/morph run: **37 passed** in 32.90 seconds, including
-  API validation/authorization/revision protection, cycles/depth/timer validation,
-  immutable schedules after edits, non-portable Craft output, linear/offline catch-up,
-  terminal disappearance, identity/ground/ROOM/hand/embedded placement, restart,
-  retry receipts, atomic embedded deletion/rollback, concurrent GET and graph edits,
-  migration preservation, changed/expired APPROACH targets and position revalidation.
-- Directly affected gameplay regressions: **245 passed** in 160.52 seconds: rabbit
-  SKIN, wounds, THROW/REMOVE, Hunting Knife, player APPROACH, world, cabin, water
-  movement, stamina recovery and odometer. Together these runs cover **404 distinct
-  pytest cases**, not the full suite. SQLite tests use isolated databases and
-  independent connections; the existing Starlette/httpx deprecation warning remains.
-- A final API create/edit/catalog/authorization check passed after tightening
-  revision-consistent catalog reads and save responses.
-- Headless Edge/Playwright checks pass for both compact Builder tabs, form payloads,
-  revisions/reload, server errors, desktop and mobile overflow; existing client
-  login/arrival and navigation/request-ID/role visibility checks also pass.
-- Changed-file Ruff, whitespace, single Alembic head, SQLite migration execution,
-  and PostgreSQL offline migration SQL compilation pass. No PostgreSQL integration
-  database or live DEV/PROD database was used.
+- Focused gameplay run: **22 passed** in 60.80 seconds, covering shared ordering,
+  ordinals, Nearby prose, ground/ROOM GET and inspection, object/MOB APPROACH through
+  travel ticks, THROW/REMOVE ordinals, knife identity/restart and competing GET.
+- Final directly affected checks: **3 passed** in 52.32 seconds: SKIN ordinal selection and both Builder APIs
+  rejecting revision-zero attempts to overwrite existing definitions (25 total).
+- Headless Edge/Playwright checks passed for unsaved Craft/Object clones, copied
+  fields, source preservation, new ID collision avoidance, revision-zero saves,
+  existing form validation/reload, compact desktop layout and mobile overflow.
+- Changed-file Ruff and whitespace checks passed. No full suite was run. Tests use
+  isolated databases; the existing Starlette/httpx deprecation warning remains.
 
 ## Deployment state and next action
 
-No DEV/PROD deployment, migration or restart was run for this increment. Thomas's
-last pasted deployment evidence was FAST DEV `575b87bb4d4ba3fce66e3ae41e49089078198a1c`;
-no later live revision is claimed here. Documentation publication is separate.
+No DEV/PROD deployment, migration or restart was run. Thomas's last pasted
+server evidence was FAST DEV `575b87bb4d4ba3fce66e3ae41e49089078198a1c`; no later
+live revision is claimed. Documentation publication is separate.
 
-After the final documentation pin is pushed, Thomas can deploy that committed
-revision and use Builder/admin access to create ordinary object prototypes, connect
-linear morph stages, and author a ground-output Craft to create a test instance.
-Test LOOK after elapsed deadlines, restart catch-up, portability and recovery before
-expiry. A save alone never creates a physical instance. The
+After the documentation pin is pushed, Thomas can deploy that committed revision
+for live checks: Clone without Save, save a distinct clone, inspect Nearby order,
+and try GET/APPROACH/THROW/REMOVE with numbered targets. The
 [deployment guide](development.html#cc-update-authority-and-installation) owns
 `sudo cc-update dev --fast [ref]` for iteration and `sudo cc-update dev [ref]` for
-full verification. No fast PROD. Default development checks remain focused tests
-and directly affected regressions; run the full suite only for sufficiently broad
-changes or Thomas's explicit request.
+full verification. No fast PROD. Development checks remain focused tests and
+directly affected regressions unless scope or Thomas requires the full suite.
 
 ## Deferred
 

@@ -71,7 +71,7 @@ Preserve these governing boundaries:
 | GET/TAKE, DROP, and I/INVENTORY already dispatch to persistent handlers. Outdoor HOG interactions remain gated. | Document GET as canonical, retain TAKE, add INV, and integrate a bounded supported outdoor path. Existing dispatch is not proof that outdoor GET works. |
 | `_get` checks ground candidates and portability, then changes holder and clears placement. Requests serialize per character, not per shared object. | Protect competing GETs across different PCs and validate destination hands atomically. |
 | Holder/coordinate exclusivity does not fully exclude held `space_id`; there is no container parent yet. | Enforce the complete current-location invariant in storage and domain operations. |
-| Ground queries filter by space and three-dimensional radius; the matcher returns the first match. | ROOM interaction must bypass intra-room distance. Resolve ambiguous targets explicitly. |
+| Ground queries filter by space and three-dimensional radius; the matcher returns the first match. | ROOM interaction must bypass intra-room distance. Resolve ordinary matches nearest-first, with contextual ordinals (section 21). |
 | HOG observation supplies the audited cabin; generic live-object candidates are not integrated. | Add truthful object candidates to observation, with separate perception and interaction checks. |
 | A cabin `Space` combines bounds and interior/exterior descriptions; a `Portal` combines endpoints and open state. | Keep these records while adapting interior interactions to ROOM semantics. |
 | `GroundPlacement` supports absolute versus ground-relative placement and read-only audits. | Preserve those meanings and the cabin's narrow audited geometry. |
@@ -135,7 +135,7 @@ VEHICLES are a distinct future access case. Exposed, reachable contents may even
 
 Use current movement and geometry authority for the supported path. Revalidate the target and path during movement; stop safely if the target is lost or the permitted direct path becomes blocked. Do not route around an obstruction or expand this into general navigation. Indoors APPROACH is unnecessary for an accessible object in the same ROOM. A target that moves stops this bounded APPROACH; no chasing is added. Ordinary arrival says "You approach the Hunting Knife and stop." or "You approach the rabbit and stop." Diagnostic geographic wording about represented targets, certification or inches is not player arrival prose.
 
-**LOCKED:** GET issued during continuous travel first stops that travel, then attempts the interaction. It never automatically resumes, whether the object is obtained, out of range, inaccessible, ambiguous, missing, or rejected because hands are full. TAKE follows the same handler. Stopping is an intentional command effect even when the object transfer fails; therefore “failed transfer changes nothing” applies to object/possession state, not to the separately required travel stop. Preserve accepted movement and odometer accounting up to the stop boundary. The normal command loop must not advance the old travel state afterward.
+**LOCKED:** GET issued during continuous travel first stops that travel, then attempts the interaction. It never automatically resumes, whether the object is obtained, out of range, inaccessible, missing, or rejected because hands are full. TAKE follows the same handler. Stopping is an intentional command effect even when the object transfer fails; therefore “failed transfer changes nothing” applies to object/possession state, not to the separately required travel stop. Preserve accepted movement and odometer accounting up to the stop boundary. The normal command loop must not advance the old travel state afterward.
 
 **LOCKED:** visibility and interaction range are separate. Draft 4's fixed 15-foot visibility policy is superseded. The current pickup configuration of 180 inches is implementation evidence about interaction range, not an approved visibility ceiling. A knife may be visible 50 feet away on a road but invisible two feet away in tall grass. Exact object visibility tuning comes later; neither distance alone nor a known coordinate proves perception.
 
@@ -146,7 +146,7 @@ authoritative current facts → bounded candidates in the correct SPACE
                             → perception/access checks → player presentation
 ```
 
-Keep dynamic candidates outside cached geographic prose. Cormac should receive facts through the observation seam, not query the database or generate objects during LOOK. Reuse outdoor Nearby's compass ordering, nearest-first ordering, and deterministic ties. Namespace mixed candidate references because the current formatter deduplicates by ID. Bound dense result sets as well as spatial searches.
+Keep dynamic candidates outside cached geographic prose. Cormac should receive facts through the observation seam, not query the database or generate objects during LOOK. Use nearest-first ordering, with absolute compass sector then namespaced stable ID breaking equal-distance ties. Namespace mixed candidate references because the current formatter deduplicates by ID. Bound dense result sets as well as spatial searches.
 
 Indoors, retain authored ROOM descriptions and present actual accessible objects from that ROOM. Do not invent distance/bearing obstacles for ROOM contents. Outdoors, describe a zero-distance object as “here” rather than giving a fictitious meaningful bearing. A held item is not a second ground candidate; contained items appear through explicit container inspection, not as loose objects.
 
@@ -362,7 +362,7 @@ create duplicate corpses or apply a stale wound twice.
 LOOK describes the corpse and its embedded items; inventory does likewise when
 held. `APPROACH CORPSE`, `GET CORPSE`, `DROP CORPSE` and `REMOVE KNIFE CORPSE` use
 ordinary movement, perception, hand and portability rules. `REMOVE KNIFE RABBIT`
-can also match the rabbit corpse when unambiguous. REMOVE works from a visible
+can also match the rabbit corpse through the same nearest-first/ordinal selection. REMOVE works from a visible
 ground corpse or one's own held corpse, needs a free hand, and cannot take a knife
 from a corpse that another player has picked up. A held corpse and its embedded
 knife follow the holder through outdoor travel and ROOM transitions. Parent deletion
@@ -641,3 +641,38 @@ cleanup worker, ignition, fuel consumption, cooking or new campfire recipe in th
 increment. The deadline index permits bounded cleanup later if actually needed.
 Migration `20260930_07` adds authoring metadata and timer state without starting
 old timers, spawning objects or changing existing identity/location.
+
+
+## 21. Builder cloning and ordinary target usability (2026-09-30)
+
+Both Craft and Object Builder provide **Clone** for an existing definition. Clone
+copies editable form data into an unsaved draft named `Clone of <original name>`,
+prepares a new editable stable ID, and clears the source revision/editor metadata.
+Nothing is persisted until Save. Save uses the existing revision-zero create path;
+selecting an existing ID cannot overwrite it. Craft aliases are copied and still
+must be made unique before saving. The source definition is never modified.
+
+Ordinary object/MOB target resolution and Nearby share nearest-to-farthest ordering.
+Equal distances use absolute eight-point compass sector, then namespaced stable ID.
+No ordinal selects the first eligible match; `2.knife`, `3.rabbit`, etc. select the
+second/third match within the command's eligible candidates. This applies to GET,
+LOOK inspection, APPROACH, DROP, THROW, REMOVE and SKIN. GET counts only reachable
+portable ground/ROOM objects, never held objects. REMOVE counts reachable parents
+with the requested embedded object; its object ordinal is local to that parent.
+Physical reach, perception, hands, combat range and atomic transfer rules remain
+in force. Ordinals are contextual selectors, never persistent identities. LOOK
+BRIEF/NORMAL/MAXIMUM retain their existing geographic meanings.
+
+Nearby uses separate lines, without stacking, for objects and MOBs alike:
+
+```text
+Nearby:
+A Hunting Knife. (here)
+A simple wooden spit. (2 ft E)
+A rabbit carcass. (15 ft E)
+```
+
+Capitalize the description's beginning and place its period before the parenthesized
+location, with no punctuation after the closing parenthesis. Distances below half
+a foot display `(here)`; other distances use rounded feet and an absolute compass
+abbreviation. This changes Nearby, not the clockwise geographic survey.

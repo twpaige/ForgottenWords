@@ -34,7 +34,7 @@ These are the documented current source-level commands. Release and feature gate
 
 | Family | Commands | Current meaning |
 | --- | --- | --- |
-| Observe | `LOOK`, `L`, `LOOK BRIEF`, `LOOK NORMAL`, `LOOK MAXIMUM` | Cormac Eyes describes HERE plus meaningful surrounding terrain, regional biome/cover differences and geographic landmarks, clockwise using absolute eight-point directions. BRIEF/NORMAL/MAXIMUM select from the same observation; MAXIMUM is prose, not RAW. Cold regional features may appear on a later LOOK. A separate Nearby lists supported perceived entities (the audited cabin and supported loose objects), clockwise then nearest within each sector, at every verbosity. Verbosity is a session preference, initially NORMAL. Admin RAW remains separate. Temporary ordinary local perception does not imply distant certified LOS. |
+| Observe | `LOOK`, `L`, `LOOK <object\|mob>`, `LOOK BRIEF`, `LOOK NORMAL`, `LOOK MAXIMUM` | Cormac Eyes describes HERE plus meaningful surrounding terrain, regional biome/cover differences and geographic landmarks, clockwise using absolute eight-point directions. BRIEF/NORMAL/MAXIMUM select from the same observation; MAXIMUM is prose, not RAW. Cold regional features may appear on a later LOOK. A separate Nearby lists supported perceived entities (the audited cabin and supported loose objects), nearest first, with description before parenthesized location, at every verbosity. Verbosity is a session preference, initially NORMAL. Admin RAW remains separate. Temporary ordinary local perception does not imply distant certified LOS. |
 | Travel direction | `N`, `NE`, `E`, `SE`, `S`, `SW`, `W`, `NW` and full direction names; `TRAVEL <0–359>`; `north [feet]`, `south [feet]`, `east [feet]`, `west [feet]` | Bare directions set continuous travel. Cardinal directions/aliases with positive feet stop after that distance, subject to all normal safety rules. North is 0°, east is 90°. |
 | Travel pace | `TRUDGE`, `WALK`, `JOG`, `RUN`, `SPRINT` | Select land pace, distinct from direction. |
 | Stop | `STOP` | Stop active voluntary travel; when swimming, enter FLOATING. Floating does not cancel current. |
@@ -49,6 +49,11 @@ These are the documented current source-level commands. Release and feature gate
 | Survival materials | `GATHER FIREWOOD`, `MAKE SPIT` | Existing HOG woodland and supported dry ground supply one firewood bundle or wooden spit at your feet. Each immediately adds five real minutes of Work Timer debt; entry requires debt below 48 hours. MAKE SPIT requires a held cutting tool; GATHER needs none. These commands are persisted definitions executed by the generic [Craft Engine](objects.html#19-craft-engine-v1-and-web-builder-2026-09-30). |
 | Places and objects | `ENTER <place>`, `EXIT`, `GET <object>`, `DROP <object>`, `INVENTORY`, `CUT <resource>`, `OPEN <door>`, `CLOSE <door>` | Interact with implemented structures, resources and objects. ENTER can deliberately enter a nearby represented waterway under its current rules; existing feature gates still apply. |
 | Communication and session | `SAY <message>`, `HELP`, `QUIT` | Speak to nearby listeners, list help, or close the session. |
+
+For ordinary OBJECT/MOB targets, no ordinal selects the first eligible match in
+nearest-first order. Use `2.knife`, `3.rabbit`, etc. for later matches; equal distances
+use compass sector then stable ID. GET excludes held items. LOOK inspection,
+APPROACH, THROW, REMOVE, DROP and SKIN share this convention.
 
 For the audited Pioneer Cabin on the DEV seed, approach the south-facing entrance,
 use `OPEN DOOR` when closed, then `ENTER CABIN`; `EXIT` returns through the same
@@ -65,10 +70,10 @@ success/failure outside it. These presentation controls never alter game state.
 ### Web content authoring
 
 Builder/admin accounts open `/builder` from the account screen to create/edit
-Craft definitions using validated server APIs. Aliases are exact commands; the
+Craft definitions and Object prototypes in compact **Crafts | Objects** tabs, using validated server APIs. Both offer **Clone**: copied editable data, a new editable ID, revision zero and `Clone of <name>`, with no write until Save and no source changes. Copied Craft commands must still be unique. Aliases are exact commands; the
 server rejects conflicts with ordinary game verbs or another craft. Future craft
 commands come from definitions, not additional hard-coded handlers. There is no
-in-game Builder command language or full Object/MOB Builder in v1.
+in-game Builder command language or MOB Builder in v1.
 
 ### Staff diagnostics
 
