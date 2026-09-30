@@ -1,10 +1,31 @@
 ---
 title: Current status
-description: Player OBJECT and MOB APPROACH corrections; no game deployment.
+description: Fast DEV iteration mode and player APPROACH corrections; no agent deployment.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## Deployment iteration tool
+
+`sudo cc-update dev --fast [git-ref]` uses the existing immutable committed-release
+machinery, dependency installation, forward migrations, activation, restart, health
+check and code rollback. It skips pytest, runs inexpensive dependency consistency
+checking, and prints **FAST / NOT FULLY VERIFIED**. Normal `sudo cc-update dev [git-ref]`
+still runs the complete suite, including reused releases. No fast PROD is allowed.
+See the [authoritative deployment guide](development.html#cc-update-authority-and-installation).
+
+The installed updater must be refreshed from the tracked source only after any
+currently running update completes. Thomas reported a DEV update in progress during
+this work; its outcome/revision have not been inspected. No server file, process,
+migration or deployment was touched by this task.
+
+Updater verification: 37 isolated Bash control-flow tests plus 5 reference-sync tests
+passed (42 total, 6.07 seconds),
+covering parsing, root/lock safety, full/fast selection, dependency and migration
+failures, release reuse and startup/readiness rollback. Bash syntax, changed-file
+Ruff and whitespace checks pass. Server commands are stubbed; these tests do not
+claim live Ubuntu deployment verification. Implementation: [96efe55](https://github.com/twpaige/Crown-Call/commit/96efe55b69986e2890449c0222bf4d9f6c9323ac), committed and pushed to main.
 
 ## Current bounded phase
 

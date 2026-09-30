@@ -98,7 +98,7 @@ Use unknown/not checked where evidence is absent. Different environments may run
 
 ### `cc-update` authority and installation
 
-The administrator workflow remains `sudo cc-update dev`. The authoritative implementation is `ops/cc-update` in the private `twpaige/Crown-Call` repository. The installed copy lives at `/usr/local/sbin/cc-update` on the game server and must be an exact copy of that tracked file, owned by `root:root` with mode `0755`:
+The default full-verification workflow remains `sudo cc-update dev [git-ref]`. Fast iteration uses `sudo cc-update dev --fast [git-ref]`; the flag must precede the optional ref. Both default to `main`. `prod --fast` is rejected before deployment work. The authoritative implementation is `ops/cc-update` in the private `twpaige/Crown-Call` repository. The installed copy lives at `/usr/local/sbin/cc-update` on the game server and must be an exact copy of that tracked file, owned by `root:root` with mode `0755`:
 
 ```text
 cd /path/to/Crown-Call
@@ -108,7 +108,7 @@ sha256sum ops/cc-update
 sudo sha256sum /usr/local/sbin/cc-update
 ```
 
-The two hashes must match. Make updater changes in `ops/cc-update`, review and test them, commit them, and then reinstall that file; never maintain a divergent server-only copy. Secrets and environment files remain server-local and must not be copied into Git.
+Wait for any running `cc-update` to finish before replacing the installed updater. Local commits and pushes do not replace that installed file or alter an already-resolved release. The two hashes must match. Make updater changes in `ops/cc-update`, review and test them, commit them, and then reinstall that file; never maintain a divergent server-only copy. Secrets and environment files remain server-local and must not be copied into Git.
 
 The script expects this server contract:
 
@@ -118,7 +118,15 @@ The script expects this server contract:
 - Root-owned environment files `/etc/crown-call/{dev,prod}/{database,app}.env`, group-readable only by the corresponding service account. These files supply runtime settings and credentials and are not repository content.
 - Systemd services `crown-call-dev` and `crown-call-prod`. They run from the corresponding `current` release, listen only on `127.0.0.1:8001` and `127.0.0.1:8000`, and expose `/health`.
 
-For either environment, `cc-update` takes an optional Git ref (default `main`), fetches the mirror, resolves the commit, and constructs an immutable release named with its 12-character commit prefix. A new release is exported with `git archive`, receives its own virtual environment, and installs the application. DEV installs development dependencies and runs the complete pytest suite. PROD installs runtime dependencies and runs `pip check`. Both paths apply forward Alembic migrations, switch `current`, restart the matching service, and retry the local readiness endpoint for up to 20 seconds. If readiness fails, the script restores the previous code symlink and restarts it; database migrations are deliberately not reversed automatically. A host-wide `flock` prevents concurrent DEV/PROD deployments.
+For either environment, `cc-update` fetches the mirror, resolves a committed Git revision, and constructs the normal immutable release named with its 12-character commit prefix. A new release is exported with `git archive`, receives its own virtual environment, and installs the application. Existing releases are reused. Both DEV modes install development dependencies on new releases so the same release can later pass full verification.
+
+- **FULL DEV (default):** `sudo cc-update dev [git-ref]` runs the complete pytest suite before migrations and activation, including when reusing a release previously deployed fast.
+- **FAST DEV:** `sudo cc-update dev --fast [git-ref]` skips pytest and runs only inexpensive `pip check` for installed dependency consistency before migrations. Startup and `/health` remain the operational checks. Output prominently states **FAST / NOT FULLY VERIFIED** at the start and on success. A healthy fast deployment is not milestone verification.
+- **PROD:** `sudo cc-update prod [git-ref]` retains runtime dependencies and `pip check`; no fast mode exists. Explicit PROD authorization is still required.
+
+All modes use the same forward Alembic migrations, `current` switch, service restart and local `/health` readiness check (up to 90 attempts for DEV's initial HOG preparation, 20 for PROD, one-second intervals). Startup/restart failure or exhausted readiness attempts use the existing previous-code rollback; with no previous release, the service is stopped. Database migrations are deliberately not reversed automatically. Dependency, test or migration failures before activation leave the current release untouched. A host-wide `flock` rejects concurrent DEV/PROD deployments.
+
+Use the iteration loop: **Codex focused tests → commit/push → FAST DEV → live playtest → repeat**. Run **FULL DEV → complete tests → milestone verified** periodically and at feature/milestone completion. Preserve which mode ran in deployment evidence. Never edit or copy application files directly into a live release; running DEV must correspond to a committed revision. Updating the separately installed administrative script through the installation procedure above does not permit editing release contents.
 
 After an authorized DEV update, record and compare the requested, mirrored, and active revisions and verify both service and readiness explicitly:
 
@@ -130,7 +138,7 @@ systemctl is-active crown-call-dev
 curl --fail --silent --show-error http://127.0.0.1:8001/health
 ```
 
-The active release basename must equal the first 12 characters of the resolved revision, the service must be active, and readiness must succeed. Preserve the updater's output because it is the evidence that tests and migrations completed before activation. Do not run `sudo cc-update prod` without Thomas's explicit production-release authorization; a successful DEV deployment does not provide it.
+The active release basename must equal the first 12 characters of the resolved revision, the service must be active, and readiness must succeed. Preserve the updater's output because it records the deployed revision, verification mode and migrations; only FULL DEV supplies evidence of the complete test suite. Do not run `sudo cc-update prod` without Thomas's explicit production-release authorization; a successful DEV deployment does not provide it.
 
 ## Chat-to-development handoff
 
