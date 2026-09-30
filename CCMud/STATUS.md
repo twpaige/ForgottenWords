@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Admin persistent instance FIND, paging, and identity-based JUMP FIND.
+description: Admin prototype discovery and object/MOB loading.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -8,54 +8,55 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-Admin `FIND O <search>` and `FIND M <search>` search actual persistent instances,
-including cold/unloaded areas. Database queries resolve implemented physical
-parents, sort by horizontal map distance and identity, and return bounded pages
-of 20 results. ENTER continues; Q retains displayed identities. New FIND replaces
-the set; disconnect clears it. This is separate from definition catalogs.
+Admin `OLIST <search>` and `MLIST <search>` now search definitions by stable
+prototype ID, name and keywords. Bare commands show usage. Results identify what
+can be created, independently of existing instances; no vnums are introduced.
 
-`JUMP FIND <number>` re-resolves the exact displayed identity and its current
-physical location, including held and embedded items. It leaves the target intact.
-Outdoor destinations retain existing JUMP safety checks; cold preparation also
-re-resolves the target before placement. Supported ROOM destinations use the
-existing certified interior anchor, currently the audited Pioneer Cabin. Unknown
-interiors remain refused. See the [command contract](commands.html#find-instances-and-jump-to-results).
+`LOAD O <prototype_id>` / `LOAD OBJECT <prototype_id>` create one new ordinary
+persistent OBJECT at the admin's current feet or in the current ROOM. Existing
+ground validation, ground attachments, physical invariants and object lifecycle
+creation hooks remain authoritative. LOAD does not put the object in a hand.
+Specialized corpses still require the death process and cannot be loaded directly.
 
-The existing Builder cloning, shared player ordinals, Crafts, object morphs,
-physical hands and gameplay remain in place. No migration, vnums, spawning system,
-HOG redesign or content-publishing mechanism was added. Root AGENTS.md now points
-to CC_Work_Optimization.txt for future sessions.
+`LOAD M <prototype_id>` / `LOAD MOB <prototype_id>` use shared MOB/world creation.
+The small read-only authored MOB catalog currently contains `rabbit`, preserving
+athletics 0, severity modifier +2 and empty wounds. It does not depend on surviving
+rabbit instances. Current MOB persistence only supports outdoor placement, so
+ROOM MOB loading is refused. There is no new MOB Builder or persistence redesign.
+
+See the [command contract](commands.html#prototype-discovery-and-loading).
+The web Builder remains the authoring interface. Existing FIND/JUMP FIND,
+player targeting, hands, Crafts and morphs remain unchanged.
 
 ## Verification
 
-Implementation: [25883db](https://github.com/twpaige/Crown-Call/commit/25883dbe9c064d0d732b90bbe0f2e01aa3446dea), committed and pushed to main.
+Implementation: [bf6001b](https://github.com/twpaige/Crown-Call/commit/bf6001b4dcb488adec4aab4e3f3599d3f91a2b31), committed and pushed to main.
 
-- Directly affected regression run: **124 passed**, one existing dependency warning,
-  127.89 seconds. Covered FIND, admin navigation, field commands, cabin, targeting,
-  WebSocket and Craft Builder tests.
-- Final FIND/Builder run: **35 passed**, one existing warning, 59.33 seconds.
-  Includes 1,005-instance bounded paging without ORM instance loads or geography
-  access, displayed result 27 after Q, cold search, held/ROOM/nested/embedded MOB
-  locations, deterministic ordering, moved/deleted targets, queued re-resolution,
-  permissions, cancellation, replacement, and reservation of FIND against Craft aliases.
-- Final ROOM/pager checks after the last small state fixes: **2 passed**, one existing
-  warning, 23.75 seconds. These runs overlap; their counts are not additive.
-- Headless Edge browser command/pager, navigation, role, HUD and layout checks passed;
-  client login/arrival regressions passed. Empty ENTER is sent only during paging.
-- Changed-file Ruff and whitespace checks passed. No full suite was run.
+- Directly affected tests: **150 passed**, one existing dependency warning,
+  166.06 seconds: admin loading, rabbit THROW, MOB wounds, object Builder/morphs,
+  Hunting Knife and Craft Builder.
+- Final feature tests: **15 passed**, one existing warning, 5.95 seconds. Includes
+  permissions, bare usage, aliases, catalog discovery without instances, bounded
+  catalog results, literal search, distinct persistent identities, held restart
+  state, current feet during travel, ROOM objects, unsupported ROOM MOBs, unknown
+  IDs, specialized corpse refusal, ground/structure/cold-placement checks,
+  creation-time morph scheduling and rollback on attachment failure.
+- Changed-file Ruff and whitespace checks passed. These runs overlap and their
+  counts are not additive. No full suite or unrelated browser checks were run.
 
 Tests use isolated SQLite fixtures and real/synthetic HOG providers. PostgreSQL
-runtime execution and live game behavior have not been verified in this task.
-Public command documentation and the private reference pin accompany the change.
+runtime and live game behavior were not verified in this task. No schema migration
+is required. Public command documentation and the private reference pin accompany
+this change.
 
 ## Deployment state and next action
 
-No DEV/PROD deployment, migration or restart was performed. Current live revisions
-were not inspected. Thomas controls FAST DEV playtesting and full DEV checkpoints.
-Next: deploy the final pushed documentation-pin revision when desired, then try
-FIND O knife, ENTER, Q, JUMP FIND 27, and FIND M rabbit, including a held/ROOM target.
+No DEV/PROD deployment, migration or restart was performed. Live revisions were
+not inspected. Thomas controls FAST DEV playtesting and full DEV checkpoints.
+After deploying the final pinned revision when desired, try OLIST knife, MLIST
+rabbit, LOAD O hunting_knife and LOAD M rabbit, then LOOK and ordinary interactions.
+Also verify bare catalog usage and object loading in the cabin ROOM.
 
-Search pages are live queries rather than a frozen world snapshot; objects moving
-across the cursor may require a fresh FIND. Only displayed identities are retained,
-and jumps always re-resolve them. Unsupported/cyclic physical paths do not receive
-invented locations. Existing deferred object/content systems remain deferred.
+Earlier admin FIND/JUMP FIND remains available for actual instances; this task
+adds prototype discovery/loading without changing FIND. Parked content publishing,
+MOB Builder, ROOM MOB persistence and other deferred gameplay remain deferred.

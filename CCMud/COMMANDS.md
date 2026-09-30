@@ -80,11 +80,48 @@ in-game Builder command language or MOB Builder in v1.
 | Command | Access and role |
 | --- | --- |
 | `OBJECT <persistent object ID>` | Admin read-only current object identity, placement/parent and hand diagnostics. |
+| `OLIST <search>` / `MLIST <search>` | Admin prototype discovery by stable ID, name and keywords. Bare commands show usage, never the catalog. |
+| `LOAD O <prototype_id>` / `LOAD OBJECT <prototype_id>` | Admin creation of one ordinary OBJECT at the current feet position or in the current ROOM. Uses normal persistence, placement and timed-morph creation rules. |
+| `LOAD M <prototype_id>` / `LOAD MOB <prototype_id>` | Admin creation through shared MOB/world authority at the current valid outdoor location; the authored `rabbit` prototype is currently supported. |
 | `FIND O <search>` / `FIND M <search>` | Admin search of actual persistent OBJECT or MOB instances, including cold/unloaded locations; 20 results per page. Separate from definition catalogs such as OLIST/MLIST. |
 | `JUMP FIND <number>` | Admin placement at the current effective location of an exact displayed FIND instance. Re-resolves identity and physical parents; never moves/extracts the target. |
 | `APPROACH <id|feature_id>` | Admin diagnostic steering to known geography or an audited persistent entrance. `approach pioneer_cabin` targets the exterior south door without opening or entering it. All normal safety restrictions apply; no pathfinding or perception claim. |
 | `JUMP <direction> <miles>`; `JUMP <x>, <y>` | Admin endpoint jump. Relative distances are miles; absolute XY values are signed integer inches. Destination ground supplies Z. No confirmation: ready valid destinations execute immediately; cold generation completes automatically, or fails safely. STOP cancels a pending request. Presentation/prose is not a placement prerequisite. |
 | `HOGDISPLAY RAW` / `HOGDISPLAY PROSE` | Admin session presentation toggle. RAW is diagnostic; PROSE is the normal path. |
+
+### Prototype discovery and loading
+
+`OLIST knife` lists matching OBJECT definitions, for example `hunting_knife — Hunting
+Knife`. `MLIST rabbit` lists the authored `rabbit` MOB definition even if no rabbits
+currently exist. Search is case-insensitive over stable prototype ID, name and
+keywords; multiple words must all match. Results sort by prototype ID. OBJECT
+searches show at most 50 matches with a request to narrow broader searches.
+Bare `OLIST` and `MLIST` return `Usage: OLIST <search>` and `Usage: MLIST <search>`.
+
+`LOAD O hunting_knife` creates one new persistent Hunting Knife, without occupying
+a hand or modifying another instance. Outdoor placement uses the same certified
+dry-ground, slope and structure checks as ordinary object placement, including a
+ground attachment. Cold/unsupported locations are refused rather than guessed.
+Indoors, the new object belongs to the admin's current ROOM. Timed prototypes use
+the ordinary creation hook to capture their lifecycle deadlines. Specialized
+`corpse` instances require the normal death process and cannot be loaded directly.
+
+`LOAD M rabbit` uses the shared MOB creation function and the authored rabbit
+defaults: athletics 0, severity modifier +2, no wounds, and a new instance UUID.
+It uses the same supported-ground authority. MOB persistence currently supports
+outdoor XY placement only, so loading a MOB from a ROOM is explicitly refused.
+The small read-only MOB prototype catalog is independent of existing instances;
+this feature does not add a MOB Builder or change existing MOB persistence.
+
+Each successful LOAD reports the name, prototype ID and placement. Repeating LOAD
+is a new creation request. These commands require an admin account; Builder role
+alone is insufficient. They do not edit definitions or create an in-game authoring
+language. The web Builder remains the content-authoring interface.
+
+Human-readable prototype IDs identify **what to create**; instance UUIDs identify
+**particular existing things**. No numeric vnums are introduced. Ordinary players
+continue using names and contextual ordinals. FIND/JUMP FIND remain separate tools
+for existing instances.
 
 ### FIND instances and jump to results
 
