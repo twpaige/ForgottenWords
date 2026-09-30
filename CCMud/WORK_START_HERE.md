@@ -28,7 +28,7 @@ The `/CCMud/` section belongs exclusively to the MUD. HOG and MUD operating rule
 | --- | --- |
 | [Current status](status.html) | Present development state, blockers, next actions, and verification |
 | [Game design](design.html) | Detailed MUD decisions and the preserved design record |
-| [Object architecture — Working Draft 5](objects.html) | Approved object decisions, Hunting Knife and bounded rabbit wounds/corpse; later slices and deployment require authorization |
+| [Object architecture — Working Draft 5](objects.html) | Approved object decisions, Hunting Knife and bounded rabbit wounds/corpse/SKIN; later slices and deployment require authorization |
 | [Commands](commands.html) | Current commands and reviewed Shadows/SOI command adoption decisions |
 | [HOG investigation evidence](evidence.html) | Full Step 10 reports, measurements and private reproduction artifacts |
 | [Heart of Gold](hog.html) | World-generation architecture and engineering constraints |
@@ -62,10 +62,12 @@ PROD deployment is part of this task. The geometry and prior release reports rem
 historical evidence; do not treat their three-foot rule as current gameplay policy.
 
 
-## Bounded rabbit hit test (2026-09-30)
+## Bounded rabbit interaction (2026-09-30)
 
-After Hunting Knife Slice 1, Thomas authorized Rabbit MOB + THROW, then REMOVE.
-MOB (mobile) is CCMUD's NPC terminology. This increment resolves hit/miss and
-preserves the same knife through held, embedded and ground states. Wounds, killing,
-full encounter turns and rabbit AI remain deferred. Read section 15 of
-[the object contract](objects.html) before expanding it. No game deployment is authorized.
+After Hunting Knife Slice 1, Thomas authorized Rabbit MOB + THROW, REMOVE,
+wounds/death/corpse, and then SKIN into carcass/raw pelt/guts. MOB (mobile) is
+CCMUD's NPC terminology. Rabbit severity is +2 and MORT means immediate animal
+death; ordinary character rules are unchanged. SKIN consumes an accessible held
+or ground corpse with a cutting tool held, placing all outputs at the character's
+feet. Read sections 15-17 of [the object contract](objects.html) and current status.
+No cooking, broader resource system or game deployment is authorized.

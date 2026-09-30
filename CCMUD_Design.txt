@@ -782,6 +782,18 @@ Scale is how many MORTs defeat a creature; it is not bonus CAP or added
 wound steps. Scale 1 people drop at one MORT, with W6's subsequent-wound
 death rule. Larger creatures follow W7/W9, not automatic human collapse.
 
+September 30 bounded rabbit SKIN adoption:
+- SKIN CORPSE requires an accessible rabbit corpse (own hand or ground) and a
+  cutting tool in a hand; Hunting Knife qualifies and remains in the same hand.
+- Remove embedded items first. Atomically consume the corpse and create three
+  persistent objects at the character's feet: rabbit carcass, raw rabbit pelt,
+  rabbit guts. No inventory insertion or automatic hand juggling.
+- Ordinary perception, reach, ground/ROOM placement and object handling apply.
+  Retries/concurrency cannot process one corpse twice; restart preserves outputs.
+- This bounded implementation adds no Craft/work timer, tanning, butchering,
+  spit-making, fire, cooking, EAT, decay or broader resource system. The cleaned
+  carcass is reserved for later whole roasting. CC_Objects section 17 governs.
+
 September 30 bounded rabbit wound/death adoption:
 - Rabbit MOB severity modifier +2 applies AFTER weapon SM and armor. Clamp to
   the existing wound ladder; no wound exceeds MORT. This supersedes the proposed
@@ -794,8 +806,9 @@ September 30 bounded rabbit wound/death adoption:
   with current name/species/weight, and transfer all embedded items to that corpse
   without changing their IDs. Conditional updates prevent duplicate death results.
 - Ordinary object perception, approach, hands, portability and GET/DROP apply.
-  REMOVE recovers from a visible ground corpse or one's own held corpse. No SKIN,
-  carcass/pelt/guts, butchering, fire, cooking, food, AI or encounter expansion.
+  REMOVE recovers from a visible ground corpse or one's own held corpse. The
+  bounded SKIN adoption above adds carcass/pelt/guts. No butchering, fire,
+  cooking, food, AI or encounter expansion.
 
 Ranged equipment (W11):
 Thrown attacks use RANGED, the thrown item's attack modifier and SM, and -1 per

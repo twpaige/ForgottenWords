@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Bounded THROW wounds, rabbit death and persistent corpse handling.
+description: Bounded rabbit corpse SKIN into persistent carcass, raw pelt and guts.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -8,67 +8,68 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-THROW → wound → death → corpse extends the existing Rabbit MOB/THROW/REMOVE
-interaction. Thomas explicitly adopted current weapon severity modifiers, then
-replaced the proposed DEEP death threshold with a **+2 MOB severity modifier**.
-The final rule applies weapon SM, armor, then MOB severity, capped at MORT.
-For Hunting Knife +0 against an unarmored (+1) rabbit with MOB +2, MoV 1–4 gives
-SEVR, 5–8 GRAV and 9+ MORT. Survivor wounds persist and combine under W8; C5 reduces
-subsequent dodge. A rabbit at MORT dies immediately, including combined wounds.
-Ordinary character MORT/bleed-out rules remain unchanged. The exact contract is
-[object architecture section 16](objects.html#16-throw-wounds-death-and-corpse-2026-09-30).
+`SKIN CORPSE` extends the existing THROW / wound / death / corpse / REMOVE loop.
+An accessible rabbit corpse may be in the character's hand or on the ground within
+normal interaction range. A suitable cutting tool must be held in either hand;
+the Hunting Knife qualifies and stays in its original hand. Embedded items must
+be removed first. Processing consumes the corpse and creates exactly three persistent
+OBJECTS: rabbit carcass, raw rabbit pelt and rabbit guts, all at the character's feet.
+No invisible inventory or automatic hand juggling. LOOK, GET and DROP use normal
+physical-object rules, including inside the cabin. See
+[object architecture section 17](objects.html#17-rabbit-corpse-skin-2026-09-30).
 
-Death atomically removes the active MOB, creates a generic CORPSE OBJECT at its
-supported ground location, and transfers all embedded items to the corpse without
-changing their IDs. Current corpse name, species and weight persist. Conditional
-wound updates prevent duplicate deaths; failed transactions restore the prior MOB
-and knife state. No HP, special kill command, replacement knife or rabbit respawn.
+The corpse claim, deletion and output creation share one transaction. Conditional
+location/tool checks and the single corpse claim prevent duplicate processing
+through retries or concurrent players; failures restore the input and all outputs.
+Each output receives its own persistent identity. The knife's identity is unchanged.
+Existing visibility, HOG ground attachment, travel-stop and ROOM rules are reused.
+Migration `20260930_04` adds three output prototypes/portability and the Hunting
+Knife's cutting capability. It does not spawn or relocate world objects.
 
-LOOK and inventory show the corpse and embedded knife. Ordinary APPROACH, GET,
-DROP, free-hand/portability checks and cabin transitions apply. REMOVE works from
-a visible ground corpse or one's own held corpse. Another player's pickup prevents
-removal. Existing perceptible OBJECT/MOB APPROACH keeps normal arrival prose and
-interaction range; HOG generation, travel, cabin and water authority are preserved.
-
-Migration `20260930_03` retains existing knife/rabbit identity and hand/ground/embedded
-placements, adds wounds and revision checks, gives existing rabbits severity +2 with
-no retroactive wounds, and adds corpse details/embedded-object constraints. No live
-migration or deployment has been performed for this increment.
+Prior rabbit combat remains unchanged: weapon severity modifiers, unarmored +1,
+MOB severity +2, persisted/combined wounds and rabbit MORT immediate death.
+Ordinary character death rules are unchanged. A dead rabbit is not respawned.
 
 ## Verification
 
-Focused wound/corpse suite: **27 passed**, one dependency deprecation warning,
-30.88 seconds. Changed-file Ruff, whitespace and Node client login/arrival checks
-pass. Full suite: **768 passed**, 13 dependency deprecation warnings, 655.84 seconds.
-No application code changed after that run began. The 27-case focused run includes
-one additional regression for the runtime's disabled-autoflush policy with foreign
-keys enforced, covering all 769 current cases together with the full run.
-Implementation: [0d4886f](https://github.com/twpaige/Crown-Call/commit/0d4886fc10cf3f0491747a4f45290138a2e8d3e6), committed and pushed to main.
-The focused wound/corpse tests exercise survival, lethal and combined wounds,
-restart, knife identity, corpse GET/REMOVE, cabin handling, rollback at transfer and
-commit, duplicate death, competing fatal throws and removal/pickup races. Migration
-checks cover existing ground, held and embedded knives. Tests use isolated SQLite
-and the real HOG DEV seed, never a live database.
+Implementation: [0073ef0](https://github.com/twpaige/Crown-Call/commit/0073ef0d3838904b2b182865ec7ac24f3b5a7373), committed and pushed to main.
+
+- Focused SKIN suite: **22 passed**. Covers held/ground input, occupied hands,
+  held cutting-tool requirement, inaccessible targets, unsupported placement,
+  all three outputs at the feet, consumed input, tool identity, restart/LOOK,
+  cabin GET, travel stopping, rollback, concurrent processing and transfer races.
+- Combined object/wound/approach/world/cabin/walking/water/travel/odometer regressions,
+  including SKIN: **302 passed** in 182.25 seconds.
+- Cormac, Eyes and knowledge-base synchronization regressions: **74 passed** in
+  20.74 seconds. Total selected coverage: **376 passed**; each run reported one
+  existing dependency deprecation warning. Tests use isolated SQLite, never live data.
+- Changed-file Ruff and whitespace checks pass. Alembic has one head, `20260930_04`.
+  Repository-wide Ruff reports 55 existing findings outside the changed files.
+- The complete pytest suite was not rerun for this bounded increment. The prior
+  wound/corpse milestone passed 768 full-suite cases plus its additional focused
+  disabled-autoflush/foreign-key regression. That is historical evidence, not a
+  claim of full-suite verification for the current SKIN revision.
 
 ## Deployment state and next action
 
-Thomas's pasted server output verified FAST DEV revision `575b87bb4d4ba3fce66e3ae41e49089078198a1c`
-before this increment: current release `575b87bb4d4b`, service active, `/health`
-ready, database up, HOG walking `certified_origin`. The installed updater's hash
-matched the committed source. That fast run skipped pytest as designed; it is not
-full milestone verification and contains no new wound/corpse implementation.
+Thomas's last pasted server evidence verified FAST DEV revision
+`575b87bb4d4ba3fce66e3ae41e49089078198a1c`: release `575b87bb4d4b`, service active,
+health ready, database up, HOG walking certified_origin. Later server revisions
+have not been verified by this task. No server command, migration, restart or
+DEV/PROD deployment was run for this increment.
 
+After the final documentation pin is pushed, Thomas can deploy that committed
+revision and playtest APPROACH CORPSE -> REMOVE KNIFE CORPSE -> SKIN CORPSE -> LOOK.
+GET CORPSE before SKIN is optional; the knife must remain held. Outputs always
+land at the player's feet. A cleaned carcass supports normal GET but no cooking yet.
 The [deployment guide](development.html#cc-update-authority-and-installation) owns
 `sudo cc-update dev --fast [ref]` for iteration and `sudo cc-update dev [ref]` for
-full verification. No fast PROD. No server command, migration, restart or deployment
-was run by this task. After review, Thomas can deploy a pinned revision and playtest
-LOOK → APPROACH KNIFE → GET KNIFE → THROW KNIFE RABBIT. On death, APPROACH CORPSE,
-REMOVE KNIFE CORPSE and GET CORPSE; a held corpse also permits REMOVE with a free hand.
-Use full DEV periodically and at feature/milestone completion.
+full verification. Use full DEV periodically and at feature/milestone completion.
+No fast PROD exists. Game deployment is separate from documentation publication.
 
 ## Deferred
 
-SKIN, carcass/pelt/guts, butchering, decay, fire, cooking, food, bleeding simulation,
-MOB AI/chasing, other species' wound/death profiles, healing and the full combat
-encounter/turn system remain outside this increment. Death does not respawn the
-rabbit; any new test animal/reset requires separate content authorization.
+Tanning, butchering, Craft, work timers, spit-making, fire, cooking, EAT, decay,
+bleeding simulation, MOB AI/chasing, other species' profiles and broader combat
+or resource systems remain outside this increment. The carcass is reserved for
+later whole roasting. A new test rabbit/reset needs separate content authorization.

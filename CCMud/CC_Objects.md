@@ -14,7 +14,7 @@ This document condenses the historical object exploration into the smallest pers
 
 **LOCKED** identifies approved decisions or preserved governing constraints. **PROVISIONAL** identifies recommendations and implementation details still subject to review. **DEFERRED** means outside these slices. **REJECTED** identifies excluded approaches. The latest explicit decisions recorded here supersede conflicting earlier draft policies and historical design alternatives. Architecture approval, implementation authorization, documentation publication, and deployment remain separate steps.
 
-The September 30 Rabbit increment in section 15 supersedes earlier stop lines only for its explicit scope. MOB (mobile) is CCMUD terminology for an NPC, including wildlife.
+The September 30 Rabbit increments in sections 15-17 supersede earlier stop lines only for their explicit scope. MOB (mobile) is CCMUD terminology for an NPC, including wildlife.
 
 ## 1. Authority and evidence
 
@@ -30,7 +30,7 @@ Start future work with private Crown-Call's [WORK_START_HERE.md](https://github.
 
 The review used the exploration's complete numbered topic outline, substantive passages across its foundational and Alpha topics, and its late convergence material, especially points 1981–2080. This is a thematic architecture review, not a line-by-line certification of every speculative example. Relevant accepted game-design sections and implementation paths were read directly. Earlier Project chats supplied no authority.
 
-The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instructions authorize Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE hit test in section 15, including commit/push. Other slices and game deployment remain separate decisions. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
+The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instructions authorize Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE / wounds / corpse / SKIN interactions in sections 15-17, including commit/push. Other slices and game deployment remain separate decisions. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
 
 ## 2. Terminology and boundaries
 
@@ -58,7 +58,7 @@ Preserve these governing boundaries:
 - Cormac and Eyes present supplied facts. Perception neither creates world truth nor grants movement permission. Preserve useful admin RAW diagnostics.
 - Outdoors uses signed 64-bit integer inches: positive X east, positive Y north, Z elevation. Preserve PostgreSQL, deliberate Alembic migrations, travel accounting, and ground-placement authority.
 - Adopted Crown's Calling rules remain above object storage. Future CCAI uses restricted, validated operations, not unrestricted database or shell authority.
-- Slice 1 and the bounded section 15 hit test are authorized for implementation and publication. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
+- Slice 1 and the bounded sections 15-17 interactions are authorized for implementation and publication. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
 
 ## 3. Existing implementation and required changes
 
@@ -214,7 +214,7 @@ The object slices do not replace combat, Craft, or perception. Accepted rabbit l
 
 ## 11. Six slices and their acceptance proofs
 
-**The six-slice plan remains; authorized implementation is Slice 1 plus the explicit bounded section 15 exception.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
+**The six-slice plan remains; authorized implementation is Slice 1 plus the explicit bounded sections 15-17 exceptions.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
 
 | Slice | Bounded deliverable | Acceptance proof |
 | --- | --- | --- |
@@ -245,7 +245,7 @@ Stop expanding the object foundation when players can reliably obtain, carry, st
 
 Draft 5 closes the previously open policy questions: named gameplay categories replace the formal umbrella taxonomy; current identity has no provenance history; DWELLINGS use ROOM interaction; visibility is separate from reach; GET and APPROACH have distinct movement behavior; inventory shows only held/worn objects; tents preserve particular identity; collision follows the approved category rule; death/SKIN have explicit outputs; obsolete incompatible DEV possessions can be removed before hands are enabled.
 
-**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; other slices remain outside the task except for the bounded section 15 authorization. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
+**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; other slices remain outside the task except for the bounded sections 15-17 authorization. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
 
 Later content choices belong before their owning slices: actual container capacities, resource/food quantities, Craft output destinations within the physical handling rules, and the fire burn clock. None requires reopening the location model or adding a future system. If implementation evidence exposes a real conflict, present that specific conflict rather than expanding the architecture speculatively.
 
@@ -278,7 +278,7 @@ the command, identity and movement rules below remain in force.
 - A migration authors one persistent rabbit MOB at X=840, Y=0 inches (70 feet east
   of Origin), on supported HOG ground. Its test ATHLX is 0. LOOK and restart never
   spawn replacements. Movement AI, concealment behavior, bleeding simulation,
-  corpse processing, SKIN, fire, cooking and food remain deferred.
+  fire, cooking and food remain deferred. Section 17 adds bounded corpse SKIN.
 - `THROW <object> <target>` requires a single throwable object in either physical
   hand. Holding is sufficient; WIELD is not required. A wielded object remaining
   in a hand qualifies by the same predicate. No WIELD command or equipment system
@@ -313,7 +313,7 @@ startup and construction. Its travel-tick regression preserves HOG generation ch
 It also supplies immediate connection feedback and protects character entry against
 competing sockets and stale callbacks. No game deployment is implied by these commits.
 
-## 16. Source map for deeper review
+## Source map for deeper review
 
 The historical exploration remains [CC_Objects.txt](https://github.com/twpaige/Crown-Call/blob/e3491580ab952874f46cf9716a33f1bd0934e6f3/CC_Objects.txt). Its useful clusters are: identity/location and boundaries (19–25, 221–239, 601–640); storage and spaces (721–780, 1561–1640); inventory alternatives and handling (781–860); durability (961–1000, 2051–2054); concrete slices (1121–1260); templates (1941–1980); convergence and the first-slice gate (1981–2080). These are evidence and alternatives, not 2,080 approved requirements.
 
@@ -371,6 +371,39 @@ cannot silently cascade-delete an embedded knife. A generic corpse is not a carc
 Migration `20260930_03` preserves existing rabbit/knife identity and location,
 initializes existing rabbits without fabricated wounds, sets rabbit severity +2,
 and adds the generic corpse prototype/portability plus exclusive embedded-object
-placement. It does not spawn another rabbit or corpse. SKIN, carcass/pelt/guts,
-butchering, decay, fire, cooking, food, bleeding simulation, MOB AI, other species'
+placement. It does not spawn another rabbit or corpse. Section 17 adds SKIN and
+carcass/pelt/guts; butchering, decay, fire, cooking, food, bleeding simulation, MOB AI, other species'
 wound/death profiles and broader combat remain outside this increment.
+
+
+## 17. Rabbit corpse SKIN (2026-09-30)
+
+Thomas authorized the next bounded interaction: `SKIN CORPSE` consumes an accessible
+rabbit corpse and creates exactly three persistent OBJECTS: **rabbit carcass**,
+**raw rabbit pelt**, and **rabbit guts**. All outputs go on the ground at the
+character's feet, never into an invisible inventory or automatically into a hand.
+The carcass is cleaned and will later be roasted whole; cooking is not implemented.
+
+The corpse may be on the ground within ordinary interaction range (currently
+15 feet outdoors) or held by the acting character. Existing perception, barriers,
+ROOM access and supported ground rules apply. Another character's held corpse is
+not accessible. A suitable cutting tool must be held in either physical hand;
+the Hunting Knife qualifies without WIELD. It keeps its original identity and hand.
+A ground corpse can be processed with both hands occupied if one holds the tool.
+Remove any embedded objects first, preserving their identities before consuming
+the parent. SKIN stops voluntary travel through the existing movement authority.
+
+Consumption and creation form one transaction. A conditional corpse claim checks
+its unchanged physical location, absence of embedded items and a held cutting tool.
+Concurrent attempts or retries cannot consume the corpse twice or produce duplicate
+outputs. Failure rolls back the input and outputs together. Each output has its own
+persistent object ID, ordinary portable capability and ground/ROOM location. Outdoor
+outputs use existing HOG ground attachments; indoor outputs use the current ROOM.
+LOOK, GET, DROP and restart preserve normal physical-object behavior.
+
+Migration `20260930_04` adds only three output definitions/portability and the
+Hunting Knife's cutting capability; it does not spawn or relocate instances.
+The bounded 48-ounce rabbit yields a 36-ounce carcass, 6-ounce raw pelt and
+6-ounce guts. This is a fixed test profile, not a general resource/yield system.
+No tanning, butchering, Craft, work timer, spit-making, fire, cooking, EAT, decay,
+bleeding simulation, MOB AI or broader resource/combat system is added.

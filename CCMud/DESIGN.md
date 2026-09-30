@@ -5,7 +5,7 @@ reviewed: 2026-09-30
 nav: design
 permalink: /CCMud/design.html
 ---
-**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death and corpses on September 30. Other slices and deployment remain separate decisions; see current status for verification.
+**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses and bounded SKIN on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
 
 ## Bounded Rabbit MOB wounds and corpse (2026-09-30)
@@ -21,7 +21,18 @@ ends the active MOB, creates a generic persistent corpse with current identifyin
 details, and reparents all embedded items without changing their IDs. Existing
 LOOK, APPROACH, GET, DROP, hands and REMOVE handle the corpse and knife.
 See [the exact contract](objects.html#16-throw-wounds-death-and-corpse-2026-09-30).
-No bleeding simulation, AI, encounter scheduler, SKIN, butchering or food is added.
+No bleeding simulation, AI, encounter scheduler, butchering or food is added.
+
+## Bounded rabbit corpse SKIN (2026-09-30)
+
+`SKIN CORPSE` requires an accessible rabbit corpse (held or on the ground) and a
+cutting tool in either hand. The Hunting Knife qualifies and remains in that hand.
+Remove embedded items first. Atomically consume the corpse and create a rabbit
+carcass, raw rabbit pelt and rabbit guts on the ground at the character's feet.
+No automatic hand juggling, Craft roll, work timer or cooking is introduced.
+Retries and concurrent attempts cannot duplicate outputs. Normal perception,
+reach, ground/ROOM placement, LOOK and object handling apply. The cleaned carcass
+is reserved for later whole roasting. See [the exact contract](objects.html#17-rabbit-corpse-skin-2026-09-30).
 
 ## Authoritative design record
 
