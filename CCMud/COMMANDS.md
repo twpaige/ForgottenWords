@@ -80,9 +80,47 @@ in-game Builder command language or MOB Builder in v1.
 | Command | Access and role |
 | --- | --- |
 | `OBJECT <persistent object ID>` | Admin read-only current object identity, placement/parent and hand diagnostics. |
+| `FIND O <search>` / `FIND M <search>` | Admin search of actual persistent OBJECT or MOB instances, including cold/unloaded locations; 20 results per page. Separate from definition catalogs such as OLIST/MLIST. |
+| `JUMP FIND <number>` | Admin placement at the current effective location of an exact displayed FIND instance. Re-resolves identity and physical parents; never moves/extracts the target. |
 | `APPROACH <id|feature_id>` | Admin diagnostic steering to known geography or an audited persistent entrance. `approach pioneer_cabin` targets the exterior south door without opening or entering it. All normal safety restrictions apply; no pathfinding or perception claim. |
 | `JUMP <direction> <miles>`; `JUMP <x>, <y>` | Admin endpoint jump. Relative distances are miles; absolute XY values are signed integer inches. Destination ground supplies Z. No confirmation: ready valid destinations execute immediately; cold generation completes automatically, or fails safely. STOP cancels a pending request. Presentation/prose is not a placement prerequisite. |
 | `HOGDISPLAY RAW` / `HOGDISPLAY PROSE` | Admin session presentation toggle. RAW is diagnostic; PROSE is the normal path. |
+
+### FIND instances and jump to results
+
+`FIND O knife` searches existing OBJECT instances by stable prototype ID, name,
+and keywords. `FIND M rabbit` searches the current persistent MOB species, name,
+and keywords; the current MOB implementation has no separate prototype table.
+FIND searches the database independently of active areas and HOG caches. It does
+not spawn, move, warm, reconcile timed morphs, or otherwise alter found instances.
+Definitions without instances do not produce results.
+
+Results show a temporary number, name, horizontal map distance in feet, compass
+direction, and physical state: ground, ROOM, held by a character, or embedded.
+Parented objects derive their map position from the current physical parent chain.
+Unresolvable parent chains/cycles do not receive invented coordinates. Sorting is
+nearest first from the admin's position when FIND begins, with persistent identity
+breaking ties. No UUIDs or vnums appear in ordinary results.
+
+Each page contains at most 20 results. When more remain, the footer is
+`[ENTER to continue, Q to quit]`. Empty ENTER advances; Q ends paging while keeping
+the displayed results available. Other commands leave the pager and execute normally.
+Numbers continue across pages. A new `FIND O` or `FIND M` replaces the previous set;
+disconnect/restart clears it. Only displayed identities are retained. Pages use live
+database queries, so instances that move across the ordering cursor between pages
+may be omitted from that traversal; rerun FIND for a fresh ordering. Displayed
+instances are not repeated.
+
+`JUMP FIND 27` re-reads the exact instance shown as result 27 and follows its current
+location, even if it moved or changed physical parent. Missing instances are reported
+plainly. Held and embedded items remain untouched. Outdoor jumps retain existing
+Zone C, ground, water and structure checks. Cold destinations prepare through the
+existing bounded JUMP process, rechecking identity/location and admin permission
+before placement; STOP cancels. ROOM destinations use the existing certified
+interior anchor (currently the audited Pioneer Cabin), with unsupported interiors
+refused. This admin placement can cross the ROOM boundary without opening a door;
+it does not change player ENTER/EXIT rules. Travel stops and teleport distance is
+not credited to odometers. Plain `JUMP <number>` is not a FIND shortcut.
 
 The compact web toolbar sends these same commands. `LK` and `STAT` send LOOK and
 STATUS. Admins also see PROSE/RAW and compass-arranged N1/N10, S1/S10, E1/E10, W1/W10

@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Builder cloning, shared nearest-first ordinal targeting and clearer Nearby prose.
+description: Admin persistent instance FIND, paging, and identity-based JUMP FIND.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -8,56 +8,54 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-The small Builder/targeting usability increment is implemented:
+Admin `FIND O <search>` and `FIND M <search>` search actual persistent instances,
+including cold/unloaded areas. Database queries resolve implemented physical
+parents, sort by horizontal map distance and identity, and return bounded pages
+of 20 results. ENTER continues; Q retains displayed identities. New FIND replaces
+the set; disconnect clears it. This is separate from definition catalogs.
 
-- Craft and Object Builder offer Clone as an unsaved editable draft. The copied
-  name becomes `Clone of <name>`, identity is new/editable and revision is zero.
-  Save still validates on the server; no source definition is overwritten.
-- Nearby and ordinary object/MOB selection share nearest-first ordering with
-  compass sector and stable ID ties. Contextual `2.knife`, `3.rabbit`, etc. work
-  through shared selection in GET, LOOK inspection, APPROACH, DROP, THROW, REMOVE
-  and SKIN. GET excludes held objects and selects eligible ground/ROOM candidates.
-- Nearby renders description first: `A Hunting Knife. (here)` or
-  `A simple wooden spit. (2 ft E)`, without grouping or a final extra period.
+`JUMP FIND <number>` re-resolves the exact displayed identity and its current
+physical location, including held and embedded items. It leaves the target intact.
+Outdoor destinations retain existing JUMP safety checks; cold preparation also
+re-resolves the target before placement. Supported ROOM destinations use the
+existing certified interior anchor, currently the audited Pioneer Cabin. Unknown
+interiors remain refused. See the [command contract](commands.html#find-instances-and-jump-to-results).
 
-Existing compact Crafts | Objects forms, validated authoring APIs, Craft execution,
-physical transfers and lazy linear timed morphs remain in place. No schema change,
-new gameplay system or deployment machinery is introduced. See the
-[usability contract](objects.html#21-builder-cloning-and-ordinary-target-usability-2026-09-30)
-and [Object Builder/morph contract](objects.html#20-object-builder-and-timed-morph-v1-2026-09-30).
+The existing Builder cloning, shared player ordinals, Crafts, object morphs,
+physical hands and gameplay remain in place. No migration, vnums, spawning system,
+HOG redesign or content-publishing mechanism was added. Root AGENTS.md now points
+to CC_Work_Optimization.txt for future sessions.
 
 ## Verification
 
-Implementation revision: [6e82fb8](https://github.com/twpaige/Crown-Call/commit/6e82fb80b30d1e592855bd5d0d35e48939ead332), committed and pushed to main.
+Implementation: [25883db](https://github.com/twpaige/Crown-Call/commit/25883dbe9c064d0d732b90bbe0f2e01aa3446dea), committed and pushed to main.
 
-- Focused gameplay run: **22 passed** in 60.80 seconds, covering shared ordering,
-  ordinals, Nearby prose, ground/ROOM GET and inspection, object/MOB APPROACH through
-  travel ticks, THROW/REMOVE ordinals, knife identity/restart and competing GET.
-- Final directly affected checks: **3 passed** in 52.32 seconds: SKIN ordinal selection and both Builder APIs
-  rejecting revision-zero attempts to overwrite existing definitions (25 total).
-- Headless Edge/Playwright checks passed for unsaved Craft/Object clones, copied
-  fields, source preservation, new ID collision avoidance, revision-zero saves,
-  existing form validation/reload, compact desktop layout and mobile overflow.
-- Changed-file Ruff and whitespace checks passed. No full suite was run. Tests use
-  isolated databases; the existing Starlette/httpx deprecation warning remains.
+- Directly affected regression run: **124 passed**, one existing dependency warning,
+  127.89 seconds. Covered FIND, admin navigation, field commands, cabin, targeting,
+  WebSocket and Craft Builder tests.
+- Final FIND/Builder run: **35 passed**, one existing warning, 59.33 seconds.
+  Includes 1,005-instance bounded paging without ORM instance loads or geography
+  access, displayed result 27 after Q, cold search, held/ROOM/nested/embedded MOB
+  locations, deterministic ordering, moved/deleted targets, queued re-resolution,
+  permissions, cancellation, replacement, and reservation of FIND against Craft aliases.
+- Final ROOM/pager checks after the last small state fixes: **2 passed**, one existing
+  warning, 23.75 seconds. These runs overlap; their counts are not additive.
+- Headless Edge browser command/pager, navigation, role, HUD and layout checks passed;
+  client login/arrival regressions passed. Empty ENTER is sent only during paging.
+- Changed-file Ruff and whitespace checks passed. No full suite was run.
+
+Tests use isolated SQLite fixtures and real/synthetic HOG providers. PostgreSQL
+runtime execution and live game behavior have not been verified in this task.
+Public command documentation and the private reference pin accompany the change.
 
 ## Deployment state and next action
 
-No DEV/PROD deployment, migration or restart was run. Thomas's last pasted
-server evidence was FAST DEV `575b87bb4d4ba3fce66e3ae41e49089078198a1c`; no later
-live revision is claimed. Documentation publication is separate.
+No DEV/PROD deployment, migration or restart was performed. Current live revisions
+were not inspected. Thomas controls FAST DEV playtesting and full DEV checkpoints.
+Next: deploy the final pushed documentation-pin revision when desired, then try
+FIND O knife, ENTER, Q, JUMP FIND 27, and FIND M rabbit, including a held/ROOM target.
 
-After the documentation pin is pushed, Thomas can deploy that committed revision
-for live checks: Clone without Save, save a distinct clone, inspect Nearby order,
-and try GET/APPROACH/THROW/REMOVE with numbered targets. The
-[deployment guide](development.html#cc-update-authority-and-installation) owns
-`sudo cc-update dev --fast [ref]` for iteration and `sudo cc-update dev [ref]` for
-full verification. No fast PROD. Development checks remain focused tests and
-directly affected regressions unless scope or Thomas requires the full suite.
-
-## Deferred
-
-Wearables, containers, armor, durability, MOB Builder/CCAI clients, repeating/circular
-morphs, specialized-state morphs, general scheduling/background cleanup, ignition,
-fuel consumption, roasting, EAT, tanning, butchering, cabin construction, broad
-resources/depletion, quality, recipe discovery and skill progression remain deferred.
+Search pages are live queries rather than a frozen world snapshot; objects moving
+across the cursor may require a fresh FIND. Only displayed identities are retained,
+and jumps always re-resolve them. Unsupported/cyclic physical paths do not receive
+invented locations. Existing deferred object/content systems remain deferred.
