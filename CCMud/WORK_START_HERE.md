@@ -28,7 +28,7 @@ The `/CCMud/` section belongs exclusively to the MUD. HOG and MUD operating rule
 | --- | --- |
 | [Current status](status.html) | Present development state, blockers, next actions, and verification |
 | [Game design](design.html) | Detailed MUD decisions and the preserved design record |
-| [Object architecture — Working Draft 5](objects.html) | Approved object decisions, Hunting Knife and bounded rabbit wounds/corpse/SKIN and survival materials; later slices and deployment require authorization |
+| [Object architecture — Working Draft 5](objects.html) | Approved object decisions, Hunting Knife and bounded rabbit wounds/corpse/SKIN and Craft Engine/web Builder; later slices and deployment require authorization |
 | [Commands](commands.html) | Current commands and reviewed Shadows/SOI command adoption decisions |
 | [HOG investigation evidence](evidence.html) | Full Step 10 reports, measurements and private reproduction artifacts |
 | [Heart of Gold](hog.html) | World-generation architecture and engineering constraints |
@@ -69,5 +69,5 @@ wounds/death/corpse, and then SKIN into carcass/raw pelt/guts. MOB (mobile) is
 CCMUD's NPC terminology. Rabbit severity is +2 and MORT means immediate animal
 death; ordinary character rules are unchanged. SKIN consumes an accessible held
 or ground corpse with a cutting tool held, placing all outputs at the character's
-feet. MAKE SPIT and GATHER FIREWOOD now provide ground objects from HOG woodland, with minimal real-time Work Timer accounting. Read sections 15-18 of [the object contract](objects.html) and current status.
+feet. MAKE SPIT and GATHER FIREWOOD now provide ground objects from HOG woodland, through the data-driven Craft Engine, with sector expressions and real-time Work Timer accounting; MAKE SPIT requires a held cutting tool. Web Builder/API is the content-authoring boundary. Read sections 15-19 of [the object contract](objects.html) and current status.
 No cooking, broader resource system or game deployment is authorized.

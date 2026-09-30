@@ -14,7 +14,7 @@ This document condenses the historical object exploration into the smallest pers
 
 **LOCKED** identifies approved decisions or preserved governing constraints. **PROVISIONAL** identifies recommendations and implementation details still subject to review. **DEFERRED** means outside these slices. **REJECTED** identifies excluded approaches. The latest explicit decisions recorded here supersede conflicting earlier draft policies and historical design alternatives. Architecture approval, implementation authorization, documentation publication, and deployment remain separate steps.
 
-The September 30 Rabbit increments in sections 15-18 supersede earlier stop lines only for their explicit scope. MOB (mobile) is CCMUD terminology for an NPC, including wildlife.
+The September 30 Rabbit increments in sections 15-19 supersede earlier stop lines only for their explicit scope. MOB (mobile) is CCMUD terminology for an NPC, including wildlife.
 
 ## 1. Authority and evidence
 
@@ -30,7 +30,7 @@ Start future work with private Crown-Call's [WORK_START_HERE.md](https://github.
 
 The review used the exploration's complete numbered topic outline, substantive passages across its foundational and Alpha topics, and its late convergence material, especially points 1981–2080. This is a thematic architecture review, not a line-by-line certification of every speculative example. Relevant accepted game-design sections and implementation paths were read directly. Earlier Project chats supplied no authority.
 
-The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instructions authorize Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE / wounds / corpse / SKIN / survival-material interactions in sections 15-18, including commit/push. Other slices and game deployment remain separate decisions. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
+The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 instructions authorize Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE / wounds / corpse / SKIN / survival-material interactions in sections 15-19, including commit/push. Other slices and game deployment remain separate decisions. Its explicitly approved decisions govern this design work. The original private `CC_Objects.txt` remains unchanged. Implementation links require private repository access and identify evidence without publishing implementation code.
 
 ## 2. Terminology and boundaries
 
@@ -58,7 +58,7 @@ Preserve these governing boundaries:
 - Cormac and Eyes present supplied facts. Perception neither creates world truth nor grants movement permission. Preserve useful admin RAW diagnostics.
 - Outdoors uses signed 64-bit integer inches: positive X east, positive Y north, Z elevation. Preserve PostgreSQL, deliberate Alembic migrations, travel accounting, and ground-placement authority.
 - Adopted Crown's Calling rules remain above object storage. Future CCAI uses restricted, validated operations, not unrestricted database or shell authority.
-- Slice 1 and the bounded sections 15-18 interactions are authorized for implementation and publication. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
+- Slice 1 and the bounded sections 15-19 interactions are authorized for implementation and publication. Live cleanup and DEV/PROD deployment have not been performed. Later slices need a separate instruction.
 
 ## 3. Existing implementation and required changes
 
@@ -214,7 +214,7 @@ The object slices do not replace combat, Craft, or perception. Accepted rabbit l
 
 ## 11. Six slices and their acceptance proofs
 
-**The six-slice plan remains; authorized implementation is Slice 1 plus the explicit bounded sections 15-18 exceptions.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
+**The six-slice plan remains; authorized implementation is Slice 1 plus the explicit bounded sections 15-19 exceptions.** Each slice closes the relevant integrity and restart tests before expanding scope. Slice 3 remains even if its final change is small.
 
 | Slice | Bounded deliverable | Acceptance proof |
 | --- | --- | --- |
@@ -245,7 +245,7 @@ Stop expanding the object foundation when players can reliably obtain, carry, st
 
 Draft 5 closes the previously open policy questions: named gameplay categories replace the formal umbrella taxonomy; current identity has no provenance history; DWELLINGS use ROOM interaction; visibility is separate from reach; GET and APPROACH have distinct movement behavior; inventory shows only held/worn objects; tents preserve particular identity; collision follows the approved category rule; death/SKIN have explicit outputs; obsolete incompatible DEV possessions can be removed before hands are enabled.
 
-**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; other slices remain outside the task except for the bounded sections 15-18 authorization. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
+**No further foundational decision is identified as necessary for Slice 1.** Thomas explicitly authorized that implementation on September 30; other slices remain outside the task except for the bounded sections 15-19 authorization. The approved policies above are locked; exact schema/locking choices, parser wording, supported initial perception parameters, and targeted DEV cleanup records are implementation preparation rather than new architecture questions.
 
 Later content choices belong before their owning slices: actual container capacities, resource/food quantities, Craft output destinations within the physical handling rules, and the fire burn clock. None requires reopening the location model or adding a future system. If implementation evidence exposes a real conflict, present that specific conflict rather than expanding the architecture speculatively.
 
@@ -411,6 +411,11 @@ bleeding simulation, MOB AI or broader resource/combat system is added.
 
 ## 18. MAKE SPIT and GATHER FIREWOOD (2026-09-30)
 
+**Execution update:** section 19 supersedes the original bespoke handlers with
+Craft Engine definitions, adds a held cutting-tool requirement to MAKE SPIT, and
+adds persistent retry receipts. The weights, ground outputs and five-minute costs remain.
+
+
 The next authorized increment adds exactly two basic survival actions, without a
 learned recipe, CAP, cutting tool or empty-hand prerequisite:
 
@@ -452,3 +457,101 @@ Migration `20260930_05` adds only the timestamp and two portable definitions. It
 neither spawns outputs nor changes existing object identity, hand or location.
 Ignition, burning/fuel consumption, roasting, EAT, tanning, butchering, broad gathering,
 learning, and a general crafting catalog remain outside this increment.
+
+
+## 19. Craft Engine v1 and web Builder (2026-09-30)
+
+Thomas authorized one server-side Craft Engine and a small web authoring foundation.
+A CRAFT is a persistent data definition, not a command-specific Python handler.
+The original GATHER FIREWOOD / MAKE SPIT handler is removed. Exact normalized command
+aliases resolve to definitions and all validation/execution follows the same path.
+The two seeded definitions are:
+
+| Craft | Sector expression | Inputs | Held tools | Outputs at feet | Work Timer |
+| --- | --- | --- | --- | --- | --- |
+| GATHER FIREWOOD | `TREES & !WATER` | None; local ordinary dead wood/brush is abstracted | None | One 5 lb firewood bundle | 300 real seconds |
+| MAKE SPIT | `TREES & !WATER` | None; suitable local fallen stick is abstracted | `tool` capability with `purpose: cutting`; Hunting Knife qualifies | One 8 oz simple wooden spit | 300 real seconds |
+
+### Definition and execution contract
+
+Definitions contain stable identity, name, exact player command aliases, required
+input prototype IDs/quantities, required held tool capabilities/properties, output
+prototype IDs/quantities, optional sector expression, real-second labor cost, and
+placement. The only v1 placement/effect is `ground_at_feet`. There is no script,
+eval, user-defined callback, construction effect, or recipe-specific executor.
+
+The server validates strict fields, registered flags, existing portable prototypes,
+known capability/property combinations, positive material quantities and bounded
+lists/costs. Current limits are eight aliases, eight rows per material/tool list,
+100 total input units and 100 total output units, and 0-48 hours per action.
+Aliases cannot replace an existing game verb or collide with another craft.
+A revision check prevents lost Builder edits. Definition edits affect future work;
+existing physical objects and completed request receipts never reset.
+
+Inputs must be held or visible within ordinary interaction reach, using existing
+HOG perception/barriers or same-ROOM access. Another character's held possessions
+are unavailable. A partial stack retains its identity and remaining quantity; full
+consumption removes the input and ground attachment. Required tools are held in an
+actual hand, not on the ground or embedded, and are never consumed as inputs.
+Objects with embedded children and specialized corpse prototypes are excluded from
+v1 generic processing. Existing SKIN remains under its section 17 handler/rules;
+future migration needs explicit corpse targeting/state support, not a shortcut.
+
+All outputs have new persistent IDs with ordinary quantities and direct ground/ROOM
+locations at the accepted character position. Hands are unchanged. Existing outdoor
+dry-ground checks and HOG attachments apply; sector eligibility never grants ground
+placement. No invisible inventory or automatic hand juggling.
+
+Consumption, creation, ground attachments, Work Timer, character execution revision
+and optional request receipt commit atomically. Work Timer remains
+`max(now, work_until) + cost`, immediate results, strictly below 48-hour entry,
+real time online/offline and no accelerated clock. Stable input ordering and
+conditional position/tool/input/revision checks prevent competing attempts from
+consuming an input twice or losing debt. Failed transactions restore all state.
+Zero-cost crafts still advance the execution revision for concurrency protection.
+
+The browser supplies a random request ID per submitted command. Same character,
+same request ID and same normalized craft command returns the original result,
+even after restart or alias edits, without another output, input consumption,
+debt charge or travel stop. Reusing that ID for a different craft command fails.
+Fresh IDs or commands without IDs represent new deliberate work; repeated work is
+allowed under C02. Receipts are durable current retry records, not object histories.
+
+### Sector expressions
+
+The grammar supports registered uppercase flags, `!` NOT, `&` AND, `|` OR and
+parentheses, with NOT then AND then OR precedence. No expression means no sector
+restriction. `TREES` only requires TREES, regardless of other flags. Multiple flags
+may be true. `(TREES & MOUNTAIN) | ROCKY` works without a second geography map.
+
+Initial names are TREES, GRASS, MOUNTAIN, ROCKY, WETLAND, WATER, SHORE, ROAD and ROOM.
+[HOG sector facts](hog.html#craft-sector-facts-2026-09-30) defines their sources and
+limits. Unavailable facts remain unknown, including under NOT; a restriction must
+resolve to true. Add future names such as PRISON through the registry and an
+authoritative fact adapter, not by editing the parser or storing craft-owned sectors.
+
+### Web Builder and future clients
+
+The flow is **web Builder -> validated server Builder API -> definitions -> Craft
+Engine**. Builder/admin accounts access `/builder` from the account screen.
+Forms provide prototype/quantity rows, capability dropdowns, aliases, flag/operator
+controls and labor cost. Browser code serializes the form and renders server results;
+it owns no crafting, geography, input-consumption or permission rules.
+
+`GET /api/builder/crafts` supplies authorized definitions and form choices.
+`PUT /api/builder/crafts/{id}` accepts `{revision, definition}`: 0 creates, the loaded
+revision edits. Authentication and builder/admin authorization apply server-side.
+Writes also require the non-simple `X-Crown-Builder: 1` header, with existing strict
+same-site cookies and no cross-origin CORS grant. Definitions record/log the editor
+and revision. Stale saves or conflicting aliases fail atomically.
+
+The shared validated server operations are the boundary for future Object/MOB
+Builders and restricted CCAI clients. CCAI does not receive shell/database authority;
+no CCAI integration or full Object/MOB Builder is included. Content authoring belongs
+primarily in this web interface, not a growing in-game builder-command language.
+
+Migration `20260930_06` adds definitions, unique aliases, execution receipts and a
+character execution revision, and seeds the two crafts. It preserves existing
+Work Timer timestamps, objects, quantities, identities and locations. It creates
+no physical objects. No fire, ignition, roasting, EAT, tanning, butchering, cabin
+construction, resource depletion, quality, discovery or progression is added.

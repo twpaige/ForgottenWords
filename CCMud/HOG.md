@@ -57,6 +57,33 @@ This is the canonical HOG architecture reference, carried forward from Crown-Cal
 * Contents
 {:toc}
 
+## Craft sector facts (2026-09-30)
+
+Craft Engine v1 reads a multi-flag view of HOG/world/ROOM state at the current
+position; it stores no second geography map. This does not change generators,
+certification or normal output-placement permission. Initial sources are:
+
+| Flag | Authoritative v1 source/interpretation |
+| --- | --- |
+| TREES | Existing wooded grassland, woodland, mixed/wet forest or montane woodland/forest regional biome |
+| GRASS | Existing grassland, wooded grassland, montane grassland or alpine meadow biome |
+| MOUNTAIN | Existing montane/alpine biome, including bare alpine rock |
+| ROCKY | Existing bare alpine rock biome; no inferred hidden geology/resource nodes |
+| WETLAND | Current point inside a ready represented wetland footprint |
+| WATER | Current point inside represented water geometry or a ready water surface |
+| SHORE | Dry point within 15 feet of a represented water edge in ready chunks; absent nearby geometry remains unknown |
+| ROAD | Registered but unknown: there is no authoritative road geometry in the current implementation |
+| ROOM | Actual character membership in an authored ROOM |
+
+Regional biome labels are explicit coarse gameplay interpretations, not newly
+surveyed walking-scale trees/rocks. Several flags can coexist. Actual water and
+wetland membership use their own footprint authority. ROOM does not infer outdoor
+facts through walls. Unavailable sources remain unknown, and negating unknown
+does not grant permission. No extra surrounding chunks are generated for flags.
+Adding a future flag such as PRISON requires registration and an owning-state
+adapter; the Boolean parser remains unchanged. Crafts with no sector restriction
+still obey physical output-placement rules. See [the Craft contract](objects.html#19-craft-engine-v1-and-web-builder-2026-09-30).
+
 ## Bounded survival-material availability (2026-09-30)
 
 MAKE SPIT and GATHER FIREWOOD consume existing current-position HOG classification

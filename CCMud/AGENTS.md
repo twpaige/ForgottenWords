@@ -41,7 +41,7 @@ python -m pytest
 python -m ruff check .
 ```
 
-Run relevant tests incrementally during substantial work. The full suite is appropriate for cross-cutting behavior; smaller focused suites can validate narrow changes. Existing lint failures must be distinguished from regressions. For documentation-only work, verify links, source claims, rendering, publishing, and unchanged application scope; do not invent tests that merely restate prose.
+Run focused behavior tests and directly affected regressions by default, incrementally during substantial work. Run the full suite only when a change is broad enough to justify it or Thomas explicitly requests it. Existing lint failures must be distinguished from regressions. For documentation-only work, verify links, source claims, rendering, publishing, and unchanged application scope; do not invent tests that merely restate prose.
 
 Never claim a test ran when it did not. Report command, result, revision/working state, and limitations. Test fixtures include isolated SQLite and mocked services; do not point test runs at live databases. PostgreSQL setup and `alembic upgrade head` are local development steps in README-APP, not authorization to migrate DEV or PROD.
 

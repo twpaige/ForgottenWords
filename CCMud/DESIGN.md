@@ -5,7 +5,7 @@ reviewed: 2026-09-30
 nav: design
 permalink: /CCMud/design.html
 ---
-**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, and MAKE SPIT / GATHER FIREWOOD on September 30. Other slices and deployment remain separate decisions; see current status for verification.
+**Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, MAKE SPIT / GATHER FIREWOOD, and the data-driven Craft Engine/web Builder on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
 
 ## Bounded Rabbit MOB wounds and corpse (2026-09-30)
@@ -34,20 +34,28 @@ Retries and concurrent attempts cannot duplicate outputs. Normal perception,
 reach, ground/ROOM placement, LOOK and object handling apply. The cleaned carcass
 is reserved for later whole roasting. See [the exact contract](objects.html#17-rabbit-corpse-skin-2026-09-30).
 
-## Basic survival materials (2026-09-30)
+## Craft Engine v1 and web Builder (2026-09-30)
 
-`GATHER FIREWOOD` yields one 5 lb bundle; `MAKE SPIT` yields one 8 oz wooden spit
-from a suitable fallen stick. Both appear at the character's feet and use ordinary
-persistent object handling. Existing HOG woodland facts and supported dry ground
-are required; no tree/branch nodes, broad gathering or depletion simulation exist.
-No special CAP, recipe or tool is required for these trivial survival actions.
+A CRAFT is data executed by one server engine. GATHER FIREWOOD and MAKE SPIT are
+persisted definitions with exact command aliases, `TREES & !WATER`, ground outputs
+and 300 real seconds of Work Timer cost. MAKE SPIT now requires a held cutting tool;
+Hunting Knife qualifies. The old command-specific material handler is removed.
+Definitions also support physical prototype/quantity inputs, held capability
+requirements and multiple output rows, with immediate atomic processing.
 
-The minimal Work Timer now exists: each result is immediate and adds five real
-minutes atomically. Entry requires debt below 48 hours, elapsed offline/online in
-real time. Repeated deliberate commands are new charged work; stale concurrent
-attempts and transaction failures cannot leave extra outputs or lose debt. See
-[the exact contract](objects.html#18-make-spit-and-gather-firewood-2026-09-30).
-No fire, fuel consumption, roasting, EAT or general crafting catalog is added.
+Sector predicates support `&`, `|`, `!` and parentheses over authoritative HOG/ROOM
+flags. Unknown facts cannot grant permission through negation. Work Timer and
+physical-object rules remain authoritative. Persistent request receipts protect
+retries across restart; new requests remain new charged work. SKIN retains its
+existing bounded implementation for now, with no new corpse-processing semantics.
+
+Builder/admin accounts author definitions at `/builder` through forms/dropdowns.
+The browser is an authoring client, not game authority. Validated, permissioned
+server operations own references, quantities, expressions, alias conflicts and
+revision-safe writes. They form the future Object/MOB Builder and CCAI boundary;
+CCAI never receives unrestricted shell/database access. No full Object/MOB builders,
+script language, construction, fire/cooking, quality, discovery or progression are
+introduced. See [the precise v1 contract](objects.html#19-craft-engine-v1-and-web-builder-2026-09-30).
 
 ## Authoritative design record
 

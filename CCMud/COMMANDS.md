@@ -46,7 +46,7 @@ These are the documented current source-level commands. Release and feature gate
 | Physical possessions | `APPROACH <object\|mob>`, `GET <object>`, `TAKE <object>`, `INV`, `INVENTORY`, `I`, `DROP <object>` | Slice 1: approach a perceived outdoor OBJECT or MOB through normal movement to interaction range, with ordinary player arrival prose; GET never closes distance and stops voluntary travel even on failure. Right hand first, then left; full hands fail. Inventory shows hands only in this slice. DROP leaves the same object at your feet. See [object architecture](objects.html#14-slice-1-implementation-2026-09-30). |
 | Rabbit wound/corpse interaction | `THROW <object> <target>`, `REMOVE <object> <target>` | Throw a held throwable item at a perceived outdoor MOB using opposed RANGE/ATHLX hit resolution. A miss lands the same item at the target; a hit wounds and embeds it. Rabbit MORT creates a corpse retaining that knife. REMOVE recovers from a visible MOB/corpse or own held corpse into a free hand. GET/DROP use normal corpse handling. See [bounded wound/death increment](objects.html#16-throw-wounds-death-and-corpse-2026-09-30). |
 | Rabbit corpse processing | `SKIN CORPSE` | With a cutting tool held, consume an accessible rabbit corpse (held or ground) into carcass, raw pelt and guts at your feet. Remove embedded items first; the tool stays in hand. See [bounded SKIN](objects.html#17-rabbit-corpse-skin-2026-09-30). |
-| Survival materials | `GATHER FIREWOOD`, `MAKE SPIT` | Existing HOG woodland and supported dry ground supply one firewood bundle or wooden spit at your feet. Each immediately adds five real minutes of Work Timer debt; entry requires debt below 48 hours. No special tool or free hand required. See [bounded materials](objects.html#18-make-spit-and-gather-firewood-2026-09-30). |
+| Survival materials | `GATHER FIREWOOD`, `MAKE SPIT` | Existing HOG woodland and supported dry ground supply one firewood bundle or wooden spit at your feet. Each immediately adds five real minutes of Work Timer debt; entry requires debt below 48 hours. MAKE SPIT requires a held cutting tool; GATHER needs none. These commands are persisted definitions executed by the generic [Craft Engine](objects.html#19-craft-engine-v1-and-web-builder-2026-09-30). |
 | Places and objects | `ENTER <place>`, `EXIT`, `GET <object>`, `DROP <object>`, `INVENTORY`, `CUT <resource>`, `OPEN <door>`, `CLOSE <door>` | Interact with implemented structures, resources and objects. ENTER can deliberately enter a nearby represented waterway under its current rules; existing feature gates still apply. |
 | Communication and session | `SAY <message>`, `HELP`, `QUIT` | Speak to nearby listeners, list help, or close the session. |
 
@@ -61,6 +61,14 @@ COPY copies the whole current transcript, including scrolled-out text, and repor
 success/failure outside it. These presentation controls never alter game state.
 
 `CLEAR` (typed or its button) clears the **web transcript locally**. It does not send an in-world command or stop travel. Do not assume its availability or effects in a telnet client.
+
+### Web content authoring
+
+Builder/admin accounts open `/builder` from the account screen to create/edit
+Craft definitions using validated server APIs. Aliases are exact commands; the
+server rejects conflicts with ordinary game verbs or another craft. Future craft
+commands come from definitions, not additional hard-coded handlers. There is no
+in-game Builder command language or full Object/MOB Builder in v1.
 
 ### Staff diagnostics
 

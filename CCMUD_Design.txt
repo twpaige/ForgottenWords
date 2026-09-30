@@ -502,6 +502,27 @@ Origin sells maps/compasses; remote crafting of a compass requires minerals
 materials, food portions, ignition costs or opening-Craft tables. Do not
 claim these content tables were finalized or grant the missing items free.
 
+September 30 Craft Engine v1 / Builder adoption (supersedes bespoke material execution):
+- A CRAFT is a validated data definition executed by one server engine. Definitions
+  include identity/name, exact command aliases, physical input/output quantities,
+  held tool capabilities, optional sector expression, Work Timer cost and placement.
+- GATHER FIREWOOD and MAKE SPIT use this generic engine, TREES & !WATER and five
+  real minutes of debt. MAKE SPIT now requires a held cutting tool; Hunting Knife
+  qualifies. Existing weights and ground-at-feet outputs remain unchanged.
+- Sector flags derive from authoritative HOG/ROOM facts, with &, |, ! and
+  parentheses; no second map or scripting language. Unknown facts cannot grant
+  permission through negation. No expression means no sector restriction.
+- Validate/consume/create/charge/record retry receipt atomically. Same request ID
+  and command replay the original result after restart; new IDs are new work.
+- Web Builder -> validated server API -> definitions -> Craft Engine. Forms and
+  dropdowns are authoring conveniences; the server owns validation and authority.
+  Builder/admin roles, revision checks and recorded/logged edits protect content.
+- Future Object/MOB Builders and CCAI use the same restricted operation boundary,
+  never unrestricted database/shell access. No full Object/MOB/CCAI integration.
+- SKIN keeps its current handler/rules until explicitly migrated. No cabin
+  construction, fire, cooking, progression or broad resource system in v1.
+  CC_Objects section 19 owns the detailed contract and initial sector limits.
+
 September 30 bounded survival-material adoption:
 - GATHER FIREWOOD yields one 5 lb bundle; MAKE SPIT yields one 8 oz simple wooden
   spit from a suitable fallen stick. Both use local HOG light/heavy woodland
