@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Bounded Rabbit MOB, THROW and REMOVE hit test; no game deployment.
+description: Player OBJECT and MOB APPROACH corrections; no game deployment.
 reviewed: 2026-09-30
 nav: status
 permalink: /CCMud/status.html
@@ -31,19 +31,32 @@ uses the existing bounded ready-ground geometry checks; Nearby presentation stay
 outside cached geographic prose. HOG generation, cabin/water barriers, travel and
 odometer authority remain unchanged.
 
+## Player APPROACH correction
+
+APPROACH resolves perceptible OBJECTs and MOBs before the restricted admin geographic
+catalog. Both use the existing continuous-travel controller and the same interaction-range
+steering. Current object/MOB interaction range is 180 inches. Every tick revalidates
+identity, fixed location and perception; movement or loss of the target stops travel.
+There is no chasing or pathfinding. HOG feature targets retain their generation checks.
+
+Ordinary arrival now says "You approach the Hunting Knife and stop." or
+"You approach the rabbit and stop." The browser honors this server arrival text;
+admin geographic diagnostics keep their existing separate wording.
+
 ## Verification
 
-Runtime implementation: [8010b6c](https://github.com/twpaige/Crown-Call/commit/8010b6cfbc38898df5e699d4ac1a9ef1ecc4d9c2), based on `3af197f22cb639c2853a27abd5100bc3058e84c7`.
-Focused rabbit tests: **32 passed**, one dependency warning, 24.74 seconds.
-Earlier rabbit/knife combined run: **48 passed**, one dependency warning, 45.81 seconds.
-The later rabbit run adds the authored Origin loop and REMOVE rollback coverage.
-Full suite: **695 passed**, 13 dependency deprecation warnings, **588.30 seconds**.
-The subsequent 32-case rabbit run covers the newly added Origin loop and REMOVE
-rollback case; the final migration run verifies both ground and held starting states
-(**2 passed**, 1.35 seconds). Together these runs cover all 698 current cases.
-Changed-file Ruff, whitespace and the existing Node client-login timing checks pass.
-No application code changed after the full suite started; the additional cases extend tests.
-Tests use isolated SQLite databases and the real HOG DEV seed, never a live database.
+APPROACH runtime: [8895854](https://github.com/twpaige/Crown-Call/commit/88958549c53f368b4a768a33ef6d2b0becdcf9db), committed and pushed to main.
+Focused and regression run: **328 passed**, one dependency deprecation warning,
+182.28 seconds. Suites cover player approach, Hunting Knife, rabbit THROW/REMOVE,
+field commands, admin/field navigation, travel, HOG walking, cabin, water movement
+and odometer. The seven new cases cover object/MOB arrival and final interaction
+range for players/admins, already-in-range arrival, moved targets, wall visibility
+and cross-kind ambiguity. Five initial cases failed against the previous code.
+Node client login/arrival rendering checks, changed-file Ruff and whitespace checks pass.
+Earlier rabbit implementation: [8010b6c](https://github.com/twpaige/Crown-Call/commit/8010b6cfbc38898df5e699d4ac1a9ef1ecc4d9c2).
+Its full-suite baseline passed 695 tests; subsequent focused cases brought coverage
+to 698 cases before this APPROACH correction. Tests use isolated SQLite databases
+and the real HOG DEV seed, never a live database.
 
 ## Limits and next action
 
@@ -53,7 +66,7 @@ cooking, food, containers and other object slices remain deferred. Tabletop seve
 modifier changes are not adopted implicitly; no wound rule is applied by this increment.
 
 After review, Thomas can deploy DEV manually and exercise LOOK → APPROACH KNIFE →
-GET KNIFE → THROW KNIFE RABBIT. On a hit, move within 15 feet and REMOVE KNIFE RABBIT;
+GET KNIFE → THROW KNIFE RABBIT. On a hit, APPROACH RABBIT and REMOVE KNIFE RABBIT;
 on a miss use ordinary APPROACH/GET. Check inventory and restart persistence.
 The earlier Slice 1 deployment prerequisites remain in README-APP.md; no live cleanup,
 `cc-update`, migration, DEV deployment or PROD deployment has been performed here.
