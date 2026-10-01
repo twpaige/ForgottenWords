@@ -113,7 +113,7 @@ ground attachment. Cold/unsupported locations are refused rather than guessed.
 Indoors, the new object belongs to the admin's current ROOM. Timed prototypes use
 the ordinary creation hook to capture their lifecycle deadlines. Specialized
 `corpse` instances require the normal death process and cannot be loaded directly.
-ROOM/dwelling infrastructure requires system building operations; LOAD cannot
+ROOM/dwelling infrastructure uses validated web Builder authoring; LOAD cannot
 create orphan ROOMs or incomplete dwellings. ROOM prototypes are hidden from OLIST.
 
 `LOAD M rabbit` uses the shared MOB creation function and the authored rabbit
@@ -286,3 +286,20 @@ membership rather than distance; nearby accessible contents show `(here)` and
 ordinal ties use stable identity. Other ROOMs' contents remain inaccessible.
 FIND reports nested contents with ROOM/dwelling context; JUMP FIND enters that
 actual ROOM without moving the target. See the [POC contract](objects.html#22-pioneer-cabin-room-object-poc-2026-10-01).
+
+
+### ROOM/DWELLING authoring
+
+Builder/admin accounts use `/builder` → **Objects** → **Rooms** or **Dwellings**.
+Select the dwelling, edit its ROOM descriptions/links or entry, and Save. The cabin's
+existing rooms are available after migration. The exterior/door association is
+read-only; changing a ROOM description is visible on the next normal LOOK.
+
+**Import / Export** provides paste/upload → Validate & review → Import reviewed
+text, plus Export saved and Download text. Import merges by local ROOM key and
+replaces each supplied ROOM's outgoing links; omitted ROOMs remain. A stale revision
+requires reload. No rooms or links are created during validation. See the
+[format and authoring rules](objects.html#23-roomdwelling-builder-and-room-text-2026-10-01).
+There are no new player/in-game Builder commands, no ROOM deletion, and no HOG
+geometry editing. Pioneer Cabin travel defaults above remain the initial authored
+layout; builders may deliberately edit its links and entry ROOM through this API.

@@ -696,8 +696,9 @@ outdoor anchor. Common exterior coordinates never grant cross-ROOM access.
 ROOM infrastructure is quantity one, non-portable and excluded from ordinary
 handling, Craft inputs/outputs, timed morphs and ordinary creation. Existing fixed
 ROOM/dwelling objects cannot be moved, reparented, morphed, consumed or deleted
-through ordinary lifecycle operations. Specialized prototypes are not editable in
-the current Object Builder. No ROOM Builder or BUILD CABIN is added.
+through ordinary lifecycle operations. The subsequent ROOM authoring slice below
+exposes these instances through Object Builder without enabling ordinary manipulation.
+BUILD CABIN remains deferred.
 
 LOOK, GET, DROP, inspection and ordinary physical outputs use current ROOM
 membership, with no 15-foot radius. Accessible ROOM candidates display `(here)`;
@@ -746,4 +747,123 @@ Main Room for compatibility; the dwelling and other ROOMs get distinct IDs.
 A system-only transactional POC instantiation operation allocates independent
 ROOM/link graphs for another dwelling; it does not grant that exterior HOG approval.
 Existing layouts are not automatically rewritten by prototype edits. Vehicles,
-construction, property systems, indoor combat and full layout authoring remain deferred.
+construction, property systems and indoor combat remain deferred. The bounded
+layout authoring interface is specified below.
+
+
+## 23. ROOM/DWELLING Builder and ROOM text (2026-10-01)
+
+The existing **Crafts | Objects** Builder now offers **Normal | Rooms | Dwellings**
+filters within Objects. Normal prototypes retain their existing workflow. ROOMs
+and dwellings are authored **instances**, not spawnable ordinary prototypes.
+Choose a dwelling/exterior association, then its ROOM. Compact forms expose name,
+keywords, ground/short descriptions, ROOM LOOK description, and directed links.
+Each link has an exact trigger, destination ROOM dropdown, real seconds, percentage
+of maximum stamina, and optional departure text. Add/remove link rows explicitly;
+reverse links are never inferred and there is no six-exit limit.
+
+Dwellings expose their owned ROOMs and entry ROOM. Their existing Space/Portal
+records still own exterior footprint, anchor and door state; the Builder displays
+that association read-only and does not author another geography map. New dwelling
+infrastructure may be attached only to an existing unassociated Space with one
+existing door. This does not certify a new HOG placement. There is no exterior
+construction, dwelling cloning or BUILD CABIN command. The migrated Pioneer Cabin
+is immediately available with Main Room, Bedroom and Loft.
+
+Saving a new ROOM explicitly creates its fixed owned object. Ordinary prototype
+Save still never spawns an object. Existing ROOM keys and ownership are fixed;
+this slice offers **no ROOM/dwelling deletion**, including empty ROOMs. It cannot
+consume, move, morph, take or reparent infrastructure. Existing infrastructure
+weight is read-only, consistent with the Object Builder live-mechanics restriction.
+Normal handling, occupancy, delayed travel, FIND/JUMP FIND and exterior safety
+remain the proven POC authority. Description edits appear in the next normal LOOK.
+Entry ROOM edits change which ROOM uses the existing doorway, not its geometry.
+
+### Shared authoring boundary
+
+GUI and ROOM text use the same authorized, typed server service. Future CCAI and
+construction clients can use that service without database access. The existing
+Builder/admin session boundary and request-header protection apply. Unknown fields,
+capabilities, malformed keys, protected command/Craft collisions, duplicate triggers,
+invalid destinations, delay/stamina and blank descriptions are rejected server-side.
+Direction abbreviations normalize using the existing runtime convention.
+
+A dwelling-wide author revision covers its metadata, owned ROOM content, entry
+and links. Saves compare the revision under the shared definition-edit lock and
+commit atomically. Stale saves/import retries require reload; concurrent imports
+cannot both create the same graph. Unchanged links retain identity; changed or
+removed links are revalidated by pending travel before arrival. ROOM object IDs,
+occupants and nested contents are preserved on edits. If old POC instances share a
+prototype, authoring isolates the edited instance's descriptive prototype rather
+than renaming another dwelling's ROOM. No gameplay morph or placement change occurs.
+
+Persistent additions are one local authored key per ROOM, a dwelling author revision
+and last editor. Migration `20261001_02` backfills `main_room`, `bedroom`, `loft`
+for the existing cabin and preserves instance/occupant/link identities and geometry.
+Keys are unique within their owning dwelling under the validated transaction path.
+
+### Human-readable ROOM format
+
+Objects → Rooms/Dwellings → **Import / Export** supports paste or UTF-8 text upload,
+**Validate & review**, then **Import reviewed text**. Validation creates nothing;
+review reports ROOM/link counts, new versus updated keys and entry. Editing text
+invalidates review. Import revalidates the saved dwelling revision and all rules
+inside the transaction. Either the complete change commits or none does.
+
+```text
+ENTRY: entrance
+
+ROOM: entrance
+NAME: Mine Entrance
+DESC:
+A rough-hewn passage descends into darkness.
+ENDDESC
+
+LINK: north -> main_tunnel
+DELAY: 1
+STAMINA: 0
+ENDLINK
+
+ROOM: main_tunnel
+NAME: Main Tunnel
+DESC:
+Heavy timbers brace the walls of this broad mining tunnel.
+ENDDESC
+
+LINK: south -> entrance
+DELAY: 1
+STAMINA: 0
+TEXT: You head toward the entrance.
+ENDLINK
+```
+
+- `ROOM` keys use lowercase letters, digits and underscores, begin with a letter,
+  and contain at most 40 characters. References use keys, never UUIDs/foreign keys.
+- `NAME` and multiline `DESC` are required. A new `ROOM:` starts the next section;
+  each `LINK` must end with `ENDLINK`, and each description with `ENDDESC`.
+- Optional `KEYWORDS`, `GROUND`, `HELD`, `WEIGHT` preserve all authored object fields.
+  Omitted values default from NAME, with weight zero. Export emits them explicitly.
+- Optional `ENTRY` appears before ROOMs. If absent, preserve the existing entry,
+  or use the first imported ROOM for a new dwelling.
+- `DELAY` defaults to 0 and accepts integers 0–3600; `STAMINA` defaults to 0 and
+  accepts integers 0–100. Optional `TEXT` is one line of up to 250 characters.
+  ROOM descriptions are limited to 1000 characters. Other fields retain Builder
+  limits. Unknown/repeated fields and malformed sections fail plainly.
+- Blank lines and `#` comments outside DESC are ignored. Within descriptions,
+  prefix a literal directive-like line (`ROOM:`, `NAME:`, etc.), `ENDDESC`, or a
+  leading backslash with a backslash; export escapes these automatically.
+- Imports **merge by key** into the selected dwelling. Matching ROOMs retain IDs;
+  new keys create new ROOMs. A supplied ROOM replaces its description/fields and
+  complete outgoing link list. Omitted ROOMs and their links remain unchanged.
+  Renaming a key means adding a different ROOM, not moving or deleting the old one.
+- Destinations must resolve within the resulting dwelling graph, including retained
+  ROOMs. This local graph authoring format does not represent cross-dwelling links;
+  it refuses an existing external link rather than silently losing it on export.
+- Text is limited to one million characters and a resulting dwelling to 500 ROOMs
+  as authoring request bounds, not a six-direction rule. No scripting or conditional
+  exits are supported. Ordinary explicitly authored return links remain valid.
+
+**Export saved** emits the persisted complete graph at a named revision into the
+same textarea; **Download text** saves it for editing/reimport. Unsaved form edits
+are not exported or included in text import. This slice supplies ROOM templates
+only, not ordinary Object or MOB template/import systems, or DEV→PROD publishing.
