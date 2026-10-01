@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: ROOM/DWELLING web authoring with transactional ROOM text import/export.
+description: Reusable DWELLING prototypes, atomic LOAD and shared doorway state.
 reviewed: 2026-10-01
 nav: status
 permalink: /CCMud/status.html
@@ -8,66 +8,69 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
-The existing Object Builder now provides Normal, Rooms and Dwellings filters.
-ROOM description/appearance and directed links, dwelling appearance/entry, and
-owned ROOM lists use a shared validated server authoring service. Existing
-Space/Portal geometry and door state remain authoritative and read-only here.
-The Pioneer Cabin's Main Room, Bedroom and Loft are available after migration.
+Object Builder now offers **Dwelling prototypes** alongside ordinary prototypes
+and existing ROOM/dwelling instance forms. A reusable definition contains appearance,
+5–100-foot rectangular dimensions, one south entrance, entry local key and ROOM text
+graph. Draft validation/application creates nothing; Save stores the prototype.
+Template edits affect future instances only.
 
-Paste/upload → Validate & review → Import uses human-readable ROOM text with local
-keys and no database UUIDs. Export saved → Download text supports round trips.
-Imports merge keys, preserve matched ROOM identities, replace supplied outgoing
-links and retain omitted ROOMs. A dwelling-wide revision and one transaction prevent
-stale/concurrent overwrites and partial graphs. Saving new ROOMs explicitly creates
-fixed infrastructure; ordinary prototype Save still does not spawn instances.
+Admin `LOAD O <dwelling_prototype>` outdoors transactionally creates independent
+root/ROOM objects, links, door states, entry, Space/Portal geometry and virtual key
+grants. Certified dry, level ground and a clear footprint are required. APPROACH
+uses existing continuous travel to 15-foot entrance range; ENTER/EXIT use the
+instance's entry ROOM and actual doorway. Original Pioneer Cabin geometry remains.
 
-The proven ROOM runtime is unchanged: coordinate-free occupancy, delayed directed
-links, cancellation/revalidation, same-ROOM interaction, nested FIND/JUMP FIND, and
-existing HOG doorway/collision rules. See [the authoring contract and text syntax](objects.html#23-roomdwelling-builder-and-room-text-2026-10-01).
+Explicit local door keys pair independently authored link sides. OPEN/CLOSED/LOCKED
+plus independent BARRED state is shared; KEY/BAR access is per side. The loading
+admin character receives configured instance-scoped virtual keys. Closed doors
+prevent departure and cancel delayed arrival without charging stamina. No physical
+keys, automatic reverse links or property system.
+
+See [the template and door contract](objects.html#24-reusable-dwelling-templates-and-installed-doors-2026-10-01)
+and [commands](commands.html#reusable-dwellings-and-doors).
 
 ## Persistence and boundaries
 
-Migration `20261001_02` adds/backfills local ROOM keys and dwelling author revision/
-last editor. It preserves existing occupants, object/link IDs, ownership, exterior
-geometry and door state. The earlier `20261001_01` indoor-storage conversion still
-applies when upgrading from older code.
+Migration `20261001_03` adds template storage, Space origin/placement identity,
+shared door state and side controls, and persistent key grants. It preserves legacy
+Pioneer Cabin door state, ROOM identities and occupants. Existing command collisions
+with LOCK/UNLOCK/BAR/UNBAR are rejected for review before schema changes. Migration
+has no destructive automatic downgrade.
 
-New dwelling infrastructure needs an existing unassociated Space with one door;
-this authoring slice does not construct/certify new exterior geography. Existing
-ROOM keys/ownership and infrastructure weight are fixed. No ROOM/dwelling deletion,
-ordinary handling/Craft/morph of infrastructure, BUILD CABIN, general cloning,
-Object/MOB text templates, indoor combat, property or publishing system was added.
+ROOMs remain fixed infrastructure with same-ROOM occupancy and the existing pending
+travel model. No BUILD CABIN, multiple entrances, rotation/foundations, template
+upgrades, general Object/MOB import, indoor combat, door damage, windows, vehicles,
+property or deployment/publishing framework was added.
 
 ## Verification
 
-Implementation: [08cb570](https://github.com/twpaige/Crown-Call/commit/08cb5709aacedbae2e26a62588a64af9ca626578), committed and pushed to main.
+Implementation: [7d8214a](https://github.com/twpaige/Crown-Call/commit/7d8214afa73e527247279cae0444bce98f1a533a), committed and pushed to main.
 
-Focused authoring checks cover load/save/auth/revisions, infrastructure restrictions,
-link editing/validation, description changes through LOOK, transactional rollback,
-concurrent imports, local keys, export/reimport, restart, separate dwelling ownership,
-shared-prototype edit isolation, and migration identity preservation.
+Focused dwelling and admin LOAD tests: **27 passed** in 9.14 seconds. Coverage includes
+prototype validation/revisions/authorization, two independent graphs, asymmetric
+shared doors, loader keys, restart persistence, failed-creation rollback, unsafe
+placement, actual APPROACH ticks, entry/exit and legacy-preserving migration.
 
-The affected regression run passed **37 tests** in 80.16 seconds: authoring, the ROOM
-POC/WebSocket arrival, prior ROOM migration, nested FIND/JUMP FIND and existing
-Craft/Object Builder API behavior. Final authoring refinements passed **26 tests**
-plus the shared-prototype check (**1 passed**) after correcting its missing test
-import. Counts overlap. Both shipped-HTML browser harnesses passed, including
-existing Craft/Object forms and new ROOM/DWELLING form/import behavior at 1280×720.
-Changed-file Ruff, diff checks and single Alembic head checked. No full suite.
+Direct ROOM/instance Builder/HOG cabin regressions were run; the indoor door lookup
+was corrected to honor coordinate-free ROOM occupancy. Nearby cabin expectations
+now use its authored name instead of a hard-coded label. Failed cases were rerun
+successfully. Final targeted dwelling/entry, nested FIND/JUMP FIND, HOG structure,
+regional APPROACH and help checks: **6 passed** in 20.24 seconds. Test counts overlap.
 
-Tests use isolated SQLite and mocked browser API responses; the server service/API
-is exercised separately. PostgreSQL migration execution and live DEV behavior are
-not verified. Existing Starlette/httpx deprecation warning remains.
+Three shipped-HTML browser harnesses pass: existing Craft/Object forms, ROOM form/
+import behavior, and the new dwelling prototype draft/review/save interface. The
+prototype editor fits 1280×720 without page scrolling. Changed-file Ruff, whitespace
+checks and the single Alembic head pass. **No full suite run.**
+
+Tests use isolated SQLite, synthetic HOG ground plus existing real-seed cabin
+regressions, and mocked browser HTTP responses with separate Python API tests.
+PostgreSQL migration execution and live DEV behavior are not verified. Existing
+Starlette/httpx deprecation warning remains.
 
 ## Deployment and next action
 
-No game deployment, live migration or restart performed. Thomas controls FAST DEV
-and full verification checkpoints. After deployment, open Builder → Objects → Rooms,
-edit a cabin description/link, verify LOOK/delay/cancellation and entry/EXIT, then
-export, validate and reimport. Try a stale second editor and a malformed template.
-Imported new ROOM keys add permanent infrastructure; omitted keys are not deletion.
-
-Use `sudo cc-update dev --fast <commit>` for iteration and
-`sudo cc-update dev <commit>` for the deliberate complete-test checkpoint.
-Binary-only rollback does not undo the earlier indoor-storage migration; any
-schema/data rollback requires a reviewed restoration/migration procedure.
+No DEV/PROD deployment, live migration or restart performed. Thomas controls FAST DEV
+and full verification checkpoints. After deployment, create a dwelling prototype,
+LOAD it at two clear level outdoor sites, and playtest entrance/ROOM door controls.
+The loader receives that instance's configured keys. Use FULL DEV for a milestone
+checkpoint after focused live testing.

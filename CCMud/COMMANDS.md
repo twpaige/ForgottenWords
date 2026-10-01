@@ -113,8 +113,9 @@ ground attachment. Cold/unsupported locations are refused rather than guessed.
 Indoors, the new object belongs to the admin's current ROOM. Timed prototypes use
 the ordinary creation hook to capture their lifecycle deadlines. Specialized
 `corpse` instances require the normal death process and cannot be loaded directly.
-ROOM/dwelling infrastructure uses validated web Builder authoring; LOAD cannot
-create orphan ROOMs or incomplete dwellings. ROOM prototypes are hidden from OLIST.
+ROOM/dwelling infrastructure uses validated web Builder authoring. LOAD O accepts
+a reusable DWELLING prototype outdoors and atomically creates its complete owned
+ROOM graph and single entrance; it cannot create orphan ROOMs or incomplete dwellings. ROOM prototypes are hidden from OLIST.
 
 `LOAD M rabbit` uses the shared MOB creation function and the authored rabbit
 defaults: athletics 0, severity modifier +2, no wounds, and a new instance UUID.
@@ -203,7 +204,7 @@ These are the highest-value additions to the interaction vocabulary, ordered by 
 | Family | Verbs or capabilities | Prerequisite and decision |
 | --- | --- | --- |
 | Hunt and gather | `HUNT`, `FISH`, `TRACK`, `BUTCHER` | Adopt as distinct verbs only after creatures, tracks, catches and carcass stages exist. If BUTCHER adds no action beyond SKIN/harvesting, merge it there. |
-| Doors and structures | `LOCK`, `UNLOCK`, `KNOCK`, `PUSH`, `PULL` | Adopt with real locks, keys, doors and movable objects. OPEN/CLOSE remain the current base; physical state and access govern effects. |
+| Doors and structures | `KNOCK`, `PUSH`, `PULL` | Adopt only with corresponding physical interactions. OPEN/CLOSE/LOCK/UNLOCK/BAR/UNBAR now use installed doorway state and side access. |
 | Physical handling | `DRAG`, `LIFT`, `CARRY` | Adopt with encumbrance and persistent carried/dragged targets. CARRY may become inventory/equipment state; no duplicate position system. |
 | Books and boards | `READ`, `WRITE`, `COPY`, `POST`, `REPLY`, `NEWS` | Adopt with physical pages, writing materials, boards, permissions and provenance. COPY must respect book versus parchment rules. Embedded artwork is content, not a magic command. |
 | Orientation | `MAP`, `COMPASS`, map bookmarks | Adopt when persistent map knowledge and possession are defined. Compass and map are different affordances; avoid revealing admin geometry. |
@@ -303,3 +304,25 @@ requires reload. No rooms or links are created during validation. See the
 There are no new player/in-game Builder commands, no ROOM deletion, and no HOG
 geometry editing. Pioneer Cabin travel defaults above remain the initial authored
 layout; builders may deliberately edit its links and entry ROOM through this API.
+
+
+### Reusable dwellings and doors
+
+Builder → Objects → **Dwelling prototypes** creates reusable definitions. Set
+footprint/entrance controls and ROOM text, Validate & review → Use reviewed graph,
+then Save. This writes only a prototype. An admin may `LOAD O frontier_cabin` at
+one certified dry, level outdoor site, then again elsewhere. Each instance owns
+fresh ROOMs/links/doors. Future prototype edits leave existing instances unchanged.
+The south entrance is at the loader's feet; the footprint extends north.
+
+`APPROACH frontier cabin` uses normal continuous travel to entrance interaction
+range (15 feet). `ENTER frontier cabin` uses its entry ROOM. EXIT there returns to
+that same exterior entrance. The original Pioneer Cabin retains its geometry.
+
+`OPEN`, `CLOSE`, `LOCK`, `UNLOCK`, `BAR`, `UNBAR` accept a nearby entrance description
+or an indoor link trigger, such as `OPEN NORTH`. Shared opposite sides see the same
+state, but KEY/BAR access can differ. LOCK requires CLOSED and a configured virtual
+key; BAR requires a closed/locked door and side access. The loading admin's character
+receives instance-scoped configured keys. UNLOCK does not remove an inside bar.
+A door closed during delayed travel cancels crossing without stamina charge.
+See [the complete template/door contract](objects.html#24-reusable-dwelling-templates-and-installed-doors-2026-10-01).

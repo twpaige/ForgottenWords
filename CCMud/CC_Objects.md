@@ -867,3 +867,105 @@ ENDLINK
 same textarea; **Download text** saves it for editing/reimport. Unsaved form edits
 are not exported or included in text import. This slice supplies ROOM templates
 only, not ordinary Object or MOB template/import systems, or DEV→PROD publishing.
+
+
+## 24. Reusable DWELLING templates and installed doors (2026-10-01)
+
+This extends the instance authoring in section 23. Objects → **Dwelling prototypes**
+creates reusable definitions; Rooms/Dwellings still edit selected live instances.
+The compact template editor provides identity, descriptions, weight, width/depth,
+one exterior entrance, side controls, and the existing human-readable ROOM text.
+Validate & review → Use reviewed graph changes an unsaved draft. **Save creates no
+instance.** Template text replaces the draft graph; instance imports retain the
+merge behavior in section 23. Server authorization, strict validation and revision
+comparison govern both APIs, including future CCAI callers.
+
+`LOAD O <dwelling_prototype_id>` requires an admin outdoors on dry land. Each LOAD
+is a new creation request. One transaction creates the dwelling root, fresh owned
+ROOM objects, directed links, physical door states, entry reference, Space/Portal
+geometry and virtual key grants. Failure rolls back everything. Template-local
+ROOM/door keys resolve only within that instance; no reverse links are inferred.
+Existing instances never acquire later template edits. Their descriptive prototypes
+are isolated snapshots, while Space records the reusable source prototype identity.
+
+### Bounded exterior placement
+
+V1 uses a rectangular footprint, 5–100 feet per side, with a single south entrance
+at the loading character's feet. The footprint starts 30 inches north of the
+entrance and extends north. This is fixed orientation, not a rotation/placement UI.
+The complete footprint and entrance apron require ready, dry, boundary-free HOG
+geometry, slope at most 0.05 and no more than one inch of ground-height variation.
+Grid-cell vertices and footprint extents are checked; corners alone are insufficient.
+Existing structures, entrances and physical occupants/objects cannot be obstructed.
+There is no foundation, terrain levelling or fallback invented geometry.
+
+The persisted generation identity, ground attachment and geometry are revalidated
+for use. Space/Portal still own exterior collision and doorway coordinates; ROOMs
+still own indoor occupancy. The original Pioneer Cabin retains its existing audited
+attachment and door state. APPROACH uses continuous player travel toward the single
+entrance and stops within the normal 15-foot interaction range. OPEN/ENTER and other
+exterior operations require reach and a clear certified approach. ENTER uses that
+instance's entry ROOM; only that ROOM can EXIT to the same exterior entrance.
+
+### Shared installed door state and side access
+
+A physical Door row belongs to one dwelling and has `OPEN`, `CLOSED` or `LOCKED`
+state plus independent `barred`. OPEN+barred is invalid, including at the database
+boundary. A directed link or exterior side supplies its own description, optional
+virtual KEY identity, and BAR access. Explicitly paired links share only physical
+state; they may expose different controls. Missing KEY means no keyed mechanism
+access on that side, not that the other side cannot lock the door.
+
+The **loading admin's character receives the configured virtual keys**, persisted
+and scoped to each physical door instance and key identity. They do not authorize
+another dwelling instance using the same template key. No loose keys, key transfer,
+property rights or general security system are introduced. BAR access is installed
+hardware and needs no loose bar object.
+
+`OPEN` requires unlocked/unbarred state; `CLOSE` changes OPEN to CLOSED. `LOCK`
+requires CLOSED plus accessible KEY and authority; `UNLOCK` changes LOCKED to CLOSED.
+`BAR` requires a non-open door and side access; `UNBAR` requires side access.
+Unlocking from outside does not remove an inside bar. Commands identify an indoor
+door by link trigger or description; ambiguous generic “door” requests ask which
+one. Prose uses the configured door description. Commands reserve LOCK/UNLOCK/BAR/
+UNBAR against Craft/link collisions. Migration rejects existing conflicting authored
+triggers rather than silently repurposing them.
+
+ROOM travel checks passability at departure and again under transaction locks at
+arrival. Closing/barring/locking during the delay cancels arrival without stamina
+cost. Exterior transfers and door operations also lock shared state. The existing
+pending-travel cancellation/restart rules remain unchanged.
+
+### ROOM text additions
+
+```text
+LINK: north -> bedroom
+DELAY: 1
+STAMINA: 0
+DOOR: yes
+DOOR_ID: bedroom_door
+DOOR_DESC: a simple wooden door
+KEY: crooked_key
+BAR: yes
+STATE: CLOSED
+BARRED: no
+ENDLINK
+```
+
+DOOR defaults to no. With DOOR yes, missing DOOR_ID gets a unique local per-link key
+and missing description defaults to “a simple wooden door”. Supply the same explicit
+DOOR_ID on independently authored opposite sides to share state. Keys follow ROOM
+key syntax; `entrance` is reserved. Shared references must connect the same ROOM
+pair and agree on initial STATE/BARRED. KEY defaults to none, BAR/BARRED to no and
+STATE to CLOSED. Export emits explicit door fields and round-trips them. Initial
+state initializes a new physical door; editing an existing graph does not reset its
+runtime state. Changing side KEY definitions later does not automatically grant new
+keys. No unrelated Object/MOB import system is added.
+
+Migration `20261001_03` adds reusable template JSON, Space source/ground identity,
+shared Door rows, side references and virtual key grants. Legacy portals keep their
+existing open/closed state and do not acquire unrequested locks/bars. ROOM objects
+remain fixed infrastructure: no ordinary taking, moving, consuming, morphing,
+deleting or reparenting. BUILD CABIN, multiple entrances, indoor combat, windows,
+door damage, vehicles, template upgrades and deployment/publishing systems remain
+out of scope.
