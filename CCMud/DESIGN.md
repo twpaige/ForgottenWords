@@ -508,3 +508,28 @@ types rather than creating separate approval systems for Objects, ROOM/DWELLING
 templates, MOBs and Crafts. It should integrate with the future selective DEV→PROD
 content-publishing/versioning workflow. No approval UI, PROD publishing pipeline, role
 system or deployment behavior is implemented by this decision.
+
+
+## Future persistent character transcript logging (2026-10-01)
+
+**Approved future design; not yet implemented.** CCMUD should eventually maintain a
+persistent server-side text transcript for each character. The purpose is both player
+history and long-term debugging: when a difficult bug is reported, an authorized
+administrator can inspect the actual commands and game output surrounding the event
+rather than relying only on recollection or browser state.
+
+Logging belongs to the server/game transcript path, not solely to the web client. This
+preserves the client-agnostic architecture so supported web, traditional MUD and future
+clients contribute to the same character history. Record actual game transcript content
+such as player commands, server output, LOOK/travel/combat messages, SAY and errors; do
+not log browser-only controls or UI chrome.
+
+Logs should append across login sessions and be retained with a bounded rotation/archive
+policy rather than one permanently growing file. A future web/admin convenience may
+allow an authorized user to download/export a character transcript as plain text for
+review or bug diagnosis. Exact retention periods, rotation size/cadence, privacy/access
+permissions, redaction needs and download UI remain future decisions.
+
+This feature must not make transcript files authoritative game state. Persistence and
+gameplay remain database/server-model responsibilities; transcript logging is diagnostic
+history and may fail without changing game outcomes.
