@@ -1,7 +1,7 @@
 ---
 title: Commands
 description: Current CCMUD commands and reviewed legacy command candidates.
-reviewed: 2026-09-30
+reviewed: 2026-10-01
 nav: commands
 permalink: /CCMud/commands.html
 ---
@@ -82,7 +82,7 @@ in-game Builder command language or MOB Builder in v1.
 | `OBJECT <persistent object ID>` | Admin read-only current object identity, placement/parent and hand diagnostics. |
 | `OLIST <search>` / `MLIST <search>` | Admin prototype discovery by stable ID, name and keywords. Bare commands show usage, never the catalog. |
 | `LOAD O <prototype_id>` / `LOAD OBJECT <prototype_id>` | Admin creation of one ordinary OBJECT at the current feet position or in the current ROOM. Uses normal persistence, placement and timed-morph creation rules. |
-| `LOAD M <prototype_id>` / `LOAD MOB <prototype_id>` | Admin creation through shared MOB/world authority at the current valid outdoor location; the authored `rabbit` prototype is currently supported. |
+| `LOAD M <prototype_id>` / `LOAD MOB <prototype_id>` | Admin creation through shared MOB/world authority at the current valid outdoor location or in the current ROOM; the authored `rabbit` prototype is currently supported. |
 | `FIND O <search>` / `FIND M <search>` | Admin search of actual persistent OBJECT or MOB instances, including cold/unloaded locations; 20 results per page. Separate from definition catalogs such as OLIST/MLIST. |
 | `JUMP FIND <number>` | Admin placement at the current effective location of an exact displayed FIND instance. Re-resolves identity and physical parents; never moves/extracts the target. |
 | `APPROACH <id|feature_id>` | Admin diagnostic steering to known geography or an audited persistent entrance. `approach pioneer_cabin` targets the exterior south door without opening or entering it. All normal safety restrictions apply; no pathfinding or perception claim. |
@@ -113,11 +113,13 @@ ground attachment. Cold/unsupported locations are refused rather than guessed.
 Indoors, the new object belongs to the admin's current ROOM. Timed prototypes use
 the ordinary creation hook to capture their lifecycle deadlines. Specialized
 `corpse` instances require the normal death process and cannot be loaded directly.
+ROOM/dwelling infrastructure requires system building operations; LOAD cannot
+create orphan ROOMs or incomplete dwellings. ROOM prototypes are hidden from OLIST.
 
 `LOAD M rabbit` uses the shared MOB creation function and the authored rabbit
 defaults: athletics 0, severity modifier +2, no wounds, and a new instance UUID.
-It uses the same supported-ground authority. MOB persistence currently supports
-outdoor XY placement only, so loading a MOB from a ROOM is explicitly refused.
+Outdoors it uses the same supported-ground authority. Indoors it creates a MOB
+in the current ROOM without coordinates; indoor combat remains unsupported.
 The small read-only MOB prototype catalog is independent of existing instances;
 this feature does not add a MOB Builder or change existing MOB persistence.
 
@@ -162,8 +164,8 @@ location, even if it moved or changed physical parent. Missing instances are rep
 plainly. Held and embedded items remain untouched. Outdoor jumps retain existing
 Zone C, ground, water and structure checks. Cold destinations prepare through the
 existing bounded JUMP process, rechecking identity/location and admin permission
-before placement; STOP cancels. ROOM destinations use the existing certified
-interior anchor (currently the audited Pioneer Cabin), with unsupported interiors
+before placement; STOP cancels. ROOM destinations resolve the actual containing
+ROOM and its owning dwelling (currently the audited Pioneer Cabin), with unsupported interiors
 refused. This admin placement can cross the ROOM boundary without opening a door;
 it does not change player ENTER/EXIT rules. Travel stops and teleport distance is
 not credited to odometers. Plain `JUMP <number>` is not a FIND shortcut.
@@ -266,3 +268,21 @@ The historical handoff mentions several of these conditionally. Their appearance
 - Determine whether EXAMINE, HOLD, SCAN, RIDE, BUTCHER and CRAFT merit a distinct action after their owning systems exist.
 - Confirm old Shadows provenance and syntax only for commands where it changes a concrete implementation decision.
 - Establish communication privacy, theft/PvP consent, staff moderation and travel targeting rules before implementing those families.
+
+
+### Pioneer Cabin ROOM travel
+
+The cabin now contains Main Room, Bedroom and Loft as owned ROOM objects.
+`ENTER CABIN` reaches Main Room through the existing exterior door. Only Main Room
+supports `EXIT`; the door must be open. Inside, `north`/`n` moves Main Room → Bedroom
+in one real second, and `south`/`s` returns. `up`/`u` moves Main Room → Loft in two
+seconds, and `down`/`d` returns. These links cost no stamina. Other indoor directions
+fail plainly; they never start outdoor travel.
+
+Departure is echoed immediately and arrival renders normal LOOK. LOOK and SAY do
+not cancel the delay. STOP or a conflicting physical/movement command cancels it
+automatically; disconnect/restart also cancels without cost. ROOM contents use
+membership rather than distance; nearby accessible contents show `(here)` and
+ordinal ties use stable identity. Other ROOMs' contents remain inaccessible.
+FIND reports nested contents with ROOM/dwelling context; JUMP FIND enters that
+actual ROOM without moving the target. See the [POC contract](objects.html#22-pioneer-cabin-room-object-poc-2026-10-01).

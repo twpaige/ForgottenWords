@@ -1,7 +1,7 @@
 ---
 title: CCMUD Object Architecture — Working Draft 5
 description: A bounded object architecture reconciled with approved gameplay decisions and the existing implementation.
-reviewed: 2026-09-30
+reviewed: 2026-10-01
 nav: design
 permalink: /CCMud/objects.html
 ---
@@ -34,17 +34,17 @@ The editable source is `ForgottenWords/CCMud/CC_Objects.md`. The September 30 in
 
 ## 2. Terminology and boundaries
 
-**LOCKED:** use these gameplay categories; they do not require one universal database table or base class.
+**LOCKED (October 1 refinement):** persistent authored nonliving physical things are OBJECTs. ROOM, DWELLING and future STRUCTURE/VEHICLE behavior specialize OBJECTs; HOG geography remains HOG. The table below describes behavior, not separate fundamental identities. See section 22 for the implemented Pioneer Cabin POC.
 
 | Category | Meaning |
 | --- | --- |
 | **PC** | Player-controlled character. |
 | **MOB (mobile)** | All non-player characters, including humans and wildlife such as rabbits, deer, and horses. |
-| **OBJECT** | Manipulable physical things: knives, rifles, backpacks, furniture, food, packed tents. |
+| **OBJECT** | Persistent authored nonliving physical things, including fixed infrastructure as well as portable possessions. |
 | **DWELLING** | Enterable habitation: cabins, houses, pitched tents. |
 | **VEHICLE** | Wagons, carriages, sleds, boats, ships. |
 | **STRUCTURE** | Fences, walls, gates, bridges, docks, and similar built features. |
-| **ROOM/SPACE** | Spatial or interior context; a DWELLING interior uses traditional MUD ROOM semantics. |
+| **ROOM** | Fixed OBJECT providing coordinate-free occupancy and authored links. Space remains an exterior-geometry implementation record. |
 | **HOG GEOGRAPHY** | Natural geography under HOG authority. |
 
 ENTITY is removed as CCMUD's formal umbrella taxonomy. Existing implementation names such as `NearbyEntity` are evidence about code, not a requirement to retain that taxonomy. A category describes gameplay behavior; it does not require replacing working character, cabin, or object storage.
@@ -115,11 +115,11 @@ Transformations follow their specific approved rule. The same tent persists thro
 
 The DWELLING boundary is real. An outside PC cannot GET an inside object, even through an open door or where coordinate numbers happen to be close. Normal exterior object discovery must not expose interior contents. Existing cross-door muffled speech is separate and remains intact.
 
-The cabin remains `pioneer_cabin`. Its seeded exterior/interior portal coordinates are `(0,1200,0)` and `(0,1260,0)`, with actual HOG ground attachment resolving height. These existing storage conventions can remain for compatibility; they must not impose intra-room object reach or walking. Interior placement means ROOM membership, not outdoor terrain sampling. Do not require a coordinate migration merely to provide the approved gameplay semantics.
+The cabin remains `pioneer_cabin`. Its seeded exterior/interior portal coordinates are `(0,1200,0)` and `(0,1260,0)`, with actual HOG ground attachment resolving height. Section 22 now deliberately migrates interior occupancy to ROOM-object IDs with null interior coordinates. The legacy doorway geometry remains exterior access data; interior placement means ROOM membership, not terrain sampling.
 
 Preserve the audited exterior doorway, wall footprint, terrain attachment, and rejection of unsupported configurations. ENTER crosses the real doorway and clears outdoor travel. Inside, reaching accessible contents or the exit does not require coordinate walking. EXIT still performs the authoritative transition to the exterior doorway, respecting door access. Existing interior radius/reach checks must be reconciled with this rule, not preserved as hidden restrictions.
 
-Held possessions follow the PC through ENTER/EXIT. A backpack dropped indoors becomes directly placed in that ROOM; its children remain parented to it. Leaving the ROOM moves the PC, not the dropped backpack. Existing `Space`/`Portal` storage can support this integration without creating separate cabin and door OBJECTS.
+Held possessions follow the PC through ENTER/EXIT. A backpack dropped indoors becomes directly placed in that ROOM; its children remain parented to it. Leaving the ROOM moves the PC, not the dropped backpack. The cabin is now a DWELLING OBJECT; `Space`/`Portal` retain its reviewed exterior geometry and door state. A separate door OBJECT is not required by this POC.
 
 **LOCKED DROP:** outdoors, leave the item at the dropper's feet on the supported surface in the current SPACE, using authoritative position at the transfer boundary. Indoors, leave it in the current ROOM; flavor text may say “at your feet” without creating an intra-room positioning requirement. DROP itself does not stop continuous travel. Unsupported outdoor placement, including unsupported water-object contexts, fails with the item still held.
 
@@ -676,3 +676,74 @@ Capitalize the description's beginning and place its period before the parenthes
 location, with no punctuation after the closing parenthesis. Distances below half
 a foot display `(here)`; other distances use rounded feet and an absolute compass
 abbreviation. This changes Nearby, not the clockwise geographic survey.
+
+
+## 22. Pioneer Cabin ROOM-object POC (2026-10-01)
+
+A dwelling **owns** ROOM objects; PCs, MOBs and ordinary objects **occupy** ROOMs.
+The cabin is a WorldObject linked one-to-one to its exterior Space. Owned ROOM
+WorldObjects reference that dwelling object and have typed ROOM data. Character,
+MOB and object `room_id` references point to ROOM objects, never exterior Spaces.
+The Python `space_id` compatibility spelling aliases `room_id` for occupants; it
+is not a second stored location. Portal/GroundPlacement Space references still
+mean exterior geometry.
+
+Placement is exclusive: outdoors has coordinates; indoor membership and owned
+ROOM placement have no X/Y/Z or chunks. Held/embedded items inherit their physical
+parent's location. Resolve immediate ROOM context separately from the dwelling's
+outdoor anchor. Common exterior coordinates never grant cross-ROOM access.
+
+ROOM infrastructure is quantity one, non-portable and excluded from ordinary
+handling, Craft inputs/outputs, timed morphs and ordinary creation. Existing fixed
+ROOM/dwelling objects cannot be moved, reparented, morphed, consumed or deleted
+through ordinary lifecycle operations. Specialized prototypes are not editable in
+the current Object Builder. No ROOM Builder or BUILD CABIN is added.
+
+LOOK, GET, DROP, inspection and ordinary physical outputs use current ROOM
+membership, with no 15-foot radius. Accessible ROOM candidates display `(here)`;
+stable identity breaks their equal-distance ties. Multiple PCs and MOBs can occupy
+the same ROOM. SAY is room-wide; different ROOMs do not hear each other merely
+because they share a dwelling. The existing open-door speech path is limited to
+the entry ROOM and real exterior doorway. Indoor MOB scope is occupancy, LOOK,
+admin LOAD/FIND; THROW/combat remains outdoors-only.
+
+The Pioneer Cabin owns Main Room, Bedroom and Loft. Main Room `north` leads to
+Bedroom in one real second; Bedroom `south` returns in one second. Main Room `up`
+leads to Loft in two seconds; Loft `down` returns in two seconds. All four cost
+zero stamina. Exterior ENTER reaches Main Room. Only Main Room has EXIT through
+the existing doorway; door state and HOG exterior safety remain authoritative.
+
+ROOM links are directed instance records with exact normalized trigger text,
+destination, integer real-time delay (0–3600 seconds), integer stamina percentage
+(0–100), and optional departure text. Reverse links are independently authored.
+There is no link-count/directional-column limit. Direction abbreviations normalize
+to full direction triggers. Other phrases are exact, bounded text, not scripts.
+Core verbs are protected; Craft and ROOM-link authoring reject alias collisions.
+Unmatched indoor movement never falls through to HOG coordinate travel.
+
+A small session-local pending transition echoes departure, waits without blocking
+input, revalidates the link/source and character ROOM revision, then atomically
+changes membership and deducts the configured percentage of maximum stamina.
+Concurrent completions cannot double-charge. Arrival calls ordinary LOOK directly.
+LOOK/SAY leave pending travel intact. A conflicting physical/movement command,
+including STOP, automatically cancels it before executing. Disconnect/restart
+cancels without cost, leaving the PC in the source ROOM. No HOG movement, distance
+credit, persistent scheduler or world-time multiplier participates.
+
+FIND extends its existing SQL parent resolution through occupants, ROOM ownership
+and dwelling anchors. Results include ROOM and dwelling context. ROOM infrastructure
+is omitted from ordinary OLIST/FIND results. JUMP FIND re-resolves the displayed
+instance and enters its actual containing ROOM, including through held/embedded
+parents, without extracting anything. The owning cabin must retain certified
+exterior attachment. Searches remain cold/read-only and retain existing paging.
+
+Migration `20261001_01` preserves the reviewed footprint, doorway, open state,
+existing PC/object identities and held/embedded relationships. Existing cabin
+occupants/contents move to Main Room and lose obsolete interior coordinates.
+Unknown Space layouts or conflicting direction Craft aliases fail preflight for
+review rather than being guessed. The legacy `pioneer_cabin` ID also identifies
+Main Room for compatibility; the dwelling and other ROOMs get distinct IDs.
+A system-only transactional POC instantiation operation allocates independent
+ROOM/link graphs for another dwelling; it does not grant that exterior HOG approval.
+Existing layouts are not automatically rewritten by prototype edits. Vehicles,
+construction, property systems, indoor combat and full layout authoring remain deferred.

@@ -1,68 +1,80 @@
 ---
 title: Current status
-description: Simple admin wildcards and audited legacy ground seed correction.
-reviewed: 2026-09-30
+description: Pioneer Cabin as a DWELLING OBJECT with owned coordinate-free ROOMs.
+reviewed: 2026-10-01
 nav: status
 permalink: /CCMud/status.html
 ---
 
 ## Current bounded phase
 
-Admin OLIST, MLIST, FIND O and FIND M accept `*` for any sequence of characters.
-`*` alone explicitly requests all matches. Existing catalog limits, the bounded
-20-result FIND pager, retained displayed numbers and current-location JUMP FIND
-remain intact. Other pattern characters remain literal. See the
-[command contract](commands.html#prototype-discovery-and-loading).
+The Pioneer Cabin ROOM-object POC is implemented. The cabin is a DWELLING OBJECT
+owning Main Room, Bedroom and Loft. Space/Portal retain reviewed exterior geometry
+and door state; they no longer own interior occupancy. PCs, MOBs and objects use
+ROOM membership with null indoor coordinates. Held/embedded identity is preserved.
 
-## Ground-object investigation and correction
+Main Room north ↔ Bedroom south takes one real second. Main Room up ↔ Loft down
+takes two seconds. All four links cost zero stamina. Only Main Room can EXIT to
+the real exterior doorway. Exact directed links use a small session-local pending
+transition, not HOG movement. LOOK/SAY preserve it; conflicting commands cancel it
+automatically. Disconnect/restart cancels without cost. Arrival revalidates, commits
+membership/stamina exactly once and calls normal LOOK directly.
 
-Thomas supplied a read-only DEV database audit on September 30. Exactly two
-outdoor, unparented objects lacked ground attachments: the original weathered
-iron lantern and worn woodsman's axe. Both retained their original stable IDs,
-quantity one, absolute (0,0,0), chunks (0,0), portability and empty morph schedules.
-The axe also retained its tool capability. These were flat-world seed placements;
-the later opt-in ground-attachment migration deliberately did not convert them.
+Same-ROOM perception/handling and speech do not use outdoor range. Other ROOMs'
+contents remain inaccessible. Multiple PCs and MOBs can occupy a ROOM. Fixed
+infrastructure cannot be ordinarily handled, consumed, morphed or deleted, and
+system instantiation gives each dwelling independent ROOM/link identities.
+FIND follows nested parents into ROOMs and reports ROOM/dwelling context; JUMP FIND
+enters the actual containing ROOM without moving the target. Indoor MOB combat
+remains excluded. See the [governing POC contract](objects.html#22-pioneer-cabin-room-object-poc-2026-10-01).
 
-FIND correctly reported their horizontal locations. Ordinary perception correctly
-rejected their absolute Z=0 against the actual HOG ground elevation. This was
-legacy seed data, not a Nearby, targeting, capability, chunk or morph regression.
+## Persistence and migration
 
-Migration `20260930_08` deliberately adds zero-offset ordinary ground attachments
-only to those exact seed identities/prototypes while all original placement and
-state guards still match. It preserves identity and stored coordinates. Moved,
-held, ROOM, embedded, changed-quantity, morphed, scheduled, removed or already
-attached seeds are skipped. Unrelated absolute placements remain absolute.
-No runtime observation repairs data, no perception/access rule is relaxed, and no
-missing object is respawned. Rollback requires a reviewed data migration rather
-than stripping valid attachments. The read-only audit SQL is retained privately
-at `scripts/audit_ground_objects.sql`.
+Migration `20261001_01` preserves applicable cabin occupants/object identities,
+held/embedded relationships, exterior footprint and door state. Existing cabin
+occupants/contents become Main Room members; their obsolete indoor coordinates
+are cleared. Unknown exterior Space layouts or conflicting up/down Craft aliases
+fail preflight for review. No automatic repair, respawn or deletion of possessions
+is introduced. ROOM/dwelling prototypes stay outside the ordinary Object Builder.
+
+The cabin's existing HOG attachment checks remain in force, including reviewed
+root/entry ownership. A second system-instantiated layout does not gain automatic
+HOG placement approval. There is no ROOM Builder, BUILD CABIN, vehicle, dungeon,
+property or indoor combat implementation.
 
 ## Verification
 
-Implementation: [cb3ebcd](https://github.com/twpaige/Crown-Call/commit/cb3ebcdd14ef979cdc65e0aa183b98e31eb3110c), committed and pushed to main.
+Implementation: [b6e70bf](https://github.com/twpaige/Crown-Call/commit/b6e70bf041f66dd6da647308768b9615e8c82cff), committed and pushed to main.
 
-- Admin search/loading and FIND/JUMP FIND: **33 passed**, one existing dependency
-  warning, 36.89 seconds. Includes wildcard patterns, literal SQL/pattern characters,
-  cold searches, bounded paging, retained numbers, parent locations and re-resolution.
-- Legacy placement, Hunting Knife and targeting: **32 passed**, one existing
-  warning, 55.16 seconds. Reproduces hidden absolute seeds on real DEV HOG terrain
-  and verifies migration guards and normal perception/GET afterward.
-- Final migration regression file: **11 passed**, one existing warning, 26.62
-  seconds, including an explicit successful APPROACH assertion. Final expanded
-  MLIST wildcard assertions also passed in a focused three-test run.
-- Changed-file Ruff and diff checks passed. Counts overlap. No full suite ran.
+Focused POC and directly affected checks covered:
 
-Tests use isolated SQLite and real/synthetic HOG fixtures. The supplied live audit
-establishes DEV data state; PostgreSQL migration execution and post-correction
-live gameplay have not yet been verified.
+- migration identity/placement preservation and rejection of altered geometry;
+- separate dwelling ownership, room isolation, multiple PCs/MOBs, GET/DROP and restart;
+- delayed links, automatic cancellation, disconnect, link edits and concurrent
+  completion with one stamina charge;
+- infrastructure lifecycle/Craft/morph guards and trigger conflicts;
+- real HOG doorway/collision/attachment, nested FIND/JUMP and reconnect;
+- actual WebSocket deadline-driven arrival, normal destination LOOK and room speech;
+- existing cabin, world, FIND paging/parent chains, outdoor THROW/knife handling,
+  indoor Craft/morph and historical migrations.
 
-## Deployment state and next action
+Successful targeted runs included 13 POC/indoor checks, 20 WebSocket/handling
+checks, and 20 lifecycle/legacy-migration checks; counts overlap. The initial
+cabin/world/FIND run passed 55 cases; its stale fixture/assertion failures were
+corrected and checked separately. Final bounded check: **6 passed** in 3.12 seconds (delay/cancellation, independent ownership, concurrent
+arrival, WebSocket deadline, migration), followed by the final indoor-scope check
+(**1 passed** in 1.13 seconds).
+Changed-file Ruff, whitespace and a single Alembic head were checked. No full
+suite was run. Tests use isolated SQLite; PostgreSQL migration execution and live
+server behavior remain unverified. The existing Starlette/httpx warning remains.
+
+## Deployment and next action
 
 No DEV/PROD deployment, migration or restart was performed. Thomas controls FAST
-DEV playtesting and full checkpoints. The normal updater will apply the guarded
-seed-data migration when this revision is deployed. Afterward, check LOOK,
-APPROACH and GET for the lantern/axe at Origin, plus wildcard searches and FIND
-paging/JUMP FIND. No additional database output is needed from the completed audit.
-
-Existing prototype loading, hands, ROOMs, Craft/morph systems and broader gameplay
-contracts remain unchanged. Parked Builder/content work remains deferred.
+DEV playtesting and full checkpoints. After deployment, check ENTER CABIN, north,
+south, up, down, cancellation, EXIT and two-player ROOM visibility/speech, then
+FIND/JUMP FIND for an indoor object. The updater applies the committed migration.
+This migration changes indoor storage; reverting the binary alone cannot restore
+the former schema. Database rollback requires a reviewed restoration/data migration.
+Use `sudo cc-update dev --fast <commit>` for iteration or
+`sudo cc-update dev <commit>` for the deliberate full-verification checkpoint.
