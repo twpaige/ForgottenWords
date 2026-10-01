@@ -1,6 +1,6 @@
 ---
 title: Current status
-description: Reusable DWELLING prototypes, atomic LOAD and shared doorway state.
+description: GUI ROOM-template authoring with persistent drafts and explicit validation for use.
 reviewed: 2026-10-01
 nav: status
 permalink: /CCMud/status.html
@@ -10,9 +10,15 @@ permalink: /CCMud/status.html
 
 Object Builder now offers **Dwelling prototypes** alongside ordinary prototypes
 and existing ROOM/dwelling instance forms. A reusable definition contains appearance,
-5–100-foot rectangular dimensions, one south entrance, entry local key and ROOM text
-graph. Draft validation/application creates nothing; Save stores the prototype.
-Template edits affect future instances only.
+5–100-foot rectangular dimensions, one south entrance, entry local key and ROOM
+graph. Interior Rooms now provides Add/Edit/Remove, bulk blank-room creation and
+compact ROOM/link/door forms with named destination dropdowns. Text import/export
+is optional and uses the same template. Template edits affect future instances only.
+
+Save draft persists incomplete rooms, descriptions, links and missing entry for later
+sessions. Validate for Use runs the existing complete server validator; Save usable
+prototype revalidates and persists usability. Drafts cannot LOAD. Neither form edits
+nor template Save creates live objects. The main editor and room dialog fit 1280×720.
 
 Admin `LOAD O <dwelling_prototype>` outdoors transactionally creates independent
 root/ROOM objects, links, door states, entry, Space/Portal geometry and virtual key
@@ -31,6 +37,9 @@ and [commands](commands.html#reusable-dwellings-and-doors).
 
 ## Persistence and boundaries
 
+Migration `20261001_04` adds saved Draft/Usable status and preserves existing validated
+templates as usable. It changes no live instance state.
+
 Migration `20261001_03` adds template storage, Space origin/placement identity,
 shared door state and side controls, and persistent key grants. It preserves legacy
 Pioneer Cabin door state, ROOM identities and occupants. Existing command collisions
@@ -44,33 +53,32 @@ property or deployment/publishing framework was added.
 
 ## Verification
 
-Implementation: [7d8214a](https://github.com/twpaige/Crown-Call/commit/7d8214afa73e527247279cae0444bce98f1a533a), committed and pushed to main.
+GUI/draft implementation: [8f9b559](https://github.com/twpaige/Crown-Call/commit/8f9b559ace0c214546c71b9cfbf3dea08222591a), committed and pushed to main.
 
-Focused dwelling and admin LOAD tests: **27 passed** in 9.14 seconds. Coverage includes
-prototype validation/revisions/authorization, two independent graphs, asymmetric
-shared doors, loader keys, restart persistence, failed-creation rollback, unsafe
-placement, actual APPROACH ticks, entry/exit and legacy-preserving migration.
+Focused existing dwelling tests: **12 passed**. Draft/API, migration and affected
+ROOM Builder regressions: **30 passed** in 9.70 seconds. The strengthened final
+four-room save/reopen/validate/LOAD and round-trip tests: **2 passed** in 2.02 seconds.
+Counts overlap. Coverage includes incomplete-draft LOAD refusal, server validation
+on usable Save, revision conflicts, four independent instantiated ROOMs, changing
+a template back to draft without affecting an existing dwelling, and preserving
+previous usable templates during migration.
 
-Direct ROOM/instance Builder/HOG cabin regressions were run; the indoor door lookup
-was corrected to honor coordinate-free ROOM occupancy. Nearby cabin expectations
-now use its authored name instead of a hard-coded label. Failed cases were rerun
-successfully. Final targeted dwelling/entry, nested FIND/JUMP FIND, HOG structure,
-regional APPROACH and help checks: **6 passed** in 20.24 seconds. Test counts overlap.
+Three shipped-HTML browser harnesses pass: the full GUI-only four-room workflow,
+existing ROOM form/import behavior and existing Craft/Object forms. The new browser
+check covers bulk creation, reopen, room/link/door editing, named destinations, entry,
+Validate for Use, draft/usable Save, text import/export, removal/cancel, revision
+errors and compact 1280×720 layout. Changed-file Ruff, whitespace checks and single
+Alembic head pass. **No full suite run.**
 
-Three shipped-HTML browser harnesses pass: existing Craft/Object forms, ROOM form/
-import behavior, and the new dwelling prototype draft/review/save interface. The
-prototype editor fits 1280×720 without page scrolling. Changed-file Ruff, whitespace
-checks and the single Alembic head pass. **No full suite run.**
-
-Tests use isolated SQLite, synthetic HOG ground plus existing real-seed cabin
-regressions, and mocked browser HTTP responses with separate Python API tests.
-PostgreSQL migration execution and live DEV behavior are not verified. Existing
-Starlette/httpx deprecation warning remains.
+Tests use isolated SQLite and mocked browser HTTP responses with separate Python
+API tests. PostgreSQL migration execution and live DEV behavior remain unverified.
+Existing Starlette/httpx deprecation warning remains. The previous reusable dwelling
+runtime is preserved; no HOG placement, travel, door/key/bar or occupancy redesign.
 
 ## Deployment and next action
 
 No DEV/PROD deployment, live migration or restart performed. Thomas controls FAST DEV
 and full verification checkpoints. After deployment, create a dwelling prototype,
-LOAD it at two clear level outdoor sites, and playtest entrance/ROOM door controls.
-The loader receives that instance's configured keys. Use FULL DEV for a milestone
-checkpoint after focused live testing.
+use Add Rooms → Create, Save draft and reopen it. Edit the rooms/links, select entry,
+Validate for Use and Save, then LOAD it. Text import is not required. Existing usable
+templates remain loadable and existing dwelling instances retain their state.

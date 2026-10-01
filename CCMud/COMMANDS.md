@@ -309,8 +309,11 @@ layout; builders may deliberately edit its links and entry ROOM through this API
 ### Reusable dwellings and doors
 
 Builder → Objects → **Dwelling prototypes** creates reusable definitions. Set
-footprint/entrance controls and ROOM text, Validate & review → Use reviewed graph,
-then Save. This writes only a prototype. An admin may `LOAD O frontier_cabin` at
+footprint/entrance controls, then use Interior Rooms → Add Room or Add Rooms → Create.
+Edit ROOM descriptions and links through forms, choose the entry, then Validate for
+Use → Save usable prototype. Save draft keeps unfinished work across sessions and
+blocks LOAD until validated and saved. Import Rooms / Export Rooms are optional
+text tools operating on the same graph. This writes only a prototype. An admin may `LOAD O frontier_cabin` at
 one certified dry, level outdoor site, then again elsewhere. Each instance owns
 fresh ROOMs/links/doors. Future prototype edits leave existing instances unchanged.
 The south entrance is at the loader's feet; the footprint extends north.

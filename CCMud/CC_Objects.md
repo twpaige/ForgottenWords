@@ -874,8 +874,10 @@ only, not ordinary Object or MOB template/import systems, or DEV→PROD publishi
 This extends the instance authoring in section 23. Objects → **Dwelling prototypes**
 creates reusable definitions; Rooms/Dwellings still edit selected live instances.
 The compact template editor provides identity, descriptions, weight, width/depth,
-one exterior entrance, side controls, and the existing human-readable ROOM text.
-Validate & review → Use reviewed graph changes an unsaved draft. **Save creates no
+one exterior entrance, side controls, and an **Interior Rooms** GUI. Add Room or
+Add Rooms → Create adds unsaved template entries; Edit opens normal ROOM fields and
+compact link controls with named destination dropdowns. Choose the entry ROOM in
+the main form. Text import/export remains an optional power tool. **Save creates no
 instance.** Template text replaces the draft graph; instance imports retain the
 merge behavior in section 23. Server authorization, strict validation and revision
 comparison govern both APIs, including future CCAI callers.
@@ -969,3 +971,41 @@ remain fixed infrastructure: no ordinary taking, moving, consuming, morphing,
 deleting or reparenting. BUILD CABIN, multiple entrances, indoor combat, windows,
 door damage, vehicles, template upgrades and deployment/publishing systems remain
 out of scope.
+
+
+### GUI template drafts and validation
+
+The Interior Rooms list supports Add, Edit and Remove. Bulk creation makes unused
+local keys `room_1`, `room_2`, etc. with names `Room 1`, `Room 2`, etc.; descriptions
+start blank. ROOM forms include local key, name, keywords, ground/short descriptions,
+weight and full description. Link rows expose trigger, named destination, delay,
+stamina, departure and existing shared door/side controls. Applying a ROOM edits
+only the unsaved template. Changing its key updates local entry/link references.
+Removing a template ROOM unsets entry/incoming destinations that referred to it;
+this never deletes a live ROOM. Existing live-instance deletion restrictions remain.
+
+**Save draft** persists unfinished work for later sessions. A draft may have zero
+ROOMs, no entry, blank descriptions or incomplete links. Shape, field-size/numeric
+bounds, unique valid local ROOM keys and revision protection still apply. It cannot
+be instantiated. No parallel graph format exists: GUI and text tools use the same
+stored definition, with draft validation followed by the existing complete validator.
+
+**Validate for Use** runs the complete server validator without saving. On success,
+**Save usable prototype** persists the definition and usable status together, after
+revalidating on the server. Subsequent GUI edits mark the draft unvalidated again;
+save it as draft or validate it again. Merely validating without saving does not
+change what LOAD may use. Usable retains the existing validator's rules; this does
+not introduce a new reachability or mandatory-link rule.
+
+**Import Rooms** opens the optional text review dialog, then applies reviewed ROOMs
+to the unsaved draft. **Export Rooms** downloads the current complete ROOM graph,
+including unsaved GUI edits; incomplete graphs must be completed before text export.
+Use Save draft to retain unfinished work. Complete GUI-authored graphs round-trip
+through the existing text format, including local door identities. No UUID entry
+or text import is needed for ordinary GUI creation.
+
+The template catalog/API returns `usable`. Saves default to draft unless usable is
+explicitly requested and complete validation succeeds. Migration `20261001_04`
+preserves previously validated templates as usable and defaults new rows to draft.
+Changing a prototype back to draft blocks new LOADs but never alters previously
+instantiated dwellings or their ROOMs, links, doors and occupants.
