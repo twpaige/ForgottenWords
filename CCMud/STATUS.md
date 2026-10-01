@@ -53,6 +53,14 @@ property or deployment/publishing framework was added.
 
 ## Verification
 
+Catalog follow-up: [fd5ccd8](https://github.com/twpaige/Crown-Call/commit/fd5ccd80ecba561171bb642738b1f2dc9c1e39d7)
+hides internal DWELLING appearance snapshots from OLIST using capability/template
+relationships. Stable draft/usable template IDs remain visible. No data/schema or
+instance-reference changes. **17 focused tests passed** in 7.22 seconds, covering
+catalog/LOAD behavior, validation identity preservation and independent instances;
+changed-file Ruff and whitespace checks passed. Live DEV rows were not queried.
+
+
 GUI/draft implementation: [8f9b559](https://github.com/twpaige/Crown-Call/commit/8f9b559ace0c214546c71b9cfbf3dea08222591a), committed and pushed to main.
 
 Focused existing dwelling tests: **12 passed**. Draft/API, migration and affected

@@ -889,6 +889,13 @@ geometry and virtual key grants. Failure rolls back everything. Template-local
 ROOM/door keys resolve only within that instance; no reverse links are inferred.
 Existing instances never acquire later template edits. Their descriptive prototypes
 are isolated snapshots, while Space records the reusable source prototype identity.
+These internal `auth_<uuid>` ObjectPrototype rows are referenced by live dwelling/
+ROOM objects; they are not extra draft or usable template identities. Validate for
+Use writes nothing, and Save updates the existing stable prototype ID. OLIST hides
+ROOM definitions and DWELLING definitions lacking a reusable template, including
+internal snapshots and legacy non-loadable dwelling definitions. Draft and usable
+reusable templates retain their human-controlled catalog IDs. Snapshot LOAD remains
+forbidden; no deletion/merge is needed to correct catalog visibility.
 
 ### Bounded exterior placement
 

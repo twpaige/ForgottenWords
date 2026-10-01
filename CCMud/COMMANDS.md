@@ -115,7 +115,10 @@ the ordinary creation hook to capture their lifecycle deadlines. Specialized
 `corpse` instances require the normal death process and cannot be loaded directly.
 ROOM/dwelling infrastructure uses validated web Builder authoring. LOAD O accepts
 a reusable DWELLING prototype outdoors and atomically creates its complete owned
-ROOM graph and single entrance; it cannot create orphan ROOMs or incomplete dwellings. ROOM prototypes are hidden from OLIST.
+ROOM graph and single entrance; it cannot create orphan ROOMs or incomplete dwellings. ROOM prototypes and internal DWELLING appearance snapshots without reusable templates
+are hidden from OLIST, including the non-loadable legacy Pioneer Cabin definition.
+Reusable DWELLING IDs remain discoverable in both draft and usable states; LOAD
+still refuses drafts. Filtering uses capability/template relationships, not ID prefixes.
 
 `LOAD M rabbit` uses the shared MOB creation function and the authored rabbit
 defaults: athletics 0, severity modifier +2, no wounds, and a new instance UUID.
