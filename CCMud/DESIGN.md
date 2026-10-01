@@ -479,3 +479,32 @@ Current/direction remain data, without forced drift or resistance. No new stamin
 speed, swimming, drowning, boats, bridges or ford mechanics. The exact versioned
 formulas, source/join semantics, limits and live river values are maintained in HOG.
 Ordinary wetlands remain traversable; independent lakes/springs/ravines retain safety rules.
+
+
+## Future Builder approval and PROD publishing lifecycle (2026-10-01)
+
+**Approved future design; not yet implemented.** Authored Builder content such as OBJECTs,
+ROOM/DWELLING templates, MOBs and CRAFTs should eventually use a controlled promotion
+lifecycle between DEV and PROD:
+
+**DRAFT → TESTABLE → APPROVED → PUBLISHED**
+
+Builders may create, edit and test content on DEV. When ready, they submit a specific
+revision for approval. Approval applies to that exact immutable revision, not merely to
+the prototype ID. A higher-authority builder/admin reviews and approves it before it may
+be published to PROD.
+
+Once a revision is approved/published, it is frozen. Further editing creates a new
+working revision which returns to DRAFT/TESTABLE status and must be reviewed and approved
+again before replacing the currently published PROD revision. PROD continues using the
+previous approved revision until the replacement is explicitly published.
+
+This policy is intended to support future role separation such as Builder
+(create/edit/test/submit), Senior Builder/Admin (approve/reject), and Administrator
+(publish/manage exceptional cases). Exact role names and permissions remain future work.
+
+The same revision/promotion model should apply consistently across authored content
+types rather than creating separate approval systems for Objects, ROOM/DWELLING
+templates, MOBs and Crafts. It should integrate with the future selective DEV→PROD
+content-publishing/versioning workflow. No approval UI, PROD publishing pipeline, role
+system or deployment behavior is implemented by this decision.
