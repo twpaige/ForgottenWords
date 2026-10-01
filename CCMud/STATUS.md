@@ -8,6 +8,16 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
+Persistent admin character bookmarks are implemented in
+[cd4c20c](https://github.com/twpaige/Crown-Call/commit/cd4c20c5546e99801de477f76d8d32ae9cde668a):
+MARK, MARKS, UNMARK and JUMP MARK. Names and stable numbers are per-character;
+coordinate marks preserve XYZ, ROOM marks preserve exact ROOM instance identity.
+Existing JUMP certification/ROOM transition authority is reused. Unsupported saved
+heights are refused rather than snapped to surface ground. Migration `20261001_05`
+adds marks and persistent number allocation, without changing existing locations.
+See [the command contract](commands.html#persistent-admin-location-marks).
+
+
 Object Builder now offers **Dwelling prototypes** alongside ordinary prototypes
 and existing ROOM/dwelling instance forms. A reusable definition contains appearance,
 5–100-foot rectangular dimensions, one south entrance, entry local key and ROOM
@@ -52,6 +62,18 @@ upgrades, general Object/MOB import, indoor combat, door damage, windows, vehicl
 property or deployment/publishing framework was added.
 
 ## Verification
+
+Bookmark checks cover replacement, multiple marks, deletion gaps/latest-number
+preservation, concurrent same-name saves, disconnect/restart reads, isolation,
+invalid selectors/admin authorization, coordinate and ROOM jumps by name/number,
+ROOM↔coordinate and ROOM↔ROOM transfers, stale ROOM retention, saved-Z refusal,
+queued deletion revalidation and migration constraints. Focused failures were test
+fixture setup errors and a ROOM-resolution filter corrected to use exact ROOM
+identity before the shared transition path. The final ROOM jump case passes.
+Directly affected JUMP FIND and cold/unsafe coordinate JUMP regressions pass.
+Changed-file Ruff, whitespace checks and single Alembic head pass. No full suite,
+DEV/PROD deployment or live migration. PostgreSQL execution remains unverified.
+
 
 Catalog follow-up: [fd5ccd8](https://github.com/twpaige/Crown-Call/commit/fd5ccd80ecba561171bb642738b1f2dc9c1e39d7)
 hides internal DWELLING appearance snapshots from OLIST using capability/template

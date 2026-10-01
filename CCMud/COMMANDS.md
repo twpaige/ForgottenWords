@@ -332,3 +332,49 @@ key; BAR requires a closed/locked door and side access. The loading admin's char
 receives instance-scoped configured keys. UNLOCK does not remove an inside bar.
 A door closed during delayed travel cancels crossing without stamina charge.
 See [the complete template/door contract](objects.html#24-reusable-dwelling-templates-and-installed-doors-2026-10-01).
+
+
+### Persistent admin location marks
+
+These are per-character bookmarks, separate from future MAP/cartography.
+
+| Command | Behavior |
+| --- | --- |
+| `MARK beautiful_view` | Save current spatial context; reply `Marked beautiful_view.` |
+| `MARKS` | List saved names with persistent numbers, ordered by number. |
+| `UNMARK beautiful_view` or `UNMARK 4` | Delete that character's mark. |
+| `JUMP MARK beautiful_view` or `JUMP MARK 4` | Use existing validated admin JUMP placement. |
+
+Names use 1–40 ASCII letters, numbers or underscores and normalize to lowercase.
+All-digit names are reserved for number lookup; a name must contain a letter or
+underscore. Saving the same normalized name replaces its location and retains its
+number. Numbers belong to the character, survive logout/restart and are never
+renumbered or reused to fill deletion gaps, including deletion of the latest mark.
+Other characters cannot list, use or delete these marks, even on the same account.
+All four commands require administrator authority.
+
+Coordinate marks store **X, Y and Z exactly**. JUMP MARK uses the existing endpoint
+certification, hazard/structure checks and Zone C bounds, including when starting
+inside a ROOM. It does not silently replace saved Z with surface height. The current
+placement authority only certifies supported HOG surface positions; an underground
+or elevated saved Z that it cannot certify is refused, leaving both character and
+mark unchanged. This preserves spatial intent without inventing another teleport
+system. Cold geography uses the existing bounded pending JUMP; STOP cancels it.
+Pending mark jumps re-resolve the mark and permissions before placement.
+
+ROOM marks save the **exact ROOM object instance ID**, not its dwelling's entry or
+outdoor doorway. JUMP MARK shares JUMP FIND's certified ROOM transition, works from
+coordinate space or another ROOM, and renders normal ROOM LOOK. An absent/invalid
+ROOM reports `That marked ROOM no longer exists.` The stale mark remains until
+UNMARK; there is no fallback to coordinates, entry ROOM or Origin.
+
+MARK/MARKS/UNMARK do not cancel pending ROOM travel. MARK during active continuous
+movement checkpoints current travel before recording the location. Jumping stops
+travel through the existing authority. No maps, shared marks, notes, folders, GUI,
+pathfinding or automatic stale-mark cleanup are added.
+
+Migration `20261001_05` stores marks and a per-character monotonic next-number
+counter. A character lock serializes name replacement/number allocation. ROOM IDs
+are intentionally not deletion-cascading references, so stale marks can persist.
+The migration rejects existing authored Craft/ROOM triggers that conflict with
+MARK/MARKS/UNMARK before changing schema.
