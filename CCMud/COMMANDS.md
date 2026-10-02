@@ -288,7 +288,8 @@ not cancel the delay. STOP or a conflicting physical/movement command cancels it
 automatically; disconnect/restart also cancels without cost. ROOM contents use
 membership rather than distance; nearby accessible contents show `(here)` and
 ordinal ties use stable identity. Other ROOMs' contents remain inaccessible.
-FIND reports nested contents with ROOM/dwelling context; JUMP FIND enters that
+FIND O reports nested contents with ROOM local_key/dwelling context (for example,
+`ROOM bedroom_two, White House`), without the player-facing room name; JUMP FIND enters that
 actual ROOM without moving the target. See the [POC contract](objects.html#22-pioneer-cabin-room-object-poc-2026-10-01).
 
 

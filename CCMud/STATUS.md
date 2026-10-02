@@ -8,6 +8,25 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
+Admin/builder room-key improvements are implemented in
+[1cd150a](https://github.com/twpaige/Crown-Call/commit/1cd150abaf222dacd042cb5c0f305707af3fb1ba).
+Dwelling instance/template scrolling room lists sort by local key and filter live
+by case-insensitive key substring, entirely client-side; clearing restores all
+rooms without editing the graph. FIND O uses the room local key instead of its
+player-facing name, preserving dwelling context and JUMP FIND identity resolution.
+The authoritative [dwelling constraint](objects.html#locked-architectural-constraint-no-nested-dwellings)
+now explicitly prohibits nested or ROOM-hosted dwellings permanently. Authored
+building interiors in Origin remain ROOMs of the single HOG-anchored Origin dwelling.
+
+Verification: **45 passed**, one existing dependency warning, 39.51 seconds
+(`tests/test_admin_find.py tests/test_room_builder.py`). Both headless Edge browser
+checks (`builder_dwelling_templates.cjs`, `builder_rooms.cjs`) passed, including a
+123-room list, sorted keys, live case-insensitive filtering, clearing, scroll
+retention, correct filtered editing and no filter-triggered save. Changed-file
+Ruff and diff checks passed. Initial implementation/test-setup failures were
+corrected before these final passes. No full suite, schema migration or game
+deployment was performed for this update.
+
 Persistent admin character bookmarks are implemented in
 [cd4c20c](https://github.com/twpaige/Crown-Call/commit/cd4c20c5546e99801de477f76d8d32ae9cde668a):
 MARK, MARKS, UNMARK and JUMP MARK. Names and stable numbers are per-character;

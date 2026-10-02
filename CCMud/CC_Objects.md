@@ -680,6 +680,22 @@ abbreviation. This changes Nearby, not the clockwise geographic survey.
 
 ## 22. Pioneer Cabin ROOM-object POC (2026-10-01)
 
+### Locked architectural constraint: no nested dwellings
+
+**A dwelling may NEVER exist inside a ROOM or inside another dwelling.**
+This is an intentional architectural prohibition, not deferred functionality.
+Dwellings remain anchored to the continuous HOG world. Dwelling-within-dwelling,
+legacy-ROOM-hosted instances, ROOM-anchored dwellings and recursive dwelling
+containment are prohibited through every creation and placement mechanism.
+
+A large authored area such as Origin is one dwelling. Shops, inns, houses,
+churches and other building interiors represented with legacy ROOMs are additional
+ROOMs owned by that same Origin dwelling, not separate dwelling instances.
+Local keys organize them for builders/admins: `MAIN_01`, `MAIN_02`, `SSS_MAIN`,
+`SSS_STORAGE`, `SSS_WORKSHOP`, `BB_DINING`, `BB_KITCHEN`. Normal room names remain
+player-facing. Existing legacy-room doors, locks and links connect street rooms
+to building interiors; they do not require additional dwelling instances.
+
 A dwelling **owns** ROOM objects; PCs, MOBs and ordinary objects **occupy** ROOMs.
 The cabin is a WorldObject linked one-to-one to its exterior Space. Owned ROOM
 WorldObjects reference that dwelling object and have typed ROOM data. Character,
@@ -874,13 +890,20 @@ only, not ordinary Object or MOB template/import systems, or DEV→PROD publishi
 This extends the instance authoring in section 23. Objects → **Dwelling prototypes**
 creates reusable definitions; Rooms/Dwellings still edit selected live instances.
 The compact template editor provides identity, descriptions, weight, width/depth,
-one exterior entrance, side controls, and an **Interior Rooms** GUI. Add Room or
+one exterior entrance, side controls, and an **Interior Rooms** GUI.
+The scrolling room lists in dwelling instance/template editors sort alphabetically
+by local key and filter live by case-insensitive local-key substring. Clearing
+the filter restores all rooms. Filtering is client-side presentation only; no
+folders, categories, pagination, graph edits or hierarchy are introduced. Add Room or
 Add Rooms → Create adds unsaved template entries; Edit opens normal ROOM fields and
 compact link controls with named destination dropdowns. Choose the entry ROOM in
 the main form. Text import/export remains an optional power tool. **Save creates no
 instance.** Template text replaces the draft graph; instance imports retain the
 merge behavior in section 23. Server authorization, strict validation and revision
 comparison govern both APIs, including future CCAI callers.
+
+The [no-nested-dwellings constraint](#locked-architectural-constraint-no-nested-dwellings)
+is permanent: no dwelling can be hosted by any ROOM or another dwelling.
 
 `LOAD O <dwelling_prototype_id>` requires an admin outdoors on dry land. Each LOAD
 is a new creation request. One transaction creates the dwelling root, fresh owned
