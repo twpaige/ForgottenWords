@@ -775,8 +775,11 @@ and dwellings are authored **instances**, not spawnable ordinary prototypes.
 Choose a dwelling/exterior association, then its ROOM. Under Objects → Rooms,
 the existing room selector displays local keys, sorted alphabetically ignoring
 case. Its adjacent live filter matches local-key substrings only; clearing restores
-the complete sorted dropdown. Filtering does not switch the edited ROOM or discard
-unsaved edits; select a result to switch. Room names remain player-facing. Compact forms expose name,
+the complete sorted dropdown. While filtering, the existing selector expands to
+show up to six choices with scrolling for additional matches. Exactly one match
+automatically opens that ROOM through the normal room-switch handler; multiple
+matches require selection. Switching retains unsaved edits in the draft and never
+automatically saves. No matches leave the current editor intact. Room names remain player-facing. Compact forms expose name,
 keywords, ground/short descriptions, ROOM LOOK description, and directed links.
 Each link has an exact trigger, destination ROOM dropdown, real seconds, percentage
 of maximum stamina, and optional departure text. Add/remove link rows explicitly;

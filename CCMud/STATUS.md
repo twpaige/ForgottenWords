@@ -8,11 +8,20 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
+ROOM filter interaction follow-up: [19a2915](https://github.com/twpaige/Crown-Call/commit/19a2915b2b5165757e3de2b8e8b21055794e7a11)
+expands the existing selector while typing (up to six visible choices), opens a
+sole match using the existing room-switch handler, and leaves multiple matches
+for explicit selection. Clearing restores the full sorted dropdown. Unsaved edits
+remain in the draft; filtering never saves. Both relevant headless Edge browser
+checks passed, including visible option clicking, focus retention, automatic sole
+selection, multiple/no matches, clearing and unsaved-edit preservation. Changed-file
+Ruff and diff checks passed. No runtime/schema/loading/architecture changes or deployment.
+
 ROOM-selector correction: [cde95d1](https://github.com/twpaige/Crown-Call/commit/cde95d192e69e01b695e9a632f1401fa9a153408)
 updates the existing Objects → Rooms dropdown to show local keys, sorted
 case-insensitively, with an adjacent live local-key substring filter. Clearing
-restores all options. Filtering preserves the current editor and unsaved changes;
-selecting a result uses the existing room-switch handler. Room names, LOOK,
+restores all options. The subsequent interaction follow-up above adds sole-match selection and visible
+choices while retaining the existing room-switch handler. Room names, LOOK,
 FIND O and dwelling architecture are unchanged. Both relevant headless Edge checks
 (`builder_rooms.cjs`, `builder_dwelling_templates.cjs`) passed, covering mixed-case
 prefix sorting, name exclusion, no matches, clearing, selection and unsaved edit
