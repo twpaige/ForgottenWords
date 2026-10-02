@@ -1,3 +1,17 @@
+October 2, 2026 - New escape/movement design direction (NOT IMPLEMENTED)
+
+The authoritative new FLEE, Adrenaline Burst, Athletics movement and moving-HIDE
+contract lives in CCMud/DESIGN.md, section "Escape, Athletics movement and moving
+HIDE (2026-10-02)" (published /CCMud/design.html). Read it before older C05/C06
+combat pacing and escape assumptions. It preserves turn-based player control but
+explores faster turns and strongly favors survival in a permadeath world. Older
+detailed turn-based rules below remain historical/alternative material where
+conflicting; no new encounter algorithm or runtime change is implied.
+The new distance examples deliberately use 2x alone, not September 27's 3.5x;
+world-clock/geographic coupling must be resolved before implementation. Current
+TRUDGE base is 1 mph; the new design table proposes 0.85 mph. Legacy 24x movement
+is still implemented. See the linked section for verified stamina and status.
+
 September 28, 2026 - Water Movement v1 accepted and implemented rules
 
 

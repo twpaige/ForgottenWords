@@ -1,12 +1,174 @@
 ---
 title: Game design
 description: The MUD's accepted decisions, preserved in full and separated from tabletop rules.
-reviewed: 2026-09-30
+reviewed: 2026-10-02
 nav: design
 permalink: /CCMud/design.html
 ---
 **Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, MAKE SPIT / GATHER FIREWOOD, the data-driven Craft Engine/web Builder, and compact Object Builder with linear real-time morphs on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
+
+## Escape, Athletics movement and moving HIDE (2026-10-02)
+
+This section owns the new **approved design direction, not implemented mechanics**.
+It takes precedence over conflicting older combat pacing/escape assumptions in
+C05/C06 of the [preserved detailed record](/CCMUD_Design.txt). That record remains
+available as historical/alternative design; its detailed turn machinery is not
+silently replaced by an invented new algorithm.
+
+### Current implementation versus intended behavior
+
+Source inspected at Crown-Call `cfed74d` (`travel.py`, `stamina_recovery.py` and
+server command dispatch): base paces are TRUDGE **1**, WALK 3, JOG 5, RUN 8,
+SPRINT 11 mph. There is no direct ATHLX speed multiplier; ATHLX affects stamina
+and carrying capacity, which can indirectly reduce load slowdown. Geographic
+movement still uses the hardcoded combined **24×** factor. Displayed mph omits
+that acceleration. No separate general accelerated world clock, FLEE/Adrenaline
+Burst, post-FLEE Cap suppression, moving HIDE or SNEAK mechanic is implemented.
+The bounded rabbit THROW/wound implementation is not a full encounter system.
+
+The following proposal uses TRUDGE **0.85 mph** as a base, not the implemented
+1 mph. Existing 0.85-mph trudging in light woodland is instead 1 × 0.85 terrain
+slowdown; it must not be mistaken for an already changed base pace.
+
+### Faster combat and survival
+
+Combat remains fundamentally turn-based and player-controlled, with much shorter
+decision windows than the older design. It should feel closer to traditional
+MUD automation while retaining chosen meaningful actions, and generally progress
+more slowly than old automated MUD combat. Exact turn duration, timeout behavior
+and engagement/continuous-travel integration remain to be designed; this does not
+authorize an automatic repeat-attack loop.
+
+CCMUD is intended for permadeath and characters may represent months or years of
+investment. Starting a fight should be easy; winning harder; preventing escape
+harder still. Killing someone actively trying to survive should take substantial
+effort, favorable circumstances, persistence or mistakes by the victim. This is
+an escape-biased mechanical design, not a consent barrier against PvP or murder.
+
+### Athletics speed and real-time endurance
+
+Proposed unobstructed physical/displayed speed:
+
+`speed_mph = base_pace_mph × (1 + effective_ATHLX / 20)`
+
+Terrain, grade, load and other applicable movement constraints still matter.
+The table is ideal-condition mph, rounded to two decimal places:
+
+| ATHLX | Multiplier | Trudge | Walk | Jog | Run | Sprint |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | 1.00 | 0.85 | 3.00 | 5.00 | 8.00 | 11.00 |
+| 1 | 1.05 | 0.89 | 3.15 | 5.25 | 8.40 | 11.55 |
+| 5 | 1.25 | 1.06 | 3.75 | 6.25 | 10.00 | 13.75 |
+| 10 | 1.50 | 1.28 | 4.50 | 7.50 | 12.00 | 16.50 |
+| 15 | 1.75 | 1.49 | 5.25 | 8.75 | 14.00 | 19.25 |
+| 20 | 2.00 | 1.70 | 6.00 | 10.00 | 16.00 | 22.00 |
+| 25 | 2.25 | 1.91 | 6.75 | 11.25 | 18.00 | 24.75 |
+| 30 | 2.50 | 2.13 | 7.50 | 12.50 | 20.00 | 27.50 |
+| 35 | 2.75 | 2.34 | 8.25 | 13.75 | 22.00 | 30.25 |
+| 40 | 3.00 | 2.55 | 9.00 | 15.00 | 24.00 | 33.00 |
+
+Current implemented stamina maximum is 20. For ATHLX A, standing recovery is
+`R = (1 + A/10)/15` points per **real second**. Recovery and expenditure are
+integrated together: TRUDGE recovers 0.9R and spends 0.35R (net +0.55R); WALK
+recovers and spends 0.7R (net zero). JOG recovers 0.3R and spends that plus
+`20/[4(5+A)]`; RUN recovers 0.1R and spends that plus `20/[2(5+A)]`.
+SPRINT has no recovery and spends `20/(5+A)` per real second. Thus full-pool
+sprint duration is `5+A` real seconds, while A remains constant. Travel
+acceleration does not multiply these stamina rates.
+
+### Distance calculation convention and clock conflict
+
+**These design examples use 2× travel convenience alone:** displayed 11 mph
+means geographic 22 miles per real hour. They do not use legacy 24× or apply an
+additional world-time multiplier. The earlier September 27 plan separately sets
+world time to 1.75× and derives a combined geographic rate of 3.5×. Its clock
+proposal remains recorded, but that 3.5× calculation is not the convention used
+here. Before implementation, settle whether world-clock scaling contributes to
+geographic movement at all; do not silently multiply these distances by 1.75.
+
+`distance_feet = 11 × (1 + A/20) × (5280/3600) × 2 × (5+A)`
+
+Ideal full-stamina sprint, constant ATHLX, no terrain/load slowdown:
+
+| ATHLX | Sprint mph | Real seconds | Geographic feet (nearest foot) |
+| --- | --- | --- | --- |
+| 0 | 11 | 5 | 161 |
+| 1 | 11.55 | 6 | 203 |
+| 5 | 13.75 | 10 | 403 |
+| 10 | 16.5 | 15 | 726 |
+| 15 | 19.25 | 20 | 1,129 |
+| 20 | 22 | 25 | 1,613 |
+| 25 | 24.75 | 30 | 2,178 |
+| 30 | 27.5 | 35 | 2,823 |
+| 35 | 30.25 | 40 | 3,549 |
+| 40 | 33 | 45 | 4,356 |
+
+At ATHLX 10/20/30/40 this is approximately 0.14/0.31/0.53/0.83 mile.
+ATHLX deliberately compounds speed and endurance, substantially increasing distance.
+
+### Successful FLEE and Adrenaline Burst
+
+A successful FLEE breaks combat engagement and **automatically** triggers flight
+response; there is no separate ADRENALINE command. This applies to qualifying
+encounters with PCs, hostile MOBs (including animals), or other combat threats.
+FLEE is not a teleport or a random jump through several ROOMs. Real movement
+creates separation in continuous geography, subject to its normal constraints.
+
+For **45 real seconds** after success, effective ATHLX is normal ATHLX **+20**
+for movement speed, sprint stamina/endurance and appropriate escape movement.
+It is not a general +20 combat Cap buff. A pursuer gains nothing merely by chasing.
+Normal ATHLX 10 gives 16.5-mph sprint and 15 seconds from full stamina; burst ATHLX
+30 gives 27.5 mph and a 35-second full-pool calculation. Those are conditional
+full-stamina examples, not a stamina refill on FLEE. The effect expires at 45 real
+seconds; a run crossing expiry must no longer use boosted ATHLX afterward.
+
+For **90 real seconds** after successful FLEE, effective **WEAPN = 0 and RANGE = 0**.
+Other Caps are not automatically reduced; **THIEV remains usable** for escape.
+This prevents flight benefits becoming an offensive repositioning exploit such
+as fleeing 100 feet and immediately exploiting boosted positioning for archery.
+Zero Caps do not mean automatic failure of every offensive command. A blanket
+−20 to every Cap was discussed and rejected.
+
+FLEE success creates an opportunity to escape, not guaranteed safety. A fleeing
+player can sprint, break line of sight through terrain, change direction, then
+SNEAK/HIDE. A pursuer may pursue but receives no perfect knowledge of subsequent
+turns after sight is broken. Future TRACK/perception may support reacquisition.
+
+Breaking combat is distinct from escaping a threat: a bear can still pursue.
+Terrain, concealment, distance and eventual loss of interest/motivation may end
+pursuit. MOB pursuit and behavior toward incapacitated characters are deferred.
+Animals must not be documented as always abandoning unconscious victims;
+wilderness encounters retain a genuine possibility of death.
+
+### HIDE while moving and SNEAK
+
+This is the normal proposed moving-HIDE behavior, **not limited to combat**:
+
+`MOVING → HIDE → SEARCHING FOR CONCEALMENT (still moving) → suitable cover → STOPPED/HIDDEN`
+
+HIDE does not stop the character immediately. It acknowledges the search, for
+example, “You begin looking for a suitable place to conceal yourself.” Once an
+appropriate hiding place is found, the character settles into it, stops moving
+and enters the hidden state. Example final prose: “You spot a thick tangle of
+brush beneath the trees, slip into it, and settle out of sight.” Exact prose is
+not fixed; this is not magical invisibility at the command's coordinate.
+
+Dense woodland may offer cover quickly. Brush, broken ground, rocks, ravines and
+structures may help depending on circumstances. Open prairie can require much
+more travel or offer no suitable cover at all. RUN/SPRINT creates distance but is
+conspicuous; SNEAK moves more slowly while attempting not to reveal position;
+HIDE seeks a place to stop and conceal oneself. These complement each other:
+FLEE → burst → SPRINT → break sight → change direction → SNEAK → HIDE/search → conceal.
+
+### Deferred implementation decisions
+
+The direction above does not specify FLEE success rolls, eligibility/retrigger
+or refresh rules, persistence across disconnect/restart, automatic heading/pace
+selection, effects on non-sprint recovery/carrying capacity, or the precise
+concealment search/detection/cancellation algorithm. Combat timing and transition
+rules, stationary HIDE details, and the world-clock/distance coupling also need
+explicit implementation decisions. Do not fill those gaps with invented rules.
 
 ## Bounded Rabbit MOB wounds and corpse (2026-09-30)
 

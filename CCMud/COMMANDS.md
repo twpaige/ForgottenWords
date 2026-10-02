@@ -1,7 +1,7 @@
 ---
 title: Commands
 description: Current CCMUD commands and reviewed legacy command candidates.
-reviewed: 2026-10-01
+reviewed: 2026-10-02
 nav: commands
 permalink: /CCMud/commands.html
 ---
@@ -379,3 +379,14 @@ counter. A character lock serializes name replacement/number allocation. ROOM ID
 are intentionally not deletion-cascading references, so stale marks can persist.
 The migration rejects existing authored Craft/ROOM triggers that conflict with
 MARK/MARKS/UNMARK before changing schema.
+
+## FLEE, moving HIDE and SNEAK: design only (2026-10-02)
+
+These commands are not yet implemented. The [escape and movement design](design.html#escape-athletics-movement-and-moving-hide-2026-10-02)
+owns their approved direction: successful FLEE automatically grants a 45-real-second
+escape ATHLX burst and 90-real-second WEAPN/RANGE suppression; it does not teleport.
+HIDE issued during movement searches for cover while movement continues, then stops
+and conceals when suitable cover is found. SNEAK complements this through slower,
+less conspicuous movement. No separate ADRENALINE command is proposed. See the design
+for exact values, limits, status and unresolved mechanics; these are not current
+player instructions or a replacement encounter implementation.
