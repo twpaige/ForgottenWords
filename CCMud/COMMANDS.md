@@ -380,13 +380,23 @@ are intentionally not deletion-cascading references, so stale marks can persist.
 The migration rejects existing authored Craft/ROOM triggers that conflict with
 MARK/MARKS/UNMARK before changing schema.
 
-## FLEE, moving HIDE and SNEAK: design only (2026-10-02)
+## Combat clock, FLEE, moving HIDE and SNEAK: design only (2026-10-02)
 
-These commands are not yet implemented. The [escape and movement design](design.html#escape-athletics-movement-and-moving-hide-2026-10-02)
-owns their approved direction: successful FLEE automatically grants a 45-real-second
-escape ATHLX burst and 90-real-second WEAPN/RANGE suppression; it does not teleport.
-HIDE issued during movement searches for cover while movement continues, then stops
-and conceals when suitable cover is found. SNEAK complements this through slower,
-less conspicuous movement. No separate ADRENALINE command is proposed. See the design
-for exact values, limits, status and unresolved mechanics; these are not current
-player instructions or a replacement encounter implementation.
+These mechanics are not yet implemented. The [current combat design](design.html#rapid-combat-clock-current-intended-design)
+owns the shared 15-second Action/15-second Preparation clock, one action per round,
+phase-start simultaneous consequences and group friendly-fire confirmation.
+HIT does not repeat automatically. Preparation queues the next action; another
+valid action replaces it and **X cancels it, not STOP**.
+
+[Combat pins](design.html#combat-pins-and-tactical-movement) restrict tactical
+movement geographically. [Successful FLEE](design.html#successful-flee-tactical-time-exemption-not-a-stat-burst)
+releases that restriction without teleportation or special ATHLX/speed/endurance
+bonuses. WEAPN/RANGE/AGGRESSION become 0/0/−10; recovery requires five uninterrupted
+real minutes outside every active pin. There is no FLEE cooldown. The prior +20
+ATHLX burst and 90-second suppression are superseded. These are intended commands,
+not claims that the encounter system or FLEE is running today.
+
+Moving HIDE still searches for cover while movement continues, then stops and
+conceals when suitable cover is found. SNEAK complements this through slower,
+less conspicuous movement. See the [movement design](design.html#hide-while-moving-and-sneak)
+for the retained proposal and unresolved mechanics.

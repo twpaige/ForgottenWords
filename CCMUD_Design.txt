@@ -1,16 +1,19 @@
-October 2, 2026 - New escape/movement design direction (NOT IMPLEMENTED)
+October 2, 2026 - Current combat clock, pins and FLEE design (NOT IMPLEMENTED)
 
-The authoritative new FLEE, Adrenaline Burst, Athletics movement and moving-HIDE
-contract lives in CCMud/DESIGN.md, section "Escape, Athletics movement and moving
-HIDE (2026-10-02)" (published /CCMud/design.html). Read it before older C05/C06
-combat pacing and escape assumptions. It preserves turn-based player control but
-explores faster turns and strongly favors survival in a permadeath world. Older
-detailed turn-based rules below remain historical/alternative material where
-conflicting; no new encounter algorithm or runtime change is implied.
-The new distance examples deliberately use 2x alone, not September 27's 3.5x;
-world-clock/geographic coupling must be resolved before implementation. Current
-TRUDGE base is 1 mph; the new design table proposes 0.85 mph. Legacy 24x movement
-is still implemented. See the linked section for verified stamina and status.
+CCMud/DESIGN.md, "Escape, Athletics movement and moving HIDE (2026-10-02)"
+(published /CCMud/design.html), owns the current design. Shared 30-real-second
+rounds comprise 15-second Action and 15-second Preparation, with one action per
+combatant, queuing/X cancellation and phase-start simultaneous consequences.
+Geographic combat pins govern tactical travel. Successful FLEE exempts tactical
+movement and sets WEAPN/RANGE/AGGRESSION to 0/0/-10 until five continuous real
+minutes outside all pins; there is no FLEE cooldown or special ATHLX/speed/endurance
+bonus. The earlier +20 ATHLX/45-second burst and 90-second suppression are SUPERSEDED.
+Read the current sections for all rules and unresolved boundaries. Conflicting
+C05/C06 clocks, initiative and resolution constraints below remain historical/
+alternative design, not the current implementation target. No runtime is changed.
+General proposed Athletics speed and moving-HIDE rules remain. Current TRUDGE base
+is 1 mph versus proposed 0.85; legacy 24x movement still runs. New distance examples
+use 2x alone, while September 27 proposed 3.5x: coupling remains unresolved.
 
 September 28, 2026 - Water Movement v1 accepted and implemented rules
 
@@ -738,7 +741,7 @@ Continuous world coordinates remain authoritative; T3's grid/diagonal rules
 are reproduced below as the combat source, not silently replaced by a
 new continuous-distance metric.
 
-C05 — CURRENT CROWN & CALL COMBAT FOUNDATION
+C05 — PRESERVED CROWN & CALL COMBAT FOUNDATION (SEE OCTOBER 2 OVERRIDE)
 --------------------------------------------
 Review H01. Combat is fully TURN-BASED.
 
@@ -930,7 +933,7 @@ or automatic admin/GM decision algorithm was selected in the review.
 For Callings, Gathering, Faith, criticals and other special effects use
 the published M/F rules; this consolidation does not redesign them.
 
-C06 — ENCOUNTER SERVER BEHAVIOR, ENTRY, MERGING, STOP/DENY
+C06 — PRESERVED ENCOUNTER BEHAVIOR (SEE OCTOBER 2 OVERRIDE)
 ---------------------------------------------------------
 Review H01. These are CCMUD additions to the combat foundation.
 

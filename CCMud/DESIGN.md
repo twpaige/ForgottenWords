@@ -23,28 +23,89 @@ server command dispatch): base paces are TRUDGE **1**, WALK 3, JOG 5, RUN 8,
 SPRINT 11 mph. There is no direct ATHLX speed multiplier; ATHLX affects stamina
 and carrying capacity, which can indirectly reduce load slowdown. Geographic
 movement still uses the hardcoded combined **24×** factor. Displayed mph omits
-that acceleration. No separate general accelerated world clock, FLEE/Adrenaline
-Burst, post-FLEE Cap suppression, moving HIDE or SNEAK mechanic is implemented.
+that acceleration. No separate general accelerated world clock, shared combat clock, combat pins,
+FLEE/recovery, moving HIDE or SNEAK mechanic is implemented.
 The bounded rabbit THROW/wound implementation is not a full encounter system.
 
 The following proposal uses TRUDGE **0.85 mph** as a base, not the implemented
 1 mph. Existing 0.85-mph trudging in light woodland is instead 1 × 0.85 terrain
 slowdown; it must not be mistaken for an already changed base pace.
 
-### Faster combat and survival
+### Rapid combat clock: current intended design
 
-Combat remains fundamentally turn-based and player-controlled, with much shorter
-decision windows than the older design. It should feel closer to traditional
-MUD automation while retaining chosen meaningful actions, and generally progress
-more slowly than old automated MUD combat. Exact turn duration, timeout behavior
-and engagement/continuous-travel integration remain to be designed; this does not
-authorize an automatic repeat-attack loop.
+**Design only, not implemented.** Combat is player-controlled with no automatic
+fighting: typing HIT once never repeats attacks. Repeating **30-real-second rounds**
+contain **15 seconds Action**, then **15 seconds Preparation**. All combatants share
+these phases; there are no Phase 1/Phase 2 combatant assignments. Each combatant
+gets **at most one combat action per round**, during Action. HIT, SHOOT/FIRE,
+DEFEND and FLEE are examples of future actions, not implemented command claims.
+Doing nothing forfeits that round's opportunity; no automatic attack substitutes.
 
-CCMUD is intended for permadeath and characters may represent months or years of
-investment. Starting a fight should be easy; winning harder; preventing escape
-harder still. Killing someone actively trying to survive should take substantial
-effort, favorable circumstances, persistence or mistakes by the victim. This is
-an escape-biased mechanical design, not a consent barrier against PvP or murder.
+Preparation allows assessment, communication, AIM/appropriate preparation and
+choosing the next action. A combat action entered then queues for the next Action
+phase, never executes immediately, and executes at phase opening if still valid.
+Another valid action replaces the queue. **X cancels the queued combat action;
+STOP does not.** Existing STOP behavior is unchanged by this documentation.
+
+### Phase-start state and simultaneous consequences
+
+Conceptually snapshot combatants at Action-phase start. Actions use their
+phase-start combat state; wounds and other consequences accumulate and settle
+for mechanical effect in the **next Action phase**. Prose may appear as actions
+occur. Command arrival order and network latency must not become initiative.
+For example, AA's queued blow gives A a MORT wound, but A's still-unused action
+in that same phase can also give AA MORT. Neither action is canceled merely
+because the other processed first: mutual mortal blows, and potentially both
+deaths, are intentional. This does not establish a new universal instant-MORT
+death rule. Exact snapshot scope and spatial revalidation are open below.
+
+These rules supersede conflicting older C05/C06 initiative/individual turns,
+long decision windows and bans on simultaneous phase resolution. Preserve those
+older designs as historical/alternative material, not competing current clocks.
+
+### Group friendly-fire confirmation
+
+Do not infer teams, hostility graphs, enemy-of-my-enemy relationships or dynamic
+combat factions. Established player grouping/follow relationships may supply a
+simple safeguard: HIT A against one's group member first warns:
+
+```text
+A is a member of your group!
+HIT A again to confirm.
+```
+
+Repeating HIT A deliberately confirms and may proceed under the normal clock.
+No global betrayal announcement is required; ordinary perception/communication
+reveals events. Confirmation lifetime and its interaction with queued commands
+remain implementation details to settle, not an inferred faction system.
+
+### Combat pins and tactical movement
+
+Every genuine weapon attack reaching **opposed-roll resolution** creates or
+refreshes a geographic combat pin, whether the attacker wins or loses. An
+aborted attack, absent/invalid target, invalid reach/range before resolution or
+other failure to reach an actual opposed weapon attack creates no pin.
+
+Each pin has a world coordinate, **45-real-second lifetime** and **1,500-foot
+radius**. Further resolved attacks may create more pins; a moving fight can leave
+a temporary chain/cluster, and old pins expire. Pins belong to geography, not
+combatants. Anyone within **any** active pin is subject to tactical movement:
+participants, group members, reinforcements, bystanders and passing travelers alike.
+This prevents accelerated travel across the final distance into an active fight.
+
+Normal travel uses planned convenience acceleration; active pin areas instead
+heavily reduce geographic distance to match tactical combat time. Approximately
+**0.1× movement distance** is a **working design value**, not implemented or final
+tuning. Its multiplication basis must be specified before implementation; do not
+silently combine it with legacy 24×, planned 2× or world-time scaling.
+
+### Permadeath and survival intent
+
+Characters may represent months or years of investment. Starting a fight should
+be relatively easy, winning harder, preventing escape harder still. Killing
+someone actively trying to survive should take substantial effort, favorable
+circumstances, persistence or serious mistakes by the victim. PvP and murder
+remain possible: these are survival-biased mechanics, not consent or immunity.
 
 ### Athletics speed and real-time endurance
 
@@ -107,39 +168,64 @@ Ideal full-stamina sprint, constant ATHLX, no terrain/load slowdown:
 At ATHLX 10/20/30/40 this is approximately 0.14/0.31/0.53/0.83 mile.
 ATHLX deliberately compounds speed and endurance, substantially increasing distance.
 
-### Successful FLEE and Adrenaline Burst
+### Successful FLEE: tactical-time exemption, not a stat burst
 
-A successful FLEE breaks combat engagement and **automatically** triggers flight
-response; there is no separate ADRENALINE command. This applies to qualifying
-encounters with PCs, hostile MOBs (including animals), or other combat threats.
-FLEE is not a teleport or a random jump through several ROOMs. Real movement
-creates separation in continuous geography, subject to its normal constraints.
+**Current design supersedes the earlier Adrenaline proposal.** Anyone inside an
+active combat-pin area may attempt FLEE, including an uninvolved traveler. On
+success, the character immediately becomes **exempt from combat-pin tactical
+movement restrictions** and uses normal travel timing to physically escape.
+There is **no +20 ATHLX, special speed bonus or special endurance bonus**. Actual
+ATHLX, normal speed, stamina, terrain, wounds and other normal movement factors
+apply. Fear/adrenaline may appear in prose only. FLEE is not teleportation.
 
-For **45 real seconds** after success, effective ATHLX is normal ATHLX **+20**
-for movement speed, sprint stamina/endurance and appropriate escape movement.
-It is not a general +20 combat Cap buff. A pursuer gains nothing merely by chasing.
-Normal ATHLX 10 gives 16.5-mph sprint and 15 seconds from full stamina; burst ATHLX
-30 gives 27.5 mph and a 35-second full-pool calculation. Those are conditional
-full-stamina examples, not a stamina refill on FLEE. The effect expires at 45 real
-seconds; a run crossing expiry must no longer use boosted ATHLX afterward.
+Successful FLEE immediately sets effective **WEAPN = 0, RANGE = 0, AGGRESSION = −10**
+during recovery. Other Caps are not automatically reduced; THIEV remains usable.
+Zero WEAPN/RANGE is not automatic failure of every offensive command. These
+penalties commit the character to escape rather than fast offensive repositioning.
 
-For **90 real seconds** after successful FLEE, effective **WEAPN = 0 and RANGE = 0**.
-Other Caps are not automatically reduced; **THIEV remains usable** for escape.
-This prevents flight benefits becoming an offensive repositioning exploit such
-as fleeing 100 feet and immediately exploiting boosted positioning for archery.
-Zero Caps do not mean automatic failure of every offensive command. A blanket
-−20 to every Cap was discussed and rejected.
+FLEE grants no invulnerability. An opponent with an unused action in the current
+Action phase may attack if the fleeing target remains visible, in valid weapon
+range and otherwise legal. A resolved attack creates/refreshes a pin normally;
+**that new pin does not by itself revoke the successful fleeing character's
+exemption**. Pursuit remains possible, without perfect positional knowledge after
+line of sight is broken. Geography, changed direction, SNEAK and HIDE support escape.
 
-FLEE success creates an opportunity to escape, not guaranteed safety. A fleeing
-player can sprint, break line of sight through terrain, change direction, then
-SNEAK/HIDE. A pursuer may pursue but receives no perfect knowledge of subsequent
-turns after sight is broken. Future TRACK/perception may support reacquisition.
+### Five continuous minutes outside all pins
 
-Breaking combat is distinct from escaping a threat: a bear can still pursue.
-Terrain, concealment, distance and eventual loss of interest/motivation may end
-pursuit. MOB pursuit and behavior toward incapacitated characters are deferred.
-Animals must not be documented as always abandoning unconscious victims;
-wilderness encounters retain a genuine possibility of death.
+FLEE recovery is **not** a five-minute wall-clock expiry after the command:
+
+| Location/state | Recovery countdown | Effective combat values |
+| --- | --- | --- |
+| Inside any active pin | Reset/pinned at 5:00; no countdown | WEAPN 0, RANGE 0, AGGRESSION −10 |
+| Outside all active pins | Count down in real time | Same penalties until complete |
+| Re-enter any pin before completion | Immediately reset to 5:00 | Same penalties |
+| Five uninterrupted real minutes outside all pins | Recovery complete | Restore normal values |
+
+Returning with 0:30 remaining resets to 5:00, rather than pausing at 0:30.
+Pin expiry/creation changes whether a location is inside any active area; all
+active pins matter. Bystanders use the same rule: Miss Kitty caught in a nearby
+fight's radius may FLEE, regain normal travel timing and receive the same penalties
+and uninterrupted-outside recovery requirement.
+
+There is **no FLEE-command cooldown**. A character caught/re-engaged 30 seconds
+later can attempt FLEE again, subject to the normal action clock; recent FLEE is
+not a reason to refuse. Penalties never stack numerically: they remain 0/0/−10.
+Re-entry already resets/pins recovery; another success again releases tactical
+movement. Exact re-engagement/exemption lifetime is an open boundary below.
+
+### Superseded FLEE proposal and wilderness limits
+
+The earlier **+20 effective ATHLX for 45 seconds** and **90-second WEAPN/RANGE
+suppression** are historical, superseded proposals, not current mechanics or
+implementation targets. The replacement is tactical-time exemption plus the
+0/0/−10 values and continuous-outside recovery above. General proposed Athletics
+speed scaling and moving HIDE below remain; they confer no special FLEE bonus.
+
+Breaking combat is distinct from escaping a threat: a bear may still pursue.
+Terrain, concealment, distance or loss of interest/motivation may end pursuit.
+MOB pursuit and behavior toward incapacitated characters remain deferred. Animals
+must not be described as always abandoning unconscious victims; wilderness
+encounters retain a genuine possibility of death.
 
 ### HIDE while moving and SNEAK
 
@@ -159,16 +245,28 @@ structures may help depending on circumstances. Open prairie can require much
 more travel or offer no suitable cover at all. RUN/SPRINT creates distance but is
 conspicuous; SNEAK moves more slowly while attempting not to reveal position;
 HIDE seeks a place to stop and conceal oneself. These complement each other:
-FLEE → burst → SPRINT → break sight → change direction → SNEAK → HIDE/search → conceal.
+FLEE → normal travel timing → SPRINT → break sight → change direction → SNEAK → HIDE/search → conceal.
 
 ### Deferred implementation decisions
 
-The direction above does not specify FLEE success rolls, eligibility/retrigger
-or refresh rules, persistence across disconnect/restart, automatic heading/pace
-selection, effects on non-sprint recovery/carrying capacity, or the precise
-concealment search/detection/cancellation algorithm. Combat timing and transition
-rules, stationary HIDE details, and the world-clock/distance coupling also need
-explicit implementation decisions. Do not fill those gaps with invented rules.
+Do not invent rules for these remaining boundaries:
+
+- FLEE success/eligibility checks and how a bystander joins the shared action clock;
+  clock synchronization for encounters that meet, merge or gain late arrivals.
+- Which attack coordinate anchors a ranged pin (attacker, target or another point),
+  create-versus-refresh identity, vertical distance and coordinate-free ROOM scope.
+- Exact tactical factor/basis, boundary crossing, and stamina accounting during
+  throttled movement; the existing world-clock/geographic coupling question remains.
+- Snapshot state versus live reach/visibility/position revalidation, and the stated
+  immediate FLEE exemption/penalties versus otherwise next-phase consequences.
+- Exemption lifetime, re-entry/re-engagement and recovery completion boundaries:
+  new incoming attacks do not alone revoke exemption, yet recapture permits another
+  FLEE. The precise transition is not specified by that example.
+- Disconnect/restart/offline recovery and pin persistence; confirmation expiry,
+  queue revalidation/order, preparation limits and restoring normal underlying values.
+- Concealment search, stationary HIDE, detection and cancellation algorithms.
+
+These are implementation questions, not authorization to change runtime behavior.
 
 ## Bounded Rabbit MOB wounds and corpse (2026-09-30)
 
@@ -558,7 +656,7 @@ before reopening a movement question.
 | Starter inventory, survival, crafting | C01 and C02 |
 | Sight, recognition, watching, trails | C03 |
 | Movement and encumbrance | C04 |
-| Combat foundation and encounters | C05 and C06 |
+| Combat clock, pins and FLEE | Current section above; C05/C06 preserved as historical alternatives where conflicting |
 | Surrender, prisoners, mortality, unconsciousness | C07 |
 | Death aftermath and inheritance | C08 and C09 |
 | Preserved foundation and reconciliation | C10 and C11 |
