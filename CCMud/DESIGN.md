@@ -8,7 +8,79 @@ permalink: /CCMud/design.html
 **Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, MAKE SPIT / GATHER FIREWOOD, the data-driven Craft Engine/web Builder, and compact Object Builder with linear real-time morphs on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
 
-## Runtime configuration Phase 2: existing travel (2026-10-02)
+## Runtime configuration Phase 3: movement and stamina (2026-10-02)
+
+This implemented contract supersedes the historical Phase 2 acceleration and the
+older 2x-only distance examples. World time and travel convenience are independent
+restart-only settings. Movement is currently the only world-time consumer; no
+accelerated calendar, combat clock or Phase 4 system is implemented.
+
+`physical_mph = base_pace_mph * (1 + ATHLX/20) * existing_conditions`
+
+`distance_inches = physical_mph * 63360/3600 * world.time_multiplier * travel.convenience_multiplier * real_seconds`
+
+Defaults are **1.75 world time**, **2 travel convenience**, a combined **3.5x**.
+The former `travel.geographic_multiplier=24` is removed, not multiplied in.
+Displayed land mph includes Athletics and applicable conditions, but excludes both
+acceleration factors. Default base paces are **0.85 / 3 / 5 / 8 / 11 mph**.
+Capacity and terrain/grade/load rules are unchanged. Water retains its 1 mph swim
+effort, currents, depth and legality rules; only geographic displacement uses the
+same two multipliers. Water display remains actual physical vector speed.
+
+| New setting | Default | Validation |
+| --- | --- | --- |
+| world.time_multiplier | 1.75 | finite 0.1-24 |
+| travel.convenience_multiplier | 2 | finite 0.1-24 |
+| stamina.maximum | 20 | finite 0.1-10,000 points |
+| stamina.restart_fraction | 0.20 | finite 0.001-1 |
+| stamina.rest_base_per_second | 1/15 | finite 0-100 points/real second |
+| stamina.rest_athletics_factor | 0.1 | finite 0-10 |
+| stamina.recovery_fraction.trudge/walk/jog/run/sprint | .9/.7/.3/.1/0 | each finite 0-1 |
+| stamina.drain_fraction.trudge/walk | .35/.7 | each finite 0-10 |
+| stamina.endurance_base_seconds | 5 | finite 0.1-3600 real seconds |
+| stamina.endurance_athletics_seconds | 1 | finite 0-3600 seconds per Athletics |
+| stamina.endurance_factor.sprint/run/jog | 1/2/4 | each finite .01-100 |
+
+Standing recovery `R = rest_base_per_second * (1 + rest_athletics_factor * ATHLX)`.
+Moving gross recovery is `R * recovery_fraction[pace]`. Trudge/Walk gross drain is
+`R * drain_fraction[pace]`. Jog/Run/Sprint endurance is
+`D = (endurance_base_seconds + endurance_athletics_seconds * ATHLX) * endurance_factor[pace]`;
+gross drain is `gross_recovery + maximum/D`. Integration uses **real elapsed
+seconds**, without world or travel acceleration. Swimming uses configured Jog
+rates; floating keeps configured Trudge gross recovery with zero drain.
+At defaults, ATHLX 10 still exhausts a full Sprint pool in 15 real seconds.
+
+Restart requirement is `maximum * restart_fraction`, including messages.
+ROOM links retain their authored percentage, applied to configured maximum when
+a journey is accepted; its accepted cost is charged once on completion. Existing
+pending journeys are not repriced. Disconnect/restart cancels them as before.
+New characters receive configured maximum. Startup performs one bounded SQL
+update of characters above a lowered maximum; increasing maximum preserves
+absolute points. It does not rescale, grant points, or rewrite timestamps/rates.
+Offline elapsed time continues to use its **persisted previous rate** until the
+normal recovery checkpoint; the current maximum caps recovery. New intervals use
+the new rate. Saved malformed settings fail before clamping or publishing an
+active snapshot. Save and Activate Identity do not clamp characters.
+
+Migration `20261002_03` removes the legacy key, explicitly sets 1.75/2 and Trudge
+0.85, adds stamina defaults, and preserves identity, other saved travel settings,
+characters and authored content. It intentionally does not reinterpret a saved
+legacy multiplier. Registry defaults are authoritative; migrations freeze their
+historical values. Pace ordering remains validated; booleans, numeric strings,
+NaN and infinity are rejected.
+
+Builder Settings provides compact Identity / Travel / World / Stamina categories.
+Gameplay Save requires server restart; Activate Identity remains branding-only.
+All gameplay consumers receive the same startup snapshot without settings SQL in
+the movement loop. No derived speed, restart-point or net-drain setting is added.
+
+Ideal distances: ATHLX 0 Walk travels 924 ft in 60 real seconds; ATHLX 20 Walk
+travels 1,848 ft. ATHLX 10 Sprint travels 1,270.5 ft in its 15-second full-pool
+endurance. ATHLX 0 Sprint's rate would cover 3,388 ft in 60 seconds, but normal
+stamina exhausts after five seconds (about 282.33 ft); 60 seconds is a rate
+example, not permission to sprint beyond exhaustion.
+
+## Historical Phase 2: existing travel (2026-10-02)
 
 Implemented in Crown-Call `3480055`; migration `20261002_02` adds the nine current
 travel defaults to the singleton settings record, preserving saved identity and
@@ -110,16 +182,16 @@ branding templates; no global replacement occurs. Craft costs, object capabiliti
 and ROOM-link values remain owned by their content definitions. No Help Editor,
 profiles, import/export or configuration-history application is added.
 
-Approved policy for a **future**, separately authorized maximum-stamina conversion:
+Phase 1 recorded the following policy, now implemented by Phase 3:
 preserve absolute stamina, clamp above a lowered maximum and grant no free stamina
 when increasing it. Thus 18/20 becomes 15/15 when lowered to 15, while 10 stays 10;
-18/20 becomes 18/30 when raised to 30. This policy is recorded, **not implemented**.
-Movement-design differences (24× versus planned alternatives, Trudge and Athletics
-speed) remain separate decisions; all current gameplay formulas are preserved.
+18/20 becomes 18/30 when raised to 30. Phase 3 now implements this policy.
+Phase 3 above owns the deliberately changed movement formulas.
 
 ## Escape, Athletics movement and moving HIDE (2026-10-02)
 
-This section owns the new **approved design direction, not implemented mechanics**.
+This section owns approved combat/escape design direction; only its ordinary
+Athletics movement is implemented by Phase 3 above.
 It takes precedence over conflicting older combat pacing/escape assumptions in
 C05/C06 of the [preserved detailed record](/CCMUD_Design.txt). That record remains
 available as historical/alternative design; its detailed turn machinery is not
@@ -127,18 +199,10 @@ silently replaced by an invented new algorithm.
 
 ### Current implementation versus intended behavior
 
-Source inspected at Crown-Call `cfed74d` (`travel.py`, `stamina_recovery.py` and
-server command dispatch): base paces are TRUDGE **1**, WALK 3, JOG 5, RUN 8,
-SPRINT 11 mph. There is no direct ATHLX speed multiplier; ATHLX affects stamina
-and carrying capacity, which can indirectly reduce load slowdown. Geographic
-movement still uses the hardcoded combined **24×** factor. Displayed mph omits
-that acceleration. No separate general accelerated world clock, shared combat clock, combat pins,
-FLEE/recovery, moving HIDE or SNEAK mechanic is implemented.
-The bounded rabbit THROW/wound implementation is not a full encounter system.
-
-The following proposal uses TRUDGE **0.85 mph** as a base, not the implemented
-1 mph. Existing 0.85-mph trudging in light woodland is instead 1 × 0.85 terrain
-slowdown; it must not be mistaken for an already changed base pace.
+Phase 3 above implements Athletics physical speed, Trudge 0.85 mph, the separate
+1.75x/2x movement factors and configurable real-time stamina. The remaining combat,
+FLEE, pins, moving HIDE and SNEAK proposals below are not implemented. The bounded
+rabbit THROW/wound interaction is not a full encounter system.
 
 ### Rapid combat clock: current intended design
 
@@ -218,7 +282,7 @@ remain possible: these are survival-biased mechanics, not consent or immunity.
 
 ### Athletics speed and real-time endurance
 
-Proposed unobstructed physical/displayed speed:
+Implemented unobstructed physical/displayed land speed:
 
 `speed_mph = base_pace_mph × (1 + effective_ATHLX / 20)`
 
@@ -238,7 +302,7 @@ The table is ideal-condition mph, rounded to two decimal places:
 | 35 | 2.75 | 2.34 | 8.25 | 13.75 | 22.00 | 30.25 |
 | 40 | 3.00 | 2.55 | 9.00 | 15.00 | 24.00 | 33.00 |
 
-Current implemented stamina maximum is 20. For ATHLX A, standing recovery is
+With Phase 3 default settings, stamina maximum is 20. For ATHLX A, standing recovery is
 `R = (1 + A/10)/15` points per **real second**. Recovery and expenditure are
 integrated together: TRUDGE recovers 0.9R and spends 0.35R (net +0.55R); WALK
 recovers and spends 0.7R (net zero). JOG recovers 0.3R and spends that plus
@@ -247,35 +311,31 @@ SPRINT has no recovery and spends `20/(5+A)` per real second. Thus full-pool
 sprint duration is `5+A` real seconds, while A remains constant. Travel
 acceleration does not multiply these stamina rates.
 
-### Distance calculation convention and clock conflict
+### Distance calculation convention
 
-**These design examples use 2× travel convenience alone:** displayed 11 mph
-means geographic 22 miles per real hour. They do not use legacy 24× or apply an
-additional world-time multiplier. The earlier September 27 plan separately sets
-world time to 1.75× and derives a combined geographic rate of 3.5×. Its clock
-proposal remains recorded, but that 3.5× calculation is not the convention used
-here. Before implementation, settle whether world-clock scaling contributes to
-geographic movement at all; do not silently multiply these distances by 1.75.
+Phase 3 resolves the earlier clock conflict: use both separate factors, currently
+1.75 world time and 2 travel convenience, with real-time endurance. The previous
+2x-only examples are superseded.
 
-`distance_feet = 11 × (1 + A/20) × (5280/3600) × 2 × (5+A)`
+`distance_feet = 11 * (1 + A/20) * (5280/3600) * 1.75 * 2 * (5+A)`
 
-Ideal full-stamina sprint, constant ATHLX, no terrain/load slowdown:
+Ideal full-stamina sprint at default settings, without terrain/load slowdown:
 
 | ATHLX | Sprint mph | Real seconds | Geographic feet (nearest foot) |
 | --- | --- | --- | --- |
-| 0 | 11 | 5 | 161 |
-| 1 | 11.55 | 6 | 203 |
-| 5 | 13.75 | 10 | 403 |
-| 10 | 16.5 | 15 | 726 |
-| 15 | 19.25 | 20 | 1,129 |
-| 20 | 22 | 25 | 1,613 |
-| 25 | 24.75 | 30 | 2,178 |
-| 30 | 27.5 | 35 | 2,823 |
-| 35 | 30.25 | 40 | 3,549 |
-| 40 | 33 | 45 | 4,356 |
+| 0 | 11 | 5 | 282 |
+| 1 | 11.55 | 6 | 356 |
+| 5 | 13.75 | 10 | 706 |
+| 10 | 16.5 | 15 | 1,270 |
+| 15 | 19.25 | 20 | 1,976 |
+| 20 | 22 | 25 | 2,823 |
+| 25 | 24.75 | 30 | 3,811 |
+| 30 | 27.5 | 35 | 4,941 |
+| 35 | 30.25 | 40 | 6,211 |
+| 40 | 33 | 45 | 7,623 |
 
-At ATHLX 10/20/30/40 this is approximately 0.14/0.31/0.53/0.83 mile.
-ATHLX deliberately compounds speed and endurance, substantially increasing distance.
+Athletics affects both physical speed and endurance. Combat-pin exemption remains
+future design; these distances describe ordinary implemented travel.
 
 ### Successful FLEE: tactical-time exemption, not a stat burst
 

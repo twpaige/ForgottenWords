@@ -1,10 +1,45 @@
 ---
 title: Current status
 description: GUI ROOM-template authoring with persistent drafts and explicit validation for use.
-reviewed: 2026-10-01
+reviewed: 2026-10-02
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## Movement and stamina configuration Phase 3 (2026-10-02)
+
+Implemented/pushed in Crown-Call `18ccaf14e169d605c8791f3e40bc47f0d7ff2226`.
+The legacy 24x setting is replaced by separate world.time_multiplier=1.75 and
+travel.convenience_multiplier=2. Trudge defaults to 0.85 mph; Athletics now scales
+physical land speed. Stamina maximum, recovery, endurance and restart fraction
+are restart-only settings. ROOM accepted costs and persisted offline-rate semantics
+are preserved. Water uses the shared geographic product with existing physical
+swim/current rules. Compact World/Stamina Settings and client maximum/threshold
+messages use configured values. Migration `20261002_03` and bounded startup
+clamping are included. [Authoritative contract](design.html#runtime-configuration-phase-3-movement-and-stamina-2026-10-02).
+
+Verification: movement/HOG-water/terrain/new-setting run 87 passed; final
+settings/stamina/migration/odometer/ROOM group 68 passed (one known baseline test
+excluded); HOG walking/navigation/player APPROACH rerun 63 passed plus its final
+corrected-import test passed; final migration-preservation and mixed activation
+checks 2 passed. Runs overlap. Water movement, prewarm, identity and offline recovery
+regressions were also exercised. All 20 new Phase 3 tests passed across focused
+runs. Three browser scripts passed: Identity Settings, compact Travel/World/Stamina
+at 1280x720, and client navigation with configured maximum/restart messages.
+Single Alembic head, migration semantics, changed-file lint and diff checks passed.
+
+Known baseline: `test_rooms.py::test_hog_entry_exit_find_jump_and_reconnect`
+expects capitalized `Bedroom` in FIND context, while runtime uses ROOM author key
+`bedroom`. Reproduced unchanged on prior main `6c3ef52`; unrelated runtime behavior
+was left alone. Old distance/timing assertions were updated to reach the same
+boundaries under the new speed. The production guard test now isolates configuration
+startup instead of attempting an unrelated database connection; the cabin assertion
+uses its current entry ROOM identity.
+
+No full suite: focused and directly affected groups were used rather than duplicating
+the roughly 44-minute server checkpoint. Full DEV remains Thomas's milestone gate.
+No DEV/PROD deployment. Phase 4 is not started. No calendar, combat, AI, HOG generator
+or authored-content changes.
 
 ## Travel configuration Phase 2 (2026-10-02)
 
@@ -21,7 +56,7 @@ scripts passed, including compact 1280×720 Travel editing, numeric payloads,
 restart status and category isolation. Migration seeding and identity preservation,
 revision/activation separation, changed-file lint/diff and single Alembic head passed.
 Existing TestClient deprecation warning only. No full suite; no DEV/PROD deployment.
-Phase 3 is not started. Cormac/HOG branding and gameplay defaults are unchanged.
+This historical Phase 2 checkpoint preceded Phase 3 above. Cormac/HOG branding remains unchanged.
 
 ## Runtime identity configuration Phase 1 (2026-10-02)
 

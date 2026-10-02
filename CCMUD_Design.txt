@@ -1,3 +1,13 @@
+IMPLEMENTED MOVEMENT OVERRIDE - 2026-10-02
+Configuration Phase 3 supersedes older movement/stamina constants in this record.
+Use CCMud/DESIGN.md, "Runtime configuration Phase 3: movement and stamina".
+Normal geographic distance uses physical pace * (1 + ATHLX/20) * existing
+conditions * 1.75 world time * 2 travel convenience * real elapsed time.
+This replaces 24x, never multiplies it. Trudge base is 0.85 mph.
+Stamina and endurance use real seconds with restart-only database configuration.
+Water retains existing physical effort/current rules with the shared 3.5x
+geographic product. No calendar, combat pins or FLEE is implemented by Phase 3.
+
 October 2, 2026 - Unified perception/SCAN/EXPOSURE (NOT IMPLEMENTED)
 
 CCMud/DESIGN.md section "Unified perception: SCAN, EXPOSURE and stealth"

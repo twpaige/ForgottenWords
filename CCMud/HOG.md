@@ -6,6 +6,13 @@ nav: hog
 permalink: /CCMud/hog.html
 ---
 
+**Current movement (Phase 3, 2026-10-02):** game travel uses separate 1.75 world-time
+and 2 convenience factors (3.5x), replacing legacy 24x. Athletics scales land
+physical speed; water keeps existing physical effort/current rules. Stamina uses
+real seconds. Historical 24x experiment results below remain historical evidence.
+See [the authoritative movement contract](design.html#runtime-configuration-phase-3-movement-and-stamina-2026-10-02).
+
+
 ## Hunting Knife integration (2026-09-30)
 
 [Object Slice 1](objects.html#14-slice-1-implementation-2026-09-30) opens bounded
