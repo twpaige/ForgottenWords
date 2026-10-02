@@ -1,12 +1,57 @@
 ---
 title: Current status
-description: GUI ROOM-template authoring with persistent drafts and explicit validation for use.
+description: Final existing-system configuration conversion and closure audit.
 reviewed: 2026-10-02
 nav: status
 permalink: /CCMud/status.html
 ---
 
+## Configuration Phase 4: final existing-system conversion (2026-10-02)
+
+**CONFIGURATION CONVERSION PROJECT COMPLETE.** Implementation, final audit and
+full-suite verification passed. The earlier Phase 3
+regression repair, pushed as `b2ea3cffebed367a7931a51f6c45d762a0513fdc`, established
+**1,140 passed, zero failed** and resolved the historical failures described below.
+
+Phase 4 adds 22 restart-required controls with unchanged defaults: interaction reach,
+SAY range, local object/MOB/dwelling perception, Work Timer admission backlog,
+dwelling authoring room count, 12 terrain speed factors and five uphill speed factors.
+Terrain classification/identities, grade boundaries and passability remain code-owned.
+The five original conversions and the explicit additional terrain decision are in
+[the final contract and audit](design.html#runtime-configuration-phase-4-final-existing-system-conversion-2026-10-02).
+
+Migration `20261002_04` preserves saved/unknown keys and existing game state. Builder
+adds seven categories with server-authoritative bounds and restart status. Both
+ROOM and template editors read active room-limit metadata. Existing instances and
+usable templates remain usable after a limit reduction; modified authoring must
+satisfy the active policy. Identity activation, earlier configuration, real-time
+stamina, water safety, accepted ROOM costs and authored content remain unchanged.
+
+Verification: **294 focused tests passed** (one existing TestClient warning).
+Five browser scripts passed: seven Phase 4 categories, Identity, Travel/World/Stamina,
+template authoring and live ROOM forms, including nondefault room metadata and
+1280x720 layouts. Fresh Phase 1–4 migration chain produces all 50 keys at revision 4;
+saved-value/unknown-key preservation tests pass. Single migration head, dependency
+consistency, changed-file lint and diff checks pass. Repository-wide Ruff retains
+exactly the same 55 baseline findings, with no new findings.
+
+Final object/ROOM/dwelling rerun: **125 passed**, one existing TestClient warning,
+84.80 seconds. Focused counts overlap. The full suite has no exclusions.
+
+Full-suite result: **1,345 passed, zero failed, 13 existing deprecation warnings in 1,214.93 seconds (20m 14s)**.
+Implementation commit: `0578531979de68632d10f340ee9d725ca41d9420`.
+
+The audit finds **no known existing global administrator-tunable gameplay/design
+constants improperly hardcoded** in the implemented-system scope. No unresolved
+user decisions remain. Internal engine/security/safety/presentation/current combat
+rules and authored content are deliberately classified in the contract. Future
+features must classify and implement their own suitable Settings; no general Phase 5
+is planned. No new combat, AI, LOS/SCAN, maps, protocols or HOG generation behavior.
+No DEV or PROD deployment is authorized or performed by this milestone.
+
 ## Movement and stamina configuration Phase 3 (2026-10-02)
+
+Historical initial checkpoint; the subsequent full-suite repair and Phase 4 status above supersede its pending verification notes.
 
 Implemented/pushed in Crown-Call `18ccaf14e169d605c8791f3e40bc47f0d7ff2226`.
 The legacy 24x setting is replaced by separate world.time_multiplier=1.75 and

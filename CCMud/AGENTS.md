@@ -1,7 +1,7 @@
 ---
 title: Development guide
 description: How to work safely, verify changes, and leave enough context for the next session.
-reviewed: 2026-09-26
+reviewed: 2026-10-02
 nav: development
 permalink: /CCMud/development.html
 ---
@@ -24,6 +24,19 @@ Thomas's current explicit decisions govern the task. Subject-specific design doc
 Investigate disagreements. Clearly stale documentation may be corrected when evidence is unambiguous. Do not silently redesign behavior to make documents agree. Update the authoritative decision when Thomas changes it.
 
 ForgottenWords owns tabletop rules and the public CCMUD knowledge base in separate areas. Crown-Call owns private MUD implementation. Do not insert HOG or MUD operations into tabletop documentation. Do not import TTRPG rule changes automatically. Do not publish private code or move crossover text to the public repository without authorization for that material.
+
+## Configuration ownership for future features
+
+The existing-system conversion closes with Phase 4; there is no general Phase 5.
+Follow the [final configuration contract and audit](design.html#runtime-configuration-phase-4-final-existing-system-conversion-2026-10-02).
+For each future feature, classify global administrator-tunable gameplay policy into
+Settings when implemented. Include typed validation, a preserving migration,
+activation semantics, metadata/UI and default/nondefault consumer tests. Gameplay
+is immutable and restart-required unless a separate live-activation design is approved.
+Keep derived values derived, authored content in its content system, and engine,
+geometry, units, safety, protocol and security contracts code-owned. Do not add
+placeholder keys for future systems. Ask Thomas about genuine design ambiguity
+while completing independent work. Never change defaults merely for configurability.
 
 ## Working on HOG
 

@@ -8,6 +8,137 @@ permalink: /CCMud/design.html
 **Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, MAKE SPIT / GATHER FIREWOOD, the data-driven Craft Engine/web Builder, and compact Object Builder with linear real-time morphs on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
 
+## Runtime configuration Phase 4: final existing-system conversion (2026-10-02)
+
+The existing-system configuration conversion adds **22 restart-required controls**
+with unchanged implemented defaults. This section supersedes earlier phase scope
+statements that terrain factors, interaction, speech, local perception, backlog or
+room-count policy remain outside Settings. Identity retains explicit activation;
+all gameplay settings are read once into the immutable startup snapshot. Saving or
+activating Identity cannot change running gameplay. No command, movement substep,
+LOOK or SAY performs a configuration database query.
+
+### Added controls and supported bounds
+
+| Registry key | Current default | Allowed values / category | Shared consumers |
+| --- | --- | --- | --- |
+| `interaction.reach_ft` | 15 ft | 1–100 ft; Interaction; must not exceed local entity range | Outdoor GET/PICKUP, REMOVE, skin/craft inputs, door interaction and APPROACH stopping |
+| `communication.say_range_ft` | 100 ft | 1–1,000 ft; Communication | Outdoor SAY and open-doorway hearing; same-ROOM speech remains local to the ROOM |
+| `perception.object_range_ft` | 100 ft | 1–100 ft; Perception | Existing object/MOB selection, LOOK and persistent dwelling observations; no distant LOS/SCAN |
+| `craft.work_backlog_limit_seconds` | 172,800 sec (48 hours) | 1–172,800 sec; Crafting | New craft admission is rejected at or above remaining backlog; existing deadlines and authored craft costs stay fixed |
+| `dwelling.max_rooms` | 500 rooms | Whole numbers 1–500; Dwellings | New/modified live graphs, template drafts, usable validation, saves and text imports |
+
+Internal inches and displayed backlog hours are derived. The former environment
+variables `PICKUP_RANGE_INCHES`, `SAY_RANGE_INCHES` and
+`OBJECT_LOOK_RANGE_INCHES` no longer override gameplay. The saved Settings values
+are authoritative. Local sight certification retains its code-owned 100-foot
+ceiling; graph/serialization support retains its code-owned 500-room ceiling.
+Neither ceiling is editable or expanded by this phase.
+
+Lowering room policy does not delete rooms, invalidate existing instances, or
+prevent loading/exporting an already usable saved template. A subsequent authoring
+save/import must satisfy the active policy, even for an existing graph. Template
+and live ROOM editors obtain limits from server metadata, including the absolute
+ceiling; they do not maintain an independent 500-room gameplay rule. Server
+validation remains authoritative for all form/text/API paths.
+
+### Terrain and uphill speed factors
+
+Thomas explicitly approved these existing speed multipliers for Settings while
+retaining terrain identities, classification, grade boundaries and all geometry
+safety/passability rules in code. All factors accept finite numeric values from
+**0.01 through 1.0**, rejecting booleans, strings, zero, negatives, NaN and infinity.
+The supported tuning floor is 0.01; the existing no-speed-bonus
+ceiling remains 1.0. Every factor is independent; no additional ordering constraint
+is invented. Defaults and classifications are unchanged.
+
+| Registry key suffix after `terrain.speed_factor.` | Default | Category |
+| --- | --- | --- |
+| `road`, `maintained_trail`, `grassland`, `firm_ground` | 1.00 each | Terrain |
+| `light_woodland`, `brush` | 0.85 each | Terrain |
+| `heavy_woodland` | 0.65 | Terrain |
+| `rocky`, `rough` | 0.70 each | Terrain |
+| `marsh`, `shallow_water` | 0.50 each | Terrain |
+| `difficult` | 0.35 | Terrain |
+
+| Registry key after `terrain.uphill_factor.` | Code-owned positive grade band | Default / category |
+| --- | --- | --- |
+| `gentle` | Above 0 through 5% | 1.00 / Uphill |
+| `moderate` | Above 5 through 10% | 0.90 / Uphill |
+| `steep` | Above 10 through 20% | 0.75 / Uphill |
+| `very_steep` | Above 20 through 30% | 0.55 / Uphill |
+| `extreme` | Above 30% | 0.35 / Uphill |
+
+Directional grade projection remains unchanged. Level/downhill travel receives
+factor 1, never a downhill bonus. Effective surface selection is still supplied by
+HOG; a maintained road still overrides surrounding vegetation. The immutable
+movement policy is derived from the active snapshot and reused in memory. Explicit
+TravelController configurations and real HOG inputs consume the same authority.
+A factor of 1 cannot permit a cliff crossing, deep-water entry, an uncertified
+region or any other passage disallowed by geometry. Swimming effort and current
+vectors retain their existing separate rules.
+
+Migration `20261002_04`, after `20261002_03`, adds these 22 keys with frozen current
+defaults. Existing saved keys, including Phase 1–3, already-present Phase 4 keys and
+unknown/newer keys, win over seeds. It increments the configuration revision once
+without changing characters, stamina, deadlines, rooms or content. Historical
+migrations are unchanged; destructive downgrade is refused. Builder adds Interaction,
+Communication, Perception, Crafting, Dwellings, Terrain and Uphill categories, with
+server-supplied labels, units, numeric bounds, integer room validation and restart
+status. Terrain/Uphill use the existing compact two-column layout.
+
+### Final existing-system audit and ownership
+
+This audit covers movement, stamina, water, interaction, communication, perception,
+presentation, objects, crafts, dwellings/ROOMs, current combat/MOBs, character/account
+policies, administration, persistence and HOG infrastructure. Classification records
+semantic ownership, not a claim that every literal should become editable.
+
+| Classification | Values / current owners | Reason and future boundary |
+| --- | --- | --- |
+| CONFIGURED | Identity (`game_settings`), pace/capacity/cadence, world and travel multipliers, real-time stamina and the 22 controls above | One typed registry and immutable runtime snapshot; earlier saved values/activation preserved |
+| KEEP INTERNAL | Terrain identities/classification and 5/10/20/30% grade thresholds (`terrain_movement`, HOG providers) | Explicit approved boundary; speed factors alone are editable |
+| KEEP INTERNAL | Character visibility 12,000 inches / 1,000 ft (`config`, `world`, `connections`) | Existing placeholder/presence query behavior, not completed distant-LOS policy; reconsider with LOS/SCAN |
+| KEEP INTERNAL | Legacy 1,200-inch movement step (`config`, `world`) | Non-HOG compatibility path; continuous HOG movement uses configured paces, not this step |
+| KEEP INTERNAL | Dwelling dimensions 5–100 ft (`dwellings`, `hog_structures`); placement maximum slope .05 (`hog_placement`, object/MOB placement) | Geometry certification and persisted placement contracts; no independent admin enlargement |
+| KEEP INTERNAL | Carrying load curve .5/1/1.5 and ATHLX physical-speed divisor 20 (`travel`) | Adopted formula structure remains code-owned; capacity inputs and pace speeds are already configured |
+| KEEP INTERNAL | Swim effort 1 mph; swimming/current onset 1 ft and wading limit 4 ft (`travel`, `water_travel`) | Coupled movement legality and boundary events; deliberate water redesign would need a coordinated contract |
+| KEEP INTERNAL | Water geometry 3-ft certification (`hog_waterway`) | Separate geometry contract, not an interchangeable duplicate of the 4-ft player wading rule |
+| CONFIGURED / DERIVED | Floating recovery (`travel`) | Uses configured Trudge gross recovery; no independent float-fraction setting |
+| KEEP INTERNAL | Water current prose bands .25/1/2/3/4 mph and deep prose at 7 ft (`water_travel`, Cormac) | Descriptive vocabulary; does not determine permission or physical current |
+| KEEP INTERNAL | Cormac nearby range 1,000 ft, distance/slope/tree/observation bands, verbosity 1/2/4, broad water 100 ft and wording (`cormac`, `world`) | Presentation policy, deliberately separate from reach and entity sight |
+| KEEP INTERNAL | Eyes sampling distances, biome fractions/limits, rise/grade/retention/cover thresholds, feature ranges/limits (`cormac_eyes`, `hog_perception`) | Bounded engine observation and presentation contracts; not player entity perception |
+| KEEP INTERNAL | THROW floor 10 ft, penalty per 10 ft, opposed d20, wound margin step 4, tiers and combination (`combat`, `world`) | Current tightly coupled interim combat rules; reconsider within approved future combat work, not this conversion |
+| AUTHORED CONTENT | Rabbit Athletics/severity (`mobs`), armor +1/48-ounce profile (`combat`), wounds/death outputs (`mob_wounds`) | MOB-specific source-owned content/profile; future prototype authoring may relocate it, but no global rabbit controls |
+| AUTHORED CONTENT | Object names/descriptions/weights/portability/tools/throwable/morph definitions; individual craft inputs/tools/outputs/quantities/work seconds | Existing object/Craft Builder and prototype authority; not duplicated in Settings |
+| AUTHORED CONTENT | ROOM-link delay/stamina percentage/departure, room descriptions, dwelling geometry within certified bounds, doors/keys/bars | Existing graph/content authority; accepted ROOM costs remain fixed during a pending transition |
+| KEEP INTERNAL | Craft cost ceiling 172,800 sec, link delay 3,600 sec, link cost 0–100%, graph links/text/name/description limits, morph transition cap 16 | Schema, serialization and resource ceilings; craft cost ceiling is distinct from backlog admission policy |
+| KEEP INTERNAL | SHORE sector inference within 180 inches (`sectors`) and legacy 180-inch nearby wording (`world`) | Geographic classification / prose, not duplicate interaction reach |
+| KEEP INTERNAL | Character name 3–40, account name 3–32, DEV ATHLX selector 0–20, initial walk/land/manual-water preferences (`world`, `auth`, `models`) | Identity/schema and explicit DEV testing/default-state contracts; no new account/chargen design |
+| KEEP INTERNAL | Account roles, session lifetime/security, password constraints, login throttle 8/300 sec, credentials/origins/cookies (`auth`, `config`, `main`) | Security/deployment authority remains outside gameplay Settings |
+| KEEP INTERNAL | LOOK/MOB entity caps 64; admin find/search pagination, mark IDs, jump timeout 30 sec, speech length 1,000 | Bounded queries, identifiers, asynchronous safety and protocol/resource limits |
+| KEEP INTERNAL | Units, coordinate/odometer precision, tolerances, seeds/versions/world bounds, HOG size/spacing/cache/expiration/workers/prewarm, integration .1 sec/catch-up 5 sec/checkpoint 1 sec | Engine, deterministic geography, persistence and performance contracts; unchanged |
+| KEEP INTERNAL | Reserved verbs, stable-ID syntax, request headers, session namespaces, DB retries and migration IDs | Protocol/schema compatibility; not admin game-design controls |
+| DEFER WITH FUTURE FEATURE | New combat scheduler/phases/pins/tactical movement/FLEE; SEARCH/SCAN/EXPOSURE/HIDE/SNEAK, routes/chaining, new MOB AI/ranged systems, Telnet/ANSI/GMCP/maps | Unimplemented systems receive appropriate configuration when their own feature is designed; no placeholder keys |
+| REQUIRES USER DECISION | None outstanding | Terrain-factor question resolved explicitly by Thomas; other candidates have the intentional ownership above |
+
+**Audit conclusion:** there are no known existing global administrator-tunable
+gameplay/design constants left improperly hardcoded within the implemented-system
+scope. Internal rules/content listed above are deliberate boundaries, not forgotten
+conversion work. Verification and final completion status are maintained in
+[Current status](status.html). No generic Phase 5 is planned.
+
+### Future-development configuration policy
+
+Every future feature must classify its values during implementation. Existing or new
+values that are global, administrator-tunable gameplay/design policy belong in the
+typed Settings registry with validation, unchanged/approved defaults, migration,
+activation policy, metadata/UI, consumer consolidation and behavior tests. Derived
+values remain derived. Content belongs to its authoring system; units, engine,
+geometry, security, protocol and safety invariants remain code-owned. Do not make
+unimplemented features configurable in advance. Bring genuine ownership ambiguity
+to Thomas rather than silently deciding it to claim completion.
+
 ## Runtime configuration Phase 3: movement and stamina (2026-10-02)
 
 This implemented contract supersedes the historical Phase 2 acceleration and the

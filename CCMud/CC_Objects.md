@@ -1046,3 +1046,14 @@ explicitly requested and complete validation succeeds. Migration `20261001_04`
 preserves previously validated templates as usable and defaults new rows to draft.
 Changing a prototype back to draft blocks new LOADs but never alters previously
 instantiated dwellings or their ROOMs, links, doors and occupants.
+
+## Configured authoring room limit (2026-10-02)
+
+`dwelling.max_rooms` defaults to 500 and accepts whole numbers 1–500. It takes effect
+on server restart. Live graph saves/imports and template draft/save/validate/text
+paths use the same server policy. Both editors read limit metadata from the server.
+The absolute graph ceiling remains code-owned at 500. Lowering the policy does not
+delete existing ROOMs or prevent loading/exporting an already usable saved template;
+new or modified authoring must satisfy it. Placement dimensions/certification,
+content values and authored link costs remain under their existing authorities.
+See the [Phase 4 configuration contract](design.html#runtime-configuration-phase-4-final-existing-system-conversion-2026-10-02).
