@@ -1,3 +1,14 @@
+October 2, 2026 - Unified perception/SCAN/EXPOSURE (NOT IMPLEMENTED)
+
+CCMud/DESIGN.md section "Unified perception: SCAN, EXPOSURE and stealth"
+(published /CCMud/design.html) owns the current conceptual model. SENSE belongs
+to the observer; situational EXPOSURE belongs to the target/context, not a new CAP.
+SCAN reallocates directional attention at peripheral cost and can coexist with
+travel/SEARCH. HIDE uses real concealment without invisibility or a generic SCAN
+penalty. Detection is observer-specific; movement affects target and observer.
+No numeric formula or cone width is locked. Older THIEV/SENSE passages remain
+context, not a settled new formula; see the current section for reconciliation.
+
 October 2, 2026 - SEARCH, command chains and recorded routes (NOT IMPLEMENTED)
 
 CCMud/DESIGN.md section "SEARCH, command chains and recorded routes (2026-10-02)"

@@ -236,7 +236,8 @@ This is the normal proposed moving-HIDE behavior, **not limited to combat**:
 HIDE does not stop the character immediately. It acknowledges the search, for
 example, “You begin looking for a suitable place to conceal yourself.” Once an
 appropriate hiding place is found, the character settles into it, stops moving
-and enters the hidden state. Example final prose: “You spot a thick tangle of
+and enters a concealed state (reduced exposure, not invisibility; see the unified
+perception section). Example final prose: “You spot a thick tangle of
 brush beneath the trees, slip into it, and settle out of sight.” Exact prose is
 not fixed; this is not magical invisibility at the command's coordinate.
 
@@ -446,6 +447,200 @@ teleports or gaps as physically traveled connecting segments. Search input bound
 pace selection, interruption/blocked-segment behavior, chain command eligibility
 and nearby rejoin criteria also remain open. No database schema, general scheduler,
 pathfinding algorithm or new numerical limits are prescribed by this design.
+
+## Unified perception: SCAN, EXPOSURE and stealth (2026-10-02)
+
+**Approved conceptual design, not implemented.** This section owns the common
+perception model; no formula, schema, modifiers or new commands are implemented
+by this documentation. It complements [SEARCH/navigation](design.html#search-command-chains-and-recorded-routes-2026-10-02)
+and the [moving-HIDE transition](design.html#hide-while-moving-and-sneak).
+
+### Shared roles and implementation boundary
+
+| Concept | Role in the shared framework |
+| --- | --- |
+| SENSE | Observer capability |
+| EXPOSURE | Situational target perceptibility; **not another CAP** |
+| LOOK | Normal broad-area perception |
+| SCAN | Deliberate directional attention, with peripheral cost |
+| SEARCH | Actual systematic travel for close-range coverage |
+| HIDE | Find/use real concealment to reduce exposure |
+| SNEAK | Deliberate slower movement intended to keep exposure low |
+| Posture | A contributor to exposure |
+| Movement | Affects both target exposure and observer effectiveness |
+| Terrain/cover/vegetation | Constrain visibility and provide actual concealment |
+| Distance | Affects whether a particular target can be detected |
+
+Use one coherent framework for environmental observation, hunting, scouting,
+PvP/ambush/pursuit, stealth, MOB perception, tracking and eventual camouflage and
+weather/night visibility. Do not create incompatible magical systems per command.
+
+Current implementation has bounded LOOK/Cormac observations, supported local
+object/MOB presentation and server target selection. Regional HOG discovery
+contains visibility/concealment inputs but is **not proof of player visibility**.
+Existing local perception is not the proposed observer-specific exposure model
+or a claim of certified distant LOS. Directional SCAN state/concentration,
+EXPOSURE, stealth/posture/movement modifiers, progressive identification and
+clothing camouflage are not implemented. Existing water STAND is not evidence
+of a general standing/sitting/prone perception system.
+
+Earlier command-reference suggestions that SCAN might merge into LOOK/SEARCH
+are superseded by its distinct directional-attention role, sharing perception
+authority. Older opposed THIEV-versus-SENSE hiding material remains context;
+the new model does not settle THIEV's exact contribution or a replacement roll.
+The old “hidden” terminology must never imply universal invisibility. Older
+self-recognition of one's own hidden objects does not grant sight through cover
+or at arbitrary distance; its precise perception/knowledge interaction needs
+reconciliation before implementation.
+
+### Directional SCAN and attention cost
+
+Proposed `SCAN NORTH`, `SCAN NORTHEAST`, etc. concentrate attention in a cone
+centered on the heading; eventual `SCAN 17` or `SCAN 243` should be possible.
+Compass directions are convenient aliases, not a reason to limit heading support.
+This replaces old SoI's looking several ROOMs ahead with continuous geography.
+
+Cone width is **not locked**. A discussed **45-degree total** cone centered north
+spans **337.5° through 22.5°**. The earlier 335°–45° example spans 70°, not 45°.
+These are geometry clarifications, not a selected final width.
+
+SCAN may run during movement without stopping it. Travel north and scan northeast
+are independent headings. This supports hunting, scouting, pursuit, watching a
+flank, landmarks, animal observation and guarding while traveling.
+
+Attention is redistributed, not freely added to normal perception everywhere.
+Within the cone, useful distance, subtle movement detection, partial-concealment
+recognition and detail may improve. Outside it, subtle/distant/hidden things and
+objects near one's feet are easier to miss. Peripheral awareness is reduced,
+**not blindness**: nearby screams, gunshots, physical contact, a very close charging
+animal and other conspicuous stimuli can still be noticed. The cone governs
+attention, not the existence of other senses.
+
+SCAN is concerted effort. Sustained attention toward the same direction may
+improve subtle/distant detection up to a reasonable cap. Rapidly cycling eight
+directions must not grant an instantaneous full-strength 360° sweep. Exact
+concentration times, reset/decay rules, caps, bonuses and peripheral penalties
+remain unspecified. Example acknowledgment: “You turn your attention northward.”
+
+### Visibility, distance and progressive information
+
+Attention is neither telescopic nor supernatural. Use authoritative geography:
+open prairie may offer long sightlines; dense forest, crests, buildings and walls
+can block them; valleys may extend them directionally. Future fog/night/weather
+can reduce effectiveness. SCAN must not invent visibility through obstacles.
+
+Detection is not identification. Near/mid/far/very-far are illustrative concepts,
+not locked bands: nearby details, recognizable figures/animals, distant movement
+or silhouettes, and only conspicuous faraway features may be possible. Smoke and
+large structures may be detected without precise identity. A sequence might be:
+
+- “Something moves among the trees to the north.”
+- “A lone figure appears to be moving south through the woodland.”
+- “A man carrying a bow is approaching from the north.”
+- Identification, only if circumstances permit.
+
+No detection automatically grants exact identity, equipment, coordinates or all
+details. Low-information signs such as something out of place may precede even
+recognition of movement. Exact stages and wording remain open. A low-exposure
+target at 20 feet is generally easier to notice than the same target at 500 feet.
+
+### Dynamic EXPOSURE and observer-specific detection
+
+EXPOSURE describes how easy a PC, MOB or object is to notice **under current
+circumstances**. It is a derived situational concept, not a fixed character stat
+or a new CAP. Observer SENSE, attention and circumstances interact with target
+exposure/concealment; no arithmetic or roll direction is selected.
+
+Potential contributors include movement, size, posture, vegetation, terrain,
+physical cover, concealment, HIDE/SNEAK, distance, light/weather and future
+clothing/equipment or noise. Their allocation and combination remain undecided;
+a list of inputs is not permission to double-count them on both sides.
+
+Illustratively, standing in open prairie is conspicuous; sitting lowers profile;
+prone lowers it further; tall grass plus prone and deliberate concealment can
+lower it much more. “High/low/very low” are examples, not fixed categories.
+
+**Detection belongs to the observer relationship.** If Thomas notices concealed
+Bob, Bob does not globally become unhidden: his physical exposure is unchanged.
+Thomas acquired perceptual knowledge; another observer may still see nothing.
+Different SENSE, direction, distance and observation circumstances matter.
+Knowledge retention/reacquisition rules remain to be designed.
+
+### HIDE, SNEAK and posture
+
+HIDE uses actual local cover to lower exposure; it never sets a universal
+`hidden = true` invisibility rule. Dense woodland, brush and fallen timber may
+provide cover; short-grass prairie may provide little or none. Better SENSE,
+proximity, concentration or favorable circumstances may still reveal a hidden
+target. Do not conjure concealment absent from the world.
+
+Retain moving HIDE: continue traveling while seeking suitable concealment, then
+use it, stop and settle with exposure reduced by actual circumstances. SNEAK
+moves slowly/deliberately to lower signature, without invisibility. RUN/SPRINT
+creates distance conspicuously; WALK has normal signature. Escape can progress
+FLEE → distance → break LOS → change heading → SNEAK → HIDE → settle.
+
+Relevant posture concepts include **standing, sitting and prone**. Smaller
+profile generally helps, especially with vegetation/terrain; prone in bare open
+ground may remain obvious at short range. Posture alone is not magical stealth.
+
+**HIDE does not inherently penalize SENSE or SCAN.** Target perceptibility and
+outward attention are separate. Concealed, motionless observers can be excellent
+watchers. Actual cover may still obstruct their sight; no generic hiding penalty
+or automatic sitting/prone numerical bonus is selected.
+
+### Movement cuts both ways
+
+For targets, sprinting generally produces very high movement signature, running
+high, walking moderate, sneaking reduced and stillness no **movement-generated**
+exposure. Stillness does not remove all other exposure. This applies to MOBs as
+well as PCs: a still deer in brush, wolf in grass, moose crossing prairie and
+rabbit by a log should not all be equally noticeable at the same distance.
+
+For observers, sprinting substantially impairs careful observation, running
+impairs it, walking somewhat impairs it and deliberate sneaking may impair it
+less. Stillness favors sustained observation whether standing, sitting or prone.
+These relationships are qualitative, not numerical modifiers or guaranteed ranks
+regardless of terrain. Movement makes a target easier to notice while making
+that moving observer worse at noticing subtle things.
+
+A concealed hunter under a fallen tree can remain low-exposure while scanning
+north. A motionless deer 400 feet away in brush may escape notice; movement may
+produce “A flicker of movement catches your attention among the trees to the
+north.” The distance is illustrative, not guaranteed detection or forest LOS.
+Patience and stillness matter.
+
+Two concealed observers may scan for one another, neither invisible nor assured
+of success. Shifting position, crossing an opening or moving equipment can expose
+a cue, initially only “Something moved near the base of a pine to the northwest.”
+This should emerge from shared perception, **not a separate sniper mode/system**.
+
+### SEARCH tradeoffs and future extensions
+
+SEARCH supplies close-range physical coverage; SCAN concentrates directional,
+often distant attention. They may operate simultaneously: do not automatically
+ban SCAN NORTH during a search spiral. Attention spent north can reduce notice
+nearby or around one's feet. Normal perception determines the tradeoff; SEARCH
+still grants no reveal radius or spacing bonus.
+
+Future clothing/equipment effects depend on context: earth tones in woodland,
+snow camouflage in snow versus summer prairie, bright colors, reflective metal
+and noisy/bulky gear can affect exposure/sensory signature differently. Do not
+implement them now or prescribe universal “hunter clothing +3 HIDE” bonuses.
+
+Future admin RAW diagnostics might show qualitative exposure and contributors
+(posture, movement, vegetation, active concealment). Format/categories are not
+locked. Players should experience prose, detection and environmental feedback,
+not “Exposure: 17.4%” or routine numerical diagnostics.
+
+### Deliberately unresolved mechanics
+
+No numeric SENSE/EXPOSURE formula, cone width, distance bands, concentration
+schedule, movement/posture modifier, HIDE/SNEAK adjustment or clothing bonus is
+approved. Later design/testing must settle representation, observer knowledge,
+visibility/detection/identification boundaries, attention persistence/cancellation,
+heading-change behavior, lighting/weather and sensory channels. Reuse existing
+perception/geography authorities without treating diagnostic geography as sight.
 
 ## Bounded Rabbit MOB wounds and corpse (2026-09-30)
 

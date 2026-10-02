@@ -213,7 +213,7 @@ These are the highest-value additions to the interaction vocabulary, ordered by 
 | Orientation | `MAP`, `COMPASS`, map bookmarks | Adopt when persistent map knowledge and possession are defined. Compass and map are different affordances; avoid revealing admin geometry. |
 | Groups | `FOLLOW`, `LEAD` | Adopt for consent-aware following, companions and mounts through the same continuous travel controller. No room-by-room follower cloning. |
 | Rest and posture | `SIT`, `REST`, `SLEEP`, `WAKE` | Adopt when posture, awareness and recovery states are designed. Existing STAND water behavior must remain valid. |
-| Stealth and perception | `HIDE`, `SNEAK`, `SEARCH` | Adopt when observers, cover and detection are modeled in continuous space. SNEAK should modify movement, not fork it. SCAN may merge into LOOK/SEARCH. |
+| Stealth and perception | `HIDE`, `SNEAK`, `SEARCH` | Adopt when observers, cover and detection are modeled in continuous space. SNEAK should modify movement, not fork it. SCAN has a distinct directional-attention role in the shared perception design. |
 | Terrain actions | `CLIMB`, `CRAWL` | Adopt when certified geometry and movement rules can support them. No invented room exits or bypasses of hazard refusal. |
 | Economy and MOBs | `ASK`, `BUY`, `SELL`, `PAY`, `HIRE` | Adopt as MOBs, trade, currency and contracts become real. Keep transactions auditable; ASK requires actual dialogue, not invented responses. |
 | Equipment care | `REPAIR`, `SHARPEN`, `EXTINGUISH` | Adopt when condition, materials and fire/light rules exist. MEND is a possible REPAIR alias; LIGHT shares the tutorial fire family. |
@@ -248,7 +248,7 @@ The historical handoff mentions several of these conditionally. Their appearance
 | `TAKE`, `INV`, `I` | Implemented aliases | TAKE uses GET; INV and I use INVENTORY. See the Live section. |
 | `YELL` | Merge with SHOUT | One loud-speech range and hearing policy. |
 | `HIT`, `STRIKE`, `KILL` | Review as ATTACK aliases | One combat-intent and Crown's Calling rules engine; KILL carries a different intent and needs explicit review. |
-| `SCAN` | Merge or review under LOOK/SEARCH | Avoid redundant perception code unless directional scanning has a real distinct function. |
+| `SCAN` | Proposed directional attention | Shares perception with LOOK/SEARCH; cone benefit costs peripheral awareness. Not implemented. |
 | `HOLD` | Review within equipment | An actual occupied hand may justify it; otherwise WIELD/WEAR/equipment state already covers the action. |
 | `RIDE` | Likely merge with mounted TRAVEL | Mount changes locomotion context; heading continues in the shared world. |
 | `CRAFT` | Review as recipe/workflow entry | Favor concrete FIRE, CUT, ROAST and other physical verbs where they communicate the task. |
@@ -269,7 +269,7 @@ The historical handoff mentions several of these conditionally. Their appearance
 ### Focused open questions
 
 - Compare the real historical Shadows `STATUS` handler with current CCMUD `STATUS` before choosing shared fields.
-- Determine whether EXAMINE, HOLD, SCAN, RIDE, BUTCHER and CRAFT merit a distinct action after their owning systems exist.
+- Determine whether EXAMINE, HOLD, RIDE, BUTCHER and CRAFT merit a distinct action after their owning systems exist.
 - Confirm old Shadows provenance and syntax only for commands where it changes a concrete implementation decision.
 - Establish communication privacy, theft/PvP consent, staff moderation and travel targeting rules before implementing those families.
 
@@ -417,3 +417,15 @@ admin bookmarks. STOP/disconnect pauses route playback and preserves progress;
 resumption is explicit and can rejoin the remaining route. Incomplete recording
 survives sessions but must resume at its recorded endpoint without fabricated
 segments. Consult the design for syntax examples and unsettled boundaries.
+
+## SCAN and shared perception: design only (2026-10-02)
+
+[Unified perception](design.html#unified-perception-scan-exposure-and-stealth-2026-10-02)
+owns SENSE/EXPOSURE, HIDE/SNEAK/posture and observer-specific detection.
+Proposed `SCAN NORTH` (eventually arbitrary headings such as `SCAN 17`) focuses
+attention directionally while allowing travel on a different heading. Benefit
+inside the cone costs subtle peripheral awareness; conspicuous stimuli can still
+be noticed. Concentration may build over time; width/timing/formulas are not locked.
+HIDE lowers exposure, not SENSE/SCAN effectiveness or universal visibility.
+SEARCH may run with SCAN, with natural attention tradeoffs. These are unimplemented
+design concepts; use the linked section for current implementation boundaries.
