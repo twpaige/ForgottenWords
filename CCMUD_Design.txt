@@ -1,3 +1,15 @@
+October 2, 2026 - SEARCH, command chains and recorded routes (NOT IMPLEMENTED)
+
+CCMud/DESIGN.md section "SEARCH, command chains and recorded routes (2026-10-02)"
+(published /CCMud/design.html) owns the current navigation/search direction.
+SEARCH physically follows an expanding square spiral; ordinary perception owns
+discovery. This supersedes Q82's stationary SEARCH and any reading of Q74 that
+awards an automatic search/spacing perception bonus. Dollar-delimited command
+chains are temporary; learned routes store persistent character-specific traveled
+geometry, support reverse/rejoin, and preserve progress on STOP/disconnect.
+See that section for commands, status, recording continuity and open boundaries.
+No navigation runtime or schema is implemented by this documentation update.
+
 October 2, 2026 - Current combat clock, pins and FLEE design (NOT IMPLEMENTED)
 
 CCMud/DESIGN.md, "Escape, Athletics movement and moving HIDE (2026-10-02)"
@@ -2312,6 +2324,7 @@ QUESTION 75 — HIDING VS. PERCEPTION
 
 Deliberate hiding is an opposed THIEV-versus-SENSE system, heavily modified by actual physical circumstances such as distance, lighting, vegetation, cover, movement, and similar factors.
 
+HISTORICAL: the October 2 SEARCH design grants movement-based opportunities, not an automatic bonus.
 Passive perception and active searching are meaningfully different. Merely being nearby gives the observer passive SENSE opportunities; deliberately SEARCHing provides a substantial advantage. Exact modifiers are deferred.
 
 
@@ -2374,6 +2387,7 @@ SENSE underlies these actions, but the action determines what the character is a
 QUESTION 82 — SEARCHING AND TRACKING WHILE MOVING
 -------------------------------------------------
 
+HISTORICAL / SUPERSEDED by the October 2 moving SEARCH design in CCMud/DESIGN.md:
 SEARCH requires the character to stop moving because it represents careful examination of a localized area.
 
 CURRENT / RESOLVED by C03: TRACK without a target discovers nearby detectable trails, nearest first. TRACK <trail>, e.g. TRACK RABBIT TRAIL #1, physically follows recorded signs at TRUDGE. Lost sign stops movement at the last resolvable segment; reposition and TRACK to reacquire. No hidden-location shortcut or mandatory SEARCH TRAIL command.

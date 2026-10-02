@@ -268,6 +268,185 @@ Do not invent rules for these remaining boundaries:
 
 These are implementation questions, not authorization to change runtime behavior.
 
+## SEARCH, command chains and recorded routes (2026-10-02)
+
+**Approved design direction for further refinement; not implemented.** This
+section owns navigation/search behavior. Syntax below is proposed, not a claim
+that these commands currently work. No new schema, pathfinding or runtime is
+authorized by this documentation.
+
+### Current implementation and precedence
+
+The inspected Crown-Call implementation (`1188b58`) already provides continuous
+travel, finite directional distances in feet, APPROACH, ordinary observations,
+STOP and safe disconnect handling. These use shared server movement/navigation
+and geography checks; APPROACH is not general obstacle-routing/pathfinding.
+Admin MARK/MARKS/UNMARK/JUMP MARK persists per-character point bookmarks (XYZ or
+exact ROOM identity) and uses validated admin placement. It is not a learned
+route, player GPS, cartography or route recording. See [current commands](commands.html).
+
+No spiral SEARCH, general `$` command queue, learned-route recording, geometric
+route persistence/rejoining or route playback is implemented. Existing search
+helpers for admin catalogs/FIND are not the proposed player SEARCH mechanic.
+Hidden-person/object detection, tracking and other future perception systems
+remain separately governed; listing them below does not claim they already run.
+
+This moving SEARCH supersedes the older Q82 requirement to stand still. Q74's
+suggestion of a substantial active-search advantage must not be interpreted as
+an automatic perception bonus from this command or its spacing. Preserve those
+older passages as historical context; normal perception/concealment owns notice.
+Existing TRACK design is distinct and is not replaced by geometric route playback.
+
+### SEARCH: movement determines where, perception determines what
+
+`SEARCH <size> [spacing]` systematically moves through an approximately centered
+square around the starting location. Both arguments are **feet**; default spacing
+is **5 feet**, measured between passes/loops, not a SENSE/perception bonus.
+
+| Example | Intended area | Spacing |
+| --- | --- | --- |
+| `SEARCH 50` | 50 × 50 ft | 5 ft |
+| `SEARCH 50 2` | 50 × 50 ft | 2 ft |
+| `SEARCH 1000 10` | 1,000 × 1,000 ft | 10 ft |
+
+Use an **expanding square spiral starting at the character's current position**,
+not a lawnmower grid approached from a distant corner. A conceptual 5-foot pattern
+is `E 5 → N 5 → W 10 → S 10 → E 15 → N 15 → W 20 → S 20 → E 25 …`.
+Nearby ground is searched first, coverage expands deterministically and searching
+begins immediately. Exact generation, orientation and clipping to the approximate
+square are later implementation details; this example does not lock an algorithm.
+
+SEARCH uses ordinary movement/navigation. Terrain, slope, water, obstacles,
+stamina, speed, observations, LOOK and interruptions apply. Other characters can
+observe the searcher physically traveling. Applicable hidden-object/person/MOB
+perception, environmental discovery and future tracking operate normally as the
+character passes close enough. No teleport, independent simulated travel or
+radius-wide reveal is permitted. **STOP cancels the search movement.**
+
+Passing within five feet of something hidden is an opportunity to perceive it,
+not a guarantee. SEARCH chooses **where the character looks**; normal perception
+chooses **what the character notices**. Smaller spacing costs substantially more
+walking without guaranteeing detection. A 1,000-foot square at ten-foot spacing
+requires substantial physical travel and time; do not abstract that cost away or
+promise an exact distance before the boundary algorithm is chosen.
+
+### Temporary command chains
+
+Proposed delimiter: **`$`**, with optional surrounding whitespace. For example,
+`N 100 $ E 50 $ N 200` travels north 100 feet, then east 50, then north 200.
+Each command starts only when the preceding command **completes**, not when it
+merely acknowledges starting. The concept supports chaining ordinary commands;
+the supported command set and completion contract still need definition.
+SEARCH may generate an equivalent movement chain or use a cleaner shared segment
+representation; it must not create a second movement engine.
+
+Prefer parsing/validating the entire manually entered chain before starting.
+`N 100 $ E 50 $ BANANA 20 $ S 10` should reject command 3 and execute nothing,
+rather than travel 150 feet before detecting malformed input. This is preflight
+syntax/eligibility validation where practical, not a promise that future terrain,
+targets or other changing conditions cannot invalidate a later step. Normal
+server validation must still apply at execution.
+
+**STOP stops current travel and discards the remaining temporary chain.** Chains
+are not persistent character knowledge. Do not use X for travel cancellation:
+[X cancels a queued combat action](design.html#rapid-combat-clock-current-intended-design).
+Literal delimiter escaping, asynchronous failures, indefinite movement commands,
+queue replacement and limits remain unspecified rather than silently invented.
+
+### Recorded routes: character knowledge of actual travel
+
+A route is a **persistent, character-specific geometric path actually traveled
+and learned**, not a text macro. Store meaningful waypoints/segments from START
+to END rather than literal commands or microscopic samples. This supports forward
+and reverse travel, simplification, interruption, rejoining and future map use.
+Another character does not automatically learn it. It remains distinct from
+admin marks, which identify destinations rather than learned paths.
+
+No arbitrary mileage limit is required: a route may span hundreds of miles;
+long straight sections can be compact. If necessary later, a generous segment/
+waypoint bound is preferable to a mileage cap. **No numerical limit is selected.**
+
+Proposed command concepts (exact syntax may be refined):
+
+| Command | Purpose |
+| --- | --- |
+| `ROUTES` | List this character's known routes |
+| `RECORD ROUTE <name>` | Begin recording actual travel |
+| `RECORD STOP` | End recording; finalize/pause distinction remains to be settled |
+| `RECORD ROUTE <name> CONTINUE` | Resume an incomplete/paused recording |
+| `RECORD ROUTE <name> APPEND` | Deliberately extend a completed route |
+| `ROUTE <name>` | Follow START toward END |
+| `ROUTE <name> REVERSE` | Follow END toward START |
+| `ROUTE CONTINUE` | Resume previously active route travel |
+| `DELETE ROUTE <name>` | Delete a recorded route |
+
+### Following, pausing and rejoining
+
+Forward or reverse travel need not begin at the exact endpoint. From reasonably
+near the route, approach an appropriate starting/rejoin point by **real movement**,
+then follow the known geometry in the chosen direction. This is not magical GPS
+across vast unknown territory. The practical rejoin-distance limit is **unsettled**;
+no pathfinding capability is implied beyond existing or separately approved
+navigation authority. Normal hazards, obstacles and movement restrictions apply.
+
+During route playback, **STOP pauses physical movement and preserves progress**:
+route identity, forward/reverse direction, progress/segment position and paused
+state. It does not erase the learned route. ROUTE CONTINUE attempts to rejoin an
+appropriate nearby point on the **remaining, uncompleted portion**, then proceeds
+toward the original destination. It need not backtrack to the exact interruption
+coordinate if a sensible forward rejoin point exists. Selection/rejoin algorithms
+remain for implementation, particularly for loops or crossing segments.
+
+Example: halfway through a route to a house 100 miles away, an angry moose forces
+the character to FLEE off the path. Route geometry, direction and progress survive.
+After escaping and orienting, ROUTE CONTINUE attempts a sensible rejoin ahead on
+the remaining route. The character is not locked to rails. If the player instead
+chooses to go home, stored geometry supports reverse travel; syntax for reversing
+an active/paused route is not locked here.
+
+Disconnect/logout **stops physical movement**, persists route progress and leaves
+playback paused on reconnect. There is no offline route travel or automatic
+login resumption; continuation is deliberate. Existing water disconnect behavior
+still has its separate contract (persisted FLOATING, no offline drift); this
+proposal does not silently rewrite it.
+
+### Recording across sessions and extending routes
+
+RECORD ROUTE begins capturing actual traveled geometry; the character then
+travels normally. For example, record `tavern`, travel out/east/north 75 feet and
+issue RECORD STOP. The interior/exterior example does not yet specify how ROOM
+transitions are encoded alongside geographic segments.
+
+Incomplete recordings survive disconnect/logout: physical movement stops and
+recording pauses, preserving the partial route for another session. A long route
+need not be recorded in one sitting. `RECORD ROUTE north_coast CONTINUE` resumes
+an unfinished recording **from its recorded endpoint**. If elsewhere, return/
+rejoin that endpoint appropriately first. Never silently connect the old endpoint
+to an unrelated current position: that would fabricate unrecorded travel.
+Endpoint-navigation conveniences are deferred.
+
+`RECORD ROUTE north_coast APPEND` deliberately reopens a completed route at its
+existing endpoint and extends it. CONTINUE resumes incomplete work; APPEND extends
+completed work. Neither authorizes an invented connecting segment. PREPEND and
+elaborate editing are not required for v1.
+
+### Distinct interruption contracts and open boundaries
+
+| System | Meaning | STOP |
+| --- | --- | --- |
+| Command chain | Temporary entered sequence | Cancel travel and remaining queue |
+| SEARCH | Generated expanding spiral; ordinary perception | Cancel search travel |
+| Recorded route playback | Persistent knowledge and traversal progress | Pause, retain route/progress |
+
+Before implementation, settle RECORD STOP finalization versus pause (the handoff
+uses both descriptions), route naming/replacement/deletion during use, restart
+state, recording interruption/resumption details, geometry simplification tolerance,
+ROOM/link transitions and non-traveled relocations such as admin JUMP. Never record
+teleports or gaps as physically traveled connecting segments. Search input bounds,
+pace selection, interruption/blocked-segment behavior, chain command eligibility
+and nearby rejoin criteria also remain open. No database schema, general scheduler,
+pathfinding algorithm or new numerical limits are prescribed by this design.
+
 ## Bounded Rabbit MOB wounds and corpse (2026-09-30)
 
 CCMUD calls NPCs **MOBs (mobiles)**. The original THROW/REMOVE hit test now uses

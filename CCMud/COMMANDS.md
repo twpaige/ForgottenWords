@@ -400,3 +400,20 @@ Moving HIDE still searches for cover while movement continues, then stops and
 conceals when suitable cover is found. SNEAK complements this through slower,
 less conspicuous movement. See the [movement design](design.html#hide-while-moving-and-sneak)
 for the retained proposal and unresolved mechanics.
+
+## SEARCH, command chains and routes: design only (2026-10-02)
+
+Not implemented. [SEARCH](design.html#search-movement-determines-where-perception-determines-what)
+proposes `SEARCH <size> [spacing]` in feet, default spacing 5, physically following
+an expanding square spiral. Normal perception determines discovery; STOP cancels.
+[Command chains](design.html#temporary-command-chains) propose `$`-separated ordinary
+commands, sequential completion and preflight validation. STOP discards the chain;
+X remains reserved for queued combat-action cancellation.
+
+[Recorded routes](design.html#recorded-routes-character-knowledge-of-actual-travel)
+propose ROUTES, RECORD ROUTE/STOP/CONTINUE/APPEND, ROUTE forward/REVERSE/CONTINUE and
+DELETE ROUTE. These store character-specific traveled geometry, not macros or
+admin bookmarks. STOP/disconnect pauses route playback and preserves progress;
+resumption is explicit and can rejoin the remaining route. Incomplete recording
+survives sessions but must resume at its recorded endpoint without fabricated
+segments. Consult the design for syntax examples and unsettled boundaries.
