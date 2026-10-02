@@ -6,6 +6,23 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Travel configuration Phase 2 (2026-10-02)
+
+Implemented/pushed in Crown-Call `3480055528e844e940f15e79ccde08a1d2c8808e`.
+Migration `20261002_02` seeds current pace speeds, shared geographic multiplier,
+observation cadence and capacity baseline/factor. Builder Settings adds Travel;
+Save marks changes pending restart. Identity activation remains identity-only.
+[Settings/defaults contract](design.html#runtime-configuration-phase-2-existing-travel-2026-10-02).
+
+Verification: settings/travel/water default regressions 124 passed; nondefault
+travel plus HOG-water/prewarm regressions 37 passed; final settings/nondefault
+configuration run 40 passed. These runs overlap. Identity and Travel browser
+scripts passed, including compact 1280×720 Travel editing, numeric payloads,
+restart status and category isolation. Migration seeding and identity preservation,
+revision/activation separation, changed-file lint/diff and single Alembic head passed.
+Existing TestClient deprecation warning only. No full suite; no DEV/PROD deployment.
+Phase 3 is not started. Cormac/HOG branding and gameplay defaults are unchanged.
+
 ## Runtime identity configuration Phase 1 (2026-10-02)
 
 Implemented/pushed in Crown-Call `4c9187a31a42267feeeebf2fbf722f18dffa1f6f`.
@@ -20,7 +37,7 @@ startup tests). Settings and Craft/Object browser scripts passed, including 1280
 layout, revision errors, save/activation separation and escaped titles. Changed-file
 lint/diff checks and Alembic single-head check passed. One existing TestClient
 deprecation warning; no full suite run. Documentation publication is separate from
-game deployment. DEV/PROD deployment remains pending. Phase 2 is not authorized.
+game deployment. DEV/PROD deployment remains pending. Phase 2 is subsequently implemented above; Phase 3 requires separate approval.
 
 ## Current bounded phase
 

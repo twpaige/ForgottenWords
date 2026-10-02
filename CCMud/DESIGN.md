@@ -8,10 +8,62 @@ permalink: /CCMud/design.html
 **Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, MAKE SPIT / GATHER FIREWOOD, the data-driven Craft Engine/web Builder, and compact Object Builder with linear real-time morphs on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
 
+## Runtime configuration Phase 2: existing travel (2026-10-02)
+
+Implemented in Crown-Call `3480055`; migration `20261002_02` adds the nine current
+travel defaults to the singleton settings record, preserving saved identity and
+existing values. This is configuration conversion, **not new movement design**.
+
+| Key | Default | Units | Valid range |
+| --- | --- | --- | --- |
+| travel.pace_mph.trudge | 1 | mph | 0.1–50 |
+| travel.pace_mph.walk | 3 | mph | 0.1–50 |
+| travel.pace_mph.jog | 5 | mph | 0.1–50 |
+| travel.pace_mph.run | 8 | mph | 0.1–50 |
+| travel.pace_mph.sprint | 11 | mph | 0.1–50 |
+| travel.geographic_multiplier | 24 | multiplier | 0.1–24 |
+| travel.observation_seconds | 15 | real seconds | 1–300 |
+| travel.capacity_base_lb | 150 | pounds | 1–10,000 |
+| travel.capacity_athletics_factor | 0.05 | factor per Athletics | 0–1 |
+
+All are finite numbers, not numeric strings or booleans. Server validation also
+requires Trudge <= Walk <= Jog <= Run <= Sprint. Bounds limit accidental extreme
+inputs; they do not certify successful movement through unprepared geography.
+The multiplier ceiling deliberately does not exceed the existing 24× acceleration.
+
+Admin-only Builder Settings now has Identity and Travel categories with labels,
+units, bounds and activation information. Save remains revision-safe. Travel
+changes are **restart-required**; Activate Identity never activates pending travel
+values, even after a mixed save. Saved revision, Identity active revision, Travel
+startup revision and restart-pending differences are separately visible. Changing
+category discards unsaved form edits; save before switching. No gameplay reload or
+new server-control button is added.
+
+Startup supplies one immutable validated snapshot to the existing HOG travel
+controller. Identity activation cannot mutate that controller's travel values.
+Land speed, swimming/floating geographic displacement and displayed physical mph
+share one configured multiplier/conversion. Pace membership is separate from
+configured speed values. Capacity remains `base × (1 + factor × Athletics)` with
+the existing load slowdown curve unchanged. Observation cadence applies to newly
+scheduled observations after startup; no missed-observation replay or retrospective
+movement reinterpretation is introduced. Normal disconnect/restart stops travel.
+
+No settings database reads occur during movement. Test controllers can receive
+explicit immutable configurations without loading a live database. Unit conversions,
+reverse-display coefficients and other mathematically derived values are not knobs.
+Registry defaults own runtime defaults; migration literals remain frozen history.
+
+All seeded behavior remains unchanged: 24× geographic movement, Trudge 1 mph,
+no direct Athletics speed scaling, no accelerated world clock. The proposed 2×,
+0.85-mph Trudge, Athletics speed formula and 1.75× world clock remain future design.
+Stamina (Phase 3), terrain/uphill factors, water thresholds/effort, combat, pins,
+FLEE, perception, SEARCH/SCAN/routes, generation and authored content are deferred.
+Only water's already-shared geographic multiplier is consolidated here.
+
 ## Runtime configuration Phase 1: identity (2026-10-02)
 
-Implemented in Crown-Call `4c9187a`. Only **game.name** and **game.short_name** are
-configurable in this phase. Migration `20261002_01` creates the singleton
+Phase 1 was implemented in Crown-Call `4c9187a`. **game.name** and **game.short_name** were the only settings
+configurable in that phase; Phase 2 above adds restart-only Travel settings. Migration `20261002_01` creates the singleton
 `game_configuration` row (fixed ID 1, revision, JSON values, updated_at, updated_by)
 and seeds **Crown & Call** / **CCMUD**. DEV and PROD own independent database values;
 no automatic cross-environment synchronization exists.
