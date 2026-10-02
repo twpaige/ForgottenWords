@@ -8,6 +8,18 @@ permalink: /CCMud/status.html
 
 ## Current bounded phase
 
+ROOM-selector correction: [cde95d1](https://github.com/twpaige/Crown-Call/commit/cde95d192e69e01b695e9a632f1401fa9a153408)
+updates the existing Objects → Rooms dropdown to show local keys, sorted
+case-insensitively, with an adjacent live local-key substring filter. Clearing
+restores all options. Filtering preserves the current editor and unsaved changes;
+selecting a result uses the existing room-switch handler. Room names, LOOK,
+FIND O and dwelling architecture are unchanged. Both relevant headless Edge checks
+(`builder_rooms.cjs`, `builder_dwelling_templates.cjs`) passed, covering mixed-case
+prefix sorting, name exclusion, no matches, clearing, selection and unsaved edit
+retention, existing save/import flows and template controls. Changed-file Ruff
+and diff checks passed. This client-only change required no Python runtime tests,
+full suite, schema migration or deployment.
+
 Admin/builder room-key improvements are implemented in
 [1cd150a](https://github.com/twpaige/Crown-Call/commit/1cd150abaf222dacd042cb5c0f305707af3fb1ba).
 Dwelling instance/template scrolling room lists sort by local key and filter live
