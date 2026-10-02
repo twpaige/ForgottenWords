@@ -8,6 +8,63 @@ permalink: /CCMud/design.html
 **Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, MAKE SPIT / GATHER FIREWOOD, the data-driven Craft Engine/web Builder, and compact Object Builder with linear real-time morphs on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
 
+## Runtime configuration Phase 1: identity (2026-10-02)
+
+Implemented in Crown-Call `4c9187a`. Only **game.name** and **game.short_name** are
+configurable in this phase. Migration `20261002_01` creates the singleton
+`game_configuration` row (fixed ID 1, revision, JSON values, updated_at, updated_by)
+and seeds **Crown & Call** / **CCMUD**. DEV and PROD own independent database values;
+no automatic cross-environment synchronization exists.
+
+`Admin Settings → validated server API → database revision → explicit activation
+or startup → immutable in-memory snapshot → runtime consumers`.
+
+The code-owned typed registry supplies defaults, category, label, description,
+constraints, activation policy and public-branding classification. Administrators
+cannot edit validation metadata or add arbitrary keys. Names are nonempty plain
+text, at most 80/16 characters respectively, with no markup, control characters
+or edge whitespace. Runtime HTML titles escape text rather than injecting HTML.
+Unknown keys cannot be submitted; unknown stored keys from a newer version remain
+untouched during an older server's edits. Missing recognized keys use versioned
+code defaults and are identified as defaulted. Invalid recognized values fail
+validation; a missing row/table or database error prevents safe startup.
+
+The compact `/builder` Settings tab is **admin-only**. Ordinary Builders retain
+Crafts/Objects but have no Settings API access. Existing session authorization and
+`X-Crown-Builder` write protection apply. GET/PUT `/api/builder/settings` reads/saves;
+POST `/api/builder/settings/activate` activates the explicitly reviewed saved
+revision. Optimistic revision checks reject stale saves/activation with conflict
+responses. SQL compare-and-update protects concurrent saves. Save does not change
+running branding; the UI shows saved versus active revision and offers Reload.
+
+Startup loads/validates the saved record before serving. Explicit activation
+validates a complete candidate before replacing the active immutable snapshot;
+failure retains the previous active identity. Runtime title consumers perform
+**no configuration database queries**. Client title, Builder title (`name · Builder`)
+and FastAPI/OpenAPI title use game.name. OpenAPI cache regeneration is serialized
+with activation. New page loads see activated identity; existing tabs refresh.
+Settings activation also updates that Builder tab's title. game.short_name is
+stored/validated for future use and has **no game display consumer yet**.
+
+Activation is process-local; Phase 1 does not introduce distributed hot reload.
+If multiple workers are introduced, restart all workers to load one saved revision.
+Future gameplay configuration should initially require restart unless separately
+approved. No gameplay settings are converted here.
+
+**Cormac and Heart of Gold/H.O.G. remain engine identities.** Internal packages,
+services, cookies, browser-storage namespaces, technical export identifiers and
+request headers remain unchanged. Authored names/descriptions are content, not
+branding templates; no global replacement occurs. Craft costs, object capabilities
+and ROOM-link values remain owned by their content definitions. No Help Editor,
+profiles, import/export or configuration-history application is added.
+
+Approved policy for a **future**, separately authorized maximum-stamina conversion:
+preserve absolute stamina, clamp above a lowered maximum and grant no free stamina
+when increasing it. Thus 18/20 becomes 15/15 when lowered to 15, while 10 stays 10;
+18/20 becomes 18/30 when raised to 30. This policy is recorded, **not implemented**.
+Movement-design differences (24× versus planned alternatives, Trudge and Athletics
+speed) remain separate decisions; all current gameplay formulas are preserved.
+
 ## Escape, Athletics movement and moving HIDE (2026-10-02)
 
 This section owns the new **approved design direction, not implemented mechanics**.

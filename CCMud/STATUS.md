@@ -6,6 +6,22 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Runtime identity configuration Phase 1 (2026-10-02)
+
+Implemented/pushed in Crown-Call `4c9187a31a42267feeeebf2fbf722f18dffa1f6f`.
+Migration `20261002_01` seeds database-backed game.name/game.short_name. Admin-only
+Builder Settings offers revision-safe Save and explicit Activate; client/Builder/API
+titles use an immutable cached snapshot. Cormac/HOG, authored content and gameplay
+remain unchanged. [Architecture and activation contract](design.html#runtime-configuration-phase-1-identity-2026-10-02).
+
+Verification: final settings/auth/health run 27 passed; Craft Builder regressions
+passed in the earlier combined run (36 passed before the additional migration and
+startup tests). Settings and Craft/Object browser scripts passed, including 1280×720
+layout, revision errors, save/activation separation and escaped titles. Changed-file
+lint/diff checks and Alembic single-head check passed. One existing TestClient
+deprecation warning; no full suite run. Documentation publication is separate from
+game deployment. DEV/PROD deployment remains pending. Phase 2 is not authorized.
+
 ## Current bounded phase
 
 ROOM filter interaction follow-up: [19a2915](https://github.com/twpaige/Crown-Call/commit/19a2915b2b5165757e3de2b8e8b21055794e7a11)
