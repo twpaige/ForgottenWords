@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 Thomas Paige. All rights reserved. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Crown &amp; Call is a persistent roleplaying MUD in an enormous frontier world. Explore Origin, where generated wilderness meets handcrafted places and players create their own stories.">
+  <meta name="theme-color" content="#0c1016">
+  <title>Crown &amp; Call — Welcome to Origin</title>
+  <style>
+    :root { color-scheme: dark; --slate: #0c1016; --panel: #161b22; --gold: #c9a44a; --gold-soft: #e4d2a0; --ink: #e8eaed; --muted: #9aa3ad; --line: rgba(201,164,74,.28); --deep: #080b0f; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--slate); color: var(--ink); font-family: Consolas, "Liberation Mono", Menlo, monospace; font-size: 16px; line-height: 1.85; }
+    ::selection { background: var(--gold-soft); color: var(--deep); }
+    a { color: var(--gold-soft); text-decoration-thickness: 1px; text-underline-offset: 5px; }
+    a:hover { color: #fff; }
+    a:focus-visible { outline: 2px solid var(--gold); outline-offset: 6px; }
+    .skip { position: absolute; top: -100px; left: 20px; padding: 8px 16px; background: var(--deep); z-index: 2; }
+    .skip:focus { top: 12px; }
+    .masthead { border-bottom: 1px solid var(--line); }
+    .masthead-inner { max-width: 1080px; margin: auto; padding: 22px 32px; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .wordmark { color: var(--gold-soft); font-size: 14px; font-weight: 700; letter-spacing: .14em; text-decoration: none; }
+    .masthead nav { display: flex; gap: 24px; font-size: 12px; }
+    .masthead nav a { color: var(--muted); text-decoration: none; }
+    .masthead nav a:hover { color: var(--gold-soft); }
+    main { max-width: 840px; margin: 0 auto; padding: 76px 36px 64px; }
+    .eyebrow { margin: 0 0 20px; color: var(--muted); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; }
+    h1 { margin: 0 0 52px; color: var(--gold-soft); font-size: clamp(36px, 6vw, 64px); letter-spacing: -.055em; line-height: 1.15; font-weight: 700; }
+    p { margin: 0 0 22px; }
+    strong { color: var(--gold-soft); font-weight: 700; }
+    .opening { padding-left: 26px; border-left: 2px solid var(--gold); }
+    .opening .remember { font-size: 21px; color: var(--gold-soft); }
+    .sentence { color: var(--muted); }
+    .arrival { margin: 34px 0 0; color: var(--gold-soft); font-size: 20px; line-height: 2; }
+    .chapter { margin-top: 44px; padding-top: 38px; border-top: 1px solid var(--line); }
+    .turn { margin: 32px 0 22px; color: var(--gold-soft); font-size: 19px; font-weight: 700; }
+    .quiet { color: var(--muted); }
+    .verbs { margin-top: 32px; color: var(--gold-soft); }
+    .closing { margin: 38px 0 0; padding: 28px 0 0; border-top: 1px solid var(--line); font-size: clamp(20px, 3.5vw, 27px); line-height: 1.5; }
+    .closing strong::before { content: "> "; color: var(--gold); }
+    footer { max-width: 1080px; margin: auto; padding: 24px 32px 36px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; color: var(--muted); font-size: 11px; }
+    footer p { margin: 0; }
+    footer nav { display: flex; gap: 22px; }
+    @media (max-width: 600px) {
+      body { font-size: 15px; line-height: 1.8; }
+      .masthead-inner { padding: 18px 22px; flex-wrap: wrap; gap: 12px; }
+      .masthead nav { gap: 20px; }
+      main { padding: 48px 22px 48px; }
+      h1 { margin-bottom: 36px; }
+      .opening { padding-left: 18px; }
+      .opening .remember { font-size: 18px; }
+      .chapter { margin-top: 32px; padding-top: 28px; }
+      footer { margin: 0 22px; padding: 22px 0 30px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      body { background: #fff; color: #111; font-size: 11pt; }
+      .masthead, footer, .skip { display: none; }
+      main { max-width: none; padding: 0; }
+      h1, strong, .opening .remember, .arrival, .turn, .verbs { color: #111; }
+      .quiet, .sentence, .eyebrow { color: #444; }
+      .chapter, .closing, .opening { border-color: #777; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#story">Skip to the introduction</a>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="wordmark" href="CCMudHome.html" aria-label="Crown and Call home">CROWN &amp; CALL</a>
+      <nav aria-label="Main navigation">
+        <a href="CCMud.html">World design</a>
+        <a href="CC_Ruleset.html">Ruleset</a>
+      </nav>
+    </div>
+  </header>
+  <main id="story">
+    <p class="eyebrow">A persistent roleplaying MUD</p>
+    <h1>Crown &amp; Call</h1>
+    <div class="opening">
+      <p class="remember">You remember your life.</p>
+      <p>Your family. Your friends. Your work. Everything was ordinary—until the men in green suits came.</p>
+      <p class="sentence">You were dragged before twelve elderly judges and condemned for crimes you had not yet committed. Your sentence: banishment to <strong>Origin—for this life and every life thereafter, for the eternity of your being.</strong></p>
+      <p class="arrival">A flash of light.<br>Then wilderness.</p>
+    </div>
+    <div class="chapter">
+      <p>Welcome to <strong>Crown &amp; Call</strong>, a persistent roleplaying MUD set in an enormous frontier world built by the Banished themselves.</p>
+      <p>For more than two centuries, people like you have built towns, farms, roads, churches, shops and outposts across a wilderness where civilization once did not exist. Technology has settled into an early-to-mid-1800s frontier existence.</p>
+      <p class="turn">And death won't get you out.</p>
+      <p>Your body—your <strong>vessel</strong>—can die. You cannot. Your soul eventually returns in another vessel, carrying the memories and knowledge of previous lives. But Origin has customs of its own: a new vessel means a new life. Old property, grudges and relationships are expected to remain behind.</p>
+      <p class="quiet">Usually.</p>
+    </div>
+    <div class="chapter">
+      <p>Crown &amp; Call combines <strong>vast procedurally generated landscapes with traditional, handcrafted MUD locations and interiors</strong>. The wilderness and authored world exist together: explore continuous terrain, then walk through the door of an individually built tavern, homestead, church or sprawling settlement.</p>
+      <p>Travel tens of thousands of miles across mountain ranges and open plains, follow rivers through wilderness, cross vast seas and discover places other players may never have seen.</p>
+      <p class="verbs">Hunt. Craft. Trade. Explore. Build relationships. Make enemies.</p>
+      <p class="turn">Join civilization—or leave it behind.</p>
+      <p>Gather your friends, disappear beyond the frontier and build a life and community of your own. Create traditions, rivalries and stories nobody planned for you.</p>
+      <p>Origin has mysteries.<br>You can pursue them—or ignore them completely.</p>
+      <p class="closing"><strong>This is your life. Go live it.</strong></p>
+    </div>
+  </main>
+  <footer>
+    <p>© 2026 Thomas Paige · Crown &amp; Call</p>
+    <nav aria-label="Footer navigation"><a href="index.html">Crown &amp; Call resources</a><a href="#story">Back to top</a></nav>
+  </footer>
+</body>
+</html>
