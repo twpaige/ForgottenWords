@@ -6,6 +6,26 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Connected terrain preparation during entry (2026-10-03)
+
+A cold terrain cache previously rejected entry and closed the Mudlet connection after
+character selection. The shared entry flow now retains authentication and the connection,
+shows one preparation notice, reserves the character, and enters automatically after
+certification. Pending players remain off-world; commands are not queued. QUIT and EOF
+release the pending claim. Ownership, duplicate-login and actual geometry failures still
+reject entry. Interior attachment certification can also wait for cold terrain. The web
+character dashboard displays preparation without enabling gameplay prematurely.
+
+Verification: 63 focused tests across MUD sessions, terrain cache, cabin, ownership and
+rooms passed. The 17 MUD tests also passed after extending real plaintext/TLS socket
+coverage to automatic entry without another login. Regression cases include pending
+claim exclusivity, wrong ownership, no wait spam, discarded pre-entry commands,
+cancellation/disconnect, failure rejection and successful certified entry. Headless Edge
+checks passed for both roles, waiting UI, HUD, navigation and desktop/mobile layouts.
+Changed-file lint passed; a broader source lint check found six existing findings in
+biomes, elevation and worldgen. No migration or environment changes are required.
+Code deployment and real Mudlet retest remain Thomas's next step; nothing was deployed.
+
 ## Mudlet HUD transcript correction (2026-10-03)
 
 Thomas confirmed real Mudlet login on DEV revision `24ce478` through the loopback

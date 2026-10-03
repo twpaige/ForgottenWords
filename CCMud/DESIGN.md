@@ -1528,3 +1528,21 @@ reply, including repeated identical requests. Welcome odometers and explicit ODO
 TRIP output remain; STOP acknowledgments, asynchronous observations and repeated hazards
 are never removed by a global text deduplicator. Ticking, terminal width/coordinates and
 ANSI/plain rendering are unchanged. GMCP remains deferred.
+
+
+### Automatic entry after terrain preparation (2026-10-03)
+
+A verified character whose terrain is still generating stays connected and authenticated.
+The shared session sends one `join_wait` notice, reserves exclusive entry ownership, and
+retries readiness once per second without blocking other sessions. Pending characters
+are absent from online/presence lists and cannot execute or queue gameplay commands.
+QUIT or disconnect releases the reservation. Once certification passes, the same session
+enters automatically, clears stale travel, and receives the usual welcome and LOOK.
+Web clients show the notice before joining; terminal clients receive readable prose.
+
+Only a typed terrain-cache pending result is retried. Generator failure, unsafe geometry,
+invalid ownership and unaudited structures still fail closed. Cold certified structure
+attachments may wait during entry; ordinary structure interactions retain their existing
+unavailable behavior. There is no entry wait deadline beyond the existing connection
+capacity limits; QUIT remains available. No new listener settings, migration, public
+ports, GMCP, terrain rules or gameplay tuning values are introduced.
