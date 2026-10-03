@@ -6,6 +6,24 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Mudlet HUD transcript correction (2026-10-03)
+
+Thomas confirmed real Mudlet login on DEV revision `24ce478` through the loopback
+listener/SSH tunnel. The terminal printed every tick's `travel_status`, including
+unchanged stationary snapshots. The fix treats unsolicited travel-status/HUD snapshots
+as state-only terminal input; web delivery is unchanged. Explicit STATUS replies remain
+readable and repeatable. Changing travel snapshots are silent too; observations, STOP
+acknowledgments and repeated hazards remain ordinary transcript events. No coordinate
+truncation, timing, mechanics, GMCP or infrastructure change is included.
+
+Verification: 15 focused MUD/WebSocket tests passed, with one existing TestClient
+warning. Session regressions cover plain/ANSI/web adapters, stationary and changing
+snapshots, STOP, repeated STATUS, asynchronous observations, repeated hazards, preserved
+web state fields and unmodified engine replies. Headless Edge navigation/HUD checks
+passed for both roles and desktop/mobile layouts. Changed-file lint and diff checks
+passed. The correction is not deployed; Thomas controls DEV deployment and live retest.
+
+
 ## Traditional MUD adapter and presentation v1 (2026-10-03)
 
 Implemented: shared WebSocket/Telnet session ownership, command/tick/STOP lifecycle,

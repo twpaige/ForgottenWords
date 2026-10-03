@@ -1514,3 +1514,17 @@ systemd, nginx or live deployment change accompanies source publication. Certifi
 provisioning/renewal, hostname/port selection, remote reachability and acceptance in actual
 Mudlet/MUSHclient/TinTin++ versions remain deployment verification. Existing game mechanics
 and terrain safety are unchanged. The existing web client remains a supported peer.
+
+
+### State snapshots versus transcript events
+
+Unsolicited `travel_status` and `hud` messages are state snapshots, not terminal
+transcript prose. Web clients continue receiving every snapshot for their existing HUD.
+The terminal adapter does not print them, even when coordinates/stamina change during
+travel: value-only deduplication would still produce a scrolling HUD. The shared session
+marks travel-status messages returned by explicit STATUS with `requested: true`, without
+changing their type/state fields or mutating engine results. Terminals render each such
+reply, including repeated identical requests. Welcome odometers and explicit ODOMETER/
+TRIP output remain; STOP acknowledgments, asynchronous observations and repeated hazards
+are never removed by a global text deduplicator. Ticking, terminal width/coordinates and
+ANSI/plain rendering are unchanged. GMCP remains deferred.
