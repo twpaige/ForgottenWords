@@ -1,7 +1,7 @@
 ---
 title: Commands
 description: Current CCMUD commands and reviewed legacy command candidates.
-reviewed: 2026-10-02
+reviewed: 2026-10-03
 nav: commands
 permalink: /CCMud/commands.html
 ---
@@ -27,6 +27,15 @@ The September 28 [historical handoff](https://github.com/twpaige/Crown-Call/blob
 | **Omit** | Do not carry the independent verb into CCMUD; the reason appears in the table. |
 
 Only the **Live** section gives current syntax. Examples elsewhere describe intent, not usable syntax or promised aliases. Staff access, object selection, privacy and character permissions are checked on the server.
+
+## Traditional client connection controls
+
+The optional MUD listener accepts existing-account login and owned-character selection.
+`ANSI ON` and `ANSI OFF` are terminal-adapter controls, scoped to the connection and
+starting OFF. They do not alter game state. Gameplay commands below use the same server
+handlers as the web client. SAY treats `#` text literally. Character creation/legacy
+claiming remain in the web interface; Builder remains web-based. Listener/TLS setup is
+separate from deploying code. See [shared sessions and presentation](design.html#shared-mud-sessions-and-presentation-v1-2026-10-03).
 
 ## Live server commands
 

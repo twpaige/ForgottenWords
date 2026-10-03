@@ -1,7 +1,7 @@
 ---
 title: Game design
 description: The MUD's accepted decisions, preserved in full and separated from tabletop rules.
-reviewed: 2026-10-02
+reviewed: 2026-10-03
 nav: design
 permalink: /CCMud/design.html
 ---
@@ -1467,3 +1467,50 @@ permissions, redaction needs and download UI remain future decisions.
 This feature must not make transcript files authoritative game state. Persistence and
 gameplay remain database/server-model responsibilities; transcript logging is diagnostic
 history and may fail without changing game outcomes.
+
+
+## Shared MUD sessions and presentation v1 (2026-10-03)
+
+The server remains authoritative for both first-class web and traditional MUD clients.
+A shared session loop owns commands, continuous travel/ROOM ticks, presence, ordering and
+STOP cleanup. Each character has one active owner across transports; second connections
+are rejected. Ownership is released only after disconnect STOP finishes. Different owned
+characters retain the existing account policy. There is no offline travel or takeover.
+
+The optional Telnet listener runs in the same application process/lifecycle on a separate
+port; one application worker is required. It defaults off. Numeric loopback plaintext is
+for local development; remote binds require direct TLS with a supplied certificate/key.
+Existing HTTP/HTTPS ports and web registration are unchanged. Terminal users log in with
+existing credentials and select an owned character. Character creation and legacy-key
+claiming remain web operations. Connection-local login tokens are revoked at terminal
+exit; existing browser sessions and join-time authorization behavior are preserved.
+
+Traditional connections receive asynchronous output without entering new commands. A
+bounded queue and single writer isolate slow clients; failure wakes owner cleanup. Shared
+presentation supplies travel fallback wording previously available only in JavaScript.
+Semantic text runs accompany existing structured event fields: titles cyan, objects green,
+PCs/MOBs magenta, hazards/errors red, prose default. Some specialized action prose remains
+neutral. Adapters render safe CSS/text nodes, ANSI, or plain text; no renderer decides
+mechanics, visibility, passability, ownership or administrative access.
+
+Approved initial authored fields include object/appearance and ROOM descriptions and
+ROOM departure text. They accept `#0`/`#8` reset, `#1`-`#7` red/green/yellow/blue/magenta/
+cyan/white, `#9` bright red, and `#A`-`#F` bright green/yellow/blue/magenta/cyan/white.
+Letter codes are case-insensitive and `##` is literal hash; unknown sequences remain
+literal. Reset means client default and each field/message is scoped. SAY stays literal.
+Raw controls are rejected on supported authoring paths and sanitized from legacy output.
+Storage limits remain source-character limits; terminal wrapping uses Unicode display
+cells and grapheme clusters. Browser wrapping remains responsive, and copy is plain text.
+No new player-writing system, migration or global gameplay setting is introduced.
+
+Terminal `ANSI ON`/`ANSI OFF` affects only that connection; default is plain. The adapter
+supports bounded ECHO, SGA, NAWS, TTYPE, BINARY and CHARSET, with UTF-8/ASCII negotiation.
+It does not advertise GMCP or compression. Structured events preserve a future GMCP seam;
+protocol packages, maps and client-specific GUIs are deferred. Security/protocol limits
+and deployment/TLS configuration stay outside immutable gameplay Settings.
+
+The implementation README owns exact configuration and limit values. No firewall,
+systemd, nginx or live deployment change accompanies source publication. Certificate
+provisioning/renewal, hostname/port selection, remote reachability and acceptance in actual
+Mudlet/MUSHclient/TinTin++ versions remain deployment verification. Existing game mechanics
+and terrain safety are unchanged. The existing web client remains a supported peer.

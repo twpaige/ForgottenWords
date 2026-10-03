@@ -1,10 +1,40 @@
 ---
 title: Current status
-description: Final existing-system configuration conversion and closure audit.
-reviewed: 2026-10-02
+description: Shared web and traditional MUD sessions with safe ANSI presentation.
+reviewed: 2026-10-03
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## Traditional MUD adapter and presentation v1 (2026-10-03)
+
+Implemented: shared WebSocket/Telnet session ownership, command/tick/STOP lifecycle,
+bounded output delivery, existing-account login/character selection, opt-in loopback
+Telnet or direct TLS listener, shared fallback prose, semantic text spans, safe Shadows
+color markup, CSS/ANSI/plain rendering and connection-local ANSI ON/OFF. Duplicate
+characters are rejected across adapters. Existing registration, character creation,
+gameplay, terrain safety and immutable Settings behavior are preserved. SAY stays literal.
+No new migration, game deployment, firewall, nginx or systemd change is included.
+
+Verification: 118 focused tests passed in the latest adapter/ROOM/builder/dwelling/object/
+Cormac batch; 68 passed in the travel/water/database-concurrency batch; an earlier 108-test
+web/auth/authoring batch also passed (counts overlap). Each batch reported one existing
+TestClient deprecation warning. New tests use real local TCP, certificate-verified TLS,
+mixed WebSocket/Telnet speech and duplicate ownership, async ticks/STOP-before-release,
+markup/control/Unicode handling, and bounded/refused protocol input. Browser navigation
+and safe DOM spans passed in headless Edge for desktop/mobile, along with travel
+presentation and field-command checks. Full-suite and live-client milestone gates remain.
+
+Deployment is separate: the listener defaults OFF. Before remote enablement, select the
+DEV TLS port/hostname, provision service-readable certificate/key, verify one application
+worker, open only that approved TLS port, and test real client profiles. HTTP health alone
+does not verify public certificate trust or reachability. No actual Mudlet/MUSHclient/
+TinTin++ GUI acceptance or live server inspection was performed. See the
+[design contract](design.html#shared-mud-sessions-and-presentation-v1-2026-10-03) and private
+application README for setup, bounds and certificate renewal behavior. GMCP packages,
+terminal character creation, extra player-writing systems and account-policy changes
+remain deferred. Thomas controls DEV deployment and the full-suite checkpoint.
+
 
 ## Configuration Phase 4: final existing-system conversion (2026-10-02)
 
