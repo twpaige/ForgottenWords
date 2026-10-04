@@ -6,6 +6,26 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Mountain certification and viewer jump helper (2026-10-03)
+
+Fixed two independent causes: any spring within the two-mile discovery halo blocked
+an entire walking chunk, and shrubland lacked its approved brush mapping. Spring
+Source v1 now reserves only a deterministic 60-by-100-foot oval around each source;
+its footing remains unavailable, while exterior terrain retains all independent
+checks. Source flow and HOG generation remain unchanged. All five supplied mountain
+probes certify; tests protect the real source and verify nearby ordinary ground.
+The viewer now provides a whole-inch jump command, Copy button and text-entry-safe
+J shortcut. See [HOG](hog.html#spring-source-v1-and-mountain-ground-certification-2026-10-03).
+
+Verification: **115 affected tests passed** (9 existing TestClient warnings), plus
+**130 runtime/water-safety tests passed** (1 existing warning; one mountain test
+appears in both groups). Headless Edge clipboard/coordinate/hotkey checks passed;
+changed-file Ruff and whitespace checks passed. Full-suite verification remains the
+normal DEV checkpoint, not repeated for this bounded fix. Walking policy version 7
+preserves prior identity compatibility; no migration or environment change is needed.
+Next: Thomas can deploy and playtest the supplied coordinates. No game deployment
+was performed; documentation publication is separate.
+
 ## Shared web and terminal prompt modes (2026-10-03)
 
 PROMPT COMPACT/TEXT/OFF and bare PROMPT now run through the shared session for both

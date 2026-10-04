@@ -1,7 +1,7 @@
 ---
 title: Heart of Gold
 description: Deterministic world-generation architecture, physical constraints, and preview limits.
-reviewed: 2026-09-30
+reviewed: 2026-10-03
 nav: hog
 permalink: /CCMud/hog.html
 ---
@@ -12,6 +12,44 @@ physical speed; water keeps existing physical effort/current rules. Stamina uses
 real seconds. Historical 24x experiment results below remain historical evidence.
 See [the authoritative movement contract](design.html#runtime-configuration-phase-3-movement-and-stamina-2026-10-02).
 
+
+## Spring Source v1 and mountain ground certification (2026-10-03)
+
+Each generated spring reserves a fixed, deterministic oval centered on its existing
+point: 60 feet east-west by 100 feet north-south. A circumscribed 64-sided polygon
+with a tiny outward numerical margin protects the whole nominal oval. This is a
+modest represented wet/unstable source footprint, not a surveyed pool or inferred
+depth. Its interior and boundary remain unavailable for normal ground certification;
+JUMP and movement retain the shared restrictions. It grants no wading or swimming
+permission. Malformed source geometry fails closed.
+
+The two-mile spring discovery halo no longer blocks entire walking chunks. Only
+intersecting source footprints reserve ground; exterior terrain must still pass
+all existing waterway, lake, natural-feature, coast, slope and interpolation checks.
+Spring points, IDs, outgoing flow and underlying deterministic generators are
+unchanged. Independently unresolved natural features, including thermal features,
+retain their own safety checks. No generalized spring hydrology is introduced.
+
+Generated `shrubland` now maps to existing `brush` terrain behavior, including the
+existing configurable movement factor (default 0.85). Walking policy identity is
+version 7; version 6 remains compatible for existing locations and revalidation.
+No database migration or new setting is needed.
+
+The supplied center `(134181571, -43850624)` and its four one-mile cardinal probes
+now certify as dry brush ground. Regression coverage also checks the actual nearby
+spring source: its interior remains UNKNOWN, while ordinary ground 100 feet away
+certifies. This replaces the previous area-wide spring-presence refusal and the
+missing shrubland mapping without relaxing unrelated checks.
+
+### Viewer jump command and clipboard shortcut
+
+Directly below Cursor coordinates, the read-only field shows `jump X, Y`, rounded
+to whole inches from the actual cursor position rather than the displayed rounded
+mile label. Move the pointer to update it. Copy or **J** copies the complete command
+and briefly displays **Copied** after success. J is ignored during text entry,
+composition, repeat, or Ctrl/Alt/Meta combinations. Clipboard failure offers manual
+selection/copy instead; the command remains readable. This helper does not execute
+JUMP or change its authorization and certification rules.
 
 ## Hunting Knife integration (2026-09-30)
 
@@ -55,7 +93,8 @@ The source has no certified shore slope, shallow/deep profile or currents for
 continental lakes. Existing local polygon lakes also deny interior traversal.
 The resolution must preserve that conservative water policy rather than invent
 a lake bed or relabel water as dry ground. JUMP shares this walking certificate;
-unresolved springs/natural features remain a separate unsupported-extent issue.
+unresolved natural features remain a separate unsupported-extent issue. Spring
+source reservations are now bounded by Spring Source v1 above.
 
 
 
