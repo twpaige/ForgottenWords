@@ -438,3 +438,18 @@ be noticed. Concentration may build over time; width/timing/formulas are not loc
 HIDE lowers exposure, not SENSE/SCAN effectiveness or universal visibility.
 SEARCH may run with SCAN, with natural attention tradeoffs. These are unimplemented
 design concepts; use the linked section for current implementation boundaries.
+
+
+## Traditional-client Alpha presentation (2026-10-03)
+
+- `PROMPT`: report current terminal prompt mode and usage.
+- `PROMPT COMPACT`: six stamina pipes / six health stars, with fixed blank slots as depleted; default.
+- `PROMPT TEXT`: integer stamina and aggregate-health percentages, suitable for screen readers.
+- `PROMPT OFF`: suppress the terminal prompt; keep command/event output.
+- `ANSI ON` / `ANSI OFF`: independent session color preference.
+- `HEALTH`: list the character's stored wound severity names, or none; works in both clients.
+
+PROMPT and ANSI are connection-local Telnet adapter controls. The web retains its HUD.
+See [prompt thresholds and health model](design.html#traditional-client-alpha-prompt-and-visibility-polish-2026-10-03).
+INSPECT SELF is not currently implemented; INSPECT continues to target objects/MOBs.
+PC wounds now have minimal persistence but no new combat/damage producer or editing command.

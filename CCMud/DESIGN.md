@@ -1546,3 +1546,56 @@ attachments may wait during entry; ordinary structure interactions retain their 
 unavailable behavior. There is no entry wait deadline beyond the existing connection
 capacity limits; QUIT remains available. No new listener settings, migration, public
 ports, GMCP, terrain rules or gameplay tuning values are introduced.
+
+
+### Traditional-client Alpha prompt and visibility polish (2026-10-03)
+
+Terminal sessions default to COMPACT. `PROMPT COMPACT`, `PROMPT TEXT` and `PROMPT OFF`
+change only the current connection; `PROMPT` reports the mode and usage. These are
+adapter preferences alongside ANSI ON/OFF, with no preference table. Web clients keep
+their existing HUD and receive no terminal prompt text.
+
+COMPACT is `<||||||/******>` with six fixed positions on each side; depleted positions
+become spaces on the right. Stamina uses `ceil(6 * clamp(current / configured_max, 0, 1))`:
+zero is empty, any positive amount has at least one pipe, and exactly full has six.
+Health sums binary wound values FLSH=1, LITE=2, DEEP=4, SEVR=8, GRAV=16, MORT=32.
+The stars are exactly: 0 total → 6; 1–5 → 5; 6–11 → 4; 12–17 → 3; 18–23 → 2;
+24–31 → 1; 32 or greater → 0. Each bar's leftmost two positions are red, middle two
+yellow, rightmost two green. These are safe presentation spans; game logic contains
+no ANSI. ANSI OFF preserves the same symbols and spaces.
+
+TEXT is `<Stamina 55% Health 43%>` for 22/40 stamina and total wounds 18.
+Stamina percentage is `floor(100 * clamp(current / configured_max, 0, 1))`.
+Health percentage is `floor(100 * max(0, 32 - total_wound_value) / 32)`.
+This is a presentation scale, not a new death rule. The prompt is a summary; HEALTH
+lists actual stored wound severity names. Existing INSPECT targets objects/MOBs;
+INSPECT SELF is not implemented. STATUS remains the existing movement/status view.
+
+Repository inspection found wounds persisted only for MOBs. Thomas approved minimal
+PC storage: migration `20261003_01` adds an empty-by-default JSON wound list while
+preserving characters. It adds no damage producer, combat scheduling, healing or death
+mechanics. Existing PCs are unwounded. Prompt and HEALTH read this state; there is no
+new player wound-editing command. Wound combination rules remain unchanged.
+
+The serialized terminal output writer appends one unterminated prompt after a drained
+batch of visible output, using current server state. Silent HUD/state ticks never dirty
+or refresh the prompt. Async speech, observations and warnings start below an existing
+prompt and finish with a new one; repeated meaningful events are retained. Telnet GA
+is used where negotiation permits it. The server does not attempt to redraw characters
+being edited locally by a client. Mudlet's separate input pane remains the intended
+first acceptance target. OFF suppresses prompts only, not events or STATUS replies.
+
+The outdoor HOG LOOK branch omitted online PCs while including objects and MOBs.
+Character records have a name but no sdesc/ldesc/full-description fields; absent
+character descriptions did not cause the omission. LOOK now includes online PCs using
+the shared ready-terrain sight, range, cover and structure-barrier checks and character
+semantic color. Different ROOMs, blocked sight and unavailable geometry remain hidden.
+Both transports consume the same authoritative event; no transport visibility override
+or new character authoring subsystem is involved.
+
+Warning/hazard prose remains red, while the trailing `You stop.` uses default style.
+Authored object descriptions still parse the historical #0–#F palette, lowercase letters,
+#8 reset and ## literal hash into safe spans. ANSI/plain/WebSocket integration uses a
+stored object description containing `#1DANGER#0 This is a #2green object#0.`; the web
+renderer uses textContent and allowlisted CSS classes. SAY continues to treat # markup
+literally. No GMCP, firewall, listener or deployment changes accompany this pass.

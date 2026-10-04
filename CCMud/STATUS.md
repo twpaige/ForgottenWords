@@ -1,10 +1,61 @@
 ---
 title: Current status
-description: Shared web and traditional MUD sessions with safe ANSI presentation.
+description: Traditional-client prompts, shared character visibility and safe ANSI presentation.
 reviewed: 2026-10-03
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## MUD-client Alpha polish and full checkpoint (2026-10-03)
+
+Implemented connection-local PROMPT COMPACT/TEXT/OFF, default COMPACT. Stamina uses
+six fixed slots and ceiling of six times the clamped current/configured-maximum ratio.
+Health follows the approved aggregate binary-wound thresholds; TEXT uses floored
+stamina percentage and floor(100 × max(0, 32 − wound total) / 32). Both compact bars
+are red/red/yellow/yellow/green/green from left to right and remain readable without
+ANSI. Serialized output batches finish with a prompt; silent HUD ticks never refresh it.
+Web clients retain their HUD. Meaningful async speech, observations and hazards remain.
+
+PCs previously had no stored wounds or detailed health command. Thomas approved the
+minimal persistence addition: migration `20261003_01` adds an empty wound list for
+existing characters, and HEALTH reports stored severity names. No combat, damage,
+healing or death mechanics were introduced. INSPECT SELF remains unimplemented.
+
+Visibility investigation found that the HOG outdoor LOOK branch omitted online PCs.
+Character records have names, not sdesc/ldesc/full-description fields. The fix includes
+PCs using existing ready-terrain visibility, cover/range and structure-barrier checks,
+with the same authoritative events for web and terminal. No description editor was needed.
+Warning prose remains red while the trailing "You stop." returns to default style.
+A stored object description was verified through ANSI/plain/WebSocket rendering and
+safe CSS browser rendering; SAY still leaves player # markup literal.
+
+Verification:
+
+- Focused prompt/visibility/presentation and MUD/session suite: **45 passed** before
+  the full checkpoint. Enhanced Alpha tests: **29 passed**, including an additional
+  concurrent web/terminal HOG LOOK case and blocked/uncertified sight assertions.
+- Full checkpoint: **1,390 passed, zero failures, 13 dependency deprecation warnings
+  in 1,253.02 seconds (20m 53s)**. No exclusions or test failures were waived. Application
+  code remained unchanged during the checkpoint; supplementary test assertions and
+  the additional concurrent-visibility case passed separately.
+- Real plaintext/TLS socket tests cover login/password handling, character selection,
+  delayed certification/automatic entry, prompt modes, HEALTH, literal SAY, duplicate
+  claims, ANSI and QUIT. The strengthened ON→OFF→ON socket cases: **2 passed**.
+  Session tests cover ticking, stationary HUD silence, STOP, explicit STATUS,
+  asynchronous observations/hazards, disconnect-as-STOP and web state preservation.
+- Headless Edge checks passed for both roles, safe spans/HTML text, warning/stop colors,
+  authored colors, HUD, navigation, account behavior and responsive layouts.
+- Changed-file lint, diff checks, dependency checks and single Alembic head passed.
+  Repository-wide Ruff has **55 unchanged pre-existing findings**: a clean archive of
+  starting commit `3577909` produced the exact same file/code/message/line findings.
+  The preserving wound migration was exercised against an existing SQLite character.
+
+Design, command reference and setup instructions describe current behavior. The next
+manual acceptance check is prompt placement in Thomas's real Mudlet profile, especially
+async speech while editing local input, after a Thomas-authorized DEV update. PC damage
+production remains outside this pass. No GMCP, public listener/firewall work or game
+deployment occurred. The release includes migration `20261003_01`; normal cc-update
+applies it. Do not confuse documentation publication with game deployment.
 
 ## Connected terrain preparation during entry (2026-10-03)
 
