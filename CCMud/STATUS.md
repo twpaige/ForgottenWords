@@ -1,10 +1,38 @@
 ---
 title: Current status
-description: Traditional-client prompts, shared character visibility and safe ANSI presentation.
-reviewed: 2026-10-03
+description: HOG terrain-first architecture accepted; production integration planning is next.
+reviewed: 2026-10-04
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## HOG terrain/water architecture frozen (2026-10-04)
+
+**DESIGN ACCEPTED / FROZEN FOR PRODUCTION PLANNING.**
+The [accepted HOG architecture](hog.html#accepted-terrain-and-water-architecture-2026-10-04)
+is macro terrain → broad major valleys → Stage 2B-style detail → simple downhill
+routing/abstract accumulation → selected water → supported natural features →
+shared movement, Cormac/LOOK and World Viewer geography.
+
+Last completed development checkpoint: private Crown-Call `7bf9abc`, committed
+and pushed. Two independent regions (DEV seed 867359018957601 and seed 42) validated
+the same valley recipe without seed-42 tuning, spill routing or basin flooding.
+That checkpoint reported **47 focused/related tests passed** and changed-file Ruff
+passed; these are prototype checks, not production integration or deployment evidence.
+Full measurements, limitations and rationale are in HOG and the linked private reports.
+
+The prototype remains offline and non-authoritative. Independent hydrology/terrain
+reconciliation and drainage-first mountain constraints are no longer the intended
+direction. No further experiment sweep is required. No generation behavior,
+gameplay, persistence, migration or DEV/PROD deployment changes accompany this freeze.
+Live server revisions were not checked for this documentation update.
+
+Next: **HOG Production Integration — Stage 1: Implementation Plan**.
+Production integration, generation versioning, cache strategy/performance,
+migration, persistence handling and deployment require separate approval.
+The five untracked simplified-relief experiment files in the development checkout
+predate `7bf9abc`; preserve them separately from this documentation work. They are
+unfinished diagnostic work, not the accepted production implementation.
 
 ## Mountain certification and viewer jump helper (2026-10-03)
 

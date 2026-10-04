@@ -1,12 +1,32 @@
 ---
 title: Game design
 description: The MUD's accepted decisions, preserved in full and separated from tabletop rules.
-reviewed: 2026-10-03
+reviewed: 2026-10-04
 nav: design
 permalink: /CCMud/design.html
 ---
 **Object architecture review:** [Working Draft 5](objects.html) records the latest approved object decisions and supersedes conflicting historical alternatives. Thomas authorized Hunting Knife Slice 1 and the bounded Rabbit MOB / THROW / REMOVE interaction, subsequently extended to wounds, death, corpses, bounded SKIN, MAKE SPIT / GATHER FIREWOOD, the data-driven Craft Engine/web Builder, and compact Object Builder with linear real-time morphs on September 30. Other slices and deployment remain separate decisions; see current status for verification.
 
+
+## HOG terrain/water design acceptance (2026-10-04)
+
+**DESIGN ACCEPTED / FROZEN FOR PRODUCTION PLANNING.**
+The authoritative [HOG terrain/water decision](hog.html#accepted-terrain-and-water-architecture-2026-10-04)
+sets terrain first: macro mountains → broad major valleys → local detail → simple
+terrain-derived drainage/accumulation → selected water → morphology-supported
+features → shared movement, Cormac/LOOK and viewer geography.
+It supersedes earlier reconciliation/drainage-first design alternatives.
+
+Water, including major rivers, derives from realized terrain; mountains do not
+accommodate predefined river routes. The ≤5% ordinary walking rule remains a
+certification/gameplay boundary, not a terrain-shaping target. Future seed-specific
+authored landforms modify terrain before water derivation and must appear consistently
+in-game and in the viewer. That authoring capability is not implemented.
+
+The two-region prototype is accepted evidence, still offline and non-authoritative.
+Production integration, versioning, cache strategy/performance, migration,
+persistence handling and deployment require separate approval. Stage 1 implementation
+planning is next; this decision adds no runtime behavior.
 
 ## Runtime configuration Phase 4: final existing-system conversion (2026-10-02)
 

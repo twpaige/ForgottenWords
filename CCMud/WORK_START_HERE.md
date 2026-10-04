@@ -1,7 +1,7 @@
 ---
 title: Start here
 description: A durable home for Crown & Call MUD design, architecture, and development continuity.
-reviewed: 2026-09-30
+reviewed: 2026-10-04
 nav: home
 permalink: /CCMud/
 ---
@@ -38,6 +38,14 @@ The `/CCMud/` section belongs exclusively to the MUD. HOG and MUD operating rule
 Each fact has one authoritative home. HTML is generated presentation. Crown-Call's pinned reference documents are generated copies for offline continuity; their source revision is recorded in `docs/reference/SOURCE.json`.
 
 ## Starting a fresh session
+
+For HOG, start with the
+[accepted terrain/water architecture](hog.html#accepted-terrain-and-water-architecture-2026-10-04):
+**DESIGN ACCEPTED / FROZEN FOR PRODUCTION PLANNING**. Validation is safely committed
+through private Crown-Call `7bf9abc`; the prototype remains offline and non-authoritative.
+The next task is **HOG Production Integration — Stage 1: Implementation Plan**.
+Do not resume discarded reconciliation/drainage-first experiments or infer production
+implementation/deployment approval from the architecture freeze.
 
 > Open Crown-Call. Read WORK_START_HERE.md and follow it. Inspect the repository and current status before making changes.
 

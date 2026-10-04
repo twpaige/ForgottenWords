@@ -1,7 +1,7 @@
 ---
 title: Heart of Gold
 description: Deterministic world-generation architecture, physical constraints, and preview limits.
-reviewed: 2026-10-03
+reviewed: 2026-10-04
 nav: hog
 permalink: /CCMud/hog.html
 ---
@@ -12,6 +12,131 @@ physical speed; water keeps existing physical effort/current rules. Stamina uses
 real seconds. Historical 24x experiment results below remain historical evidence.
 See [the authoritative movement contract](design.html#runtime-configuration-phase-3-movement-and-stamina-2026-10-02).
 
+
+## Accepted terrain and water architecture (2026-10-04)
+
+**DESIGN ACCEPTED / FROZEN FOR PRODUCTION PLANNING.**
+
+This is the current HOG design direction. It supersedes any intended direction
+that independently generates terrain and hydrology and then reconciles them,
+preserves old water routes at the expense of terrain, or uses drainage-first
+constraints to shape mountains. Dated implementation descriptions below remain
+records of existing behavior; this decision has not changed running generation.
+The validated prototype is offline and non-authoritative.
+
+### Authority and generation order
+
+Continental shape / macro elevation / mountain ranges
+→ broad major valleys
+→ Stage 2B-style local terrain detail
+→ simple terrain-derived downhill drainage / accumulation
+→ selected rivers, streams, lakes and springs
+→ morphology-supported natural features
+→ shared geography consumed by movement, Cormac/LOOK and the World Viewer.
+
+**Terrain is authoritative. Water derives from the realized terrain.**
+Rivers, including major rivers, are not predefined routes that mountains must
+accommodate. Major valleys are terrain landforms, not predefined river channels.
+Once terrain exists, simple actual-downhill routing and abstract accumulation
+identify useful river candidates. All consumers must use the same realized
+geography, rather than inventing separate physical, descriptive or viewer worlds.
+
+### Deliberately simple water
+
+HOG is not a watershed or ecological simulation. The accepted design does not
+require rainfall simulation, CFS/discharge modeling, erosion simulation,
+groundwater modeling, complete watershed accounting, an outlet for every hollow,
+preservation of every possible tributary, reconciliation of old minor-water
+identities, or flooding every depression to its spill level.
+
+Dry valleys and hollows are valid terrain. Drainage accumulation is an abstract
+relative measure: small drainage + joining tributaries → stream → river → larger
+river. Exact real-world flow rates are unnecessary. Only selected drainage paths
+become represented water; minor drainage may be omitted when it adds nothing
+necessary to a rich, believable world. Existing climate and hydrology descriptions
+are implementation history, not requirements to restore simulation complexity.
+
+### Broad major valleys
+
+Substantial mountain regions receive a small number of broad deterministic valley
+landforms. These organize terrain before smaller ridges, spurs and hollows are
+added. Valleys may branch, merge, terminate inside mountains or open onto lower
+terrain. Broad blending produces substantial landforms rather than artificial
+trenches, providing plausible drainage corridors and natural mountain travel routes.
+Mountain realization must not unnecessarily modify plains or genuinely gentle terrain.
+
+The existing **≤5% ordinary walking threshold remains a gameplay/certification
+rule, not a terrain-generation target**. Mountains retain genuinely steep terrain;
+valley floors naturally supply many gentler corridors.
+
+### Accepted validation evidence
+
+Two independent mountain regions succeeded with the same recipe and no seed-42
+tuning. Both produced joined river candidates using simple actual-downhill routing,
+without spill routing or basin flooding.
+
+| Measurement | DEV seed 867359018957601 | Seed 42 |
+| --- | ---: | ---: |
+| Longest ¼-mile downhill route, before → after | 7.0 → 29.9 miles | 7.6 → 67.9 miles |
+| Largest contributing area, before → after | 15.1 → 117.3 sq mi | 20.6 → 499.3 sq mi |
+| Terrain materially changed (>1 ft) | 13.45% | 13.36% |
+| Median mountain slope, before → after | 4.94% → 5.07% | 4.91% → 5.02% |
+| P95 mountain slope, before → after | 11.22% → 11.36% | 11.22% → 11.30% |
+| Valley-floor median grade | 0.53% | approximately 0.57% |
+| Sampled valley-floor locations at ≤5% grade | 83/84 | 82/84 |
+
+Regional slope statistics use the quarter-mile grid; valley-floor grades use
+25-foot offsets. These are bounded diagnostic results, not certified walking
+routes, proof of world-wide behavior, or a demonstrated range-to-coast river.
+Freeze the architecture, not every prototype width, curve or selection threshold.
+
+Evidence is safely committed in private Crown-Call through
+`7bf9abcd77e15e845d7ff43ec82962deb7f96f98`. Repository access is required:
+[first validation report](https://github.com/twpaige/Crown-Call/blob/7bf9abcd77e15e845d7ff43ec82962deb7f96f98/scripts/relief_prototype/MAJOR_VALLEYS_REPORT.md)
+and [second validation report](https://github.com/twpaige/Crown-Call/blob/7bf9abcd77e15e845d7ff43ec82962deb7f96f98/scripts/relief_prototype/MAJOR_VALLEYS_VALIDATION_2.md).
+Their compact JSON summaries are stored alongside them.
+
+### Bounded channel corrections and natural features
+
+Final selected channels may receive small bounded local adjustments. Fine checks
+of quarter-mile candidates found intervening rises up to approximately 3.4 ft in
+seed 42 (4.9 ft in DEV), suitable for considering modest channel shaping later.
+No adjustment was implemented. This is not approval for a general reconciliation
+solver. Coarse drainage samples must not jump substantial hidden ridges: seed 42
+had a roughly 76-ft rise hidden inside one half-mile edge. Final physical channels
+must be checked against sufficiently fine continuous terrain. Finite prototype
+samples do not prove continuous monotonicity or final water safety.
+
+**Final terrain + final water → natural features.** Cliffs, scree, talus, gorges,
+waterfalls, ravines and other features exist only where realized geometry supports
+them. Old procedural candidates are hints; omit unsupported candidates rather than
+forcing terrain to accommodate them.
+
+### Why this architecture was chosen
+
+Original local mountains were too smooth despite high macro elevations. Stage 2B
+demonstrated convincing local relief. Preserving/reconciling existing hydrology
+then introduced excessive complexity, seams, steep artifacts and drainage constraints;
+drainage-first experiments over-constrained terrain. Terrain-first routing showed
+that Stage 2B lacked enough long connected valleys. Adding a few broad major valleys
+resolved that problem in two independent regions/seeds without elaborate hydrology.
+The deliberate choice is **good terrain first → simple water derived from terrain**.
+Independent terrain + independent hydrology → complex reconciliation is discarded.
+Further prototype sweeps are not the next step.
+
+### Future authored geography and production boundary
+
+Seed-specific authored geography may later modify authoritative terrain before
+water derivation. A builder could add an island, mountain, valley, peninsula or
+other real landform to one seed/world. HOG would derive appropriate water and
+supported natural features from that resulting terrain, consistently in-game and
+in the World Viewer. This is a future architectural requirement, not implemented
+authoring functionality.
+
+Production integration, generation versioning, cache strategy/performance,
+migration, persistence handling and deployment remain future work requiring separate
+approval. The next task is **HOG Production Integration — Stage 1: Implementation
+Plan**; this freeze authorizes no production implementation or game deployment.
 
 ## Spring Source v1 and mountain ground certification (2026-10-03)
 
@@ -1069,6 +1194,11 @@ runtime chunks or infer a persistent format from illustrative serialization.
 
 ## Generator overview
 
+The sections below describe existing implementation and earlier milestones.
+For future terrain/water generation, the
+[accepted architecture](#accepted-terrain-and-water-architecture-2026-10-04)
+governs; old route-preservation or hydrology-first constraints are superseded.
+
 ### Current Step 10 DEV exploration contract (2026-09-26)
 
 This section supersedes the activation limits in the historical implementation
@@ -1412,6 +1542,12 @@ operations; pre-alpha terrain may still be regenerated during development.
 
 ## Development stages
 
+The numbered list records the existing preview/integration sequence, not the new
+production generation order. The accepted production direction is
+[terrain → derived water → supported features](#accepted-terrain-and-water-architecture-2026-10-04).
+Next: Stage 1 implementation planning. Integration, versioning, caches/performance,
+persistence, migration and deployment require separate approval.
+
 1. World framework and admin viewer — completed for previews.
 2. Continental shape — reviewed.
 3. Elevation and landforms — reviewed.
@@ -1477,6 +1613,12 @@ World positions are stored in inches; for example, (22,000, 42,000) is about
 on land is determined by the selected geography.
 
 ## Step 4B local hydrology preview
+
+**Existing implementation record.** The discharge, spill-filling, protected-route
+and identity-retention behavior below is not the accepted production direction.
+The [terrain-first decision](#accepted-terrain-and-water-architecture-2026-10-04)
+supersedes those constraints for future integration; this documentation does not
+change the existing generator.
 
 Local hydrology version 3 distinguishes runoff from channels. The local routing
 mesh carries diffuse hillslope water internally; it is not itself a creek map.
@@ -1585,6 +1727,10 @@ lake bowls infer missing fine relief beneath a coarse regional model. This is
 not yet the persisted, walkable terrain and hydrology integration of Step 10.
 
 ## Step 9: Natural Features
+
+**Existing catalog record.** Future integration must derive features from final
+terrain and final selected water. Existing candidates are hints only; unsupported
+features are omitted under the accepted architecture above.
 
 `natural_features.py` derives a versioned catalog from the existing local hydrology
 context. It does not regenerate coastlines, mountain ranges, water, vegetation,
