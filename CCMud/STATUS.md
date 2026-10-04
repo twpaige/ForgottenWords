@@ -6,6 +6,27 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Shared web and terminal prompt modes (2026-10-03)
+
+PROMPT COMPACT/TEXT/OFF and bare PROMPT now run through the shared session for both
+clients. The web shows the same server-calculated symbols, colors and percentages beside
+command input, and echoes submitted commands with the prompt visible when sent.
+Changed prompt metadata travels alongside existing WebSocket events; state updates
+refresh the widget in place without transcript spam, replacing typed input or moving
+its selection. OFF hides the widget; new connections reset to COMPACT. Compact spaces
+are preserved, TEXT can wrap on narrow screens, and the widget has an accessible text
+percentage label without continuous live announcements. Existing web HUD and terminal
+prompt behavior are retained. No new migration or environment setting is needed.
+
+Verification: **47 focused Alpha/MUD tests passed**, one existing TestClient warning.
+These include real plaintext/TLS connections, shared mode commands, authoritative wound/
+stamina updates, unchanged-state deduplication, fresh-session defaults and terminal
+HUD silence. Headless Edge checks passed for both roles, prompt/input command echo,
+input-selection preservation, OFF/TEXT modes, responsive layout and existing navigation/
+safe-color behavior. Changed-file lint and diff checks passed. This focused follow-up
+did not repeat the preceding full-suite checkpoint. Documentation publication is separate
+from game deployment; no DEV or PROD deployment was performed.
+
 ## MUD-client Alpha polish and full checkpoint (2026-10-03)
 
 Implemented connection-local PROMPT COMPACT/TEXT/OFF, default COMPACT. Stamina uses

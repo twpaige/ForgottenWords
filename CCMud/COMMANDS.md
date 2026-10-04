@@ -449,7 +449,9 @@ design concepts; use the linked section for current implementation boundaries.
 - `ANSI ON` / `ANSI OFF`: independent session color preference.
 - `HEALTH`: list the character's stored wound severity names, or none; works in both clients.
 
-PROMPT and ANSI are connection-local Telnet adapter controls. The web retains its HUD.
+PROMPT is shared by web and Telnet sessions; ANSI remains a Telnet adapter control.
+The web keeps its HUD and shows the prompt beside command input, echoing it with submitted
+commands. Prompt state updates never add transcript lines. Both preferences are connection-local.
 See [prompt thresholds and health model](design.html#traditional-client-alpha-prompt-and-visibility-polish-2026-10-03).
 INSPECT SELF is not currently implemented; INSPECT continues to target objects/MOBs.
 PC wounds now have minimal persistence but no new combat/damage producer or editing command.

@@ -1550,10 +1550,10 @@ ports, GMCP, terrain rules or gameplay tuning values are introduced.
 
 ### Traditional-client Alpha prompt and visibility polish (2026-10-03)
 
-Terminal sessions default to COMPACT. `PROMPT COMPACT`, `PROMPT TEXT` and `PROMPT OFF`
-change only the current connection; `PROMPT` reports the mode and usage. These are
-adapter preferences alongside ANSI ON/OFF, with no preference table. Web clients keep
-their existing HUD and receive no terminal prompt text.
+Web and terminal sessions default to COMPACT. `PROMPT COMPACT`, `PROMPT TEXT` and `PROMPT OFF`
+change only the current connection; `PROMPT` reports the mode and usage. Prompt commands are handled by the shared session with no preference table. ANSI ON/OFF
+remains terminal-specific. Web clients keep their existing HUD and add the same prompt
+beside the command input. On narrow screens, TEXT mode can wrap above the input.
 
 COMPACT is `<||||||/******>` with six fixed positions on each side; depleted positions
 become spaces on the right. Stamina uses `ceil(6 * clamp(current / configured_max, 0, 1))`:
@@ -1599,3 +1599,19 @@ Authored object descriptions still parse the historical #0–#F palette, lowerca
 stored object description containing `#1DANGER#0 This is a #2green object#0.`; the web
 renderer uses textContent and allowlisted CSS classes. SAY continues to treat # markup
 literally. No GMCP, firewall, listener or deployment changes accompany this pass.
+
+
+### Web prompt parity (2026-10-03)
+
+The web prompt uses the same server-side COMPACT/TEXT/OFF mode handling, stamina and
+wound calculations, positional colors and connection-local default as Telnet. WebSocket
+messages carry changed prompt metadata alongside existing events; unchanged displays
+are deduplicated, without extra transcript events or replacing existing HUD fields.
+The browser uses allowlisted CSS spans and textContent, preserving compact blank slots.
+It updates only the prompt element, preserving typed input, selection and focus.
+Submitted commands echo the then-visible prompt plus literal command text into history;
+the live prompt stays beside the command input ready for the next command. OFF hides
+it and retains the web's ordinary command echo. Disconnect/re-entry clears stale display;
+a new connection starts COMPACT. The compact widget has a percentage-based accessible
+label and is not a live-announcement region. Telnet prompt delivery remains event-driven,
+with no prompts from silent state ticks. No migration or configuration changes are needed.
