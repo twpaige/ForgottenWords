@@ -6,6 +6,22 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Builder blueprint portability v1 (2026-10-05)
+
+Implemented: versioned UTF-8 JSON download/import for Object Builder prototypes,
+Craft definitions and complete reusable dwelling templates, including saved drafts.
+Export All/Import All use the same envelope and validators. Review performs no
+writes; conflict replacements require explicit approval and a fresh preview.
+Approved changes commit atomically without creating instances. Live dwelling/ROOM
+graphs, Settings and world state are excluded; existing ROOM text tools remain.
+[Portable-content contract](objects.html#portable-builder-blueprints-v1-2026-10-05).
+
+Verification includes isolated export/delete/import semantic round trips,
+cross-category references, rollback/stale-preview protection, authorization,
+existing Builder/Craft regressions and desktop browser download/import checks.
+No full suite and no deployment. Human annotations are not persisted; uneditable
+legacy engine prototypes are excluded with explicit file notes.
+
 ## Production HOG World Viewer restored (2026-10-05)
 
 Implemented/pushed in Crown-Call `db20f79b6c11213a7c284ce84e516212d9bfb0c2`,

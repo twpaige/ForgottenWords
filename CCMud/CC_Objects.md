@@ -1057,3 +1057,56 @@ delete existing ROOMs or prevent loading/exporting an already usable saved templ
 new or modified authoring must satisfy it. Placement dimensions/certification,
 content values and authored link costs remain under their existing authorities.
 See the [Phase 4 configuration contract](design.html#runtime-configuration-phase-4-final-existing-system-conversion-2026-10-02).
+
+
+## Portable Builder blueprints v1 (2026-10-05)
+
+Builder's compact Download menu exports saved **object prototypes**, **craft
+definitions**, **dwelling templates**, or **All** as readable UTF-8 JSON. The
+format is `ccmud-authored-content`, version `1`, with `exported_at` and arrays
+`objects`, `crafts`, and `dwelling_templates`. Category files populate only their
+category. Each record has a stable authored `id` and `definition`; templates also
+carry `usable`. Optional/default fields are omitted. Property order is irrelevant.
+The existing ROOM text tools remain available and unchanged.
+
+This protects reusable blueprints, not deployed structures. A dwelling template
+includes its appearance, footprint, entrance controls, entry ROOM, ROOM descriptions,
+directed links, costs and authored initial door settings. Edits made solely to a
+placed dwelling are not automatically copied back into its template. No live
+ROOM graph, exterior identity, coordinates, occupants, possessions, running timer,
+virtual key ownership, account, character or Settings data travels in these files.
+Saving/importing creates no WorldObjects. Draft templates remain drafts and cannot
+LOAD until validated through the ordinary Builder workflow.
+
+Import is Upload → Validate/Preview → explicit approval → one transaction.
+Records are NEW, UNCHANGED or CONFLICT, with separate warnings/errors and a field
+comparison. Conflicts default to **Keep Existing**. A checked replacement requires
+another preview before approval; there is no automatic overwrite. The server
+rechecks destination revisions/content and the approved choices. A stale preview
+must be refreshed. Source revisions are informational, never destination tokens.
+All approved categories succeed together or roll back together. Validation uses
+the same Builder rules, including mechanical-edit restrictions on prototypes used
+by live objects, morph chains, craft references and complete usable-template checks.
+
+References must resolve in the destination or approved import. A referenced
+conflicting object retained with different data blocks the dependent import.
+Category exports do not collect dependency packages; use Export All or supply the
+required definitions at the destination. Runtime-only and legacy engine prototypes
+whose capabilities cannot be faithfully authored through Object Builder are
+excluded and explicitly named in file `_notes`, never flattened into incomplete
+ordinary objects. Such dependencies must already exist compatibly at the destination.
+
+Normalization is centralized in the portability service, separate from database
+schema. Missing optional fields take current model defaults; missing required
+fields and future format versions fail. Unknown fields generate warnings and are
+ignored. Source revision/actor metadata is ignored with a notice. `_comment` and
+`_notes` are accepted as human annotations but are not persisted in gameplay
+records; the preview makes this limitation explicit. No historical schema
+conversion is invented for this first format version. Future known renames belong
+in that normalization boundary rather than in gameplay services.
+
+V1 accepts at most 2 MB and 1,000 records per category. Files are authorized through
+the existing Builder boundary. Export reads a consistent saved snapshot. Preview
+is read-only, including SQLite; it does not simulate saves by writing and rolling
+back. No database migration, destination mapping, live instance import, MOB format,
+package manager or synchronization mechanism is introduced.
