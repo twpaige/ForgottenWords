@@ -6,6 +6,40 @@ nav: hog
 permalink: /CCMud/hog.html
 ---
 
+## Production geography in the World Viewer (2026-10-05)
+
+`/admin/world` now retains the large-scale viewer when production HOG is selected.
+Its only geography request is the production map product, executed by the existing
+HOG worker against TerrainField → GeographyContext → PhysicalGeography → NaturalFeatures.
+No viewer terrain/water generator is introduced. The production TerrainField's own
+coastline edges and ocean membership are used, never legacy hydrology overlays.
+
+Each view uses at most 50 by 50 world-aligned dyadic samples. Continent/regional
+views show TerrainField heights and coastlines; views at most two miles across use
+physical bed heights plus accepted physical water and natural-feature products.
+Zoom changes display sampling, not the recipe, geometry, identity or certification.
+Cursor heights identify the sampled coordinate; unresolved samples remain unresolved.
+Narrow water strokes have a one-pixel display minimum, not a wider gameplay footprint.
+Large-scale absence of an overlay does not certify dry or featureless ground.
+
+Cold or queue-limited requests return HTTP 202 preparing with retry guidance. The
+viewer retries and offers Refresh / Retry; no web request waits for cold generation.
+Existing bounded worker/result-cache machinery is reused without architectural or
+recipe changes. Interactive gameplay does not perform the viewer's generation work.
+
+Pan/zoom, elevation shading/contours, applicable water controls, natural features,
+world-inch cursor coordinates, jump field, Copy and text-entry-safe J are retained.
+Production is locked to the active world seed. Favoriting it remains possible;
+alternate saved favorites cannot substitute another world. Unsupported legacy layers
+are disabled. Legacy-provider behavior remains available, and the separate
+`/admin/world/production-preview` remains a detailed tile diagnostic.
+
+This is a viewer change only: no terrain, drainage, physical-water, certification,
+movement, persistence, Origin, Builder, database or HOG worker architecture changes.
+A standard FAST DEV update is appropriate on an already-active production-HOG world;
+no reset or environment change is required. No game deployment accompanied the work.
+
+
 **Current movement (Phase 3, 2026-10-02):** game travel uses separate 1.75 world-time
 and 2 convenience factors (3.5x), replacing legacy 24x. Athletics scales land
 physical speed; water keeps existing physical effort/current rules. Stamina uses

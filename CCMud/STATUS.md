@@ -6,6 +6,34 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Production HOG World Viewer restored (2026-10-05)
+
+Implemented/pushed in Crown-Call `db20f79b6c11213a7c284ce84e516212d9bfb0c2`,
+based on the reported active DEV commit `fda1d1c`. `/admin/world` reuses its large
+viewer controls with worker-generated production samples, coastline and close-up
+physical water/natural features. Cold requests are preparing/retryable; legacy
+geography remains disabled in production mode. Active-world seed authority and
+jump/Copy/J are retained. [Viewer contract](hog.html#production-geography-in-the-world-viewer-2026-10-05).
+
+Verification: viewer/preview/activation regressions **28 passed**; final new viewer
+tests **9 passed** (overlapping runs). Worker/product tests produced 20 passes and
+one existing diagnostic viewer-hash failure, reproduced unchanged on `fda1d1c`:
+`test_hog_products.py::test_real_world_baseline_hashes[0]`. That unrelated stored
+hash was not changed. Production and legacy viewer browser checks passed, including
+preparing recovery, pan/zoom, coordinates, Copy/J, favorites and no legacy requests.
+Changed-file Ruff and diff checks passed. No full suite.
+
+Actual isolated worker smoke checks on seed 42 produced a 1,521-sample continent
+view in about 5.9 seconds and a 1,849-sample close-up with two water features in
+about 12 seconds, including RAW equality verification. Enqueue returned in about
+13 ms and under 1 ms respectively. These are local workstation measurements, not
+DEV latency claims. The close-up physical sample and identities matched RAW.
+
+No generation, worker architecture, world state or database changes. No game
+deployment. Standard `sudo cc-update dev --fast <commit>` is appropriate; Thomas
+controls deployment. This viewer task is complete; no follow-on work started.
+
+
 ## HOG terrain/water architecture frozen (2026-10-04)
 
 **DESIGN ACCEPTED / FROZEN FOR PRODUCTION PLANNING.**
