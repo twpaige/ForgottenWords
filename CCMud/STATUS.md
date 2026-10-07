@@ -6,42 +6,56 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
-## Character LOOK integration — awaiting DEV certification (2026-10-07)
+## Character Core persistent foundations — awaiting DEV certification (2026-10-07)
 
-Prompt #2 is COMPLETE after Thomas's DEV certification of existing/new Characters,
-indoor/outdoor scenes, SAY, presence, dwelling movement, reconnect and private-name
-selection. No ordinary private-name leakage was observed. The compatibility bridge
-was also DEV-certified. Ordinary additive DEV migrations now use approved
-fix-forward recovery; the stopped-service backup exercise was canceled.
+Prompts #2 and #3 are COMPLETE after Thomas's DEV certification. Shared Character
+presentation, LOOK ME/observer LOOK, targeting, hands, movement clearing and private
+identity protection remain unchanged. No Wear or presentation redesign is included.
 
-Prompt #3 builds on the shared presentation foundation. `LOOK <character>` selects
-visible online Characters by public SDESC, including `n.keyword` ordinals. `LOOK ME`
-uses exactly the same observer-facing output: SDESC, multiline FDESC, current PMOTE
-and visible held objects. Scene LDESC/SDESC also includes held objects and PMOTE.
-The server supplies equivalent semantic output to browser and traditional clients.
-Successful movement clears PMOTE; failed/canceled movement and hand changes do not.
-Persisted prose/equipment refresh on LOOK without replacing visibility rules.
+Prompt #3.1 adds the six missing BASE CAP fields (WEAPN, THIEV, SENSE, MAGIC, ACADX,
+FAITH), each defaulting to zero, alongside existing ATHLX/RANGE storage. Numeric
+values validate 0–20. Existing ATHLX/RANGE values are retained exactly, including
+fractional ATHLX and the legacy NULL/unresolved marker; unresolved ATHLX continues
+to block HOG activation. No movement, stamina, ranged or combat formula changes.
+`available_cap` is nonnegative integer unspent currency, default 0. No earning,
+spending, training, credits or starting allocation is implemented.
 
-Private wound severity codes lack visibility metadata, so no fabricated wound detail
-is shown; an observer-condition hook remains. No Wear, containers, hoods, disguises,
-combat presentation or description-authoring/approval workflow is added. PMOTE
-command authoring awaits resolution of the historical 60-character proposal versus
-the accepted 500-character storage contract. No new migration, generation change,
-receipt rewrite or deployment is included; the exact HOG code pin is refreshed.
+Characters initially know zero crafts. Unique Character-to-stable-Craft-ID rows
+persist knowledge, with transactional query/add/remove helpers. Prototype edits
+retain knowledge; duplicate relationships and dangling IDs are prevented. Existing
+MAKE eligibility is unchanged. No learning, timers or GRANT CRAFT command is added.
 
-Verification: **200 focused tests passed**, covering Character LOOK/persistence,
-world/ROOM movement, web/Telnet sessions, existing presentation and HOG activation
-gates. Changed-file Ruff and diff checks passed; the Alembic head remains
-`20261007_01`. The unrelated real-worker geography test was excluded. One existing
-Starlette/httpx deprecation warning; no full suite or live deployment was run.
+Character ADMIN rank persists as integer 0–100, default 0, and grants no permissions
+by itself. A code-owned registry initially contains `communication.say` (ALLOW)
+and `builder.content` (DENY). Sparse Character GRANT/DENY overrides resolve explicit
+DENY before GRANT before registry default, including contradictory rows. Unknown
+names are rejected. These foundations are not yet wired into gameplay; existing
+account player/builder/admin roles and authentication remain operational unchanged.
+No administration commands, account bans or moderation systems are implemented.
 
-Full Character Core certification remains **NOT COMPLETE**: the current model has
-ATHLX/RANGE but not all eight Caps, available Cap currency, persistent known-craft
-relationships or character-level administration/permission overrides. These are
-pre-existing roadmap gaps, not additions to Prompt #3. Wear & Equipment is a
-separate unfinished Stage 1 priority. Prompt #3 still requires Thomas's DEV review
-and explicit completion authorization. Review the remaining Core gaps afterward
-with Thomas before deciding additional bounded work; Prompt #4 remains on hold.
+Migration `20261007_02` is ordinary additive DEV work. It preserves existing identity,
+presentation, movement, preferences, wounds and object relationships. Exact HOG
+code/schema compatibility pins are updated; generation and activation receipts are
+unchanged. DEV recovery follows the accepted fix-forward policy, with no special
+bridge release or backup exercise.
+
+Verification: **391 distinct focused/regression tests passed** across Character
+Core, presentation/LOOK, authentication, Craft Engine/Builder, ranged combat,
+stamina, world movement, HOG walking/activation and web/Telnet sessions. Two old
+rabbit-migration fixtures were corrected to drop the new RANGE constraint when
+reconstructing the pre-RANGE schema; both passed on rerun. Changed-file Ruff,
+diff checks, dependency checks and single Alembic head passed. PostgreSQL offline
+DDL confirms eight additive columns and two new tables with no data rewrites/drops;
+persistence/migration tests used isolated SQLite, not a live PostgreSQL database.
+The unrelated real-worker geography test was excluded. One existing Starlette/httpx
+deprecation warning remains. No full suite or game deployment was run.
+
+Character Core reevaluation found no additional persistent structural gap within
+Prompt #3.1's scope. Certification remains PENDING Thomas's DEV review; #3.1 is not
+marked COMPLETE and #4 remains on hold. Wear & Equipment is a separate Stage 1
+priority. PMOTE authoring, safe observer-visible wound details, description approval,
+progression/learning and full authorization wiring remain their separately scoped
+follow-ons. No Stage 1 completion is claimed.
 
 ## Stage 1 Content Portability certification — COMPLETE (2026-10-07)
 
