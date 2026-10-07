@@ -6,7 +6,42 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
-## Character Core persistent foundations — awaiting DEV certification (2026-10-07)
+## Wear physical foundation — implementation complete, awaiting DEV certification (2026-10-07)
+
+Prompt #4 implements the canonical 27-location registry, legal layers and capacities,
+wearable prototype authoring, WEAR, worn REMOVE and deterministic private INV. Existing
+WorldObject identities and Character ownership are preserved; nullable wear-role fields
+extend the existing exactly-one-location constraint. Database capacity and free-hand
+constraints, serialized transfers and conditional updates protect concurrent changes.
+Only single held objects can be worn. Worn objects remain carried weight but cannot
+serve as held Craft inputs/tools, THROW items, DROP targets or SKIN tools.
+
+The normal Object Builder supports anchor, layer, visual coverage and concealability.
+Existing Content Portability, authorization and live/pending-instance mechanical edit
+protections apply. Compatible timed morphs retain the same wear location/layer; terminal
+disappearance frees capacity. Incompatible stages are rejected, without relocation.
+Coverage and concealability are authored data only: no worn LOOK, concealment, armor,
+containers or Character presentation redesign is implemented.
+
+Migration `20261007_03` preserves existing held, loose, ROOM and embedded placements.
+It checks for authored WEAR command conflicts before changing schema. Exact HOG code
+and schema pins are refreshed; geography and activation receipts remain unchanged.
+Normal FAST DEV deployment and fix-forward recovery apply. No game deployment occurred.
+
+Verification: 347 distinct focused/regression tests passed across wear, persistence,
+capacity/concurrency/rollback, migration preservation, Builder, portability, Craft,
+embedded REMOVE/throw, GET/DROP, Character presentation, ROOM/dwelling, HOG activation
+and MUD sessions. Builder browser checks passed save/reload, portable validation and
+controlled layer choices. Changed-file Ruff, dependency checks, diff checks and single
+Alembic head passed. Tests used isolated SQLite; live PostgreSQL was not tested.
+The unrelated HOG real-worker geography test was excluded. One existing Starlette/httpx
+deprecation warning remains. No full-suite run was needed.
+
+Prompt #4 is **not COMPLETE** until Thomas deploys, certifies DEV and explicitly accepts.
+Equipment Visibility & Character Presentation and Armor Foundation & Stage 1 Wear
+Certification remain unstarted. Stage 1 Wear & Equipment is not complete.
+
+## Character Core persistent foundations — COMPLETE (2026-10-07)
 
 Prompts #2 and #3 are COMPLETE after Thomas's DEV certification. Shared Character
 presentation, LOOK ME/observer LOOK, targeting, hands, movement clearing and private
@@ -51,9 +86,9 @@ The unrelated real-worker geography test was excluded. One existing Starlette/ht
 deprecation warning remains. No full suite or game deployment was run.
 
 Character Core reevaluation found no additional persistent structural gap within
-Prompt #3.1's scope. Certification remains PENDING Thomas's DEV review; #3.1 is not
-marked COMPLETE and #4 remains on hold. Wear & Equipment is a separate Stage 1
-priority. PMOTE authoring, safe observer-visible wound details, description approval,
+Prompt #3.1's scope. Thomas certified deployment, migration, persistence, gameplay,
+Craft and Builder access, and accepted the new-foundation automated coverage. #3.1
+is COMPLETE. Wear & Equipment remains a separate Stage 1 priority. PMOTE authoring, safe observer-visible wound details, description approval,
 progression/learning and full authorization wiring remain their separately scoped
 follow-ons. No Stage 1 completion is claimed.
 

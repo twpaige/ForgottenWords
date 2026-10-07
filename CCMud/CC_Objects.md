@@ -573,7 +573,7 @@ ground and held/inventory descriptions, weight in ounces per unit, portable,
 existing cutting/woodcutting tool purpose, existing throwable attack/severity
 modifiers, and timed morph. Capabilities have strict server schemas; no arbitrary
 JSON, scripts or unrestricted database access. Saves record editor/revision/time.
-Saving never spawns an instance. There is no prototype deletion, wearable,
+Saving never spawns an instance. There is no prototype deletion,
 container, armor, durability or MOB Builder in v1. Mechanical edits that affect
 live instances or pending morph destinations are rejected; use a new prototype.
 Description corrections remain shared. Saves revalidate affected definition rules
@@ -612,7 +612,9 @@ explicit lifecycle exception to the ordinary parent-deletion protection, not a
 general container cascade policy. An embedded object may itself morph while
 preserving its own parent; its terminal disappearance leaves that parent intact.
 Corpse morphs remain excluded, so ordinary rabbit death/SKIN/knife recovery rules
-are unchanged. Wearable and general container morph behavior remains deferred.
+are unchanged. Wearable stages must retain the same anchor/layer throughout the chain; a worn
+instance retains its role or disappears, never silently relocates. General container
+morph behavior remains deferred.
 
 ### Relevance, concurrency and restart
 
@@ -1110,3 +1112,34 @@ the existing Builder boundary. Export reads a consistent saved snapshot. Preview
 is read-only, including SQLite; it does not simulate saves by writing and rolling
 back. No database migration, destination mapping, live instance import, MOB format,
 package manager or synchronization mechanism is introduced.
+
+
+## Wear physical foundation (2026-10-07; pending DEV certification)
+
+Wear uses existing Character-owned WorldObjects, with exactly one hand or worn role.
+The nullable `wear_location`, `wear_layer` and `wear_slot` fields are persisted together;
+wear_slot is a capacity position, not a second object inventory. Worn quantity is one.
+The database preserves exclusive physical placement and unique occupied capacity.
+WEAR transfers a held object in place; REMOVE transfers a worn object to the first free
+hand. Both-full refusal leaves the worn object unchanged. Embedded REMOVE retains its
+existing two-target syntax and precedence. INV lists right/left hands, then worn items
+in registry location/layer/capacity order. Worn weight remains carried weight.
+
+The code-owned registry contains head, face, eyes, throat, neck, torso, arms, hands,
+waist, legs, feet, back, lfinger, rfinger, lwrist, rwrist, lear, rear, lankle, rankle,
+lshoulder, rshoulder, larmband, rarmband, hair, belt1 and belt2. Torso/arms/legs allow
+UNDER, BASE, ARMOR and OVER; head allows BASE/ARMOR/OVER; hands BASE/ARMOR; feet
+UNDER/BASE/ARMOR; neck BASE/OVER. Remaining locations allow BASE only. Each legal pair
+holds one object except neck BASE, which holds three.
+
+The portable prototype's optional `wearable` capability authors `location`, `layer`,
+`coverage` (unique registered locations) and `concealable` (boolean). The normal Builder
+uses controlled registry choices and the existing save/reload, clone, mechanical-edit
+protection and Content Portability paths. Coverage and concealability have no visibility
+effect in this pass. No armor capability, effective armor, containers or worn Character
+LOOK output is implemented. Hand-only mechanics exclude worn objects.
+
+Additive migration `20261007_03` preserves existing placements and rejects existing
+Craft/link/template WEAR command conflicts before schema changes. New authoring reserves
+WEAR. DEV recovery is fix-forward. Equipment Visibility & Character Presentation and
+Armor Foundation & Stage 1 Wear Certification remain separate future passes.
