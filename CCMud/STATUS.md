@@ -6,7 +6,35 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
-## Stage 1 Content Portability certification — awaiting DEV review (2026-10-07)
+## Character Presentation Foundation — awaiting review (2026-10-07)
+
+Dex Prompt #2 implementation adds persistent SDESC, LDESC, FDESC, PMOTE and the
+three approved pronoun sets, with an additive preserving migration. Existing
+Characters receive neutral `a person`/`they` defaults; other descriptions start
+blank. Private names remain for account selection, administration and internal use.
+
+One server-side Character presentation view supplies outdoor/ROOM LOOK and Nearby,
+login/logout presence, and SAY. LDESC is scene prose; SDESC is visible identity.
+Session snapshots retain descriptions through movement and reload them on reconnect.
+Web and Telnet render the same semantic output. FDESC and PMOTE are stored for the
+next pass; no explicit Character LOOK/LOOK ME, Wear, disguise, combat presentation,
+description-authoring commands or creation/approval workflow was added.
+
+Verification: **132 distinct focused tests passed** across Character presentation,
+migration/persistence, world/ROOM behavior, authentication, web/Telnet sessions,
+presentation regressions and activation gates (overlapping development runs).
+Changed-file Ruff, whitespace checks and the single Alembic head passed. The
+unrelated real-worker geography test was excluded. One existing Starlette/httpx
+deprecation warning; no full suite or live PostgreSQL migration was run.
+
+The exact HOG code/schema compatibility mapping now includes the additive
+presentation migration while retaining code, world, generation and placement gates.
+No receipt rewrite or geography change. Review migration recovery before deployment:
+the previous release rejects the new schema, so code-only rollback cannot restore
+readiness after migration. No game deployment performed. Prompt #2 awaits Thomas's
+review/acceptance; Character Core is not complete and Prompt #3 has not started.
+
+## Stage 1 Content Portability certification — COMPLETE (2026-10-07)
 
 Automated certification passed for existing Object, Craft and dwelling-template
 portability. Fixed one validation gap: imported Craft commands are now checked
@@ -22,10 +50,11 @@ preserve authored fields and identities; tests also cover real-session permissio
 changed approvals, pending-morph mechanical protection, rollback of new and replaced
 definitions, and unchanged live dwelling graphs, doors, keys and occupants.
 
-Python checks used isolated SQLite; PostgreSQL and live DEV remain unverified.
-One existing Starlette/httpx deprecation warning. No full suite, migration or game
-deployment. Thomas controls DEV updates and acceptance. Dex Prompt #1 remains
-uncompleted pending his explicit authorization; no later Dex prompt was started.
+Python checks used isolated SQLite. After the exact HOG compatibility-pin correction,
+Thomas reported successful DEV certification: all five manual checks plus additional
+dwelling-template modification/load tests passed, and test content was restored.
+Thomas explicitly authorized completion; Dex Prompt #1 is COMPLETE. This does not
+mark all of Stage 1 complete.
 
 ## Builder blueprint portability v1 (2026-10-05)
 
