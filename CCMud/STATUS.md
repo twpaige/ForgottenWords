@@ -6,33 +6,42 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
-## Character Presentation Foundation — awaiting review (2026-10-07)
+## Character LOOK integration — awaiting DEV certification (2026-10-07)
 
-Dex Prompt #2 implementation adds persistent SDESC, LDESC, FDESC, PMOTE and the
-three approved pronoun sets, with an additive preserving migration. Existing
-Characters receive neutral `a person`/`they` defaults; other descriptions start
-blank. Private names remain for account selection, administration and internal use.
+Prompt #2 is COMPLETE after Thomas's DEV certification of existing/new Characters,
+indoor/outdoor scenes, SAY, presence, dwelling movement, reconnect and private-name
+selection. No ordinary private-name leakage was observed. The compatibility bridge
+was also DEV-certified. Ordinary additive DEV migrations now use approved
+fix-forward recovery; the stopped-service backup exercise was canceled.
 
-One server-side Character presentation view supplies outdoor/ROOM LOOK and Nearby,
-login/logout presence, and SAY. LDESC is scene prose; SDESC is visible identity.
-Session snapshots retain descriptions through movement and reload them on reconnect.
-Web and Telnet render the same semantic output. FDESC and PMOTE are stored for the
-next pass; no explicit Character LOOK/LOOK ME, Wear, disguise, combat presentation,
-description-authoring commands or creation/approval workflow was added.
+Prompt #3 builds on the shared presentation foundation. `LOOK <character>` selects
+visible online Characters by public SDESC, including `n.keyword` ordinals. `LOOK ME`
+uses exactly the same observer-facing output: SDESC, multiline FDESC, current PMOTE
+and visible held objects. Scene LDESC/SDESC also includes held objects and PMOTE.
+The server supplies equivalent semantic output to browser and traditional clients.
+Successful movement clears PMOTE; failed/canceled movement and hand changes do not.
+Persisted prose/equipment refresh on LOOK without replacing visibility rules.
 
-Verification: **132 distinct focused tests passed** across Character presentation,
-migration/persistence, world/ROOM behavior, authentication, web/Telnet sessions,
-presentation regressions and activation gates (overlapping development runs).
-Changed-file Ruff, whitespace checks and the single Alembic head passed. The
-unrelated real-worker geography test was excluded. One existing Starlette/httpx
-deprecation warning; no full suite or live PostgreSQL migration was run.
+Private wound severity codes lack visibility metadata, so no fabricated wound detail
+is shown; an observer-condition hook remains. No Wear, containers, hoods, disguises,
+combat presentation or description-authoring/approval workflow is added. PMOTE
+command authoring awaits resolution of the historical 60-character proposal versus
+the accepted 500-character storage contract. No new migration, generation change,
+receipt rewrite or deployment is included; the exact HOG code pin is refreshed.
 
-The exact HOG code/schema compatibility mapping now includes the additive
-presentation migration while retaining code, world, generation and placement gates.
-No receipt rewrite or geography change. Review migration recovery before deployment:
-the previous release rejects the new schema, so code-only rollback cannot restore
-readiness after migration. No game deployment performed. Prompt #2 awaits Thomas's
-review/acceptance; Character Core is not complete and Prompt #3 has not started.
+Verification: **200 focused tests passed**, covering Character LOOK/persistence,
+world/ROOM movement, web/Telnet sessions, existing presentation and HOG activation
+gates. Changed-file Ruff and diff checks passed; the Alembic head remains
+`20261007_01`. The unrelated real-worker geography test was excluded. One existing
+Starlette/httpx deprecation warning; no full suite or live deployment was run.
+
+Full Character Core certification remains **NOT COMPLETE**: the current model has
+ATHLX/RANGE but not all eight Caps, available Cap currency, persistent known-craft
+relationships or character-level administration/permission overrides. These are
+pre-existing roadmap gaps, not additions to Prompt #3. Wear & Equipment is a
+separate unfinished Stage 1 priority. Prompt #3 still requires Thomas's DEV review
+and explicit completion authorization. Review the remaining Core gaps afterward
+with Thomas before deciding additional bounded work; Prompt #4 remains on hold.
 
 ## Stage 1 Content Portability certification — COMPLETE (2026-10-07)
 

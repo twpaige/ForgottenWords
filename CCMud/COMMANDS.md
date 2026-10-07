@@ -1,7 +1,7 @@
 ---
 title: Commands
 description: Current CCMUD commands and reviewed legacy command candidates.
-reviewed: 2026-10-03
+reviewed: 2026-10-07
 nav: commands
 permalink: /CCMud/commands.html
 ---
@@ -40,6 +40,15 @@ separate from deploying code. See [shared sessions and presentation](design.html
 ## Live server commands
 
 These are the documented current source-level commands. Release and feature gates still apply; consult [status](status.html) and the private implementation before asserting what any deployed instance accepts.
+
+Character LOOK integration (awaiting DEV certification): `LOOK <character>` / `L
+<character>` selects visible online Characters by public short-description words,
+with `2.person`-style ordinals for repeated descriptions. Private Character names
+and internal IDs are not aliases. `LOOK ME` uses the identical observer-facing
+pipeline, including full description, current PMOTE and visible held objects; it
+does not reveal private HEALTH information. Scene LOOK uses LDESC/SDESC plus held
+objects and PMOTE. Movement clears PMOTE; its authoring command is not implemented.
+Object/MOB LOOK and HOG verbosity commands remain available.
 
 | Family | Commands | Current meaning |
 | --- | --- | --- |
