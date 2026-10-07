@@ -1,10 +1,31 @@
 ---
 title: Current status
 description: HOG terrain-first architecture accepted; production integration planning is next.
-reviewed: 2026-10-04
+reviewed: 2026-10-07
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## Stage 1 Content Portability certification — awaiting DEV review (2026-10-07)
+
+Automated certification passed for existing Object, Craft and dwelling-template
+portability. Fixed one validation gap: imported Craft commands are now checked
+against the final set of saved dwelling templates, including absent-from-file,
+unchanged and kept-conflict templates. Explicitly replacing a template to free
+its old command remains supported. No new portable categories or architecture.
+
+Verification: **170 focused Python tests passed** across content portability,
+dwelling templates/drafts, Craft Builder/engine and Object Builder/morph coverage.
+The shipped Builder content browser check passed at 1280×720: downloads, unsaved
+edit guard, explicit replacement/repreview and no premature import. Round trips
+preserve authored fields and identities; tests also cover real-session permissions,
+changed approvals, pending-morph mechanical protection, rollback of new and replaced
+definitions, and unchanged live dwelling graphs, doors, keys and occupants.
+
+Python checks used isolated SQLite; PostgreSQL and live DEV remain unverified.
+One existing Starlette/httpx deprecation warning. No full suite, migration or game
+deployment. Thomas controls DEV updates and acceptance. Dex Prompt #1 remains
+uncompleted pending his explicit authorization; no later Dex prompt was started.
 
 ## Builder blueprint portability v1 (2026-10-05)
 
