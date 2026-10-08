@@ -1252,11 +1252,11 @@ No per-instance overrides, Craft TYPE/MATERIAL matching, salvage, percentages, r
 durability or new feature architecture is introduced. Additive DEV migration uses the
 accepted fix-forward policy with exact HOG code/schema compatibility updates, preserving
 all generation/configuration/placement and activation-receipt safeguards. Prompt #6.1
-is DEV-certified, COMPLETE and archived. #6.2 is implemented pending DEV certification;
-#6.3, Builder certification and overall Stage 1 completion remain pending.
+is DEV-certified, COMPLETE and archived. #6.2 is DEV-certified, COMPLETE and archived;
+#6.3 implementation awaits DEV certification. Builder and Stage 1 remain pending.
 
 
-## Craft prototype authoring foundation — implemented, pending DEV certification (2026-10-08)
+## Craft prototype authoring foundation — DEV-certified and COMPLETE (2026-10-08)
 
 Prompt #6.2 extends the existing Craft JSON definitions, Builder API/forms and
 version-1 Content Portability. Stable IDs, revisions, aliases, physical objects,
@@ -1295,8 +1295,61 @@ minute/CAP fields does not change gameplay. The deterministic future timing help
 uses BASE CAP 0–20, applies 3% per level, and rounds to the nearest whole second with
 exact half-seconds up. It is not called by gameplay and does not alter Learning Time.
 
-Full prerequisite resolution/cycle validation and inactive unresolved-reference
-drafts remain #6.3 work. No learning, knowledge enforcement, new cooldown restrictions,
+Prompt #6.3 now implements prerequisite resolution/cycle validation and persistent
+unresolved-reference drafts; its DEV certification remains pending. No learning, knowledge enforcement, new cooldown restrictions,
 reservations, sampling runtime, training or Stage 2 mechanics are enabled. Builder
-and Stage 1 remain incomplete; #6.2 awaits Thomas's DEV certification and completion
-authorization. The approval-controlled queue/archive are unchanged.
+and Stage 1 remain incomplete; #6.2 is DEV-certified, COMPLETE and archived. The approval-controlled queue/archive are unchanged.
+
+## Craft draft lifecycle and validation — pending DEV certification (2026-10-08)
+
+Craft draft/lifecycle support is implemented in #6.3, pending DEV certification.
+DRAFT and INACTIVE definitions persist under their existing stable IDs and cannot
+start new execution. ACTIVE definitions use shared activation validation across
+Builder and Content Portability. Incomplete fields and unresolved references remain
+editable; imports diagnose unresolved dependencies and retain approved incoming
+Crafts as DRAFT. Resolving dependencies does not automatically activate drafts.
+
+Prerequisite cycles and DRAFT branches block activation. INACTIVE prerequisites are
+allowed with audit warnings. Changes that would invalidate kept ACTIVE dependents
+are rejected atomically. Craft Audit is read-only. Retirement preserves Character
+knowledge, work timers, physical objects and completed receipt replay. Existing
+v1 execution/timing and #6.2's authored-only future fields remain unchanged.
+
+Migration `20261008_02` adds one lifecycle column. It preserves raw definitions and
+classifies legacy rows once: valid definitions stay ACTIVE; unresolved/invalid rows
+and dependent branches become DRAFT, with their authored aliases/references intact.
+Only non-executable derived alias-index entries are removed. No receipts, knowledge,
+Characters or WorldObjects are rewritten. Classification requires an online database;
+static offline migration SQL cannot determine authored-content validity. Normal
+additive DEV fix-forward and exact HOG code/schema safeguards apply; no bridge.
+
+Builder and all five Stage 1 priorities have been reviewed within their approved
+foundation scope. Content Portability, Character Core, Wear and existing recovery
+mechanisms retain their accepted status. Builder implementation is ready for DEV
+certification, not marked COMPLETE. #6.3 and Stage 1 await Thomas's explicit approval.
+No Stage 2 or subsequent prompt work has begun. The Dex queue/archive are unchanged.
+
+The existing Craft Builder offers lifecycle selection, Save, Validate activation and
+Craft Audit. New definitions and clones start as DRAFT in the GUI. Validation is a
+read-only preview; Save rechecks the complete graph under the existing definition
+lock. Failed activation leaves the previous stored revision untouched. Existing
+valid ACTIVE definitions continue using the same command dispatcher and executor.
+Executable alias indexes contain ACTIVE commands only; authored aliases persist in
+all lifecycle states. Completed receipt retries remain available after retirement.
+
+Draft validation permits bounded typed partial fields and unresolved identifiers,
+while rejecting malformed structures, control characters, unsafe values and unknown
+execution modes. Activation additionally checks complete #6.2 fields, registry and
+content resolution, prerequisites/cycles, command uniqueness/reserved verbs and
+both live ROOM and saved dwelling-template link collisions. Retiring a prerequisite
+is allowed and its unavailable branch is flagged by the read-only audit. Converting
+it to DRAFT while ACTIVE dependents remain is refused, not cascaded silently.
+
+The existing version-1 content envelope carries a Craft `lifecycle` alongside its
+full `definition`. Files without lifecycle request legacy ACTIVE compatibility but
+must pass activation checks; unresolved approved imports become DRAFT with preview
+diagnostics. Explicit DRAFT/INACTIVE files retain that state. Imports validate the
+reviewed final dependency graph, including same-file references independent of row
+order. Keep Existing, explicit replacement, stale-preview detection, live-object
+protections and single-transaction rollback remain. No kept dependent is rewritten.
+The audit never activates, repairs, retires, deletes or alters content automatically.

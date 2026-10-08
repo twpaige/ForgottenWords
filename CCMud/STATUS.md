@@ -1,14 +1,57 @@
 ---
 title: Current status
-description: Object TYPE/MATERIAL DEV-certified; expanded Craft authoring implemented pending DEV certification.
+description: Craft authoring DEV-certified; draft lifecycle and Builder certification implementation awaits DEV.
 reviewed: 2026-10-08
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Craft prototype authoring foundation — implemented, pending DEV certification (2026-10-08)
+## Craft drafts, validation and Builder certification — pending DEV (2026-10-08)
 
-Craft prototype authoring is implemented in #6.2, pending Thomas's DEV certification.
+Craft draft/lifecycle support is implemented in #6.3, pending DEV certification.
+DRAFT and INACTIVE definitions persist under their existing stable IDs and cannot
+start new execution. ACTIVE definitions use shared activation validation across
+Builder and Content Portability. Incomplete fields and unresolved references remain
+editable; imports diagnose unresolved dependencies and retain approved incoming
+Crafts as DRAFT. Resolving dependencies does not automatically activate drafts.
+
+Prerequisite cycles and DRAFT branches block activation. INACTIVE prerequisites are
+allowed with audit warnings. Changes that would invalidate kept ACTIVE dependents
+are rejected atomically. Craft Audit is read-only. Retirement preserves Character
+knowledge, work timers, physical objects and completed receipt replay. Existing
+v1 execution/timing and #6.2's authored-only future fields remain unchanged.
+
+Migration `20261008_02` adds one lifecycle column. It preserves raw definitions and
+classifies legacy rows once: valid definitions stay ACTIVE; unresolved/invalid rows
+and dependent branches become DRAFT, with their authored aliases/references intact.
+Only non-executable derived alias-index entries are removed. No receipts, knowledge,
+Characters or WorldObjects are rewritten. Classification requires an online database;
+static offline migration SQL cannot determine authored-content validity. Normal
+additive DEV fix-forward and exact HOG code/schema safeguards apply; no bridge.
+
+Verification: **511 distinct focused automated tests passed** across Craft lifecycle,
+Engine/Builder/authoring, Content Portability, Object Builder/classifications, Wear,
+Character Core, dwelling templates/drafts, ROOM Builder and HOG activation. Coverage
+includes legacy classification with raw data preservation, actual Alembic upgrade,
+atomic imports, dependency protection, read-only audit, blank partial fields, and
+completed-receipt replay after retirement. Four Builder browser checks passed:
+forms, Craft drafts, Content Portability and dwelling templates; desktop/mobile
+controls and unresolved-reference round trips were checked. Changed-file Ruff,
+dependency, migration-head and diff checks passed. Tests used isolated SQLite;
+PostgreSQL column DDL was compiled, but no live PostgreSQL migration was run.
+One unrelated real HOG-worker test was deselected; existing Starlette/httpx and
+Alembic configuration deprecation warnings remain. No full suite or game deployment
+was run. The next step is Thomas's FAST DEV deployment and manual certification.
+
+Builder and all five Stage 1 priorities have been reviewed within their approved
+foundation scope. Content Portability, Character Core, Wear and existing recovery
+mechanisms retain their accepted status. Builder implementation is ready for DEV
+certification, not marked COMPLETE. #6.3 and Stage 1 await Thomas's explicit approval.
+No Stage 2 or subsequent prompt work has begun. The Dex queue/archive are unchanged.
+
+## Craft prototype authoring foundation — DEV-certified and COMPLETE (2026-10-08)
+
+Craft prototype authoring #6.2 is DEV-certified, COMPLETE and archived.
 The existing Builder/JSON/portability paths now support category and canonical command
 identity, prerequisite and BASE CAP metadata, separate minute timers, bounded AND/OR
 object requirement predicates/modes, and crafter/observer echoes. Current Craft
@@ -19,8 +62,8 @@ helper rounds nearest whole second, ties up, and is not active in gameplay.
 
 No migration is required; Alembic stays `20261008_01`, with an exact HOG code-pin update.
 Defaults and the authored-data/runtime boundary are documented in the Object architecture
-reference's Craft prototype authoring section. #6.3 drafts/dependency/activation work
-and Stage 2 remain unstarted. Builder and Stage 1 are not COMPLETE.
+reference's Craft prototype authoring section. #6.3 draft/activation implementation awaits DEV certification.
+Stage 2 is unstarted; Builder and Stage 1 are not COMPLETE.
 
 Verification: **433 distinct focused tests passed** across expanded Craft authoring,
 existing Craft Engine/Builder, Content Portability, Object Builder/morph/classifications,
@@ -33,7 +76,14 @@ explicit import conflicts, ordinary desktop layout and expanded mobile overflow.
 Changed-file Ruff, dependency, Alembic head, diff and reference checks passed. Tests
 used isolated SQLite; no live PostgreSQL, full suite or game deployment was run.
 One unrelated real HOG-worker test was deselected. Existing Starlette/httpx and
-Alembic path_separator deprecation warnings remain. Next: Thomas FAST DEV certification.
+Alembic path_separator deprecation warnings remain. Thomas accepted these tests for existing execution/timing compatibility.
+
+Thomas DEV-certified #6.2 authoring, persistence, minimum CAPs, AND/OR predicates,
+all three requirement modes, authored echoes, legacy definition preservation and
+Content Portability round trips. He accepted the 433 automated checks for execution
+and timing compatibility. Manual execution was impractical because suitable terrain
+was inaccessible through the currently unreliable JUMP mechanism; this work does
+not claim to fix JUMP. #6.2 completion and archival were explicitly authorized.
 
 ## Object TYPE / MATERIAL - DEV-certified and COMPLETE (2026-10-08)
 
@@ -43,7 +93,7 @@ and the shared revision/live-instance/pending-morph safeguards. Classification e
 and imports never change WorldObject identities or placement. FEATURE/ObjectCapability
 and exact-prototype Craft execution are unchanged. Migration `20261008_01` is additive
 and uses the accepted DEV fix-forward policy; exact HOG code/schema pins are updated.
-Prompt #6.2 authoring is implemented pending DEV certification; #6.3 remains unstarted. Builder and Stage 1 are not COMPLETE.
+Prompt #6.2 is DEV-certified and COMPLETE; #6.3 awaits DEV certification. Builder and Stage 1 are not COMPLETE.
 
 Thomas DEV-certified existing prototype compatibility, multiple TYPE/MATERIAL
 authoring, persistence, clone independence, portability round trips, live-instance
@@ -82,15 +132,15 @@ priorities found an implementation gap in the locked Builder specifications.
 | 1. Content Portability | COMPLETE for existing Object, Craft and dwelling definitions; Prompt #1 DEV-certified. Future authored fields must extend the same portability system. |
 | 2. Character Core | COMPLETE within the accepted foundational scope of Prompts #2, #3 and #3.1. Progression and full permission wiring remain separate follow-ons. |
 | 3. Wear & Equipment | COMPLETE; Prompts #4, #5 and #6 DEV-certified, with accepted automated armor coverage. |
-| 4. Builder foundation | Object TYPE/MATERIAL #6.1 is DEV-certified and COMPLETE. Craft authoring #6.2 is implemented pending DEV certification; #6.3 drafts/certification remains. See the blocker below. |
+| 4. Builder foundation | Object TYPE/MATERIAL #6.1 is DEV-certified and COMPLETE. Craft authoring #6.2 is DEV-certified and COMPLETE; #6.3 draft/validation implementation awaits DEV certification. See the blocker below. |
 | 5. Persistence & Recovery | Existing persistence, versioning, migration and recovery mechanisms remain in place. Prior isolated PostgreSQL restore evidence exists; current equipment persistence has DEV certification. Ordinary additive DEV changes retain the accepted fix-forward policy. No new architecture or matched-backup exercise is required by this review. |
 
-**Remaining Builder work:** #6.1 TYPE/MATERIAL is DEV-certified, COMPLETE and
-archived. #6.2 expanded Craft authoring is implemented pending DEV certification.
-#6.3 still owns unresolved-reference drafts, dependency/cycle resolution, activation
-validation and final Builder certification. Existing execution remains the v1
-compatibility path; later progression/runtime features are not activated by authoring.
-This review does not claim a fresh live backup/restore test or a new full-suite run.
+**Remaining certification:** #6.1 and #6.2 are DEV-certified, COMPLETE and archived.
+#6.3 supplies draft persistence, dependency/cycle validation, lifecycle gating,
+read-only audit and unresolved-reference portability. Focused implementation checks
+support the approved Builder checklist; Thomas's DEV certification and explicit
+completion authorization remain required. No new feature or recovery architecture
+is proposed by this review. Existing execution remains the v1 compatibility path.
 Later NPC authoring, Character combat, progression, containers and disguise remain
 outside the completed prompt scope.
 
