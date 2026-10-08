@@ -1211,8 +1211,8 @@ covers authoring/portability, physical roles/capacity, visibility/presentation, 
 and persistence. Thomas DEV-certified authoring, equipment/visibility, reconnect and
 worn JUNK, and accepted automated calculation/runtime/portability/wound-order coverage.
 Prompt #6 and Stage 1 Wear & Equipment are COMPLETE. The final Stage 1 review in
-[Current status](status.html) records a separate Builder specification gap; no later
-prompt or implementation has begun.
+[Current status](status.html) records that #6.1–#6.3 closed the Builder gap and
+Stage 1 is COMPLETE. Stage 2 remains unstarted.
 
 
 ## Object TYPE and MATERIAL foundation (2026-10-08; DEV-certified and COMPLETE)
@@ -1253,7 +1253,7 @@ durability or new feature architecture is introduced. Additive DEV migration use
 accepted fix-forward policy with exact HOG code/schema compatibility updates, preserving
 all generation/configuration/placement and activation-receipt safeguards. Prompt #6.1
 is DEV-certified, COMPLETE and archived. #6.2 is DEV-certified, COMPLETE and archived;
-#6.3 implementation awaits DEV certification. Builder and Stage 1 remain pending.
+#6.3 is also DEV-certified, COMPLETE and archived. Builder and Stage 1 are COMPLETE.
 
 
 ## Craft prototype authoring foundation — DEV-certified and COMPLETE (2026-10-08)
@@ -1296,13 +1296,22 @@ uses BASE CAP 0–20, applies 3% per level, and rounds to the nearest whole seco
 exact half-seconds up. It is not called by gameplay and does not alter Learning Time.
 
 Prompt #6.3 now implements prerequisite resolution/cycle validation and persistent
-unresolved-reference drafts; its DEV certification remains pending. No learning, knowledge enforcement, new cooldown restrictions,
+unresolved-reference drafts; it is DEV-certified, COMPLETE and archived. No learning, knowledge enforcement, new cooldown restrictions,
 reservations, sampling runtime, training or Stage 2 mechanics are enabled. Builder
-and Stage 1 remain incomplete; #6.2 is DEV-certified, COMPLETE and archived. The approval-controlled queue/archive are unchanged.
+and Stage 1 are COMPLETE; #6.1–#6.3 are DEV-certified, COMPLETE and archived.
 
-## Craft draft lifecycle and validation — pending DEV certification (2026-10-08)
+## Craft draft lifecycle and validation — DEV-certified and COMPLETE (2026-10-08)
 
-Craft draft/lifecycle support is implemented in #6.3, pending DEV certification.
+Craft draft/lifecycle support in #6.3 is DEV-certified, COMPLETE and archived.
+
+Thomas DEV-certified implementation `b4fd87b0e117638720254babe515bd47bf75e1b1`
+and explicitly authorized completion and archival on 2026-10-08. Existing Craft
+lifecycle compatibility, incomplete DRAFT persistence, invalid activation refusal
+and atomicity, successful DRAFT-to-ACTIVE transition, Craft Audit, ACTIVE-to-INACTIVE
+retirement, and Content Portability round trips passed. All existing Crafts remained
+intact. Thomas accepted the 511 focused automated tests for complex dependency,
+unresolved-reference and rollback cases.
+
 DRAFT and INACTIVE definitions persist under their existing stable IDs and cannot
 start new execution. ACTIVE definitions use shared activation validation across
 Builder and Content Portability. Incomplete fields and unresolved references remain
@@ -1323,11 +1332,10 @@ Characters or WorldObjects are rewritten. Classification requires an online data
 static offline migration SQL cannot determine authored-content validity. Normal
 additive DEV fix-forward and exact HOG code/schema safeguards apply; no bridge.
 
-Builder and all five Stage 1 priorities have been reviewed within their approved
-foundation scope. Content Portability, Character Core, Wear and existing recovery
-mechanisms retain their accepted status. Builder implementation is ready for DEV
-certification, not marked COMPLETE. #6.3 and Stage 1 await Thomas's explicit approval.
-No Stage 2 or subsequent prompt work has begun. The Dex queue/archive are unchanged.
+Stage 1 Builder Foundation and all five Stage 1 priorities are COMPLETE after
+Thomas's DEV certification and explicit completion authorization. Prompt #6.3 is
+COMPLETE and archived with its specification and acceptance notes preserved.
+Stage 2 and subsequent prompts remain unstarted; further work requires authorization.
 
 The existing Craft Builder offers lifecycle selection, Save, Validate activation and
 Craft Audit. New definitions and clones start as DRAFT in the GUI. Validation is a

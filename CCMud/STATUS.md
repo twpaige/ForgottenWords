@@ -1,14 +1,23 @@
 ---
 title: Current status
-description: Craft authoring DEV-certified; draft lifecycle and Builder certification implementation awaits DEV.
+description: Stage 1 COMPLETE; Craft drafts DEV-certified and archived. Stage 2 awaits authorization.
 reviewed: 2026-10-08
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Craft drafts, validation and Builder certification — pending DEV (2026-10-08)
+## Craft drafts, validation and Builder certification — DEV-certified and COMPLETE (2026-10-08)
 
-Craft draft/lifecycle support is implemented in #6.3, pending DEV certification.
+Craft draft/lifecycle support in #6.3 is DEV-certified, COMPLETE and archived.
+
+Thomas DEV-certified implementation `b4fd87b0e117638720254babe515bd47bf75e1b1`
+and explicitly authorized completion and archival on 2026-10-08. Existing Craft
+lifecycle compatibility, incomplete DRAFT persistence, invalid activation refusal
+and atomicity, successful DRAFT-to-ACTIVE transition, Craft Audit, ACTIVE-to-INACTIVE
+retirement, and Content Portability round trips passed. All existing Crafts remained
+intact. Thomas accepted the 511 focused automated tests for complex dependency,
+unresolved-reference and rollback cases.
+
 DRAFT and INACTIVE definitions persist under their existing stable IDs and cannot
 start new execution. ACTIVE definitions use shared activation validation across
 Builder and Content Portability. Incomplete fields and unresolved references remain
@@ -41,13 +50,13 @@ dependency, migration-head and diff checks passed. Tests used isolated SQLite;
 PostgreSQL column DDL was compiled, but no live PostgreSQL migration was run.
 One unrelated real HOG-worker test was deselected; existing Starlette/httpx and
 Alembic configuration deprecation warnings remain. No full suite or game deployment
-was run. The next step is Thomas's FAST DEV deployment and manual certification.
+was run by Codex during implementation. Thomas subsequently reported successful DEV
+certification as recorded above; no additional test or deployment run is claimed here.
 
-Builder and all five Stage 1 priorities have been reviewed within their approved
-foundation scope. Content Portability, Character Core, Wear and existing recovery
-mechanisms retain their accepted status. Builder implementation is ready for DEV
-certification, not marked COMPLETE. #6.3 and Stage 1 await Thomas's explicit approval.
-No Stage 2 or subsequent prompt work has begun. The Dex queue/archive are unchanged.
+Stage 1 Builder Foundation and all five Stage 1 priorities are COMPLETE after
+Thomas's DEV certification and explicit completion authorization. Prompt #6.3 is
+COMPLETE and archived with its specification and acceptance notes preserved.
+Stage 2 and subsequent prompts remain unstarted; further work requires authorization.
 
 ## Craft prototype authoring foundation — DEV-certified and COMPLETE (2026-10-08)
 
@@ -62,8 +71,8 @@ helper rounds nearest whole second, ties up, and is not active in gameplay.
 
 No migration is required; Alembic stays `20261008_01`, with an exact HOG code-pin update.
 Defaults and the authored-data/runtime boundary are documented in the Object architecture
-reference's Craft prototype authoring section. #6.3 draft/activation implementation awaits DEV certification.
-Stage 2 is unstarted; Builder and Stage 1 are not COMPLETE.
+reference's Craft prototype authoring section. #6.3 draft/activation is DEV-certified, COMPLETE and archived.
+Builder and Stage 1 are COMPLETE; Stage 2 is unstarted.
 
 Verification: **433 distinct focused tests passed** across expanded Craft authoring,
 existing Craft Engine/Builder, Content Portability, Object Builder/morph/classifications,
@@ -93,7 +102,7 @@ and the shared revision/live-instance/pending-morph safeguards. Classification e
 and imports never change WorldObject identities or placement. FEATURE/ObjectCapability
 and exact-prototype Craft execution are unchanged. Migration `20261008_01` is additive
 and uses the accepted DEV fix-forward policy; exact HOG code/schema pins are updated.
-Prompt #6.2 is DEV-certified and COMPLETE; #6.3 awaits DEV certification. Builder and Stage 1 are not COMPLETE.
+Prompts #6.1–#6.3 are DEV-certified, COMPLETE and archived. Builder and Stage 1 are COMPLETE.
 
 Thomas DEV-certified existing prototype compatibility, multiple TYPE/MATERIAL
 authoring, persistence, clone independence, portability round trips, live-instance
@@ -123,26 +132,25 @@ configuration deprecation warnings remain. No full suite or game deployment ran.
 
 ## Final Stage 1 certification review (2026-10-08)
 
-**Stage 1 is NOT COMPLETE.** Prompt #6 and Stage 1 Wear & Equipment are COMPLETE
-following Thomas's DEV certification and explicit acceptance. Review of all five
-priorities found an implementation gap in the locked Builder specifications.
+**Stage 1 COMPLETE — 2026-10-08.** Thomas's #6.3 DEV certification and explicit
+completion authorization close the final Builder requirement. All five priorities
+are satisfied within the approved foundation scope; no remaining Stage 1 blocker
+was identified.
 
 | Priority | Certification finding |
 | --- | --- |
-| 1. Content Portability | COMPLETE for existing Object, Craft and dwelling definitions; Prompt #1 DEV-certified. Future authored fields must extend the same portability system. |
-| 2. Character Core | COMPLETE within the accepted foundational scope of Prompts #2, #3 and #3.1. Progression and full permission wiring remain separate follow-ons. |
-| 3. Wear & Equipment | COMPLETE; Prompts #4, #5 and #6 DEV-certified, with accepted automated armor coverage. |
-| 4. Builder foundation | Object TYPE/MATERIAL #6.1 is DEV-certified and COMPLETE. Craft authoring #6.2 is DEV-certified and COMPLETE; #6.3 draft/validation implementation awaits DEV certification. See the blocker below. |
-| 5. Persistence & Recovery | Existing persistence, versioning, migration and recovery mechanisms remain in place. Prior isolated PostgreSQL restore evidence exists; current equipment persistence has DEV certification. Ordinary additive DEV changes retain the accepted fix-forward policy. No new architecture or matched-backup exercise is required by this review. |
+| 1. Content Portability | COMPLETE. #1 DEV-certified Object/Craft/dwelling round trips, conflicts and live-instance safety; #6.1–#6.3 extend the same system with accepted classification, authored Craft fields and unresolved drafts. |
+| 2. Character Core | COMPLETE within accepted Prompts #2, #3 and #3.1: shared presentation, persistent CAPs, hands/equipment, knowledge and permission foundations. |
+| 3. Wear & Equipment | COMPLETE. #4–#6 DEV-certified physical roles, visibility, armor and persistence, with accepted automated calculation/regression coverage. |
+| 4. Builder foundation | COMPLETE. #6.1 TYPE/MATERIAL, #6.2 Craft authoring and #6.3 drafts/validation/audit are DEV-certified and archived. Existing Object/ROOM/Dwelling authoring and live-object safeguards are preserved. |
+| 5. Persistence & Recovery | COMPLETE within the established discipline: persistent identities/state, revisions, preserving migrations, backups and isolated PostgreSQL restore evidence. DEV-certified persistence and accepted automated atomicity/rollback checks remain applicable; ordinary additive DEV recovery uses the accepted fix-forward policy. |
 
-**Remaining certification:** #6.1 and #6.2 are DEV-certified, COMPLETE and archived.
-#6.3 supplies draft persistence, dependency/cycle validation, lifecycle gating,
-read-only audit and unresolved-reference portability. Focused implementation checks
-support the approved Builder checklist; Thomas's DEV certification and explicit
-completion authorization remain required. No new feature or recovery architecture
-is proposed by this review. Existing execution remains the v1 compatibility path.
-Later NPC authoring, Character combat, progression, containers and disguise remain
-outside the completed prompt scope.
+Craft Learning, progression, full permission wiring, Character combat, containers,
+NPC authoring and other deferred mechanics remain outside this accepted foundation.
+No new recovery architecture or matched-backup exercise is required. Completion
+records Thomas's DEV acceptance and the existing verification evidence; no new
+full-suite checkpoint, restore exercise or PROD certification is claimed.
+Stage 2 and subsequent prompts remain unstarted, awaiting explicit authorization.
 
 ## Armor foundation - DEV-certified and COMPLETE (2026-10-08)
 
@@ -167,9 +175,9 @@ Thomas DEV-certified armor prototype authoring, WEAR/REMOVE, layer visibility an
 concealment, reconnect persistence, and JUNK deletion of worn armor. INV and LOOK ME
 updated correctly throughout. Automated coverage for armor calculations, coverage
 rules, runtime derivation, Builder portability and wound ordering was accepted.
-Thomas explicitly authorized completion. No subsequent prompt has begun.
-Prompt #6 and Stage 1 Wear & Equipment are COMPLETE. The separate Builder gap above
-prevents overall Stage 1 completion.
+Thomas explicitly authorized completion; later Builder certification is recorded above.
+Prompt #6 and Stage 1 Wear & Equipment are COMPLETE. The Builder gap is now closed;
+the final review above records Stage 1 completion.
 
 Verification: **417 distinct focused tests passed** across armor, Wear, visibility,
 JUNK, Builder/morph, portability, Character Core/presentation/LOOK, MOB wounds, HOG
@@ -325,7 +333,7 @@ Prompt #3.1's scope. Thomas certified deployment, migration, persistence, gamepl
 Craft and Builder access, and accepted the new-foundation automated coverage. #3.1
 is COMPLETE. Wear & Equipment remains a separate Stage 1 priority. PMOTE authoring, safe observer-visible wound details, description approval,
 progression/learning and full authorization wiring remain their separately scoped
-follow-ons. No Stage 1 completion is claimed.
+follow-ons. Overall Stage 1 completion is recorded in the final review above.
 
 ## Stage 1 Content Portability certification — COMPLETE (2026-10-07)
 
@@ -346,8 +354,8 @@ definitions, and unchanged live dwelling graphs, doors, keys and occupants.
 Python checks used isolated SQLite. After the exact HOG compatibility-pin correction,
 Thomas reported successful DEV certification: all five manual checks plus additional
 dwelling-template modification/load tests passed, and test content was restored.
-Thomas explicitly authorized completion; Dex Prompt #1 is COMPLETE. This does not
-mark all of Stage 1 complete.
+Thomas explicitly authorized completion; Dex Prompt #1 is COMPLETE. The final
+review above now records completion of all five Stage 1 priorities.
 
 ## Builder blueprint portability v1 (2026-10-05)
 
