@@ -1,12 +1,44 @@
 ---
 title: Current status
-description: HOG terrain-first architecture accepted; production integration planning is next.
+description: Wear and armor DEV-certified; final Stage 1 review identifies remaining Builder specification gaps.
 reviewed: 2026-10-08
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Armor foundation - implementation complete, awaiting DEV certification (2026-10-08)
+## Final Stage 1 certification review (2026-10-08)
+
+**Stage 1 is NOT COMPLETE.** Prompt #6 and Stage 1 Wear & Equipment are COMPLETE
+following Thomas's DEV certification and explicit acceptance. Review of all five
+priorities found an implementation gap in the locked Builder specifications.
+
+| Priority | Certification finding |
+| --- | --- |
+| 1. Content Portability | COMPLETE for existing Object, Craft and dwelling definitions; Prompt #1 DEV-certified. Future authored fields must extend the same portability system. |
+| 2. Character Core | COMPLETE within the accepted foundational scope of Prompts #2, #3 and #3.1. Progression and full permission wiring remain separate follow-ons. |
+| 3. Wear & Equipment | COMPLETE; Prompts #4, #5 and #6 DEV-certified, with accepted automated armor coverage. |
+| 4. Builder foundation | Existing Object/Craft/dwelling Builder works, but locked Sections 4A/4B are specification-complete, not implementation-complete. See the blocker below. |
+| 5. Persistence & Recovery | Existing persistence, versioning, migration and recovery mechanisms remain in place. Prior isolated PostgreSQL restore evidence exists; current equipment persistence has DEV certification. Ordinary additive DEV changes retain the accepted fix-forward policy. No new architecture or matched-backup exercise is required by this review. |
+
+**Remaining blocker: Builder specification/implementation mismatch.** The Object
+Builder definition has presentation/weight and existing capabilities, including armor,
+but lacks the locked multiple TYPE/MATERIAL authoring model. Craft Builder still uses
+`name`, command `aliases`, exact-prototype inputs/outputs, `work_seconds` and ground
+placement. It does not yet author the locked category/command/craft_name, associated
+CAP, prerequisite/CAP requirements, distinct Learning Time/Execution Timer/Crafting
+Cooldown and authored echoes. Craft imports reject unresolved references instead of
+retaining the specified inactive drafts. These are existing roadmap requirements,
+not newly invented features. Existing v1 portability certification remains valid for
+its implemented definition set; it does not certify absent authored fields.
+
+Evidence inspected: Object/Craft definition validators, shared portability validation,
+dwelling draft support, recorded DEV acceptances and existing recovery evidence.
+This review makes no claim of a fresh live backup/restore test or a new full-suite run.
+No corrective implementation or new prompt is authorized or started by this review.
+Later NPC authoring, Character combat, progression, containers and disguise remain
+outside the completed prompt scope.
+
+## Armor foundation - DEV-certified and COMPLETE (2026-10-08)
 
 Prompt #6 extends the existing Object Builder and Content Portability with a separate
 validated armor capability. Classes are No Armor (+1), Leather (0), Chainmail (-1),
@@ -25,9 +57,13 @@ wound pipeline remains unchanged; Character combat is not implemented.
 Focused automated certification covers the Stage 1 Wear & Equipment checklist:
 ordinary wearable/armor authoring and portability, physical roles/capacity, persistence,
 visual concealment, shared LOOK/LOOK ME, private INV, armor derivation and reconstruction.
-Implementation and automated certification are complete; final DEV certification,
-Stage 1 Wear & Equipment acceptance and Prompt #6 COMPLETE require Thomas's approval.
-No claim that all Stage 1 is complete. No subsequent prompt has begun.
+Thomas DEV-certified armor prototype authoring, WEAR/REMOVE, layer visibility and
+concealment, reconnect persistence, and JUNK deletion of worn armor. INV and LOOK ME
+updated correctly throughout. Automated coverage for armor calculations, coverage
+rules, runtime derivation, Builder portability and wound ordering was accepted.
+Thomas explicitly authorized completion. No subsequent prompt has begun.
+Prompt #6 and Stage 1 Wear & Equipment are COMPLETE. The separate Builder gap above
+prevents overall Stage 1 completion.
 
 Verification: **417 distinct focused tests passed** across armor, Wear, visibility,
 JUNK, Builder/morph, portability, Character Core/presentation/LOOK, MOB wounds, HOG
@@ -43,7 +79,9 @@ isolated SQLite, not live PostgreSQL. No full suite or game deployment was run.
 No migration:
 Alembic stays `20261007_03`. The exact HOG destination code fingerprint is updated;
 source/schema pins, generation, configuration, placement and receipt safeguards remain.
-No DEV/PROD deployment. Thomas controls the next FAST DEV attempt and manual review.
+Thomas subsequently reported successful DEV certification of the implementation
+release `5d62469348ed14835d71d17b0eaad56d8c463ce0`. This documentation update does not
+deploy or modify application code. No PROD deployment is claimed.
 
 ## Separate admin utility: JUNK - DEV-certified and accepted (2026-10-08)
 
@@ -92,7 +130,7 @@ Thomas certified visible clothing, overcoat concealment, INV markers, self/obser
 LOOK, immediate WEAR updates and held/worn presentation; additional layering, selective
 coverage, morph freshness and client equivalence have accepted automated coverage.
 The earlier hat issue was authored visual coverage, not a code defect. Prompt #5 is
-COMPLETE. Prompt #6's armor foundation is described above; final Wear acceptance is pending.
+COMPLETE. Prompt #6 and final Stage 1 Wear acceptance are recorded above.
 
 ## Wear physical foundation — COMPLETE after DEV certification (2026-10-07)
 
@@ -130,7 +168,7 @@ Thomas DEV-certified and explicitly accepted Prompt #4: wearable Builder authori
 WEAR/REMOVE, hand transfers, full-hand refusal, occupied capacity, numbered targeting,
 inventory consistency, reconnect persistence and existing gameplay all passed. Repeated
 wear/remove transfers of two identical cowboy hats lost or duplicated no objects.
-Prompt #4 is COMPLETE. Stage 1 Wear & Equipment is not complete.
+Prompt #4 is COMPLETE. Subsequent Prompts #5/#6 completed Stage 1 Wear & Equipment.
 
 ## Character Core persistent foundations — COMPLETE (2026-10-07)
 

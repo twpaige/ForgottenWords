@@ -1170,7 +1170,7 @@ and accepted Prompt #5. The hat concealment incident was incorrect authored visu
 coverage, not a visibility defect.
 
 
-## Armor foundation (2026-10-08; pending DEV certification)
+## Armor foundation (2026-10-08; DEV-certified and COMPLETE)
 
 An optional `armor` ObjectCapability extends the existing portable wearable prototype.
 Object Builder provides controlled `armor_class` choices: `NO_ARMOR`, `LEATHER`,
@@ -1208,4 +1208,8 @@ Existing Character LOOK, LOOK ME, INV and Web/Telnet presentation remain unchang
 The established wound function accepts the derived modifier; Character combat is not
 implemented to demonstrate armor. Automated Stage 1 Wear & Equipment certification
 covers authoring/portability, physical roles/capacity, visibility/presentation, armor
-and persistence. Final DEV certification and Prompt #6 completion await Thomas.
+and persistence. Thomas DEV-certified authoring, equipment/visibility, reconnect and
+worn JUNK, and accepted automated calculation/runtime/portability/wound-order coverage.
+Prompt #6 and Stage 1 Wear & Equipment are COMPLETE. The final Stage 1 review in
+[Current status](status.html) records a separate Builder specification gap; no later
+prompt or implementation has begun.
