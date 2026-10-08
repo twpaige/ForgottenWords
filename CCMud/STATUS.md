@@ -1,10 +1,48 @@
 ---
 title: Current status
-description: World Viewer optimization DEV-certified; Stage 1 COMPLETE. Dex 6.4 remains open for administrative JUMP; Stage 2 unstarted.
+description: Immediate administrative JUMP implemented, awaiting DEV certification. World Viewer optimization accepted; Stage 1 COMPLETE; Stage 2 unstarted.
 reviewed: 2026-10-08
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## Immediate administrative JUMP — implemented, awaiting DEV certification (2026-10-08)
+
+Thomas approved immediate coordinate/directional administrative JUMP for Dex #6.4.
+Requested X/Y persists immediately; travel stops without changing stamina or pace.
+Cold destinations retain numeric Z as an explicitly provisional height. The existing
+asynchronous HOG preparation path reconciles Z only after normal endpoint geography,
+water-depth and structure checks pass, without changing the requested X/Y.
+
+LOOK and the position display distinguish unresolved footing. Normal walking and
+physical interactions remain gated. Another authorized JUMP works while preparation
+is pending, failed, timed out or cancelled, including immediately after unresolved
+reconnect. STOP cancels waiting and preserves coordinates. New placement tokens
+prevent obsolete results from affecting a newer destination. Successful preparation
+announces readiness and restores ordinary movement.
+
+Additive migration `20261008_03` adds a nullable placement token without rewriting
+existing Characters. Unresolved outdoor admins can pass startup/login placement
+waiting while identity, role, coordinates, ATHLX, exact compatibility, receipt,
+configuration, staging and dwelling safeguards remain enforced. Authenticated entry
+resumes preparation after stale travel cleanup. FIND/MARK retain their certified
+identity/ROOM placement rules. Seed, deterministic geography, generation identity,
+activation receipts and worker scheduling are unchanged.
+
+Verification covers controlled slow/failed workers, cancellation/timeouts, stale
+results, escape after failure and reconnect, session entry, held/worn preservation,
+additive migration and activation gates. A separate real production-provider worker
+check at `25000,25000` reconciles against authoritative physical geography and passes
+the existing footing validator. Browser navigation checks cover provisional HUD
+labeling and continued command availability. These are local implementation checks;
+**DEV deployment and certification have not occurred**.
+
+Use the established FAST DEV/additive fix-forward workflow; stop and diagnose if
+readiness fails. The prior release does not understand provisional placement.
+**#6.4 remains open**, awaiting Thomas's DEV certification and explicit completion
+authorization. World Viewer performance certification remains separate and accepted.
+No Origin warming, #6.5 or Stage 2 work is included.
+
 
 ## World Viewer optimization — DEV-certified and accepted (2026-10-08)
 
