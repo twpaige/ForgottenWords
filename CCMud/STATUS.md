@@ -6,27 +6,59 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
-## Separate admin utility: JUNK — awaiting DEV review (2026-10-08)
+## Armor foundation - implementation complete, awaiting DEV certification (2026-10-08)
+
+Prompt #6 extends the existing Object Builder and Content Portability with a separate
+validated armor capability. Classes are No Armor (+1), Leather (0), Chainmail (-1),
+Plate (-2). Abstract regions are HEAD/TORSO/ARMS/LEGS. Thomas clarified strongest
+single class per region, without stacking bonuses, then weakest of all four regions;
+uncovered regions count as No Armor. Only currently worn instances protect, including
+visually concealed armor. Physical wear roles and existing Character presentation remain.
+
+Disposable runtime snapshots provide regional/overall protection and the severity
+modifier. Warm reads are query-free. Existing object/capability transactions invalidate
+snapshots, including WEAR/REMOVE and JUNK; worn morph deadlines also force refresh.
+Login rebuilds from persisted equipment and a restarted service begins empty. No
+independently editable or persisted Character armor value exists. The established
+wound pipeline remains unchanged; Character combat is not implemented.
+
+Focused automated certification covers the Stage 1 Wear & Equipment checklist:
+ordinary wearable/armor authoring and portability, physical roles/capacity, persistence,
+visual concealment, shared LOOK/LOOK ME, private INV, armor derivation and reconstruction.
+Implementation and automated certification are complete; final DEV certification,
+Stage 1 Wear & Equipment acceptance and Prompt #6 COMPLETE require Thomas's approval.
+No claim that all Stage 1 is complete. No subsequent prompt has begun.
+
+Verification: **417 distinct focused tests passed** across armor, Wear, visibility,
+JUNK, Builder/morph, portability, Character Core/presentation/LOOK, MOB wounds, HOG
+activation and MUD sessions. The combined run passed 416; the remaining new API test
+passed after correcting its authorization fixture to submit a valid body. Invalid
+bodies are rejected by existing validation before the route's authorization check.
+Shipped Builder browser checks passed armor save/reload, controlled values, ordinary
+Craft/Object forms and portability download/explicit import, desktop/mobile layout.
+Changed-file Ruff and diff checks passed. One unrelated real-worker geography test
+was excluded; the existing Starlette/httpx deprecation warning remains. Tests used
+isolated SQLite, not live PostgreSQL. No full suite or game deployment was run.
+
+No migration:
+Alembic stays `20261007_03`. The exact HOG destination code fingerprint is updated;
+source/schema pins, generation, configuration, placement and receipt safeguards remain.
+No DEV/PROD deployment. Thomas controls the next FAST DEV attempt and manual review.
+
+## Separate admin utility: JUNK - DEV-certified and accepted (2026-10-08)
 
 JUNK permanently deletes one selected WorldObject instance using existing keywords,
 numbered targeting and account-admin authority. Eligible objects are the acting
 Character's held/worn objects or visible ground objects within normal reach.
 Infrastructure, embedded objects, parents with embedded children and other
 Characters' possessions are refused. Prototype records and other instances remain.
-Ground-placement/corpse metadata removal shares the deletion transaction; failed
-deletion rolls back. No confirmation UI, salvage or new persistence model is added.
+Metadata removal shares the deletion transaction; failed deletion rolls back.
 
-Verification: 256 focused tests passed, including authorization, instance isolation,
-physical states, concurrency, rollback, Wear/visibility, craft/object lifecycle and
-HOG activation regressions. Changed-file lint and diff checks passed. One unrelated
-real-worker test was excluded; the existing Starlette/httpx deprecation warning
-remains. No migration or game deployment; only the exact HOG code pin is refreshed.
+Thomas certified held, worn and nearby ground deletion and unchanged inventory/equipment,
+and accepted automated authorization, numbered-targeting and protection coverage.
+JUNK is accepted separately from Wear. No additional utility work is required.
 
-This is separately authorized utility work. Prompt #5 remains pending certification;
-the reported concealment was explained by authored hat coverage, and its visibility
-implementation is unchanged. Prompt #6 has not begun.
-
-## Equipment visibility — implementation complete, awaiting DEV certification (2026-10-07)
+## Equipment visibility - COMPLETE after DEV certification (2026-10-08)
 
 Prompt #5 connects current worn WorldObjects and wearable prototypes to the existing
 Character presentation pipeline. Strictly outer layers conceal physically concealable
@@ -56,9 +88,11 @@ Changed-file Ruff, dependency checks, single unchanged Alembic head, diff checks
 pinned documentation verification passed. Isolated SQLite was used; live PostgreSQL
 was not tested. The unrelated real-worker geography test was excluded. One existing
 Starlette/httpx warning remains. No full suite or game deployment was run.
-Prompt #5 remains **pending Thomas's DEV certification and explicit acceptance**.
-Armor Foundation & Stage 1 Wear Certification remains unstarted. No armor mechanics,
-hood/disguise state, containers or Stage 1 Wear completion is claimed.
+Thomas certified visible clothing, overcoat concealment, INV markers, self/observer
+LOOK, immediate WEAR updates and held/worn presentation; additional layering, selective
+coverage, morph freshness and client equivalence have accepted automated coverage.
+The earlier hat issue was authored visual coverage, not a code defect. Prompt #5 is
+COMPLETE. Prompt #6's armor foundation is described above; final Wear acceptance is pending.
 
 ## Wear physical foundation — COMPLETE after DEV certification (2026-10-07)
 

@@ -1135,16 +1135,16 @@ holds one object except neck BASE, which holds three.
 The portable prototype's optional `wearable` capability authors `location`, `layer`,
 `coverage` (unique registered locations) and `concealable` (boolean). The normal Builder
 uses controlled registry choices and the existing save/reload, clone, mechanical-edit
-protection and Content Portability paths. Coverage and concealability have no visibility
-effect in this pass. No armor capability, effective armor, containers or worn Character
-LOOK output is implemented. Hand-only mechanics exclude worn objects.
+protection and Content Portability paths. The following passes activate visibility
+and armor independently. Hand-only mechanics exclude worn objects; containers remain
+outside this foundation.
 
 Additive migration `20261007_03` preserves existing placements and rejects existing
 Craft/link/template WEAR command conflicts before schema changes. New authoring reserves
 WEAR. DEV recovery is fix-forward. Prompt #4 is DEV-certified.
 
 
-## Equipment visibility (2026-10-07; pending DEV certification)
+## Equipment visibility (2026-10-08; DEV-certified)
 
 Prompt #5 activates the authored visual coverage and concealability above. For each
 worn object, concealment requires both its `concealable` flag and another worn object
@@ -1165,5 +1165,47 @@ uses the existing lifecycle authority before projection, so coverage/concealabil
 changes and disappearance become visible even when the wearer has issued no command.
 Visibility is neither persisted nor cached. No schema or Builder format change is needed.
 Web and Telnet render equivalent server semantic output. Armor, hoods/disguises, identity
-obscuration and containers remain outside this pass. Prompt #5 awaits DEV acceptance;
-Armor Foundation & Stage 1 Wear Certification has not begun.
+obscuration and containers remain outside this visibility pass. Thomas DEV-certified
+and accepted Prompt #5. The hat concealment incident was incorrect authored visual
+coverage, not a visibility defect.
+
+
+## Armor foundation (2026-10-08; pending DEV certification)
+
+An optional `armor` ObjectCapability extends the existing portable wearable prototype.
+Object Builder provides controlled `armor_class` choices: `NO_ARMOR`, `LEATHER`,
+`CHAINMAIL`, `PLATE`. Its `regions` list requires one or more unique values from
+`HEAD`, `TORSO`, `ARMS`, `LEGS`. Invalid classes/regions and armor without wearable or
+portable configuration are rejected. Save/reload, clone, revision protection and
+Content Portability use existing shared validation. Armor changes are mechanical
+changes: live instances and pending morph destinations retain their existing protection
+against such edits. No separate definition storage or migration is introduced.
+
+These four regions are abstract combat coverage, not wear locations. Armor coverage,
+visual coverage, anchor, layer and concealability remain independent. Only currently
+worn WorldObjects contribute; held, ground, ROOM, embedded and other Characters'
+objects provide no protection to the Character. Concealed armor still protects.
+
+Thomas's overlap clarification is strongest single class per region, without stacking
+bonuses, then weakest of all four regions overall. Missing coverage is No Armor.
+Plate on HEAD/TORSO/ARMS plus Chainmail on LEGS yields Chainmail overall; three stronger
+regions never compensate for the fourth. No Armor gives +1 wound severity, Leather 0,
+Chainmail -1 and Plate -2. Preserve MoV -> Base Wound -> Severity Modifier -> Armor Modifier
+-> Final Wound, including the existing caps and combination rules. Armor never modifies
+hit probability. No averaging, percentages, hit-location rolls, durability, penalties,
+shields-as-armor or additional combat mechanics are added.
+
+Regional and overall protection are immutable, disposable runtime snapshots derived
+from current worn objects/capabilities. Warm reads avoid equipment queries. Existing
+object transactions invalidate cached results after changes, including WEAR/REMOVE and
+JUNK. Worn morph deadlines expire cached results; refresh uses existing lifecycle
+reconciliation so compatible transitions and disappearance remain authoritative.
+Login rebuilds, and server/service restart begins without cached state. Explicit
+refresh is available following an external database repair. No derived armor column
+or independently authored Character armor value exists.
+
+Existing Character LOOK, LOOK ME, INV and Web/Telnet presentation remain unchanged.
+The established wound function accepts the derived modifier; Character combat is not
+implemented to demonstrate armor. Automated Stage 1 Wear & Equipment certification
+covers authoring/portability, physical roles/capacity, visibility/presentation, armor
+and persistence. Final DEV certification and Prompt #6 completion await Thomas.
