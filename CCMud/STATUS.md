@@ -1,10 +1,47 @@
 ---
 title: Current status
-description: Stage 1 COMPLETE; Craft drafts DEV-certified and archived. Stage 2 awaits authorization.
+description: World Viewer optimization DEV-certified; Stage 1 COMPLETE. Dex 6.4 remains open for administrative JUMP; Stage 2 unstarted.
 reviewed: 2026-10-08
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## World Viewer optimization — DEV-certified and accepted (2026-10-08)
+
+Thomas deployed implementation `724d7c00dcd6e9ce1027ce2b75c349af418c0dc3`
+and reported healthy application, database, MUD and HOG status. DEV testing
+confirmed substantially faster new-geography loading, more responsive pan/zoom,
+and correct interim rendering: previously prepared geography remains anchored at
+its world coordinates, and newly exposed areas fill in after preparation. Thomas
+is satisfied and explicitly accepted the World Viewer optimization.
+
+Detail responses select viewport-relevant complete feature records through the
+existing generators instead of constructing full regional catalogs. During pending
+pan/zoom, the previous response is clipped to its prepared bounds; newly exposed
+areas remain blank with the preparing indicator. No quarter-mile pan buffer,
+Origin warming, generation/seed/world-identity changes, activation relaxation or
+worker-scheduling changes were introduced.
+
+Matched local regional-edge measurements reduced cold viewer latency and queued
+gameplay wait from **119.39 seconds to 3.70 seconds**; warm recomputation fell from
+**248 ms to 8 ms**. These are local measurements, not measured DEV latency. Thomas's
+DEV report independently confirms the practical responsiveness improvement.
+Private performance evidence remains in
+`docs/evidence/viewer-viewport-integration.json` in Crown-Call.
+
+Thomas accepts the automated correctness coverage and documented limitations:
+real production-seed positive lake/landform cases were not independently verified,
+although accepted analytic fixtures passed; the historical viewer-hash test failure
+also reproduces on the pristine accepted baseline. Those limitations remain recorded,
+not silently resolved. Implementation verification included 14 passing viewer-specific
+tests, desktop/mobile browser checks and HOG activation checks; the broader focused
+run recorded 97 passed, one optional-dependency skip and that pre-existing failure.
+
+**Prompt #6.4 remains open for the separate administrative JUMP work.** Acceptance
+of this viewer optimization does not complete or archive #6.4. Stage 1 remains
+COMPLETE; no Stage 2 or subsequent prompt work has begun. This certification update
+changes documentation only and does not deploy a game release.
+
 
 ## Craft drafts, validation and Builder certification — DEV-certified and COMPLETE (2026-10-08)
 
