@@ -1215,7 +1215,7 @@ Prompt #6 and Stage 1 Wear & Equipment are COMPLETE. The final Stage 1 review in
 prompt or implementation has begun.
 
 
-## Object TYPE and MATERIAL foundation (2026-10-08; pending DEV certification)
+## Object TYPE and MATERIAL foundation (2026-10-08; DEV-certified and COMPLETE)
 
 TYPE classifies what an object is; MATERIAL classifies its substances. Both are
 prototype-authored lists, separate from existing FEATURE/ObjectCapability behavior.
@@ -1252,5 +1252,51 @@ No per-instance overrides, Craft TYPE/MATERIAL matching, salvage, percentages, r
 durability or new feature architecture is introduced. Additive DEV migration uses the
 accepted fix-forward policy with exact HOG code/schema compatibility updates, preserving
 all generation/configuration/placement and activation-receipt safeguards. Prompt #6.1
-awaits Thomas's DEV certification and explicit completion authorization. #6.2/#6.3,
-Builder certification and overall Stage 1 completion remain pending.
+is DEV-certified, COMPLETE and archived. #6.2 is implemented pending DEV certification;
+#6.3, Builder certification and overall Stage 1 completion remain pending.
+
+
+## Craft prototype authoring foundation — implemented, pending DEV certification (2026-10-08)
+
+Prompt #6.2 extends the existing Craft JSON definitions, Builder API/forms and
+version-1 Content Portability. Stable IDs, revisions, aliases, physical objects,
+Character knowledge and completed execution receipts retain their existing behavior.
+No database migration is needed; Alembic remains `20261008_01`. The exact HOG code
+compatibility pin is refreshed without generation, configuration or placement changes.
+
+Implemented authoring: free-text categories with existing-category suggestions;
+canonical `command` + `craft_name` identity through the same CraftAlias dispatcher;
+zero-or-one prerequisite ID (self-reference rejected); all eight AND-only minimum
+BASE CAPs; exactly one associated CAP; Learning/Execution/Cooldown minute fields;
+bounded OR alternatives of AND object predicates using exact prototype, existing
+TYPE/MATERIAL registries and ObjectCapability FEATURE names; and start, working,
+completion text for crafter and observers. Existing sector predicates, exact inputs,
+held tools and ground outputs retain their runtime behavior.
+
+REQUIRED preserves whole matching objects; CONSUMED describes whole-object removal;
+SAMPLED specifies a positive native quantity/USES amount per selected object, leaving
+the remainder. These new requirement modes/predicates are authored data only in this
+pass, not a replacement for existing executable inputs/tools. Working echoes are
+specified once per active minute, but no temporary echo renderer or timer is added.
+
+Compatibility defaults are explicit: category `uncategorized`, no canonical command
+pair, no prerequisite or CAP minimums, associated CAP `ACADX`, Learning 1 minute,
+Execution 0 minutes, Cooldown 1 minute, empty additional requirements and echoes.
+ACADX and minute defaults are metadata fallbacks, not claims about historical skills,
+learning investment or Character knowledge. Legacy aliases are retained verbatim in
+meaning; new canonical identities are optional for existing content and cannot collide.
+
+`execution_compatibility: legacy_work_timer` explicitly retains `work_seconds` as the
+current runtime cost, independent of all three minute fields. Existing zero,
+sub-minute and other costs remain exact; no conversion/backfill reinterprets them.
+New definitions may explicitly author a compatibility cost (server default 0 seconds;
+the existing new-Craft form retains its 300-second starting value). Changing the new
+minute/CAP fields does not change gameplay. The deterministic future timing helper
+uses BASE CAP 0–20, applies 3% per level, and rounds to the nearest whole second with
+exact half-seconds up. It is not called by gameplay and does not alter Learning Time.
+
+Full prerequisite resolution/cycle validation and inactive unresolved-reference
+drafts remain #6.3 work. No learning, knowledge enforcement, new cooldown restrictions,
+reservations, sampling runtime, training or Stage 2 mechanics are enabled. Builder
+and Stage 1 remain incomplete; #6.2 awaits Thomas's DEV certification and completion
+authorization. The approval-controlled queue/archive are unchanged.

@@ -1,21 +1,54 @@
 ---
 title: Current status
-description: Wear and armor DEV-certified; final Stage 1 review identifies remaining Builder specification gaps.
+description: Object TYPE/MATERIAL DEV-certified; expanded Craft authoring implemented pending DEV certification.
 reviewed: 2026-10-08
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Object TYPE / MATERIAL - implemented, awaiting DEV certification (2026-10-08)
+## Craft prototype authoring foundation — implemented, pending DEV certification (2026-10-08)
 
-Object TYPE/MATERIAL authoring is implemented in Prompt #6.1, pending Thomas's
-DEV certification. It uses small developer-owned registries, canonical ordered lists
+Craft prototype authoring is implemented in #6.2, pending Thomas's DEV certification.
+The existing Builder/JSON/portability paths now support category and canonical command
+identity, prerequisite and BASE CAP metadata, separate minute timers, bounded AND/OR
+object requirement predicates/modes, and crafter/observer echoes. Current Craft
+execution remains unchanged through explicit `legacy_work_timer` compatibility:
+`work_seconds` stays exact and independent of authored minute timers. Existing aliases,
+receipts, WorldObjects and Character knowledge are preserved. The new BASE CAP timing
+helper rounds nearest whole second, ties up, and is not active in gameplay.
+
+No migration is required; Alembic stays `20261008_01`, with an exact HOG code-pin update.
+Defaults and the authored-data/runtime boundary are documented in the Object architecture
+reference's Craft prototype authoring section. #6.3 drafts/dependency/activation work
+and Stage 2 remain unstarted. Builder and Stage 1 are not COMPLETE.
+
+Verification: **433 distinct focused tests passed** across expanded Craft authoring,
+existing Craft Engine/Builder, Content Portability, Object Builder/morph/classifications,
+Character Core/presentation/LOOK, survival materials and HOG activation. Coverage includes
+exact 0/17/27-second legacy execution, half-up timing (including fractional BASE ATHLX),
+API persistence, canonical/legacy collisions, rollback, unchanged receipts/knowledge,
+read-only legacy normalization and preserving schema checks. Builder forms and content
+browser checks passed save/reload, clones, CAP/timers/echoes, AND/OR sampled requirements,
+explicit import conflicts, ordinary desktop layout and expanded mobile overflow.
+Changed-file Ruff, dependency, Alembic head, diff and reference checks passed. Tests
+used isolated SQLite; no live PostgreSQL, full suite or game deployment was run.
+One unrelated real HOG-worker test was deselected. Existing Starlette/httpx and
+Alembic path_separator deprecation warnings remain. Next: Thomas FAST DEV certification.
+
+## Object TYPE / MATERIAL - DEV-certified and COMPLETE (2026-10-08)
+
+Object TYPE/MATERIAL authoring is DEV-certified and COMPLETE in Prompt #6.1. It uses small developer-owned registries, canonical ordered lists
 on ObjectPrototype, empty legacy defaults, existing Builder multi-select controls,
 and the shared revision/live-instance/pending-morph safeguards. Classification edits
 and imports never change WorldObject identities or placement. FEATURE/ObjectCapability
 and exact-prototype Craft execution are unchanged. Migration `20261008_01` is additive
 and uses the accepted DEV fix-forward policy; exact HOG code/schema pins are updated.
-Prompts #6.2 and #6.3 remain unstarted and necessary; Builder and Stage 1 are not COMPLETE.
+Prompt #6.2 authoring is implemented pending DEV certification; #6.3 remains unstarted. Builder and Stage 1 are not COMPLETE.
+
+Thomas DEV-certified existing prototype compatibility, multiple TYPE/MATERIAL
+authoring, persistence, clone independence, portability round trips, live-instance
+protection and GET/DROP/INV/LOOK ME. Remaining automated coverage was accepted;
+#6.1 was marked COMPLETE and archived by explicit authorization.
 
 Object Builder authors multiple TYPE and MATERIAL tags without converting them into
 FEATURE capabilities. Duplicates, unknown IDs and malformed lists are rejected;
@@ -49,25 +82,15 @@ priorities found an implementation gap in the locked Builder specifications.
 | 1. Content Portability | COMPLETE for existing Object, Craft and dwelling definitions; Prompt #1 DEV-certified. Future authored fields must extend the same portability system. |
 | 2. Character Core | COMPLETE within the accepted foundational scope of Prompts #2, #3 and #3.1. Progression and full permission wiring remain separate follow-ons. |
 | 3. Wear & Equipment | COMPLETE; Prompts #4, #5 and #6 DEV-certified, with accepted automated armor coverage. |
-| 4. Builder foundation | Object TYPE/MATERIAL is implemented in #6.1, pending DEV acceptance. Craft authoring/drafts remain for #6.2/#6.3. See the blocker below. |
+| 4. Builder foundation | Object TYPE/MATERIAL #6.1 is DEV-certified and COMPLETE. Craft authoring #6.2 is implemented pending DEV certification; #6.3 drafts/certification remains. See the blocker below. |
 | 5. Persistence & Recovery | Existing persistence, versioning, migration and recovery mechanisms remain in place. Prior isolated PostgreSQL restore evidence exists; current equipment persistence has DEV certification. Ordinary additive DEV changes retain the accepted fix-forward policy. No new architecture or matched-backup exercise is required by this review. |
 
-**Remaining blocker: Craft Builder specification/implementation mismatch.** Object
-TYPE/MATERIAL implementation is now supplied by #6.1 and awaits DEV acceptance.
-Craft Builder still uses
-`name`, command `aliases`, exact-prototype inputs/outputs, `work_seconds` and ground
-placement. It does not yet author the locked category/command/craft_name, associated
-CAP, prerequisite/CAP requirements, distinct Learning Time/Execution Timer/Crafting
-Cooldown and authored echoes. Craft imports reject unresolved references instead of
-retaining the specified inactive drafts. These are existing roadmap requirements,
-not newly invented features. Existing v1 portability certification remains valid for
-its implemented definition set; it does not certify absent authored fields.
-
-Evidence inspected: Object/Craft definition validators, shared portability validation,
-dwelling draft support, recorded DEV acceptances and existing recovery evidence.
-This review makes no claim of a fresh live backup/restore test or a new full-suite run.
-The review itself started no implementation. Thomas subsequently authorized #6.1
-only; #6.2/#6.3 remain unstarted.
+**Remaining Builder work:** #6.1 TYPE/MATERIAL is DEV-certified, COMPLETE and
+archived. #6.2 expanded Craft authoring is implemented pending DEV certification.
+#6.3 still owns unresolved-reference drafts, dependency/cycle resolution, activation
+validation and final Builder certification. Existing execution remains the v1
+compatibility path; later progression/runtime features are not activated by authoring.
+This review does not claim a fresh live backup/restore test or a new full-suite run.
 Later NPC authoring, Character combat, progression, containers and disguise remain
 outside the completed prompt scope.
 
