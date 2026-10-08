@@ -1,10 +1,30 @@
 ---
 title: Current status
 description: HOG terrain-first architecture accepted; production integration planning is next.
-reviewed: 2026-10-07
+reviewed: 2026-10-08
 nav: status
 permalink: /CCMud/status.html
 ---
+
+## Separate admin utility: JUNK — awaiting DEV review (2026-10-08)
+
+JUNK permanently deletes one selected WorldObject instance using existing keywords,
+numbered targeting and account-admin authority. Eligible objects are the acting
+Character's held/worn objects or visible ground objects within normal reach.
+Infrastructure, embedded objects, parents with embedded children and other
+Characters' possessions are refused. Prototype records and other instances remain.
+Ground-placement/corpse metadata removal shares the deletion transaction; failed
+deletion rolls back. No confirmation UI, salvage or new persistence model is added.
+
+Verification: 256 focused tests passed, including authorization, instance isolation,
+physical states, concurrency, rollback, Wear/visibility, craft/object lifecycle and
+HOG activation regressions. Changed-file lint and diff checks passed. One unrelated
+real-worker test was excluded; the existing Starlette/httpx deprecation warning
+remains. No migration or game deployment; only the exact HOG code pin is refreshed.
+
+This is separately authorized utility work. Prompt #5 remains pending certification;
+the reported concealment was explained by authored hat coverage, and its visibility
+implementation is unchanged. Prompt #6 has not begun.
 
 ## Equipment visibility — implementation complete, awaiting DEV certification (2026-10-07)
 

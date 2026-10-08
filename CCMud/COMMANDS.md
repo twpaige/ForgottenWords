@@ -1,7 +1,7 @@
 ---
 title: Commands
 description: Current CCMUD commands and reviewed legacy command candidates.
-reviewed: 2026-10-07
+reviewed: 2026-10-08
 nav: commands
 permalink: /CCMud/commands.html
 ---
@@ -96,6 +96,16 @@ commands come from definitions, not additional hard-coded handlers. There is no
 in-game Builder command language or MOB Builder in v1.
 
 ### Staff diagnostics
+
+`JUNK <object>` is an admin-only instance cleanup command, separately authorized
+from Wear certification. It permanently deletes one selected held/worn object or
+visible ground object within normal reach. Normal keyword/prefix and numbered
+targeting apply, for example `JUNK HAT` or `JUNK 2.HAT`; a stack is one instance
+and its full quantity is removed. It never deletes the prototype or other instances.
+It refuses infrastructure, embedded objects, objects with embedded children and
+other Characters' possessions. Existing account admin authority is required;
+builder status and Character ADMIN rank alone are insufficient. No confirmation
+or undo is provided. Source implementation does not imply DEV deployment.
 
 | Command | Access and role |
 | --- | --- |
