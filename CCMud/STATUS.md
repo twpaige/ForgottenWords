@@ -6,7 +6,41 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
-## Wear physical foundation — implementation complete, awaiting DEV certification (2026-10-07)
+## Equipment visibility — implementation complete, awaiting DEV certification (2026-10-07)
+
+Prompt #5 connects current worn WorldObjects and wearable prototypes to the existing
+Character presentation pipeline. Strictly outer layers conceal physically concealable
+items only where authored visual coverage includes their anchor. Same-layer neck items
+remain visible together; non-concealable items remain visible. Concealed garments still
+provide their authored coverage. No geometry or implicit anchor coverage is invented.
+
+LOOK/LOOK ME share observer-visible equipment with existing FDESC, PMOTE and held-object
+presentation. Scene LOOK uses the same projection. INV retains every held/worn item,
+marks concealed entries and preserves registry anatomical/layer/capacity order. Worn
+HANDS coverage cannot conceal held objects. Private names and unsupported wound details
+remain suppressed. Web/Telnet share server semantic spans.
+
+Observer LOOK reconciles the target's carried timed objects before reading current
+prototype coverage/concealability, including disappearance. It releases prior observer
+object locks before taking target locks. Distant scene candidates are excluded before
+refresh. No persistent visibility cache or new migration is required; schema stays
+`20261007_03`. Exact HOG code compatibility pins are updated, geography unchanged.
+
+Verification: **260 distinct focused/regression tests passed** across equipment visibility,
+Character presentation/LOOK, Wear, Object Builder/morph, Content Portability, world/ROOM,
+HOG activation and MUD sessions. Coverage includes all 16 layer pairings, selective and
+cross-anchor coverage, non-concealable items, neck capacity, held-hand separation,
+private INV ordering, self/observer equality, indoor/outdoor scenes, reconnect, immediate
+WEAR/REMOVE changes, observer-only morph/disappearance and simultaneous mutual LOOK.
+Changed-file Ruff, dependency checks, single unchanged Alembic head, diff checks and
+pinned documentation verification passed. Isolated SQLite was used; live PostgreSQL
+was not tested. The unrelated real-worker geography test was excluded. One existing
+Starlette/httpx warning remains. No full suite or game deployment was run.
+Prompt #5 remains **pending Thomas's DEV certification and explicit acceptance**.
+Armor Foundation & Stage 1 Wear Certification remains unstarted. No armor mechanics,
+hood/disguise state, containers or Stage 1 Wear completion is claimed.
+
+## Wear physical foundation — COMPLETE after DEV certification (2026-10-07)
 
 Prompt #4 implements the canonical 27-location registry, legal layers and capacities,
 wearable prototype authoring, WEAR, worn REMOVE and deterministic private INV. Existing
@@ -26,7 +60,8 @@ containers or Character presentation redesign is implemented.
 Migration `20261007_03` preserves existing held, loose, ROOM and embedded placements.
 It checks for authored WEAR command conflicts before changing schema. Exact HOG code
 and schema pins are refreshed; geography and activation receipts remain unchanged.
-Normal FAST DEV deployment and fix-forward recovery apply. No game deployment occurred.
+Normal FAST DEV deployment and fix-forward recovery apply. Thomas subsequently
+completed the DEV deployment and certification recorded below.
 
 Verification: 347 distinct focused/regression tests passed across wear, persistence,
 capacity/concurrency/rollback, migration preservation, Builder, portability, Craft,
@@ -37,9 +72,11 @@ Alembic head passed. Tests used isolated SQLite; live PostgreSQL was not tested.
 The unrelated HOG real-worker geography test was excluded. One existing Starlette/httpx
 deprecation warning remains. No full-suite run was needed.
 
-Prompt #4 is **not COMPLETE** until Thomas deploys, certifies DEV and explicitly accepts.
-Equipment Visibility & Character Presentation and Armor Foundation & Stage 1 Wear
-Certification remain unstarted. Stage 1 Wear & Equipment is not complete.
+Thomas DEV-certified and explicitly accepted Prompt #4: wearable Builder authoring,
+WEAR/REMOVE, hand transfers, full-hand refusal, occupied capacity, numbered targeting,
+inventory consistency, reconnect persistence and existing gameplay all passed. Repeated
+wear/remove transfers of two identical cowboy hats lost or duplicated no objects.
+Prompt #4 is COMPLETE. Stage 1 Wear & Equipment is not complete.
 
 ## Character Core persistent foundations — COMPLETE (2026-10-07)
 

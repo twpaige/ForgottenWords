@@ -45,9 +45,10 @@ Character LOOK integration (DEV-certified): `LOOK <character>` / `L
 <character>` selects visible online Characters by public short-description words,
 with `2.person`-style ordinals for repeated descriptions. Private Character names
 and internal IDs are not aliases. `LOOK ME` uses the identical observer-facing
-pipeline, including full description, current PMOTE and visible held objects; it
-does not reveal private HEALTH information. Scene LOOK uses LDESC/SDESC plus held
-objects and PMOTE. Movement clears PMOTE; its authoring command is not implemented.
+pipeline, including full description, current PMOTE, held objects and observer-visible worn
+equipment (Prompt #5 pending DEV certification); it
+does not reveal private HEALTH information. Scene LOOK uses LDESC/SDESC plus held/visible worn
+objects and PMOTE. INV retains concealed worn items with a concealed marker. Movement clears PMOTE; its authoring command is not implemented.
 Object/MOB LOOK and HOG verbosity commands remain available.
 
 | Family | Commands | Current meaning |
@@ -62,7 +63,7 @@ Object/MOB LOOK and HOG verbosity commands remain available.
 | Character | `TRIP RESET` | Reset TRIP only; responds `Trip odometer reset.` without stopping travel. |
 | Character | `STATUS` | Current CCMUD status, including travel state; historical Shadows STATUS has different, unresolved semantics. |
 | Physical possessions | `APPROACH <object\|mob>`, `GET <object>`, `TAKE <object>`, `INV`, `INVENTORY`, `I`, `DROP <object>` | Slice 1: approach a perceived outdoor OBJECT or MOB through normal movement to interaction range, with ordinary player arrival prose; GET never closes distance and stops voluntary travel even on failure. Right hand first, then left; full hands fail. Inventory shows right/left hands, then worn objects in deterministic location/layer order. DROP leaves the same object at your feet. See [object architecture](objects.html#14-slice-1-implementation-2026-09-30). |
-| Wear foundation | `WEAR <held object>`, `REMOVE <worn object>` | Transfer the same single object between hand and a legal worn role. Occupied wear capacity or two full hands refuses the transfer. Embedded REMOVE keeps its two-target form. Worn items are not held tools or materials. Pending DEV certification; no worn LOOK or concealment yet. |
+| Wear foundation | `WEAR <held object>`, `REMOVE <worn object>` | Transfer the same single object between hand and a legal worn role. Occupied wear capacity or two full hands refuses the transfer. Embedded REMOVE keeps its two-target form. Worn items are not held tools or materials. Physical Wear is DEV-certified. Shared LOOK/LOOK ME now omit concealed worn items; INV retains and marks them (visibility pending DEV certification). |
 | Rabbit wound/corpse interaction | `THROW <object> <target>`, `REMOVE <object> <target>` | Throw a held throwable item at a perceived outdoor MOB using opposed RANGE/ATHLX hit resolution. A miss lands the same item at the target; a hit wounds and embeds it. Rabbit MORT creates a corpse retaining that knife. REMOVE recovers from a visible MOB/corpse or own held corpse into a free hand. GET/DROP use normal corpse handling. See [bounded wound/death increment](objects.html#16-throw-wounds-death-and-corpse-2026-09-30). |
 | Rabbit corpse processing | `SKIN CORPSE` | With a cutting tool held, consume an accessible rabbit corpse (held or ground) into carcass, raw pelt and guts at your feet. Remove embedded items first; the tool stays in hand. See [bounded SKIN](objects.html#17-rabbit-corpse-skin-2026-09-30). |
 | Survival materials | `GATHER FIREWOOD`, `MAKE SPIT` | Existing HOG woodland and supported dry ground supply one firewood bundle or wooden spit at your feet. Each immediately adds five real minutes of Work Timer debt; entry requires debt below 48 hours. MAKE SPIT requires a held cutting tool; GATHER needs none. These commands are persisted definitions executed by the generic [Craft Engine](objects.html#19-craft-engine-v1-and-web-builder-2026-09-30). |

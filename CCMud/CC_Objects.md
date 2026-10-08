@@ -1114,7 +1114,7 @@ back. No database migration, destination mapping, live instance import, MOB form
 package manager or synchronization mechanism is introduced.
 
 
-## Wear physical foundation (2026-10-07; pending DEV certification)
+## Wear physical foundation (2026-10-07; DEV-certified)
 
 Wear uses existing Character-owned WorldObjects, with exactly one hand or worn role.
 The nullable `wear_location`, `wear_layer` and `wear_slot` fields are persisted together;
@@ -1141,5 +1141,29 @@ LOOK output is implemented. Hand-only mechanics exclude worn objects.
 
 Additive migration `20261007_03` preserves existing placements and rejects existing
 Craft/link/template WEAR command conflicts before schema changes. New authoring reserves
-WEAR. DEV recovery is fix-forward. Equipment Visibility & Character Presentation and
-Armor Foundation & Stage 1 Wear Certification remain separate future passes.
+WEAR. DEV recovery is fix-forward. Prompt #4 is DEV-certified.
+
+
+## Equipment visibility (2026-10-07; pending DEV certification)
+
+Prompt #5 activates the authored visual coverage and concealability above. For each
+worn object, concealment requires both its `concealable` flag and another worn object
+at a strictly higher layer whose coverage includes its anchor location. Empty coverage
+conceals nothing; occupying an outer anchor alone adds no implicit coverage. Same-layer
+items do not hide each other. A concealed garment continues providing authored coverage;
+non-concealable objects remain visible. Broader coverage creates no extra physical roles.
+
+Shared Character presentation receives only visible worn descriptions, preserving
+existing held descriptions, FDESC, PMOTE and safe conditions. LOOK ME has exactly the
+same visibility as another observer's Character LOOK; scene LOOK shares that projection.
+INV remains private physical truth, marking hidden worn entries `(concealed)` without
+removing them or changing anatomical/layer/capacity order. Held objects are unaffected
+by clothing coverage, including worn HANDS equipment.
+
+Current worn state/prototypes are read afresh. Observer-side timed-morph reconciliation
+uses the existing lifecycle authority before projection, so coverage/concealability
+changes and disappearance become visible even when the wearer has issued no command.
+Visibility is neither persisted nor cached. No schema or Builder format change is needed.
+Web and Telnet render equivalent server semantic output. Armor, hoods/disguises, identity
+obscuration and containers remain outside this pass. Prompt #5 awaits DEV acceptance;
+Armor Foundation & Stage 1 Wear Certification has not begun.
