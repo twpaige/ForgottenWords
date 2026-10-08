@@ -6,6 +6,38 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
+## Object TYPE / MATERIAL - implemented, awaiting DEV certification (2026-10-08)
+
+Object TYPE/MATERIAL authoring is implemented in Prompt #6.1, pending Thomas's
+DEV certification. It uses small developer-owned registries, canonical ordered lists
+on ObjectPrototype, empty legacy defaults, existing Builder multi-select controls,
+and the shared revision/live-instance/pending-morph safeguards. Classification edits
+and imports never change WorldObject identities or placement. FEATURE/ObjectCapability
+and exact-prototype Craft execution are unchanged. Migration `20261008_01` is additive
+and uses the accepted DEV fix-forward policy; exact HOG code/schema pins are updated.
+Prompts #6.2 and #6.3 remain unstarted and necessary; Builder and Stage 1 are not COMPLETE.
+
+Object Builder authors multiple TYPE and MATERIAL tags without converting them into
+FEATURE capabilities. Duplicates, unknown IDs and malformed lists are rejected;
+accepted lists use deterministic registry order. Existing definitions migrate empty
+without guessed classifications. Portability preserves both lists in its existing
+version-1 envelope; absent legacy fields mean empty lists, with explicit conflict
+replacement required to remove existing tags. Live objects and pending morph targets
+remain protected against mechanical edits through both Builder and import paths.
+
+Verification: **357 focused tests passed**, covering classification validation,
+legacy/default behavior, persistence/reload, live and pending-morph safeguards,
+revision/auth protection, portability conflicts and atomic rollback, existing
+Craft execution, Wear/visibility/armor/JUNK, dwelling definitions and HOG activation.
+Migration checks preserved all old prototype/capability/WorldObject rows, exercised
+Alembic from `20261007_03` to `20261008_01` in isolated SQLite, and confirmed exactly
+two additive JSON columns in PostgreSQL offline DDL. Live PostgreSQL was not tested.
+Shipped Builder browser checks passed controlled multi-selects, selection summaries,
+save/reload, clone/removal, ordinary controls, desktop/mobile layout and portability
+review/import. Changed-file Ruff and diff checks passed; one Alembic head remains.
+One unrelated HOG worker test was excluded. Existing Starlette/httpx and Alembic
+configuration deprecation warnings remain. No full suite or game deployment ran.
+
 ## Final Stage 1 certification review (2026-10-08)
 
 **Stage 1 is NOT COMPLETE.** Prompt #6 and Stage 1 Wear & Equipment are COMPLETE
@@ -17,12 +49,12 @@ priorities found an implementation gap in the locked Builder specifications.
 | 1. Content Portability | COMPLETE for existing Object, Craft and dwelling definitions; Prompt #1 DEV-certified. Future authored fields must extend the same portability system. |
 | 2. Character Core | COMPLETE within the accepted foundational scope of Prompts #2, #3 and #3.1. Progression and full permission wiring remain separate follow-ons. |
 | 3. Wear & Equipment | COMPLETE; Prompts #4, #5 and #6 DEV-certified, with accepted automated armor coverage. |
-| 4. Builder foundation | Existing Object/Craft/dwelling Builder works, but locked Sections 4A/4B are specification-complete, not implementation-complete. See the blocker below. |
+| 4. Builder foundation | Object TYPE/MATERIAL is implemented in #6.1, pending DEV acceptance. Craft authoring/drafts remain for #6.2/#6.3. See the blocker below. |
 | 5. Persistence & Recovery | Existing persistence, versioning, migration and recovery mechanisms remain in place. Prior isolated PostgreSQL restore evidence exists; current equipment persistence has DEV certification. Ordinary additive DEV changes retain the accepted fix-forward policy. No new architecture or matched-backup exercise is required by this review. |
 
-**Remaining blocker: Builder specification/implementation mismatch.** The Object
-Builder definition has presentation/weight and existing capabilities, including armor,
-but lacks the locked multiple TYPE/MATERIAL authoring model. Craft Builder still uses
+**Remaining blocker: Craft Builder specification/implementation mismatch.** Object
+TYPE/MATERIAL implementation is now supplied by #6.1 and awaits DEV acceptance.
+Craft Builder still uses
 `name`, command `aliases`, exact-prototype inputs/outputs, `work_seconds` and ground
 placement. It does not yet author the locked category/command/craft_name, associated
 CAP, prerequisite/CAP requirements, distinct Learning Time/Execution Timer/Crafting
@@ -34,7 +66,8 @@ its implemented definition set; it does not certify absent authored fields.
 Evidence inspected: Object/Craft definition validators, shared portability validation,
 dwelling draft support, recorded DEV acceptances and existing recovery evidence.
 This review makes no claim of a fresh live backup/restore test or a new full-suite run.
-No corrective implementation or new prompt is authorized or started by this review.
+The review itself started no implementation. Thomas subsequently authorized #6.1
+only; #6.2/#6.3 remain unstarted.
 Later NPC authoring, Character combat, progression, containers and disguise remain
 outside the completed prompt scope.
 
@@ -77,7 +110,7 @@ was excluded; the existing Starlette/httpx deprecation warning remains. Tests us
 isolated SQLite, not live PostgreSQL. No full suite or game deployment was run.
 
 No migration:
-Alembic stays `20261007_03`. The exact HOG destination code fingerprint is updated;
+At the armor release, Alembic remained `20261007_03`. The exact HOG destination code fingerprint is updated;
 source/schema pins, generation, configuration, placement and receipt safeguards remain.
 Thomas subsequently reported successful DEV certification of the implementation
 release `5d62469348ed14835d71d17b0eaad56d8c463ce0`. This documentation update does not

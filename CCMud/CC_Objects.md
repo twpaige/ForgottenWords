@@ -1213,3 +1213,44 @@ worn JUNK, and accepted automated calculation/runtime/portability/wound-order co
 Prompt #6 and Stage 1 Wear & Equipment are COMPLETE. The final Stage 1 review in
 [Current status](status.html) records a separate Builder specification gap; no later
 prompt or implementation has begun.
+
+
+## Object TYPE and MATERIAL foundation (2026-10-08; pending DEV certification)
+
+TYPE classifies what an object is; MATERIAL classifies its substances. Both are
+prototype-authored lists, separate from existing FEATURE/ObjectCapability behavior.
+The initial developer-owned registries are deliberately small:
+
+| Registry | Canonical identifiers |
+| --- | --- |
+| TYPE | CLOTHING, CONTAINER, FOOD, FURNITURE, TOOL, WEAPON |
+| MATERIAL | BONE, FUR, LEATHER, METAL, STONE, TEXTILE, WOOD |
+
+Builder users select multiple registered values or none. Duplicate/unknown IDs,
+noncanonical case and malformed lists are rejected. Accepted values use registry
+order. TEXTILE is the canonical initial fabric tag; no alternate CLOTH ID is added.
+A tag alone enables no behavior: TOOL does not grant a tool capability, WEAPON does
+not change combat, and CONTAINER adds no container mechanics. Registry additions
+are deliberate developer changes and need no object-schema redesign.
+
+Migration `20261008_01` adds two non-null JSON lists to ObjectPrototype, both defaulting
+to empty. It leaves all existing prototype data and WorldObject identities, placement,
+ownership, wear roles and capabilities unchanged; it guesses no historical tags.
+The existing Object Builder supports save/reload, clone, selection/removal and a current
+selection summary. Revision checks and live/pending-morph mechanical protections apply
+to TYPE/MATERIAL edits, including shared Content Portability replacement.
+
+Version-1 Object export/import includes the classifications without a separate format.
+Export emits both lists, including empty lists. Missing fields in old definitions mean
+empty lists. Such a definition conflicts with an already-classified prototype; Keep
+Existing preserves tags and explicit replacement is required to remove them. Unknown
+IDs fail validation, and invalid/failed imports cannot leave partial changes or create
+WorldObjects. Current prototype tags are available through small read helpers for
+future consumers; exact-prototype Craft execution remains unchanged in #6.1.
+
+No per-instance overrides, Craft TYPE/MATERIAL matching, salvage, percentages, repair,
+durability or new feature architecture is introduced. Additive DEV migration uses the
+accepted fix-forward policy with exact HOG code/schema compatibility updates, preserving
+all generation/configuration/placement and activation-receipt safeguards. Prompt #6.1
+awaits Thomas's DEV certification and explicit completion authorization. #6.2/#6.3,
+Builder certification and overall Stage 1 completion remain pending.
