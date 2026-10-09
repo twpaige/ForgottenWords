@@ -6,7 +6,7 @@ nav: status
 permalink: /CCMud/status.html
 ---
 
-## Certified JUMP and ASPEED — implemented, awaiting DEV certification (2026-10-09)
+## Certified JUMP and ASPEED — ordinary-movement regression corrected, awaiting DEV retest (2026-10-09)
 
 Prompt #6.4 was DEV-certified, completed and archived. Thomas approved follow-up
 #6.45: restore certification-dependent administrative JUMP and add persistent
@@ -27,7 +27,8 @@ No refill or unrelated stamina exemption. Existing pace, ATHLX, load, terrain,
 slope, water resultant, world-time and convenience factors remain authoritative.
 
 Every intermediate segment uses existing certification/water/structure/collision
-validation. Segments are bounded to 128 inches; ticks attempt at most 128 iterations
+validation. Only for currently authorized effective ASPEED above 1, segments are
+bounded to 128 inches and ticks attempt at most 128 iterations
 with a 100-ms cooperative elapsed-work budget checked between segments and at
 completion. A bounded query already in progress completes before that check.
 Processing limits stop at the last validated position with an explanation and keep
@@ -46,17 +47,31 @@ Across three destinations, product-ready 1× ticks took 0.6–1.9 ms and 10× to
 still stops movement at the negative-coordinate destination. These are local
 measurements, not DEV timings or a guarantee of uninterrupted 100× travel.
 
-Verification: the 381-test focused suite passed across JUMP, ASPEED, legacy
-recovery, FIND/MARK, travel, terrain, stamina, water, HOG walking/activation and
-WebSocket behavior. A final 124-test rerun passed after the persisted-floating
-JUMP cancellation safeguard, plus 19 legacy recovery tests. Browser navigation,
-changed-file lint, actual SQLite migration/data preservation, PostgreSQL additive
-DDL generation and exact code/schema compatibility checks passed. The real-worker
-cold JUMP test validates destination footing against the production authority.
-No live database was used for these checks.
+DEV testing of `600a9e0b2cc3f727b54bc7df32ed0243ae8ab021` found ordinary WALK
+stopping at ASPEED 1. The new processing budgets had incorrectly applied to every
+Character; an otherwise valid tick exceeding 100 ms stopped even after successful
+certification. The correction restricts subdivision, iteration limits, elapsed-time
+stops and hazard-backtracking budgets to effective authorized ASPEED above 1.
+Ordinary players, admins at 1× and revoked admins retain the original integration,
+scheduler-delay, certification, collision/water/slope and stamina behavior. No
+migration, higher timeout or weaker HOG check is introduced.
 
-**Not deployed or DEV-certified. #6.45 remains open.** Use normal FAST DEV and the
-accepted additive fix-forward procedure; stop and diagnose any readiness failure.
+The focused correction suite passed **301 tests**; changed-file lint and exact HOG
+compatibility checks passed. Correction verification covers forced slow processing at 1×, exact ordinary
+integration behavior, 5/10/100× acceleration and limits, stamina, hazards, cold
+boundaries and permission revocation. Production-provider comparisons against the
+pre-#6.45 integrator cover NORTH, EAST and distance-limited travel at `(1000,1000)`,
+`(1493,2780)` and `(-300000,250000)`, comparing movement state and messages rather
+than volatile cache receipt metadata. Private evidence:
+`docs/evidence/normal-travel-budget-regression.json`. All nine ordinary movement
+comparisons matched; one normal NORTH integration took 141 ms without stopping.
+Nine accelerated checks at 5/10/100× also passed: zero-stamina movement at 5/10×,
+and explicit last-validated-position budget stops at 100×. These are bounded local
+correctness checks using the real provider, not DEV certification.
+
+**Correction not deployed or DEV-certified. #6.45 remains open.** Use normal FAST
+DEV and the accepted fix-forward procedure; stop and diagnose readiness failures.
+
 No queue/archive edits, Origin warming, #6.5 or Stage 2 work are included.
 
 
