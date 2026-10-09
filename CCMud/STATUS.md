@@ -1,47 +1,63 @@
 ---
 title: Current status
-description: Immediate administrative JUMP implemented, awaiting DEV certification. World Viewer optimization accepted; Stage 1 COMPLETE; Stage 2 unstarted.
-reviewed: 2026-10-08
+description: Certified JUMP restoration and ASPEED implemented, awaiting DEV certification. World Viewer optimization accepted; Stage 1 COMPLETE; Stage 2 unstarted.
+reviewed: 2026-10-09
 nav: status
 permalink: /CCMud/status.html
 ---
 
-## Immediate administrative JUMP — implemented, awaiting DEV certification (2026-10-08)
+## Certified JUMP and ASPEED — implemented, awaiting DEV certification (2026-10-09)
 
-Thomas approved immediate coordinate/directional administrative JUMP for Dex #6.4.
-Requested X/Y persists immediately; travel stops without changing stamina or pace.
-Cold destinations retain numeric Z as an explicitly provisional height. The existing
-asynchronous HOG preparation path reconciles Z only after normal endpoint geography,
-water-depth and structure checks pass, without changing the requested X/Y.
+Prompt #6.4 was DEV-certified, completed and archived. Thomas approved follow-up
+#6.45: restore certification-dependent administrative JUMP and add persistent
+Character-specific `ASPEED 1–100`. New JUMPs prepare/certify before relocating;
+failure, timeout, STOP and disconnect preserve departure. Existing coordinate,
+directional, FIND, MARK, ROOM and authorization rules remain authoritative.
 
-LOOK and the position display distinguish unresolved footing. Normal walking and
-physical interactions remain gated. Another authorized JUMP works while preparation
-is pending, failed, timed out or cancelled, including immediately after unresolved
-reconnect. STOP cancels waiting and preserves coordinates. New placement tokens
-prevent obsolete results from affecting a newer destination. Successful preparation
-announces readiness and restores ordinary movement.
+Legacy unresolved rows retain their recorded coordinates and placement marker
+until authoritative certification at that XY or an explicitly requested certified
+JUMP resolves them. Startup/login retain the narrow recovery exception; no new
+markers, invented former positions, silent staging relocation or false footing.
 
-Additive migration `20261008_03` adds a nullable placement token without rewriting
-existing Characters. Unresolved outdoor admins can pass startup/login placement
-waiting while identity, role, coordinates, ATHLX, exact compatibility, receipt,
-configuration, staging and dwelling safeguards remain enforced. Authenticated entry
-resumes preparation after stale travel cleanup. FIND/MARK retain their certified
-identity/ROOM placement rules. Seed, deterministic geography, generation identity,
-activation receipts and worker scheduling are unchanged.
+Additive migration `20261009_01` adds constrained integer `admin_speed`, default 1.
+ASPEED changes stop travel, persist per Character, and require current Account
+admin role. Above 1, movement loses no stamina and movement exhaustion does not
+block starting/continuing. Ordinary rules return at 1 or on permission revocation.
+No refill or unrelated stamina exemption. Existing pace, ATHLX, load, terrain,
+slope, water resultant, world-time and convenience factors remain authoritative.
 
-Verification covers controlled slow/failed workers, cancellation/timeouts, stale
-results, escape after failure and reconnect, session entry, held/worn preservation,
-additive migration and activation gates. A separate real production-provider worker
-check at `25000,25000` reconciles against authoritative physical geography and passes
-the existing footing validator. Browser navigation checks cover provisional HUD
-labeling and continued command availability. These are local implementation checks;
-**DEV deployment and certification have not occurred**.
+Every intermediate segment uses existing certification/water/structure/collision
+validation. Segments are bounded to 128 inches; ticks attempt at most 128 iterations
+with a 100-ms cooperative elapsed-work budget checked between segments and at
+completion. A bounded query already in progress completes before that check.
+Processing limits stop at the last validated position with an explanation and keep
+the selected multiplier. Cold geography stops safely without automatic restart.
+This is safe administrative acceleration, not a promise that 100× can traverse
+cold or expensive geography without stopping.
 
-Use the established FAST DEV/additive fix-forward workflow; stop and diagnose if
-readiness fails. The prior release does not understand provisional placement.
-**#6.4 remains open**, awaiting Thomas's DEV certification and explicit completion
-authorization. World Viewer performance certification remains separate and accepted.
-No Origin warming, #6.5 or Stage 2 work is included.
+The approved World Viewer optimization remains unchanged, as do HOG seed,
+generation formulas/identity, certification, worker scheduling and activation
+safeguards. The exact reviewed code/schema compatibility mapping is refreshed;
+activation receipts are not rewritten. Local tests and real-provider performance
+measurements are documented in Crown-Call's README and performance evidence.
+Across three destinations, product-ready 1× ticks took 0.6–1.9 ms and 10× took
+3.3–9.8 ms; high-speed first-use certificate work caused safe budget stops in
+101–133 ms, including the in-progress bounded query. The existing grade refusal
+still stops movement at the negative-coordinate destination. These are local
+measurements, not DEV timings or a guarantee of uninterrupted 100× travel.
+
+Verification: the 381-test focused suite passed across JUMP, ASPEED, legacy
+recovery, FIND/MARK, travel, terrain, stamina, water, HOG walking/activation and
+WebSocket behavior. A final 124-test rerun passed after the persisted-floating
+JUMP cancellation safeguard, plus 19 legacy recovery tests. Browser navigation,
+changed-file lint, actual SQLite migration/data preservation, PostgreSQL additive
+DDL generation and exact code/schema compatibility checks passed. The real-worker
+cold JUMP test validates destination footing against the production authority.
+No live database was used for these checks.
+
+**Not deployed or DEV-certified. #6.45 remains open.** Use normal FAST DEV and the
+accepted additive fix-forward procedure; stop and diagnose any readiness failure.
+No queue/archive edits, Origin warming, #6.5 or Stage 2 work are included.
 
 
 ## World Viewer optimization — DEV-certified and accepted (2026-10-08)
@@ -75,8 +91,8 @@ not silently resolved. Implementation verification included 14 passing viewer-sp
 tests, desktop/mobile browser checks and HOG activation checks; the broader focused
 run recorded 97 passed, one optional-dependency skip and that pre-existing failure.
 
-**Prompt #6.4 remains open for the separate administrative JUMP work.** Acceptance
-of this viewer optimization does not complete or archive #6.4. Stage 1 remains
+**Prompt #6.4 was subsequently DEV-certified and archived.** The accepted viewer
+optimization remains separate from the approved #6.45 navigation follow-up. Stage 1 remains
 COMPLETE; no Stage 2 or subsequent prompt work has begun. This certification update
 changes documentation only and does not deploy a game release.
 
